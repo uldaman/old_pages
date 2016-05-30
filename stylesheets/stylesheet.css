@@ -90,7 +90,7 @@ header h2 {
 }
 
 .inner {
-  width: 620px;
+  width: 720px;
   margin: 0 auto;
 }
 
@@ -162,6 +162,18 @@ a.button span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
 #view-on-github {
+  margin-right: 0;
+}
+#go-to-blog span {
+  background: transparent url(../images/go-to-blog.ico) 12px 50% no-repeat;
+}
+#go-to-blog {
+  margin-right: 0;
+}
+#go-to-wiki span {
+  background: transparent url(../images/go-to-wiki.ico) 12px 50% no-repeat;
+}
+#go-to-wiki {
   margin-right: 0;
 }
 
@@ -248,14 +260,14 @@ h2 {
   margin-bottom: 8px;
   font-size: 22px;
   font-weight: bold;
-  color: #303030;
+  color: #d5000d;
 }
 
 h3 {
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #d5000d;
+  color: #303030;
 }
 
 h4 {
