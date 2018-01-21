@@ -3,7 +3,7 @@ Author: Martin
 Date: 2016-05-25 18:45
 Summary: 将我的博客从 User Pages site 迁移到 Project Pages site.
 
-在很早之前我从 wordpress 迁移到 github, 参考日记: [从 wp 迁移到 pelican (github)](http://blog.smallcpp.cn/cong-wp-qian-yi-dao-pelican-github.html)
+在很早之前我从 wordpress 迁移到 github, 参考日记: [从 wp 迁移到 pelican (github)](http://www.smallcpp.cn/cong-wp-qian-yi-dao-pelican-github.html)
 
 近期读到一个博主的文章: [程序员的知识管理](http://blog.xiaohansong.com/2016/01/16/kownledge-Management/), 参考了下他的 [Github Page 首页](http://xiaohansong.com/), 发现挺有意思的.
 

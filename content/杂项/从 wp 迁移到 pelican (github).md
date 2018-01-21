@@ -342,7 +342,7 @@ for file in files:
 好了, 现在我们的 wp 已经迁移到了本地博客系统, 运行 **make serve** 看看是不是成功了...
 
 #6. 发布到 Github
-> 更新: 关于发布到 Github 还是有些东西要说的, 见我另一篇笔记: [迁移 Github Project Page](http://blog.smallcpp.cn/qian-yi-github-project-page.html)
+> 更新: 关于发布到 Github 还是有些东西要说的, 见我另一篇笔记: [迁移 Github Project Page](http://www.smallcpp.cn/qian-yi-github-project-page.html)
 
 这个其实没啥好讲的了, 我是用的 github for windows 工具来管理 github, 每次 **make html** 后, 把 output 下的文件同步到 github 上 page 项目的主干下就行了...
 

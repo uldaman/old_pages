@@ -8,4 +8,4 @@ title: 迁移 OneNote 说明
 
 拾遗、碎片知识、操作指南类 \-\> [wiki](http://wiki.smallcpp.cn)
 
-总结、感想、分析类 \-\> [blog](http://blog.smallcpp.cn)
+总结、感想、分析类 \-\> [blog](http://www.smallcpp.cn)

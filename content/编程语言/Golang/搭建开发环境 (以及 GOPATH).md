@@ -30,7 +30,7 @@ Summary: 开发工具可以选择 LiteIDE 或者 安装了 GoClipse 插件的 Ec
 ##设置字体/缩进
 查看\-\>选项\-\>LiteEditor
 
-![缩进](http://blog.smallcpp.cn/theme/images/Golang/缩进.png)
+![缩进](http://www.smallcpp.cn/theme/images/Golang/缩进.png)
 
 ##设置 GOPATH
 当编译器查找包时, 就会到 GOROOT 和 GOPATH 环境变量引用的位置去查找 (实际是 `GOROOT/src` 和 `GOPATH/src`).
@@ -86,10 +86,10 @@ func main() {
 ![调试](http://i63.tinypic.com/2rvzslu.jpg)
 
 ##开始调试
-![断点](http://blog.smallcpp.cn/theme/images/Golang/断点.png)
+![断点](http://www.smallcpp.cn/theme/images/Golang/断点.png)
 
 点击上图所示按钮, 或按键盘 `F9` 可设置断点, `F5` 开始调试程序.
 
 启动调试后, 程序会断在 `main` 函数第一行, 然后可以如下图所示进行控制:
 
-![调试](http://blog.smallcpp.cn/theme/images/Golang/调试.png)
+![调试](http://www.smallcpp.cn/theme/images/Golang/调试.png)
