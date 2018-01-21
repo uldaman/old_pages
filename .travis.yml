@@ -1,0 +1,24 @@
+group: deprecated-2017Q4
+python:
+- '2.7'
+before_install:
+- openssl aes-256-cbc -K $encrypted_2d72b4f713b1_key -iv $encrypted_2d72b4f713b1_iv
+  -in .travis/id_rsa.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- eval $(ssh-agent)
+- ssh-add ~/.ssh/id_rsa
+- cp .travis/ssh_config ~/.ssh/config
+- git config --global user.name "z351522453"
+- git config --global user.email "351522453@qq.com"
+- git remote set-url --push origin git@github.com:z351522453/z351522453.github.com.git
+- git fetch origin master:refs/remotes/origin/master
+install:
+- sudo pip install fabric
+- sudo pip install ghp-import
+- sudo pip install pelican
+- sudo pip install Markdown
+script:
+- fab gh_pages
+branches:
+  only:
+  - markdown
