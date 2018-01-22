@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-14 15:52
-title: Django 中间件和admin
+title: Django 中间件和 admin
 
 在django中, 中间件其实就是一个类, 在请求到来和结束后, django 会根据自己的规则在合适的时机执行中间件中相应的方法.
 
