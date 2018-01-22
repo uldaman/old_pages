@@ -173,7 +173,8 @@ OmniMarkupPreviewer 的默认配置已经满足日常需求了, 不过可以在�
 ## 插入文件头
 我们使用 Pelican 时, 要在每个 md 文件中添加文件头, 格式大概如下:
 
-```Title: Git 简明手册
+```
+Title: Git 简明手册
 Author: Martin
 Date: 2016-03-13 13:00
 Summary: Git 学习笔记, 记录一些常用的操作, 以及 SourceTree、Github 的用法.
