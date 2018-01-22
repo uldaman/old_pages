@@ -1,7 +1,6 @@
----Title: Github 常用功能
+Title: Github 常用功能
 Author: Martin
 Date: 2017-08-26 21:28
----
 
 [TOC]
 
