@@ -156,7 +156,7 @@ __alt + shift + right__ 在当前列左边新建列
 __alt + right/left__ 左右移动列
 
 ## 预览
-__OmniMarkupPreviwer__ 可以实时在浏览器中预览
+__OmniMarkupPreviewer__ 可以实时在浏览器中预览
 
 - Ctrl + Alt + O: Preview Markup in Browser.
 - Ctrl + Alt + X: Export Markup as HTML.
@@ -164,10 +164,10 @@ __OmniMarkupPreviwer__ 可以实时在浏览器中预览
 
 还有个 __Markdown Preview__ 插件也是可以预览 md 文件, 但是需要手动生成 + F5 的, 所以感觉用起来比较麻烦.
 
-OmniMarkupPreviwer 的默认配置已经满足日常需求了, 不过可以在配置文件中把 __toc__ 打开, 这样就可以生成目录了.
+OmniMarkupPreviewer 的默认配置已经满足日常需求了, 不过可以在配置文件中把 __toc__ 打开, 这样就可以生成目录了.
 
 ```
-"extensions": ["tables", "strikeout", "fenced_code", "codehilite", "toc"] // 这是 OmniMarkupPreviwer 配置文件的最后一行
+"extensions": ["tables", "strikeout", "fenced_code", "codehilite", "toc"] // 这是 OmniMarkupPreviewer 配置文件的最后一行
 ```
 
 ## 插入文件头
