@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-03 16:05
-title: python web 环境配置
+title: Python web 环境配置
 
 MVC -- M 是指业务模型, V 是指用户界面, C 则是控制器.
 

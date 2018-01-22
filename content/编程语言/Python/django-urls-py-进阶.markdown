@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-23 06:13
-title: (四) Django urls.py 进阶
+title: Django urls.py 进阶
 
 原 urls.py:
 

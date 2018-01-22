@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-26 04:52
-title: (三) Django 缓存系统
+title: Django 缓存系统
 
 Django 缓存有: 内存缓存、数据库缓存 和 文件缓存.
 

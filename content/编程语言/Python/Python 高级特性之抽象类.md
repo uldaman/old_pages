@@ -1,4 +1,4 @@
-Title:  Python 高级特性之抽象类
+Title: Python 高级特性之抽象类
 Author: Martin
 Date: 2016-03-31 13:32
 Summary: Python 高级特性之抽象类

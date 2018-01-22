@@ -1,4 +1,4 @@
-Title: 43. Python 字符编码判断
+Title: Python 字符编码判断
 Author: Martin
 Date: 2016-05-12 20:08
 Summary: 使用 chardet 可以很方便的实现字符串/文件的编码检测, 尤其是中文网页, 有的页面使用 GBK/GB2312, 有的使用 UTF-8, 如果你需要去爬一些页面, 知道网页编码很重要的.

@@ -1,4 +1,4 @@
-Title: 50. Python collections
+Title: Python collections
 Author: Martin
 Date: 2016-10-10 14:20
 Summary: collections 是 Python 内置的一个集合模块, 在 Python 内置数据类型的基础上, 又提供了几个额外的数据类型供我们使用.

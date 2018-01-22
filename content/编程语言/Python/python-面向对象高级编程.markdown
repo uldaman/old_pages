@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-02 18:48
-title: python 面向对象高级编程
+title: Python 面向对象高级编程
 
 **动态修改类的属性和方法**
 

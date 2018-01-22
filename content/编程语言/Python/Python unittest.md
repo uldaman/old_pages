@@ -1,4 +1,4 @@
-Title: 49. Python unittest
+Title: Python unittest
 Author: Martin
 Date: 2016-09-14 15:31
 Summary: 单元测试, 即对软件设计的最小单元进行内部逻辑、语法、算法、功能等的正解性进行验证.

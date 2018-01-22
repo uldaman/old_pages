@@ -1,4 +1,4 @@
-Title: 44. Django migration vs syncdb
+Title: Django migration vs syncdb
 Author: Martin
 Date: 2016-05-12 20:08
 Summary: migration 是 Django 1.7+ 新特性, Migrations 将模型变更 (添加一个字段, 删除模型等) 映射到数据库 schema.

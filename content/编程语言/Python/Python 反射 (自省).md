@@ -1,4 +1,4 @@
-Title: 51. Python 反射 (自省)
+Title: Python 反射 (自省)
 Author: Martin
 Date: 2017-09-15 19:20
 Summary: 反射机制在 Python 中被称为自省 (不确定, 欢迎指证). 反射的主要功能就是通过字符串动态的导入包、实例化对象、调用方法以及访问属性.

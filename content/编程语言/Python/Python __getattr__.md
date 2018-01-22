@@ -1,4 +1,4 @@
-Title: 52. Python __getattr__
+Title: Python __getattr__
 Author: Martin
 Date: 2017-09-15 20:20
 Summary: 当调用类中不存在的属性时, Python 解释器会试图调用类的 __getattr__ 方法 (如果存在).

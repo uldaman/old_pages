@@ -1,4 +1,4 @@
-Title:  Python 高级特性之 sorted( )
+Title: Python 高级特性之 sorted( )
 Author: Martin
 Date: 2016-01-26 21:37
 Summary: sorted() 函数接收两个参数, 一个是序列, 一个是函数, 它完成对序列的排序操作.

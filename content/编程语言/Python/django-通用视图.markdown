@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-09-26 04:48
-title: (二) Django 视图进阶
+title: Django 视图进阶
 
 **通用视图**
 

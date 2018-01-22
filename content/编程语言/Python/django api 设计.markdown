@@ -1,6 +1,6 @@
 author: Martin
 date: 2015-10-02 05:46
-title: (五) Django API 设计
+title: Django API 设计
 
 **restful
 **一种软件架构风格, 是设计风格而不是标准, 只提供了一组设计原则和约束条件.

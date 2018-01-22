@@ -1,4 +1,4 @@
-Title:  Python 高级特性之 filter( )
+Title: Python 高级特性之 filter( )
 Author: Martin
 Date: 2016-01-26 21:36
 Summary: filter() 函数接收两个参数, 一个是函数, 一个是序列;  它提供的是一个过滤功能.
