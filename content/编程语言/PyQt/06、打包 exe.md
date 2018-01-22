@@ -45,7 +45,7 @@ setup(
     windows = ['first_window.py'],  # 如果是窗口程序就用 windows, 控制台程序就用 console
     )
 ```
-<br>
+
 然后控制台进入 **first_window** 目录, 执行命令: `python exe.py py2exe`, 系统就开始打包了, 打包完成后会生成一个 `dist` 目录, 这里存放 exe 文件.
 
 开发 pyqt 程序时, 可能会产生多个 py 文件, 只需要在打包脚本中指定**入口文件**就可以了, py2exe 会自动分析依赖, 但并不是绝对的, 例如 sip 包就不会被自动带上, 所以这里就需要我们在 `includes` 中配置.<br>
@@ -58,7 +58,7 @@ options = {
     }
 }
 ```
-<br>
+
 # 使用 pyinstaller
 ## 一、初识
 用过 pyinstaller 之后的第一感觉就是相见恨晚, 有这么好用的打包程序, 谁 tm 还用 py2exe, 全程根本不需要手工指定 include 哪些包、哪些 dll 应该被包含, 哪些不该包含, 全都自动实现, 基本剩我们只需要执行如下代码就可以了:
@@ -66,13 +66,13 @@ options = {
 ```
 pyinstaller app.py
 ```
-<br>
+
 如果不想显示 console, 并且打包成一个单独的 exe 文件, 那就加两个参数:
 
 ```
 pyinstaller app.py --noconsole --onefile
 ```
-<br>如果你只引用了很少的资源, 你可以这样简单的打包程序在系统中的显示图标
+如果你只引用了很少的资源, 你可以这样简单的打包程序在系统中的显示图标
 ## 二、打包所有静态资源
 Qt 本身在资源管理器的资源是可以直接打包入程序中, 不需要做什么处理的, 但有时可能需要在程序中调用一些外部资源文件, 此时 pyinstaller 就不能帮我们自动打包了..
 
@@ -86,7 +86,7 @@ a = Analysis([
                 datas=[('task_bar.ico','.')]
             ])
 ```
-<br>
+
 这样就把 **task\_bar.ico** 文件打包进 exe 文件了, 每次执行 exe 文件的时候都会把这个 icon 解压到一个临时目录中供调用.
 
 现在的问题在于, 这个临时目录的路径是不固定的, 那么我们在程序中要如何寻找这个临时目录里的资源文件呢?
@@ -103,7 +103,7 @@ def resource_path(rel_path='icon.ico'):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, rel_path)
 ```
-<br>
+
 当以 python 源码运行时就获取当前的路径, 打包后运行时就获取临时目录的路径, 这样我们在 pyqt 中的 icon 设置代码就变成了:
 
 ```python

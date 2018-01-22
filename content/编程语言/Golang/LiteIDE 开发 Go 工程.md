@@ -53,7 +53,7 @@ func main() {
     }
 }
 ```
-<br>
+
 然后, 在 src 目录下 (与 calc 目录同级) 新建个 **simplemath** 目录, 并新建个 add.go 文件:
 
 ```go
@@ -63,7 +63,7 @@ func Add(a int, b int) int {
     return a + b
 }
 ```
-<br>
+
 此时的文件结构如下:
 
 ![文件结构](http://i68.tinypic.com/2r71y04.jpg)
@@ -88,7 +88,7 @@ func TestAdd1(t *testing.T) {
     }
 }
 ```
-<br>
+
 点击 LiteIDE 工具栏上的 **T** 图标就能执行该测试单元了.
 
 ![测试单元](http://i65.tinypic.com/347fuz6.jpg)

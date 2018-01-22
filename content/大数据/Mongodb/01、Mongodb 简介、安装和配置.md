@@ -28,7 +28,7 @@ D:\
 
 mkdir Data
 ```
-<br>
+
 
 ## 以 CMD 进程运行 MongoDB 服务器
 为了从命令提示符下运行 MongoDB 服务器, 需要在 MongoDB 目录的 __bin__ 目录中执行 __mongod.exe__ 文件.
@@ -36,7 +36,7 @@ mkdir Data
 ```
 mongod --dbpath D:\Data
 ```
-<br>
+
 
 如果执行成功, 可能会输出类似如下信息:
 
@@ -58,13 +58,13 @@ I FTDC     [initandlisten] Initializing full-time diagnostic data capture with d
 I NETWORK  [initandlisten] waiting for connections on port 27017
 ……
 ```
-<br>
+
 
 ## 以 Windows 服务运行 MongoDB 服务器
 ```
 mongod --bind_ip [your id adress] --logpath [D:\Data\mongodb.log] --logappend --dbpath [D:\Data] --port [your port number] --serviceName [your service name] --serviceDisplayName [your service name] --install
 ```
-<br>
+
 
 下表为 mongodb 启动的参数说明:
 
@@ -88,7 +88,7 @@ MongoDB shell version: 3.0.6
 connecting to: test
 ……
 ```
-<br>
+
 __db__ 命令用于查看当前操作的文档(数据库):
 
 ```
@@ -96,7 +96,7 @@ __db__ 命令用于查看当前操作的文档(数据库):
 test
 >
 ```
-<br>
+
 __db.serverCmdLineOpts()__ 方法用来查看连接的 Mongodb 的信息:
 
 ```js
@@ -115,7 +115,7 @@ db.serverCmdLineOpts()
         "ok" : 1
 }
 ```
-<br>
+
 MongoDB Client 中还可以运行一些简单的算术运算:
 
 ```

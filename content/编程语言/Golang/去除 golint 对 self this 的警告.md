@@ -19,7 +19,7 @@ if name == "this" || name == "self" {
   return true
 }
 ```
-<br>
+
 然后全局替换 `github.com/golang/lint` \-\> `github.com/z351522453/lint`, 修改好后 `git push`.
 
 > 主要是因为 golint 包下 golint.go 中用全路径 import 了 lint 包 (`import "github.com/golang/lint"`), 应该把路径改成自己的 github 库路径.

@@ -25,7 +25,7 @@ db.counters.insert(
    }
 )
 ```
-<br>
+
 
 2\. Create a __getNextSequence__ function that accepts a name of the sequence. The function uses the findAndModify() method to atomically increment the seq value and return this new value:
 
@@ -42,7 +42,7 @@ function getNextSequence(name) {
    return ret.seq;
 }
 ```
-<br>
+
 
 3\. Use this __getNextSequence()__ function during insert().
 
@@ -61,7 +61,7 @@ db.users.insert(
    }
 )
 ```
-<br>
+
 ## Optimistic Loop
 1\. Create a function named __insertDocument__ that performs the "insert if not present" loop. The function wraps the insert() method and takes a __doc__ and a __targetCollection__ arguments.
 
@@ -89,7 +89,7 @@ function insertDocument(doc, targetCollection) {
     }
 }
 ```
-<br>
+
 
 2\. Use the __insertDocument()__ function to perform an insert:
 
@@ -110,4 +110,4 @@ insertDocument(
    myCollection
 )
 ```
-<br>
+

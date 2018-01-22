@@ -21,7 +21,7 @@ use admin
 db.getCollectionNames()
 [ "system.users", "system.version" ]
 ```
-<br>
+
 
 - system.users 存储了数据库帐号信息
 - system.version 存储 authSchema 的版本信息
@@ -46,4 +46,4 @@ if (supportsDocLocking() || enableCollectionLocking) {
 
 _lockState-&gt;lock(_id, _mode);
 ```
-<br>
+

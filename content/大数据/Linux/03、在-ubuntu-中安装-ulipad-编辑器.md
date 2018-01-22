@@ -91,7 +91,7 @@ Linux 下只要注意制表符设置就可以了, 其它默认即可.
 ```
 sudo gedit /usr/share/applications/Ulipad.desktop
 ```
-<br>
+
 然后在里面添加如下内容:
 
 ```
@@ -105,7 +105,7 @@ Terminal=false
 Type=Application
 Categories=Application;Development;
 ```
-<br>
+
 保存后, Ulipad 就会出现在'应用程序'里面:
 
 ![](http://i64.tinypic.com/15i0osn.jpg)

@@ -25,7 +25,7 @@ def on_pushButton(self, checked):
     """
     print "111"
 ```
-<br>
+
 我这里手动关联了一个信号槽, 按以前对 C++ 开发 Qt 的理解, 当产生 `clicked(bool)` 信号时, 会找到 `on_pushButton(self, checked)` 槽函数...
 
 然而, 遗憾的是, pyqt 不具备这样的功能, 如果你不在 `@pyqtSignature("")` 声明, pyqt 是找不到这个槽函数的...所以你必须改成 `@pyqtSignature("bool")`.

@@ -41,7 +41,7 @@ void Qt_Notepad::SaveFile() {
     }
 }
 ```
-<br>
+
 这两个函数中分别使用了 QFileDialog 的两个静态函数: getOpenFileName() 和 getSaveFileName();
 
 先来看下 getOpenFileName() , 这个函数获取需要打开的文件的全路径.
@@ -54,7 +54,7 @@ QString getOpenFileName(QWidget * parent = 0,
                         QString * selectedFilter = 0,
                         Options options = 0)
 ```
-<br>
+
 
 - parent: 父窗口.
 - caption: 对话框标题;

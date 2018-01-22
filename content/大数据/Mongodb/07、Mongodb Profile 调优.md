@@ -16,14 +16,14 @@ db.system.profile.drop()
 db.createCollection( "system.profile", { capped: true, size:4096000 } )
 db.setProfilingLevel(1)
 ```
-<br>
+
 ## 2. 查看当前 Profile
 查看当前是否开启 Profile 功能用命令:
 
 ```js
 db.getProfilingLevel()
 ```
-<br>
+
 返回 Level 等级, 返回值:
 
 - 0 关闭
@@ -35,7 +35,7 @@ db.getProfilingLevel()
 db.setProfilingLevel(1,1000)
 { "was" : 0, "slowms" : 20, "ok" : 1 }
 ```
-<br>
+
 第一个参数表示 Profile 的级别, 第二个参数是定义慢查询的阈值
 
 ## 4. system.profile
@@ -48,7 +48,7 @@ db.system.profile.find()
 { "ts" : ISODate("2014-05-05T02:45:13.562Z"), "info" : "query test.system.profile ntoreturn:5 reslen:36 nscanned:2  \nquery: { query: { millis: { $gt: 0.0 } }, orderby: { $natural: -1.0 } }  nreturned:0 bytes:20", "millis" : 0 }
 { "ts" : ISODate("2014-05-05T02:45:17.171Z"), "info" : "query test.emp reslen:261 nscanned:5  \nquery: {}  nreturned:5 bytes:245", "millis" : 0 }
 ```
-<br>
+
 返回值说明:
 
 - ts: 该命令执行的时间

@@ -27,7 +27,7 @@ class WorkThread(QThread):
 workThread = WorkThread()
 workThread.start()
 ```
-<br>
+
 需要注意, 如果你在一个类的方法里 start 一个线程, 你需要将线程实例申明为类的属性, 否则, 当你调用完这个 start 线程的类方法后, 由于方法退出, 局部的线程实例被销毁, 就会报错: `QThread: Destroyed while thread is still running`.
 
 例如下面这样就会报错:
@@ -37,7 +37,7 @@ def word_start(self):
     workThread = WorkThread()
     workThread.start()
 ```
-<br>
+
 要改成:
 
 ```python
@@ -45,7 +45,7 @@ def word_start(self):
     self.workThread = WorkThread()
     self.workThread.start()
 ```
-<br>
+
 # 线程间通信
 在 Qt 中, 可以很方便的利用信号槽的机制在多线程间进行通信:
 
@@ -71,7 +71,7 @@ workThread = WorkThread()
 workThread.sin_out.connect(on_output)  # 连接信号槽
 workThread.start()
 ```
-<br>
+
 # Qt 的线程同步
 ### 可用的类
 Qt 提供以下几个类来保证线程同步问题:
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-<br>
+
 我们来分析一下, 先来看的 producer 的 run() 方法, 好, 假设已经进入 for 循环:
 
 - step1: `freeSpace.acquire()` 从 freeSpace 获取一个可用信号, 因为用 1 来初始化的 freeSpace, 所以这里能正常获取一个信号

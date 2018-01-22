@@ -99,7 +99,7 @@ class MemoryDemo {
     }
 }
 ```
-<br>
+
 编译后运行结果如下 (不同的机器不同时间运行的结果也不一定一样):
 
 ```
@@ -110,7 +110,7 @@ Free memory after allocation : 1872224
 Memory used by allocation : 16584
 Free memory after collecting discarded integers : 1888808
 ```
-<br>
+
 ## 2、执行其他程序
 在安全的环境中, 可以在多任务操作系统中使用 Java 去执行其他特别大的进程 (也就是程序).
 
@@ -135,7 +135,7 @@ class ExecDemo {
     }
 }
 ```
-<br>
+
 `exec()` 还有其他几种形式, 例子中演示的是最常用的一种.
 
 `exec()` 方法返回 Process 对象后, 在新程序开始运行后就可以使用 Process 的方法了.
@@ -159,12 +159,12 @@ class ExecDemoFini {
     }
 }
 ```
-<br>
+
 下面是运行的结果 (当关闭记事本后, 会接着运行程序, 打印信息):
 
 ```
 Notepad returned 0
 请按任意键继续. . .
 ```
-<br>
+
 当子进程正在运行时, 可以对标准输入输出进行读写, `getOutputStream()` 方法和 `getInPutStream()` 方法返回对子进程的标准输入和输出.

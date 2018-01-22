@@ -15,7 +15,7 @@ MongoDB shell version: 3.0.6
 connecting to: test
 ...
 ```
-<br>
+
 
 ## 创建数据库(文档)
 **命令格式:**
@@ -23,7 +23,7 @@ connecting to: test
 ```
 use DATABASE_NAME
 ```
-<br>
+
 如果数据库不存在, 则创建数据库并切换过去, 否则直接切换到指定数据库.
 
 **实例:**
@@ -35,7 +35,7 @@ switched to db runoob
 runoob
 >
 ```
-<br>
+
 现在我们创建一个新数据库 runoob, 然后 db 命令查看当前所在的数据库, 就会当前环境看到已经切换到 runoob 数据库中了..
 
 使用 **show dbs** 命令可以查看所有已存在的数据库:
@@ -46,7 +46,7 @@ local  0.078GB
 test   0.078GB
 >
 ```
-<br>
+
 但是, 我们发现刚创建的数据库 runoob 并不在数据库的列表中, 要显示它, 我们需要向 runoob 数据库插入一些数据, 关于如何插入数据, 请参考下面的笔记.
 
 ## 删除数据库(文档)
@@ -55,7 +55,7 @@ test   0.078GB
 ```
 db.dropDatabase()
 ```
-<br>
+
 删除当前所在数据库
 
 **实例:**<br>
@@ -67,7 +67,7 @@ local   0.078GB
 runoob  0.078GB
 test    0.078GB
 ```
-<br>
+
 切换到待删除数据库 runoob:
 
 ```
@@ -75,14 +75,14 @@ test    0.078GB
 switched to db runoob
 >
 ```
-<br>
+
 执行删除命令:
 
 ```
 > db.dropDatabase()
 {"dropped": "runoob", "ok": 1}
 ```
-<br>
+
 最后, 再通过 show dbs 命令数据库是否删除成功:
 
 ```
@@ -91,7 +91,7 @@ local  0.078GB
 test   0.078GB
 >
 ```
-<br>
+
 
 ## 插入数据
 **命令格式:**<br>
@@ -100,7 +100,7 @@ MongoDB 使用 **insert()** 或 **save()** 方法向**集合**中插入文档:
 ```
 db.COLLECTION_NAME.insert(document)
 ```
-<br>
+
 这里提到一个**集合** 和 **document** 的概念.
 
 什么是**集合**?<br>
@@ -130,13 +130,13 @@ switched to db runoob
 runoob
 >
 ```
-<br>
+
 然后向 **runoob** 数据库的 **col** 集合中插入数据:
 
 ```
 >db.col.insert({name: 'MongoDB 教程', age: 18})
 ```
-<br>
+
 **col** 是我们的集合名, 如果该集合不在当前所处的数据库中, MongoDB 会自动创建该集合并插入文档.
 
 MongoDB 数据中的**字段都是字符串格式的**, 但是 MongoDB 做了优化, 通常我们可以可以省略引号.
@@ -154,7 +154,7 @@ MongoDB 数据中的**字段都是字符串格式的**, 但是 MongoDB 做了优
 {"_id": ObjectId("56064886ade2f21f36b03134"), "name": "MongoDB 教程", "age": 18}
 >
 ```
-<br>
+
 可以看到刚才插入的数据有了一个 **\_id** 字段, 使用该字段可以对数据进行 删、改、查.
 
 ## 删除文档
@@ -168,7 +168,7 @@ db.collection.remove(
    {justOne}
 )
 ```
-<br>
+
 
 参数说明:
 
@@ -180,7 +180,7 @@ db.collection.remove(
 ```
 db.col.remove({})
 ```
-<br>
+
 ## 修改数据
 可以使用 **update()** 和 **save()** 方法来更新集合中的文档.
 
@@ -200,7 +200,7 @@ db.collection.update(
    }
 )
 ```
-<br>
+
 参数说明:
 
 - query: 匹配条件, 直接写 {} 表示匹配所有
@@ -226,7 +226,7 @@ db.collection.save(
    }
 )
 ```
-<br>
+
 参数说明:
 
 - document: 文档数据
@@ -241,7 +241,7 @@ MongoDB 使用 **find()** 或 **findOne()** 方法从**集合**中插查询数�
 >db.COLLECTION_NAME.find()
 >db.col.find().pretty()
 ```
-<br>
+
 find() 方法以**非结构化**的方式来显示所有文档, 如果需要以易读的**结构化**方式来读取数据, 可以使用 **pretty()** 方法.
 
 **实例**<br>
@@ -255,7 +255,7 @@ find() 方法以**非结构化**的方式来显示所有文档, 如果需要以�
         "age": 18
 }
 ```
-<br>
+
 细心同学可能已经发现, 上面查询结果中字段都是**字符串**格式(\_id、name、age 都用引号包起来了).
 
 ### 过滤返回字段
@@ -270,7 +270,7 @@ find() 方法以**非结构化**的方式来显示所有文档, 如果需要以�
         "name": "MongoDB 教程",
 }
 ```
-<br>
+
 注意, \_id 总是返回的.
 
 或者指定哪些字段不返回:
@@ -282,7 +282,7 @@ find() 方法以**非结构化**的方式来显示所有文档, 如果需要以�
         "age": 18
 }
 ```
-<br>
+
 可以看到, 这种方式可以过滤掉 \_id 字段.
 
 ### 条件查询
@@ -308,13 +308,13 @@ MongoDB 的 **find()** 和 **findOne()** 都支持条件语句的查询, 它们�
 ```
 >db.col.insert({name: '张三', age: 18, school: {name: '交通大学', city: '上海'}})
 ```
-<br>
+
 如果想要根据学校名字来查询数据, 就可以用下面这种嵌套条件:
 
 ```
 db.col.find({'school.name': '交通大学'}).pretty()
 ```
-<br>
+
 ### 不包含字段查询
 这种查询是查询集合中**没有某个字段**的数据.
 
@@ -324,13 +324,13 @@ db.col.find({'school.name': '交通大学'}).pretty()
 >db.col.insert({name: '张三', age: 18)
 >db.col.insert({name: '李四')
 ```
-<br>
+
 现在需求查询没有 age 字段的数据, 方法如下:
 
 ```
 >db.col.find({'age': {$exists:false}})
 ```
-<br>
+
 ### 复合条件查询
 
 #### OR 条件
@@ -345,14 +345,14 @@ OR 条件语句使用了关键字 **$or**, 语法格式如下:
    }
 ).pretty()
 ```
-<br>
+
 #### IN 条件
 in 条件语句, 也是一种或者逻辑, 使用了关键字 **$in**, 但它与 or 不同, or 是在不同的 field 之间或者, 而 in 是在同一个 field 间或者, 并且支持对**数组**型元素进行查询
 
 ```
 >db.col.find({key1: {$in: [value1, value2]}}).pretty()
 ```
-<br>
+
 匹配 key1 的值为 value1 或者 value2 的元素, 或者匹配包含有 value1 / value2 的数组元素.
 
 #### AND 条件
@@ -370,14 +370,14 @@ OR 条件语句可以使用了关键字 **$and**, 也可以直接在条件 docum
 
 >db.col.find({key1:value1, key2:value2}).pretty()
 ```
-<br>
+
 #### ALL 条件
 ALL 条件用来对数组中的元素进行全匹配, 使用了关键字 **$all**.
 
 ```
 >db.col.find({key1: {$all: [value1, value2]}}).pretty()
 ```
-<br>
+
 首先, key1 要是个数组, 如 [value1, value2 ...]<br>
 该语句匹配同时包含元素 value1 和 value2 的数组.
 
@@ -398,13 +398,13 @@ find() 方法具有投影基本语法如下
 ```
 db.COLLECTION_NAME.find({}, {KEY1: 1, KEY1: 0})
 ```
-<br>
+
 请注意 **\_id** 字段始终显示, 如果不想这个字段, 那么需要将其设置为 0:
 
 ```
 db.COLLECTION_NAME.find({}, {KEY: 1, _id: 0})
 ```
-<br>
+
 #### 分页
 MongoDB 的分页功能需要用到两个方法: **Limit()** 和 **Skip()**
 
@@ -414,27 +414,27 @@ limit() 方法接受一个数字参数, 该参数指定读取的记录条数.
 ```
 db.COLLECTION_NAME.find().limit(number)
 ```
-<br>
+
 ##### Skip()
 skip() 方法用来跳过指定数量的数据, skip() 方法同样接受一个数字参数作为跳过的记录条数
 
 ```
 db.COLLECTION_NAME.find().skip(number)
 ```
-<br>
+
 配合 **Limit()** 和 **Skip()** 就能实现分页查询的功能, 例如每页面显示 10 条数据, 想显示第 5 页的数据:
 
 ```
 db.COLLECTION_NAME.find().skip(4 * 10).limit(10)
 ```
-<br>
+
 #### 排序
 **命令格式:**
 
 ```
 db.COLLECTION_NAME.find().sort({KEY: 1})
 ```
-<br>
+
 Key 可以设为 1 或者 -1, 1 用于升序排列, 而 -1 用于降序.
 
 **注意:** 排序是一个耗性能的操作, 建议只对建立了**索引**的 key 进行排序.

@@ -31,7 +31,7 @@ IcisReport.server.port=8080
 #   IcisReport 的上下文路径
 IcisReport.contextPath=/IcisReport
 ```
-<br>
+
 # Properties 类
 Java 用 `Properties` 类来操作 Properties 文件, `Properties` 类存在于包 `Java.util` 中, 该类继承自 `Hashtable`.
 
@@ -112,4 +112,4 @@ Java读取 Properties 文件的方法有很多.
      }
  }
 ```
-<br>
+

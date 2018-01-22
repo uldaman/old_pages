@@ -31,7 +31,7 @@ public class App {
     }
 }
 ```
-<br>
+
 这里 Eclipse 就会提示错误, 我们引入 JUnit 包就可以了.
 
 ![](http://i66.tinypic.com/ejbk3q.jpg)

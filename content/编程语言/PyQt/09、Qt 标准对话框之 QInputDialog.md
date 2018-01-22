@@ -30,7 +30,7 @@ QInputDialog 提供了一些简单的 `static` 函数，用于快速的建立一
 from PyQt4 import QtGui
 QtGui.QInputDialog.getText(self, u'提示', u'输入信息:', QtGui.QLineEdit.Normal, u"请输入你的信息...")
 ```
-<br>
+
 代码比较简单，使用 getText 函数就可以弹出一个可供用户输入的对话框:
 
 ![](http://i63.tinypic.com/w1qixt.jpg)

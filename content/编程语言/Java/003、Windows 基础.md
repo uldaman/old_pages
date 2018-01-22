@@ -96,7 +96,7 @@ REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v Enable
 REG ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v PromptOnSecureDesktop /t REG_DWORD /d 0 /f
 echo.& pause
 ```
-<br><br>
+<br>
 将以下代码copy到记事本中存为reg文件运行
 ```
 Windows Registry Editor Version 5.00
@@ -109,7 +109,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Sidebar\Settings]
 "AllowElevatedProcess"=dword:00000001
 ```
-<br>
+
 
 - 运行gpedit.msc：计算机配置-管理模板-系统-关机选项-关闭会阻止或取消关机......：启动此功能
 - 控制面板>操作中心>更改操作中心设置:将所有钩选的选项全部去掉并将下方客户体验改善计划关闭

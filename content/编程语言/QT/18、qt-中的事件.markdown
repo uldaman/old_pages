@@ -32,7 +32,7 @@ void EventLabel::mouseMoveEvent(QMouseEvent *event) {
     this->setText(QString("Move: (%1, %2)").arg(QString::number(event->x()), QString::number(event->y())));
 }
 ```
-<br>
+
 当然, 我们还需要修改 ui 文件, 让 QLabel 控件从 EventLabel 上创建.
 
 生成应用程序后, 第一次使用, 我们需要在 Label 上按下鼠标后**拖动**一下, QLabel 上就开始显示鼠标坐标, 接下来就就不需要按下鼠标了, 直接移动鼠标就能显示坐标.
@@ -60,7 +60,7 @@ void CustomButton::mousePressEvent(QMouseEvent *event) {
     }
 }
 ```
-<br>
+
 此时, 你会发现, 之前为 clicked() 信号添加的槽将不再被执行…
 
 因此, 可以推断, 父类 `QPushButton` 的 `mousePressEvent()` 函数中肯定发出了 `clicked()` 信号, 否则的话, 我们的槽函数怎么会不执行了呢?<br>
@@ -88,7 +88,7 @@ void EventLabel::closeEvent(QCloseEvent *event) {
     }
 }
 ```
-<br>
+
 当点击 "YES" 的时候, 调用的是 `event->accept()` 函数, 它表示这个消息我自己会处理, 所以窗口就被关闭了, 如果是 "NO", 调用的就是 `event->ignore()` 函数, 它表示我不想处理这个事件, 它将会被传递给父类中寻找另外的接受者, 因为它自己不想处理这个事件, 所以窗口将不会被关闭…
 
 好吧, 其实我现在已经晕了, 这两个函数让人很难理解, 暂时先这样, 慢慢领悟…
@@ -107,7 +107,7 @@ bool NewWidget::event(QEvent *e) {
     return QWidget::event(e);
 }
 ```
-<br>
+
 需要注意的是, 拦截完后, 我们还需要返回给 QWidget::event() 函数, 否则, Qt 将不再分发所有的消息, 例如, 下面这样的代码就会让你的 Qt 会进入一种”无响应”状态…
 
 ```cpp
@@ -115,7 +115,7 @@ bool NewWidget::event(QEvent *e) {
     return true
 }
 ```
-<br>
+
 # 事件过滤器
 有的时候, 我们可能需要在一个界面上的多个对象上拦截事件, 例如, 一个窗口上有 10 个编辑框, 我想要 1 号编辑框拦截 a 键, 2 号编辑框拦截 b 键, 以此类推;
 
@@ -162,7 +162,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     }
 }
 ```
-<br>
+
 简单的说明一下这个代码, 首先定义了一个定义的界面类 `MainWindow`, 然后重写了它的 `eventFilter` 函数, 为了过滤特定组件的事件, 在函数内部, 先判断是对象目标对象是不是 `textEdit`, 然后再判断事件是不是 `KeyPress`, 要使用这个事件过滤器能接收到 `textEdit` 的事件, 还需要做一个非常重要的动作, 就是安装过滤器, 安装过滤器需要调用 `QObject::installEventFilter()` 函数, 这个函数的签名如下: `void QObject::installEventFilter ( QObject * filterObj );` 它有一个 `QObject*` 参数, 传入我们的事件过滤器所在类的指针即可, 这里就是 `this` 了.
 
 事件过滤器的强大之处在于, 我们可以为整个应用程序添加一个事件过滤器.

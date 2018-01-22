@@ -65,5 +65,5 @@ Demo::Demo(QWidget *parent)
     });
 }
 ```
-<br>
+
 triggered() 是 QAction 的信号函数, 当点击 QAction 时被发出.

@@ -54,7 +54,7 @@ Summary: 官方文档永远是最好的学习资料...
      </filterSection>
  </QtHelpProject>
 ```
-<br>
+
 这个文件里面的内容太多了, 手写是不可能的...所以用写个脚本去生成这个文件比较靠谱, 脚本关键性代码如下:
 
 ```python
@@ -71,7 +71,7 @@ for file in files:
         # file = '<file>_sources/' + file + '</file>'
         print file
 ```
-<br>
+
 然后是用命令生成 `pyqtclassreference.qch` 文件:
 
 ```
@@ -86,7 +86,7 @@ Documentation successfully generated.
 
 C:\Python27\Lib\site-packages\PyQt4\doc\html>
 ```
-<br>
+
 再把该 pyqtclassreference.qch 文件添加到 Qt Assistant 中就可以了 (编辑 \-\> 首选项), 下图是添加后的界面:
 
 ![](http://i64.tinypic.com/2rztls1.jpg)

@@ -20,26 +20,26 @@ PreparedStatement 对比 Statement 主要有两方面有所不同:
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 ```
-<br>
+
 **一般实例化一个 PreparedStatement 和结果集**
 
 ```java
 PreparedStatement prepstmt = null;
 ResultSet rs = null;
 ```
-<br>
+
 **得到 SQL 语句**
 
 ```java
 prepstmt = conn.prepareStatement(String StrSQl); // conn 为 Connection 类型
 ```
-<br>
+
 **执行 SQL, 得到结果集**
 
 ```java
 rs = prepstmt.executeQuery(); // rs 为 ResultSet 类型
 ```
-<br>
+
 # 一些具体用法
 ## 创建 PreparedStatement 对象
 以下的代码段 (其中 con 是 Connection 对象) 创建包含带两个 IN 参数占位符的 SQL 语句的 PreparedStatement 对象:
@@ -48,7 +48,7 @@ rs = prepstmt.executeQuery(); // rs 为 ResultSet 类型
 PreparedStatement pstmt = con.prepareStatement("UPDATE table4 SET m = ? WHERE x = ?");　　
 PreparedStatement pstmt = con.prepareStatement("UPDATE table4 SET m = ? WHERE x = ?"); 　　
 ```
-<br>
+
 pstmt 对象包含语句 `"UPDATE table4 SET m = ? WHERE x = ?"`, 它已发送给 DBMS, 并为执行作好了准备.
 
 ## 传递 IN 参数
@@ -64,7 +64,7 @@ pstmt 对象包含语句 `"UPDATE table4 SET m = ? WHERE x = ?"`, 它已发送�
 pstmt.setLong(1, 123456789);
 pstmt.setLong(2, 100000000);
 ```
-<br>
+
 一旦设置了给定语句的参数值, 就可用它多次执行该语句, 直到调用 `clearParameters` 方法清除它为止, 在连接的缺省模式下 (启用自动提交), 当语句完成时将自动提交或还原该语句.
 
 如果基本数据库和驱动程序在语句提交之后仍保持这些语句的打开状态, 则同一个 PreparedStatement 可执行多次, 如果这一点不成立, 那么试图通过使用 PreparedStatement 对象代替 Statement 对象来提高性能是没有意义的.
@@ -78,7 +78,7 @@ for (int i = 0; i < 10; i++) {
     int rowCount = pstmt.executeUpdate();
 }
 ```
-<br>
+
 ## IN 参数中数据类型的一致性
 `setXXX` 方法中的 XXX 是 Java 类型, 它是一种隐含的 JDBC 类型 (一般 SQL 类型), 因为驱动程序将把 Java 类型映射为相应的 JDBC 类型 (遵循该 JDBCGuide 中 §8.6.2 "映射 Java 和 JDBC 类型" 表中所指定的映射) , 并将该 JDBC 类型发送给数据库.
 
@@ -87,7 +87,7 @@ for (int i = 0; i < 10; i++) {
 ```java
 pstmt.setShort(2, 44);
 ```
-<br>
+
 驱动程序将 44 作为 `JDBC SMALLINT` 发送给数据库, 它是 `Java Short` 类型的标准映射.
 
 程序员的责任是确保将每个 IN 参数的 Java 类型映射为与数据库所需的 JDBC 数据类型兼容的 JDBC 类型.

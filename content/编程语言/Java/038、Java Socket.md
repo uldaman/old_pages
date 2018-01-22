@@ -45,7 +45,7 @@ ServerSocket(int port);
 ServerSocket(int port, int backlog);
 ServerSocket(int port, int backlog, InetAddress bindAddr)
 ```
-<br>
+
 其中:
 
 - `address`、`host` 和 `port` 分别是双向连接中另一方的 IP 地址、主机名和端 口号
@@ -70,7 +70,7 @@ getLocalPort();     //本地客户端的端口
 getInputStream();   //获得输入流
 getOutStream();     //获得输出流
 ```
-<br>
+
 值得注意的是, 在这些方法里面, 最重要的就是 `getInputStream()` 和 `getOutputStream()`了.
 
 **Socket 状态**
@@ -80,13 +80,13 @@ isClosed();     //连接是否已关闭, 若关闭, 返回 true；否则返回 f
 isConnect();    //如果曾经连接过, 返回 true；否则返回 false
 isBound();      //如果 Socket 已经与本地一个端口绑定, 返回 true；否则返回 false
 ```
-<br>
+
 如果要确认 Socket 的状态是否处于连接中, 下面语句是很好的判断方式:
 
 ```java
 boolean isConnection=socket.isConnected() && !socket.isClosed();   //判断当前是否处于连接
 ```
-<br>
+
 # 代码片段
 客户端
 
@@ -103,7 +103,7 @@ System.out.println(br.readLine());
 ps.println("爷不学了");
 socket.close();
 ```
-<br>
+
 服务端
 
 ```java
@@ -122,7 +122,7 @@ System.out.println(br.readLine());
 server.close();
 socket.close();
 ```
-<br>
+
 多线程版服务端
 
 ```java
@@ -147,5 +147,5 @@ ServerSocket server = new ServerSocket(9999);   //创建服务器
     }
 }
 ```
-<br>
+
 

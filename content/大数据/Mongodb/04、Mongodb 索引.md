@@ -17,7 +17,7 @@ __ensureIndex()__ 方法可以创建一个新的索引.
 ```
 db.COLLECTION_NAME.ensureIndex({KEY: 1})
 ```
-<br>
+
 语法中 Key 值为你要创建的索引字段, __1__ 为指定按升序创建索引, 如果你想按降序来创建索引指定为 __-1__ 即可.
 
 __复合索引__
@@ -27,7 +27,7 @@ __ensureIndex()__ 方法中也可以设置使用多个字段创建索引(关系�
 ```
 db.col.ensureIndex({'title': 1, 'description': -1})
 ```
-<br>
+
 该索引被创建后, 基于 __title__ 和 __description__ 的查询将会用到该索引, 或者是基于 __title__ 的查询也会用到该索引, 但是只是基于 __description__ 的查询将不会用到该复合索引;<br>
 因此可以说, 如果想用到复合索引, 必须在查询条件中包含复合索引中的前 N 个索引列...
 
@@ -62,7 +62,7 @@ db.col.getIndexes()
         }
 ]
 ```
-<br>
+
 
 返回值分析:
 
@@ -101,7 +101,7 @@ db.col.find().explain()
     ]
 }
 ```
-<br>
+
 重点返回值:
 
 - cursor: BasicCursor, 这个表示没有使用索引, 等下会演示下使用了索引的情形.
@@ -145,7 +145,7 @@ db.col.find({age: {$gt: 20, $lt: 30}}).explain()
 }
 
 ```
-<br>
+
 重点返回值:
 
 - cursor: BtreeCursor age\_1, 表示使用了索引 age\_1

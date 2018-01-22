@@ -21,7 +21,7 @@ Project Pages site 和普通的 Github Repository 没两样, 但它利用一个 
 ```shell
 git clone github.com/user/repository.git
 ```
-<br>
+
 再创建 `gh-pages` 分支:
 
 ```shell
@@ -32,13 +32,13 @@ Switched to a new branch 'gh-pages'
 
 git rm -rf .
 ```
-<br>
+
 现在, 这个 `gh-pages` 分支就是我们新的 `blog` 仓库, 类似于以前 Github Page 仓库 (username.github.io) 的主分支, 我们将以前 Github Page 仓库下的文件拷贝到这个 `gh-pages` 分支下, 最后提交到远程:
 
 ```shell
 git push origin gh-pages
 ```
-<br>
+
 现在, 我们通过 `username.github.io/blog` 就能访问 `blog` 仓库 `gh-pages` 分支下的 `index.html` 文件.
 
 # 添加自定义域名
@@ -54,7 +54,7 @@ git push origin gh-pages
 ```
 blog    CNAME        username.github.io
 ```
-<br>
+
 修改过后要等一段时间才能生效, 具体时间视域名运营商决定...
 
 # 迁移博客源文件
@@ -80,7 +80,7 @@ def gh_pages():
     local("ghp-import -b {github_pages_branch} {deploy_path}".format(**env))
     local("git push origin {github_pages_branch}".format(**env))
 ```
-<br>
+
 # References
 [GitHub Pages Basics](https://help.github.com/categories/github-pages-basics/)<br>
 [Setting up your pages site repository](https://help.github.com/articles/setting-up-your-pages-site-repository/)<br>

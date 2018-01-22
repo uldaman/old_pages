@@ -19,7 +19,7 @@ void addBatch(String sql)
 // 将一批命令提交给数据库来执行, 如果全部命令执行成功, 则返回更新计数组成的数组.
 int[] executeBatch()
 ```
-<br>
+
 返回: 包含批中每个命令的一个元素的更新计数所组成的数组 (数组中的每个元素为: 成功处理了命令后, 执行命令所影响数据库中行数的更新计数), 数组的元素根据将命令添加到批中的顺序排序.
 
 **PreparedStatement** 接口里:<br>
@@ -29,7 +29,7 @@ int[] executeBatch()
 // 将一组参数添加到此 PreparedStatement 对象的批处理命令中.
 void addBatch()
 ```
-<br>
+
 因为数据库的处理速度是非常惊人的, 单次吞吐量很大, 执行效率极高, `addBatch()` 把若干 sql 语句装载到一起, 然后一次送到数据库执行, 执行只需要很短的时间.
 
 这里说说 `PreparedStatement` 最重要的 `addbatch()` 的使用.

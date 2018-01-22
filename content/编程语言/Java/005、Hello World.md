@@ -20,7 +20,7 @@ class HelloWorld {
     }
 }
 ```
-<br>
+
 
 DOS下编译:<br>
 **javac  xxx.java**, 得到 HelloWorld.class 文件, 称为字节码文件, 注意: 不管 java 源文件是什么名(必须是 .java 结尾), 目标文件都是源文件里面写的 **类名.class**, 但是, 如果源代码为 **public** class HelloWorld, 则源文件名必须和类名一致.

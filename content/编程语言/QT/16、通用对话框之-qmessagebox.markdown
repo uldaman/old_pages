@@ -53,7 +53,7 @@ if (QMessageBox::Yes == QMessageBox::question(this,
     QMessageBox::information(this, "Hmmm...", "I'm sorry!");
 }
 ```
-<br>
+
 当然这些 static func 可以满足我们大部分的项目需求, 然而, 有时, 我们需要显示一个特殊的 QMessageBox, 此时, 我们就要使用 QMessageBox 的属性设置 API 来达到目的, 例如我们想弹出下面这种 QMessageBox.
 
 ![](http://i58.tinypic.com/1zydo2o.jpg)
@@ -82,7 +82,7 @@ case QMessageBox::Cancel:
     break;
 }
 ```
-<br>
+
 
 - setText() 设置对话框的主要文本信息;
 - setIformativeText() 设置对话框的简单说明文本;

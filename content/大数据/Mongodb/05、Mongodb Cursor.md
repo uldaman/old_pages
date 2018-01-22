@@ -20,7 +20,7 @@ Summary: 游标是数据库系统为用户开设的一个数据缓冲区, 用户
 ```
 var cursor = db.num.find()
 ```
-<br>
+
 
 - cursor.count(): 获取查询到的结果数量
 - cursor.hasNext(): 是否还有数据
@@ -45,7 +45,7 @@ cursor.limit(5)
 var cursor = db.num.find()
 cursor.limit(5).skip(3)
 ```
-<br>
+
 ## forEach 方法
 __forEach()__ 方法用来遍历游标, 并且可以提供一个 __function__ 做为回调函数, 在遍历时, 将传入的 function 依次作用到 Cursor 中的每条数据上.
 
@@ -55,7 +55,7 @@ cursor.forEach(fuction(doc) {print(doc.name)})
 '李四'
 '王五'
 ```
-<br>
+
 ## map 方法
 __map()__ 方法功能与 __forEach()__ 一致, 但它可以接受返回值, 并把返回结果放到一个数组中.
 
@@ -63,6 +63,6 @@ __map()__ 方法功能与 __forEach()__ 一致, 但它可以接受返回值, 并
 cursor.map(fuction(doc) {return doc.name})
 ['张三', '李四', '王五']
 ```
-<br>
+
 ## 更多
 关于游标的更多操作, 参考[官方文档](https://docs.mongodb.org/manual/reference/method/js-cursor/)

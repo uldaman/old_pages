@@ -37,7 +37,7 @@ db.runCommand({
     [verbose: ] 布尔值, 是否产生更加详细的服务器日志, 默认 true
 });
 ```
-<br>
+
 测试数据:
 
 ![](http://i68.tinypic.com/1zd81p2.jpg)
@@ -49,7 +49,7 @@ db.runCommand({
 {age: 1, names: ['name_1', 'name_7', 'name_13', 'name_19']}
 ......
 ```
-<br>
+
 __第一步__是写 __Map__ (映射)函数, 可以简单的理解成分组吧~
 
 ```js
@@ -57,7 +57,7 @@ var m = function(){
     emit(this.age, this.name);
 }
 ```
-<br>
+
 __emit__ 的第一个参数是 __key__, 就是分组的依据, 参考 __group__ 中的 __key__ 的功能, 这是自然是 __age__ 了, 后面一个是 __value__, 就是要统计的数据, 可以是 JSON 对象. __this__ 表示的是对当前文档的引用.
 
 这样 __m__ 就会把送过来的数据根据 __Map__ 函数中定义的 __key__ 进行分组了, 组中的元素就是 __Map__ 函数中定义的 __value__, 可以想象成如下结构:
@@ -69,7 +69,7 @@ __emit__ 的第一个参数是 __key__, 就是分组的依据, 参考 __group__ 
 // 第二组
 {key: 1, values: ['name_1', 'name_7', 'name_13', 'name_19']}
 ```
-<br>
+
 组中的 __key__ 其实就是 __age__ 的值了, __values__ 是个数组, 数组内的成员都有相同的 __age__ !!
 
 __第二步__就是简化了, 编写 __reduce__ 函数:
@@ -80,7 +80,7 @@ var r = function(key, values){
     return ret;
 }
 ```
-<br>
+
 __reduce__ 函数会处理每一个分组, 参数就是我们想像分组里的 __key__ 和 __values__.
 
 这里 __reduce__ 函数只是简单的把 __key__ 和 __values__ 包装了一下, 然后返回一个对象, 对象结构正好和我们想象的相符:
@@ -88,7 +88,7 @@ __reduce__ 函数会处理每一个分组, 参数就是我们想像分组里的 
 ```
 {age: 对应的 age，names: [名字1，名字2..]}
 ```
-<br>
+
 __然后__, 还可以编写 __finalize__ 函数对 __reduce__ 的返回值做最后处理:
 
 ```js
@@ -99,7 +99,7 @@ var f = function(key, rval){
     return rval;
 }
 ```
-<br>
+
 这里的 __key__ 还是上面的 __key__, 也就是还是 __age__, __rval__ 是 __reduce__ 的返回值, 所以 __rval__ 的一个实例如: __{age: 0, names: ['name\_6', 'name\_12', 'name\_18']},__
 
 这里判断 __key__ 是不是 0, 如果是, 就在 __rval__ 对象上加 __msg__ 属性, 显然也可以判断 __rval.age == 0__, 因为 __key__ 和 __rval.age__ 是相等的嘛~~
@@ -116,7 +116,7 @@ db.runCommand({
     }
 )
 ```
-<br>
+
 最终返回的 __t\_age\_names__ 集合中的文档包含两个键 __\_id__ 和 __value__:
 
 - __\_id__, 保存上面的 key, 这个例子中就是 age

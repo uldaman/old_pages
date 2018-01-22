@@ -16,7 +16,7 @@ Summary: 考虑了很久, 终于下定决心把博客从 wordpress 迁移到 git
 pip install pelican
 pip install Markdown
 ```
-<br>
+
 然后新建一个 myblog 文件夹, 运行 cmd, 进入这个文件夹, 然后执行 **pelican-quickstart**, 运行命令后, 会让做一些选项设置:
 
 ```
@@ -40,7 +40,7 @@ pip install Markdown
 > Is this your personal page (username.github.io)? (y/N) Y
 Done. Your new project is available at C:\Users\Administrator\Desktop\test
 ```
-<br>
+
 然后, 在当前的 myblog 目录下就有以下文件:
 
 ```
@@ -54,7 +54,7 @@ myblog/
 ├── pelicanconf.py       # Main settings file
 └── publishconf.py       # Settings to use when ready to publish
 ```
-<br>
+
 content: 这里是放置博文的 md 文件, 例如 hello_python.markdown 文章;
 
 output: 这个目录下放置的就是一会利用 pelican 生成的静态博客内容, 当然是 html 的;
@@ -82,7 +82,7 @@ Summary: 摘要
 
 正文
 ```
-<br>
+
 保存好后, 用 cmd 进入 myblog 目录, 执行 **make html**, 过一会, output 目录下就生成了博客文件, 再执行 **make serve**, 然后打开浏览器, 访问: **http://localhost:8000/**, 如果不出问题, 应该能够看到我们博客了...
 
 pelican 支持很多插件, 这里暂时用不上, 因为我只是用来当一个静态页面而已, 不过换个自己喜欢的主题还是蛮不错的~
@@ -123,7 +123,7 @@ zurb-F5-basic 主题现在有个 Bug, 那就是第一篇博文竟然是全文显
 {% endif %}
 {% endblock content %}
 ```
-<br>
+
 对于 `pelicanconf.py`, 除了 THEME 外, 还有一些有用的设置:
 
 ```python
@@ -148,7 +148,7 @@ MD_EXTENSIONS = [
   "admonition",
   "codehilite(guess_lang=False,pygments_style=monokai,noclasses=True)"]
 ```
-<br>
+
 **注意**, MD 语法高亮的设置需要 python 包 `pygments` 支持, 所以, 先安装 `pygments` 吧.
 
 > pygments\_style 可以在 [http://pygments.org/demo/](http://pygments.org/demo/?lang=cpp&sort=) 进行调试<br>
@@ -212,7 +212,7 @@ pelican 原生支持 DISQUS 评论系统, 然而坑爹的 GFW . . .
 </article>
 {% endblock %}
 ```
-<br>
+
 #3. 解析 GFM
 > 使用 GFM 后, 有些 markdown 样式渲染不出来, 不再推荐使用~ 仅了解下就好.
 
@@ -225,7 +225,7 @@ Pymdown Extensions Documentation 对 **pymdownx.github** 说明如下:
 ```
 For code highlighting, you will also need to load the markdown.extensions.codehilite extension yourself as well with guess_lang=False and your preferred Pygments style (if available or use some other JavaScript highlighter). Though there is no Github style included with this extension, you are most likely able to find a suitable theme online by searching. I do have older Github styles found at the pymdown-styles repo; it contains the original Pygments Github style (github) and the Github 2014 style (github2014) which Github used before they ditched Pygments for their own in-house highlighter.
 ```
-<br>
+
 简单的说, 就是 **pymdownx.github** 提供了一些功能用来模仿 Github, 但不是全部, 如果想要使用 Github 的代码高亮, 你需要设置 `markdown.extensions.codehilite` 的 `guess_lang=False`, 并且引用一个 `Pygments style` 文件, 虽然该扩展本身并不包含 Github style, 但是你可以去找....然后作者也给了一个 [pymdown-styles repo](https://github.com/z351522453/pymdown-styles) 供使用 (我将它 Fork 回自己的仓库, 做了点更改, 让它更像 Github 的高亮风格).
 
 使用方法比较简单, clone 项目到本地, 执行 `python setup.py install`, 然后修改 `pelicanconf.py` 文件中 `MD_EXTENSIONS` 的 **codehilite**, 最终的 **MD_EXTENSIONS** 如下:
@@ -242,7 +242,7 @@ MD_EXTENSIONS = [
   "admonition",
   "codehilite(guess_lang=False,pygments_style=github2014,noclasses=True)"]
 ```
-<br>
+
 References:<br>
 [Python Markdown Documentation](https://pythonhosted.org/Markdown/extensions/)<br>
 [Pymdown Extensions Documentation For Github](http://facelessuser.github.io/pymdown-extensions/extensions/github/)<br>
@@ -257,7 +257,7 @@ References:<br>
 ```html
 <link rel="shortcut icon" type="image/x-icon" href="{{ SITEURL }}/theme/images/favicon.ico" />
 ```
-<br>
+
 #5. 迁移 wordpress
 环境搭建好后, 就是把我们 wordpress(后面简称 wp) 的内容迁移过来啦.
 
@@ -289,7 +289,7 @@ for file in files:
 
         os.renames(file, new + '.markdown')
 ```
-<br>
+
 **第三步**, 有了 md 文件了, 剩下的还不好办吗, 全部拷贝到 myblog/content 目录下, 然而问题又来了, 一堆 md 文件堆在一个文件夹下显然是很乱的, 而且也无法利用 **USE_FOLDER_AS_CATEGORY = True # 这个可以让 pelican 根据 content 里的文件夹结构自动生成文章分类** 这条设置了, 所以又写了个脚本把文章按类别分类(在运行脚本之前要手动建好文件夹).
 
 ```python
@@ -318,7 +318,7 @@ for file in files:
                     break
         file_object.close()
 ```
-<br>
+
 **第四步**, md 按类别整理好后, 就可以用 **make html** 来生成 blog 啦, 不过遗憾的是特么生成的文件名依然是乱码, 于是又写了个脚本修复文件名...(应该可以改源码的, 暂时没空看源码, 先用这个脚本过度下).
 
 ```python
@@ -338,7 +338,7 @@ for file in files:
         print new
         os.renames(file, new.decode('utf-8'))
 ```
-<br>
+
 好了, 现在我们的 wp 已经迁移到了本地博客系统, 运行 **make serve** 看看是不是成功了...
 
 #6. 发布到 Github

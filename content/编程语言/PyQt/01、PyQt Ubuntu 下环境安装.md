@@ -27,7 +27,7 @@ __Python 2.7 + PyQt 4.11 + Qt 4.8.7__
 ~/Downloads/qt-everywhere-opensource-src-4.8.7$ sudo make
 ~/Downloads/qt-everywhere-opensource-src-4.8.7$ sudo make install
 ```
-<br>
+
 安装好后, Qt 的默认路径是 `/usr/local/Trolltech/Qt-4.8.7/`, 可以在执行第一条命令时指定安装目录 `./configure --prefix=/usr/local`
 
 过程是漫长的, 耐心等待...
@@ -37,7 +37,7 @@ __Python 2.7 + PyQt 4.11 + Qt 4.8.7__
 ```shell
 sudo vi ~/.bashrc
 ```
-<br>
+
 打开文件后, 在结尾处添加以下内容:
 
 ```
@@ -45,13 +45,13 @@ export QTDIR=/usr/local/Trolltech/Qt-4.8.7
 export LD_LIBRARY_PATH=${QTDIR}/lib:${LD_LIBRARY_PATH}
 export PATH=${QTDIR}/bin:${PATH}
 ```
-<br>
+
 然后刷新下 bashrc:
 
 ```shell
 source ~/.bashrc
 ```
-<br>
+
 测试是否安装成功:
 
 ```shell
@@ -59,7 +59,7 @@ qmake -v
 QMake version 2.01a
 Using Qt version 4.8.7 in /usr/local/Trolltech/Qt-4.8.7/lib
 ```
-<br>
+
 输入 `qmake -v` 后如果出现上面的内容就表示 Qt 安装好了...
 
 # SIP
@@ -73,20 +73,20 @@ PyQt 编译时使用的 SIP 版本__必须__与 python 默认调用的 SIP 保�
 ```shell
 sip -V
 ```
-<br>
+
 在python3环境输入：
 
 ```python
 import sip
 print(sip.SIP_VERSION_STR)
 ```
-<br>
+
 查看二者显示的版本是否一致, 如不一致, 删除 python 的 dist-packages 目录下 sip 的相关文件:
 
 ```shell
 sudo rm -rf /usr/lib/python2.7/dist-packages/sip*
 ```
-<br>
+
 然后再开始开安装.
 
 首先去 [Riverbank Computing](https://www.riverbankcomputing.com/software/sip/download) 下载 SIP 安装包.
@@ -98,7 +98,7 @@ sudo python configure.py
 sudo make
 sudo make install
 ```
-<br>
+
 安装结束后, 再用之前的方法测试下.
 
 # PyQt 4.11
@@ -111,19 +111,19 @@ sudo python configure.py
 sudo make
 sudo make install
 ```
-<br>
+
 如果 `sudo python configure.py` 时提示找不到 qmake 编译器, 可以用面这条命令来指定 qmake:
 
 ```shell
 sudo python configure.py -q /usr/local/Trolltech/Qt-4.8.7/bin/qmake
 ```
-<br>
+
 安装完后测试下:
 
 ```
 import PyQt4
 ```
-<br>
+
 如果不报错就说明安装好了...
 
 # QScintilla
@@ -151,7 +151,7 @@ python configure.py
 sudo make
 sudo make install
 ```
-<br>
+
 # Eric6
 去官网下载 [Eric6](http://eric-ide.python-projects.org/eric-download.html) 安装包:
 
@@ -167,13 +167,13 @@ sudo python install.py
 cd ../eric6-i18n-zh_CN-6.1.4
 sudo python3 install-i18n.py
 ```
-<br>
+
 安装好后, 运行 eric6:
 
 ```
 sudo eric6
 ```
-<br>
+
 __注意:__ 为避免 Eric6 写入配置文件时权限不足, 要用 `sudo` 来运行 eric6.
 
 也可以将当前用户的 eric6 目录权限设置为可读写:
@@ -182,5 +182,5 @@ __注意:__ 为避免 Eric6 写入配置文件时权限不足, 要用 `sudo` 来
 sudo chmod a+w -R ~/.eric6
 sudo chmod a+w -R ～/.config/Eric6
 ```
-<br>
+
 然后就可以不用 `sudo` 来运行 eric6 了.

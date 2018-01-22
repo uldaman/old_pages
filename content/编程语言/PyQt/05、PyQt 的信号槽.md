@@ -32,7 +32,7 @@ def on_pushButton_2_clicked(self):
     # TODO: not implemented yet
     raise NotImplementedError
 ```
-<br>
+
 这个槽函数会被关联到 pushButton_2 按钮的 clicked 信号, 我们翻阅代码发现并没有找到 Qt 的信号槽关联函数 (connect), 其实它是通过下面这句代码来实现的:
 
 ![](http://i66.tinypic.com/2v8pmc0.jpg)
@@ -81,7 +81,7 @@ class ClassName(Ui_Xxx):
     def update_two(self):
         print u'更新第二个 table widget'
 ```
-<br>
+
 发现脚本直接跑不起来.... 经探索发现, 信号必须被定义成`类成员`, 像下面这样:
 
 ```python
@@ -101,7 +101,7 @@ class ClassName(Ui_Xxx):
     def update_two(self):
         print u'更新第二个 table widget'
 ```
-<br>
+
 改过后, 脚本可以跑起来了, 但是发现信号槽关联失败, 再探索发现信号要定义成类的一级成员, 于是我只能再定义个类继承 QTableWedgit:
 
 ```python
@@ -112,7 +112,7 @@ from PyQt4.QtCore import pyqtSignal
 class My_Table_Widget(QtGui.QTableWidget):
     sin_update = pyqtSignal(dict)
 ```
-<br>
+
 然后在 Qt 设计师中让 `table_widget_one` 和 `table_widget_two` 提升为 `My_Table_Widget`, 最后改主脚本为:
 
 ```python

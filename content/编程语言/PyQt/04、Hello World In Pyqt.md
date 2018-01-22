@@ -45,7 +45,7 @@ if __name__ == "__main__":
     Dialog.show()
     sys.exit(app.exec_())
 ```
-<br>
+
 ![](http://i65.tinypic.com/dfitfn.jpg)
 
 ![](http://i65.tinypic.com/292v8dy.jpg)
@@ -69,13 +69,13 @@ if __name__ == "__main__":
 ```python
 from .Ui_first_window import Ui_Form
 ```
-<br>
+
 变成
 
 ```python
 from Ui_first_window import Ui_Form
 ```
-<br>
+
 添加测试代码:
 
 ```python
@@ -88,5 +88,5 @@ if __name__ == "__main__":
     dlg.show()
     sys.exit(app.exec_())
 ```
-<br>
+
 然后就可以按 **F2** 或者 点击工具栏上的图标, 就能打开刚才新建的窗体了.

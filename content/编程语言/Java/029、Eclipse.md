@@ -72,7 +72,7 @@ if (contains(triggers, key)) {
                         insertProposal(p, key, e.stateMask, fContentAssistSubjectControlAdapter.getSelectedRange().x);
                     }
 ```
-<br>
+
 修改之后的代码是:
 
 ```java
@@ -82,7 +82,7 @@ if (key != '=' && key != 0x20 && key != ';' && contains(triggers, key)) {
                         insertProposal(p, key, e.stateMask, fContentAssistSubjectControlAdapter.getSelectedRange().x);
                     }
 ```
-<br>
+
 如果想要使用 "tab" 键上屏需要修改 1328 行, 具体代码如下:
 
 ```java
@@ -91,7 +91,7 @@ e.doit= false;
 fProposalShell.setFocus();
 return false;
 ```
-<br>
+
 修改之后的代码是:
 
 ```java
@@ -100,7 +100,7 @@ e.doit= false;
 insertSelectedProposalWithMask(e.stateMask);
 break;
 ```
-<br>
+
 修改完成之后需要保存替换原来的 jar 文件:
 
 项目右键 \-\> export
