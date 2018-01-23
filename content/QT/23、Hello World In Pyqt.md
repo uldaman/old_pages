@@ -1,4 +1,4 @@
-Title: 04、Hello World In Pyqt
+Title: 23、Hello World In Pyqt
 Author: Martin
 Date: 2016-05-11 23:39
 Summary: 学习使用 Eric 开发一个 Qt 程序的基本流程.

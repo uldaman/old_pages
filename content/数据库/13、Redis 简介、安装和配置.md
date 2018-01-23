@@ -1,4 +1,4 @@
-Title: 01、Redis 简介、安装和配置
+Title: 13、Redis 简介、安装和配置
 Author: Martin
 Date: 2016-03-28 12:35
 Summary: 简单介绍下 redis, 及其安装、配置.

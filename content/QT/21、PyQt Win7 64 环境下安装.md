@@ -1,4 +1,4 @@
-Title: 02、PyQt Win7 64 环境下安装
+Title: 21、PyQt Win7 64 环境下安装
 Author: Martin
 Date: 2016-05-11 20:47
 Summary: Python 2.7 + PyQt 4.11 + Eric6 安装简介

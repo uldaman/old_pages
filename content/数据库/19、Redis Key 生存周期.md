@@ -1,4 +1,4 @@
-Title: 07、Redis Key 生存周期
+Title: 19、Redis Key 生存周期
 Author: Martin
 Date: 2016-03-28 12:41
 Summary: 关于设置 key 生存周期的四种命令的补充说明.

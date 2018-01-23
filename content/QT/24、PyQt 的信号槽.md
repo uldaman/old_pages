@@ -1,4 +1,4 @@
-Title: 05、PyQt 的信号槽
+Title: 24、PyQt 的信号槽
 Author: Martin
 Date: 2016-05-12 00:29
 Summary: 学习使用 Eric 来创建一个信号槽.

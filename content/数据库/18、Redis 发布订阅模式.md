@@ -1,4 +1,4 @@
-Title: 06、Redis 发布订阅模式
+Title: 18、Redis 发布订阅模式
 Author: Martin
 Date: 2016-03-28 12:40
 Summary: Redis 提供了两种方式来作消息队列: 生产者/消费者 和 发布/订阅

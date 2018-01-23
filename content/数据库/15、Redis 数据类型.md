@@ -1,4 +1,4 @@
-Title: 03、Redis 数据类型
+Title: 15、Redis 数据类型
 Author: Martin
 Date: 2016-03-28 12:37
 Summary: 介绍 Redis 中不同的数据类型的命令使用.

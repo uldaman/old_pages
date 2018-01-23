@@ -1,4 +1,4 @@
-Title: 08、Redis Lua 脚本
+Title: 20、Redis Lua 脚本
 Author: Martin
 Date: 2016-03-28 12:52
 Summary: Redis 从 2.6 版本开始在服务器内部嵌入了一个 Lua 解释器, 使得用户在服务器端执行 Lua 脚本

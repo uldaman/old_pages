@@ -1,4 +1,4 @@
-Title: 03、Eric6 配置
+Title: 22、Eric6 配置
 Author: Martin
 Date: 2016-05-11 21:29
 Summary: 首次打开 eric6.bat 或直接运行 eric6-configure.bat 就能打开 eric6 的配置窗口.

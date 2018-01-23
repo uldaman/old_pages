@@ -1,4 +1,4 @@
-Title: 05、Redis 排序
+Title: 17、Redis 排序
 Author: Martin
 Date: 2016-03-28 12:39
 Summary: 除了现有的有序集合实现了排序, 还也可以自定义排序功能(针对 list 和 set 类型).

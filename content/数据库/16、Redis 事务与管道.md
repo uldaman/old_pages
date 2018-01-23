@@ -1,4 +1,4 @@
-Title: 04、Redis 事务与管道
+Title: 16、Redis 事务与管道
 Author: Martin
 Date: 2016-03-28 12:38
 Summary: 事务可以理解为一个打包的批量执行脚本, 将一串的命令发送给 redis 排队, 等待 redis 去执行.

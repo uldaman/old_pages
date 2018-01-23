@@ -1,4 +1,4 @@
-Title: 08、pyqt 中文问题
+Title: 27、pyqt 中文问题
 Author: Martin
 Date: 2016-05-14 20:33
 Summary: 解决 PyQt 中文乱码...

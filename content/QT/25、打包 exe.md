@@ -1,4 +1,4 @@
-Title: 06、打包 exe
+Title: 25、打包 exe
 Author: Martin
 Date: 2016-05-12 23:27
 Summary: 利用 py2exe / pyinstaller 将开发好的 PyQt 程序打包成 exe 发布.

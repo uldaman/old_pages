@@ -1,4 +1,4 @@
-Title: 01、PyQt Ubuntu 下环境安装
+Title: 20、PyQt Ubuntu 下环境安装
 Author: Martin
 Date: 2016-04-26 19:04
 Summary: Qt 4.8.7 + Python 2.7 + PyQt 4.11 + Eric6 安装简介

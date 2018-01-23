@@ -1,4 +1,4 @@
-Title: 02、Redis 连接相关命令
+Title: 14、Redis 连接相关命令
 Author: Martin
 Date: 2016-03-28 12:36
 Summary: 连接相关的命令大多用来测试客户端与服务端的连接情况.
