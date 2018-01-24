@@ -149,7 +149,7 @@ OX:
 [difftool]
     prompt = false
 [difftool "bc3"]
-	cmd = bcomp $REMOTE $LOCAL
+    cmd = bcomp $REMOTE $LOCAL
 
 [merge]
     tool = bc3
