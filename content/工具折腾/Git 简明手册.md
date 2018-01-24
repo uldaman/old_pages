@@ -130,7 +130,6 @@ windows:
     prompt = false
 [difftool "bc3"]
     cmd = "\"D:/martin/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\""
-    trustExitCode = true
 
 [merge]
     tool = bc3
@@ -151,7 +150,6 @@ OX:
     prompt = false
 [difftool "bc3"]
 	cmd = bcomp $REMOTE $LOCAL
-	trustExitCode = true
 
 [merge]
     tool = bc3
