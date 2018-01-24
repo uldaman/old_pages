@@ -121,6 +121,8 @@ edit file (工作区) \-\> git add (暂存区/index/stage) \-\> git commit (comm
 ### 整合 beyond compare 与 diff
 安装好 BCompare 后, 打开用户目录~下的 `.gitconfig` 文件, 进行如下修改:
 
+windows:
+
 ```
 [diff]
     tool = bc3
@@ -128,6 +130,7 @@ edit file (工作区) \-\> git add (暂存区/index/stage) \-\> git commit (comm
     prompt = false
 [difftool "bc3"]
     cmd = "\"D:/martin/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\""
+    trustExitCode = true
 
 [merge]
     tool = bc3
@@ -138,6 +141,29 @@ edit file (工作区) \-\> git add (暂存区/index/stage) \-\> git commit (comm
     cmd = "\"D:/martin/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
     trustExitCode = true
 ```
+
+OX:
+
+```
+[diff]
+    tool = bc3
+[difftool]
+    prompt = false
+[difftool "bc3"]
+	cmd = bcomp $REMOTE $LOCAL
+	trustExitCode = true
+
+[merge]
+    tool = bc3
+[mergetool]
+    prompt = false
+    keepBackup = false
+[mergetool "bc3"]
+    cmd = bcomp $LOCAL $REMOTE $BASE $MERGED
+    trustExitCode = true
+```
+
+注意：你在 mac 系统中装了 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.
 
 参数说明:
 
@@ -176,8 +202,6 @@ mac 系统的 git\-diff\-wrapper.sh
 bcompare "$2" "$5"|cat
 ```
 
-注意：你在 mac 系统中装了 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.
-
 在用户目录~下修改 .gitconfig 文件, 添加一行:
 
 ```
@@ -185,7 +209,7 @@ bcompare "$2" "$5"|cat
 external = ~/bin/git-diff-wrapper.sh
 ```
 
-注意: Mac上运行 git diff 时, 由于系统要保存历史文件到临时目录再进行比较, 而在保存到临时目录又需要很高的权限, 所以在 git  diff 前加了 sudo 才能执行成功.
+注意: Mac上运行 git diff 时, 由于系统要保存历史文件到临时目录再进行比较, 而在保存到临时目录又需要很高的权限, 所以在 git diff 前加了 sudo 才能执行成功.
 
 ## 7. 忽略文件
 即 .gitignore, 由于 windows 的特性, 可能无法直接新建这样文件名的文件, 可以在 git bash 中使用 linux 命令来新建.
