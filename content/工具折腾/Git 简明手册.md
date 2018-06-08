@@ -499,3 +499,16 @@ Git 控制是否忽略大小的选项是 `core.ignorecase` (true: 不区分, fal
 
 - 第一种, 做全局设置 `git config --global core.ignorecase false`, 并且删除 Git 项目的 `core.ignorecase` 选项
 - 第二种, 就是只对当前项目做配置 `git config core.ignorecase false`
+
+## 14. 命令别名
+```sh
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+git config --global alias.st status
+```
+
+## 15. 自定义 Log
+```sh
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+```

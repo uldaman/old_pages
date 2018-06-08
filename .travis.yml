@@ -13,7 +13,7 @@ before_install:
 - git remote set-url --push origin git@github.com:z351522453/z351522453.github.com.git
 - git fetch origin master:refs/remotes/origin/master
 install:
-- sudo pip install fabric
+- sudo pip install "fabric<2"
 - sudo pip install ghp-import
 - sudo pip install pelican
 - sudo pip install Markdown
