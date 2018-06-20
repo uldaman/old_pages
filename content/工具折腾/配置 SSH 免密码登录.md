@@ -2,7 +2,7 @@ Title: 配置 SSH 免密码登录
 Author: Martin
 Date: 2016-11-03 22:30
 
-![](http://www.smallcpp.cn/static/images/SSH/免密码登录原理.png)
+![](http://www.smallcpp.cn/theme/images/SSH/免密码登录原理.png)
 
 `cd ~
 ` 进入根目录

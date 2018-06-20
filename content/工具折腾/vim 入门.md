@@ -30,7 +30,7 @@ Date: 2016-10-28 16:37
 - [ctrl]+w q 退出当前窗口
 
 # 快捷键
-![](http://www.smallcpp.cn/static/images/VIM入门/vim.jpg)
+![](http://www.smallcpp.cn/theme/images/VIM入门/vim.jpg)
 
 ## 移动光标的方法
 |        快捷键         |                                                           功能                                                           |

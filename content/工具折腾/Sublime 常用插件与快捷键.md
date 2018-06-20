@@ -206,7 +206,7 @@ Preferences \-\> package settings \-\> Bracket Highlighter \-\> Bracket Settings
 
 配好后的效果如下图:
 
-![](http://www.smallcpp.cn/static/images/Sublime常用插件与快捷键/BracketHighlighter.png)
+![](http://www.smallcpp.cn/theme/images/Sublime常用插件与快捷键/BracketHighlighter.png)
 
 ## 代码提示、自动补全和代码跳转
 **Update**:
