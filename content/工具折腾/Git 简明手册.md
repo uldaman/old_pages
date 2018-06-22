@@ -1,4 +1,4 @@
-Title: Git 简明手册
+﻿Title: Git 简明手册
 Author: Martin
 Date: 2016-03-13 13:00
 
@@ -481,14 +481,16 @@ SourceTree 的 stash 操作会让选择一个选项 -- "保存暂存的更改"
 git config --global core.quotepath false
 ```
 
-另外, 还会出现 commit 信息乱码:
+另外, 还会出现 commit/log 信息乱码:
 
 ```sh
 git config --global i18n.commitencoding utf-8
-git config --global i18n.logoutputencoding gbk
-git config --global gui.encoding utf-8
-git config --global svn.pathnameencoding GB2312
+git config --global i18n.logoutputencoding utf-8
 ```
+
+然后还要把 `LESSCHARSET=utf-8` 添加到系统环境变量中：
+
+![](http://www.smallcpp.cn/theme/images/Git简明手册/LESSCHARSET.jpg)
 
 ## 13. 区分文件大小写
 默认的 Git 监控是**不区分**文件大小写的 ~
@@ -503,7 +505,7 @@ Git 控制是否忽略大小的选项是 `core.ignorecase` (true: 不区分, fal
 ## 14. 命令别名
 ```sh
 git config --global alias.co checkout
-git config --global alias.ci commit
+git config --global alias.cm commit -m
 git config --global alias.br branch
 git config --global alias.st status
 ```
