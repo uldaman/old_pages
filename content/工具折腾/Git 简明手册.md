@@ -5,11 +5,16 @@ Date: 2016-03-13 13:00
 [TOC]
 
 ## 1. git 配置
-
 - git config \-\-list
 - git config \-\-global user.name "your name"
 - git config \-\-global user.email "email@example.com"
-- git config \-\-global core.autocrlf  false // 关闭换行符检测, windows 的换行有点问题
+- git config \-\-global core.autocrlf  false  // 关闭换行符检测, windows 的换行有点问题
+- git config \-\-global merge.ff false  // 关闭 merge 的 fast forwarding 选项, 能保证每次 merge 都有原始分支信息
+- git config \-\-global pull.ff only  // pull 也走的 merge 过程, 需要覆盖上一条的设置, 否则 pull 也会产生一条 Merge message
+- [中文显示](http://www.smallcpp.cn/git-jian-ming-shou-ce.html#12)
+- [区分大小写](http://www.smallcpp.cn/git-jian-ming-shou-ce.html#13)
+- [命令别名](http://www.smallcpp.cn/git-jian-ming-shou-ce.html#14)
+- [自定义 Log](http://www.smallcpp.cn/git-jian-ming-shou-ce.html#15-log)
 
 ## 2. 初始化版本库
 打开 git bash, 进入目标目录, 执行 **git init**, 在目标目录下就会生成 **.git** 目录, 它存放的就是 git 版本库信息.
@@ -35,7 +40,7 @@ edit file (工作区) \-\> git add (暂存区/index/stage) \-\> git commit (comm
 - 切换分支
     + `git checkout` 分支名
 - 合并分支
-    + `git checkout master`, `git merge` 分支名, 这样就把分支的内容合并的 master 分支了
+    + `git checkout master`, `git merge` 分支名, 这样就把分支的内容合并的 master 分支了 ([注意](http://www.smallcpp.cn/git-jian-ming-shou-ce.html#15-log))
 - 解决冲突
     + 如果产生了冲突, 先 `git diff` 查看冲突, 解决冲突后, `git add`, `git commit` 重新提交
 - 查看图形化时间线
