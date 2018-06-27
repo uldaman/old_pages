@@ -37,6 +37,7 @@ Date: 2016-04-24 15:08
     "always_show_minimap_viewport": true,
     "auto_complete_commit_on_tab": false,
     "auto_find_in_selection": true,
+    "open_files_in_new_window": false,
     "bold_folder_labels": true,
     "color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
     "theme": "Soda Dark.sublime-theme",
@@ -164,6 +165,8 @@ Anaconda 可以通过 Package Control 直接安装.
             "E501" // 忽略长度限制
         ],
 
+    "auto_formatting": true,
+
     "autoformat_ignore":
         [
             "E309",
@@ -174,15 +177,13 @@ Anaconda 可以通过 Package Control 直接安装.
 
     "anaconda_linter_underlines": false,
 
-    "anaconda_linter_show_errors_on_save": true,
-
     "complete_parameters": true, // 输 ( 时补充函数的非默认参数
 
     "complete_all_parameters": true, // 输 ( 时补充函数的所有参数
 
     "auto_python_builder_enabled": false,  // 自动为当前项目生成编译系统, 通常不需要, 我们自己配置, 参照 6. 项目设置
 
-    "auto_complete_triggers":  // 仅需要在 windows 下配置, 具体说明参照 3.2.1
+    "auto_complete_triggers":  // 点(dot)\[.\]后出现代码提示
         [
             {
                 "selector": "source.python - string - comment - constant.numeric",
@@ -200,24 +201,6 @@ Anaconda 可以通过 Package Control 直接安装.
         "python_interpreter": "E:/Workspace/ZEBU-KNOWLEDGE/environment/develop_env/Scripts/python",  // 添加 virtualenv 支持
         "anaconda_linting": true,
     }
-}
-```
-
-### 3.2.1 添加按点(dot)\[.\]后出现代码提示.
-> Windows 下这个配置可以放在 [Preferences \-\> 插件设置 \-\> Anaconda \-\> Settings\-User] 中
-
-Python.sublime-settings configuration file in the Packages/User directory (Preferences -> Browse Packages) and add the following:
-
-到 Sublime Text 3\\Data\\Packages\\User (Preferences \-\> Browse Packages \-\> User) 下添加一个文件 Python.sublime-settings (如果没有的话), 添加如下内容:
-
-```js
-{
-    "auto_complete_triggers": [
-        {
-            "selector": "source.python - string - comment - constant.numeric",
-            "characters": "."
-        }
-    ]
 }
 ```
 
@@ -276,9 +259,48 @@ def test_function():
 
 保存好后选择 __项目 \-\> 编辑项目__, 设置使用 virtualenv 环境:
 
+> 2018.06.26 update for mac, python3.6
+
 ```js
+// mac, python3.6
 {
-    "build_systems": [
+    "build_systems":
+    [
+        {
+            "cmd":
+            [
+                "${project_path}/venv/bin/python",
+                "-i",
+                "-u",
+                "-m",
+                "${project_base_name}.${file_base_name}"
+            ],
+            "env":
+            {
+                "LANG": "de_DE.utf-8",
+                "LC_ALL": "de_DE.utf-8"
+            },
+            "name": "project_venv builder",
+            "selector": "source.python",
+            "working_dir": "${project_path:${folder}}"  // project_path == nil 时取 folder
+        }
+    ],
+    "folders":
+    [
+        {
+            "path": ".",
+            "follow_symlinks": true
+        }
+    ],
+    "settings":
+    {
+        "python_interpreter": "${project_path}/venv/bin/python"
+    }
+}
+
+// window, python2.7
+{
+    "build_systems": [  // 添加 [Tools / Build System]
         {
             "name": "project_venv builder",
             "selector": "source.python",
@@ -298,6 +320,7 @@ def test_function():
 然后是覆盖 __Jedi__ 默认设置中的 python\_interpreter 和 python\_package\_paths (如果你安装了 __Jedi__ 的话):
 
 ```js
+// window, python2.7
 {
     "build_systems": [
         {
@@ -329,6 +352,7 @@ def test_function():
 另外是覆盖 __pylinter__ 的设置 (如果使用的是 __pylinter__ 的话, 另外, virtualenv 里也需要 `pip install pylint`):
 
 ```js
+// window, python2.7
 {
     "build_systems": [
         {
@@ -533,7 +557,67 @@ __删除__ "id" 为 "repl\_python" 的项(如果想保留也可以不删除), __
 
 首选项 \-\> 浏览插件, 创建一个 py 文件: `project_venv_repl.py`
 
+> 2018.06.26 update for mac, python3.6
+
 ```python
+# mac, python3.6
+import os
+import sublime
+import sublime_plugin
+
+
+def expand(view, path):
+    """Expand the given path
+    """
+    window = view.window()
+    if window is not None:
+        tmp = sublime.expand_variables(path, window.extract_variables())
+        tmp = os.path.expanduser(os.path.expandvars(tmp))
+    else:
+        return path
+    return tmp
+
+
+class ProjectVenvReplCommand(sublime_plugin.TextCommand):
+    """
+    Starts a SublimeREPL, attempting to use project"s specified
+    python interpreter.
+    """
+
+    def run(self, edit, no_file=False):
+        """Called on project_venv_repl command"""
+        cmd_list = [self.get_project_interpreter(), "-i", "-u"]
+        if not no_file:
+            file = "{}.{}".format(self.get_variable("project_base_name"), self.get_variable("file_base_name"))
+            cmd_list.append("-m")
+            cmd_list.append(file)
+        self.repl_open(cmd_list=cmd_list)
+
+    def get_variable(self, key):
+        return self.view.window().extract_variables()[key]
+
+    def get_project_interpreter(self):
+        """Return the project"s specified python interpreter, if any"""
+        settings = self.view.settings()
+        return expand(self.view, settings.get("python_interpreter", "python"))
+
+    def repl_open(self, cmd_list):
+        """Open a SublimeREPL using provided commands"""
+        self.view.window().run_command(
+            "repl_open", {
+                "encoding": "utf8",
+                "type": "subprocess",
+                "cmd": cmd_list,
+                "cwd": self.get_variable("project_path"),
+                "syntax": "Packages/Python/Python.tmLanguage",
+                "extend_env": {
+                    "LANG": "de_DE.utf-8",
+                    "LC_ALL": "de_DE.utf-8"
+                },
+            }
+        )
+
+# windows, python2.7
 import sublime_plugin
 class ProjectVenvReplCommand(sublime_plugin.TextCommand):
     """
@@ -567,7 +651,32 @@ class ProjectVenvReplCommand(sublime_plugin.TextCommand):
 
 首选项 \-\> 按键绑定 \- 用户
 
+> 2018.06.26 update for mac, python3.6
+
 ```js
+// mac, python3.6
+[
+    // Runs currently open file in repl
+    {
+        "keys":[
+            "super+b"
+        ],
+        "command":"project_venv_repl"
+    },
+
+    // Runs repl without any file
+    {
+        "keys":[
+            "super+shift+b"
+        ],
+        "command":"project_venv_repl",
+        "args":{
+            "no_file":true
+        }
+    }
+]
+
+// windows, python2.7
 [
     // Runs currently open file in repl
     {
