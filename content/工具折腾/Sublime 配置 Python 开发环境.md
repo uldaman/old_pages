@@ -179,7 +179,7 @@ Anaconda 可以通过 Package Control 直接安装.
 
     "complete_parameters": true, // 输 ( 时补充函数的非默认参数
 
-    "complete_all_parameters": true, // 输 ( 时补充函数的所有参数
+    "complete_all_parameters": false, // 输 ( 时补充函数的所有参数
 
     "auto_python_builder_enabled": false,  // 自动为当前项目生成编译系统, 通常不需要, 我们自己配置, 参照 6. 项目设置
 
