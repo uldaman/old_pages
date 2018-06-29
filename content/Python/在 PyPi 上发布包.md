@@ -5,7 +5,7 @@ Date: 2018-06-26 12:31
 Reference:
 
 - [PyPi Packaging Tutorial](https://packaging.python.org/tutorials/packaging-projects/)
-- [web3-gear](https://github.com/z351522453/web3-gear)
+- [web3-gear](https://github.com/uldaman/web3-gear)
 
 # 准备工作
 - setup.py、setup.cfg、requirements、LICENSE、README.rst(注意不是 markdown)、MANIFEST.in 等文件

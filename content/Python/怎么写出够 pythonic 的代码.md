@@ -14,11 +14,11 @@ Date: 2016-05-15 16:09
 
 # References:
 
-[python 性能调优](https://github.com/z351522453/CS_Offer/blob/master/Python/Optimization.md)
+[python 性能调优](https://github.com/uldaman/CS_Offer/blob/master/Python/Optimization.md)
 
 [让你的Python代码更加pythonic](http://wuzhiwei.net/be_pythonic/)
 
-[关于 Python 的最全面试题](https://github.com/z351522453/interview_python)
+[关于 Python 的最全面试题](https://github.com/uldaman/interview_python)
 
 # 列表生成式
 提供一个可迭代的对象生成一个新列表

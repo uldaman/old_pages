@@ -20,10 +20,10 @@ if name == "this" || name == "self" {
 }
 ```
 
-然后全局替换 `github.com/golang/lint` \-\> `github.com/z351522453/lint`, 修改好后 `git push`.
+然后全局替换 `github.com/golang/lint` \-\> `github.com/uldaman/lint`, 修改好后 `git push`.
 
 > 主要是因为 golint 包下 golint.go 中用全路径 import 了 lint 包 (`import "github.com/golang/lint"`), 应该把路径改成自己的 github 库路径.
 
-最后再执行 `go get -u github.com/z351522453/lint/golint`.
+最后再执行 `go get -u github.com/uldaman/lint/golint`.
 
 或者在本地 `cd` 到 golint 包下执行 `go build -o golint` 直接生成 golint 二进制文件 (要注意是 golint 包下执行, 而不是 lint 包, 因为 main 函数在 golint.go 中).

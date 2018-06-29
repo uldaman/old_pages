@@ -97,9 +97,9 @@ before_install:
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 - cp .travis/ssh_config ~/.ssh/config
-- git config --global user.name "z351522453"
-- git config --global user.email "351522453@qq.com"
-- git remote set-url --push origin git@github.com:z351522453/wiki.git  # hack 1
+- git config --global user.name "uldaman"
+- git config --global user.email "zhuec@hotmail.com"
+- git remote set-url --push origin git@github.com:uldaman/wiki.git  # hack 1
 - git fetch origin gh-pages:refs/remotes/origin/gh-pages  # hack 2
 
 install:

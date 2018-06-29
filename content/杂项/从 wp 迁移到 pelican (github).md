@@ -25,7 +25,7 @@ pip install Markdown
 > Who will be the author of this web site? Martin
 > What will be the default language of this web site? [en] zh
 > Do you want to specify a URL prefix? e.g., http://example.com   (Y/n)
-> What is your URL prefix? (see above example; no trailing slash) http://z351522453.github.com
+> What is your URL prefix? (see above example; no trailing slash) http://uldaman.github.com
 > Do you want to enable article pagination? (Y/n)
 > How many articles per page do you want? [10]
 > What is your time zone? [Europe/Paris] Asia/Shanghai
@@ -129,7 +129,7 @@ zurb-F5-basic 主题现在有个 Bug, 那就是第一篇博文竟然是全文显
 ```python
 AUTHOR = u'martin'
 SITENAME = u'Small Cpp'
-SITEURL = 'http://z351522453.github.com'
+SITEURL = 'http://uldaman.github.com'
 
 THEME = 'pelican-themes/zurb-F5-basic'
 USE_FOLDER_AS_CATEGORY = True # 这个可以让 pelican 根据 content 里的文件夹结构自动生成文章分类
@@ -226,7 +226,7 @@ Pymdown Extensions Documentation 对 **pymdownx.github** 说明如下:
 For code highlighting, you will also need to load the markdown.extensions.codehilite extension yourself as well with guess_lang=False and your preferred Pygments style (if available or use some other JavaScript highlighter). Though there is no Github style included with this extension, you are most likely able to find a suitable theme online by searching. I do have older Github styles found at the pymdown-styles repo; it contains the original Pygments Github style (github) and the Github 2014 style (github2014) which Github used before they ditched Pygments for their own in-house highlighter.
 ```
 
-简单的说, 就是 **pymdownx.github** 提供了一些功能用来模仿 Github, 但不是全部, 如果想要使用 Github 的代码高亮, 你需要设置 `markdown.extensions.codehilite` 的 `guess_lang=False`, 并且引用一个 `Pygments style` 文件, 虽然该扩展本身并不包含 Github style, 但是你可以去找....然后作者也给了一个 [pymdown-styles repo](https://github.com/z351522453/pymdown-styles) 供使用 (我将它 Fork 回自己的仓库, 做了点更改, 让它更像 Github 的高亮风格).
+简单的说, 就是 **pymdownx.github** 提供了一些功能用来模仿 Github, 但不是全部, 如果想要使用 Github 的代码高亮, 你需要设置 `markdown.extensions.codehilite` 的 `guess_lang=False`, 并且引用一个 `Pygments style` 文件, 虽然该扩展本身并不包含 Github style, 但是你可以去找....然后作者也给了一个 [pymdown-styles repo](https://github.com/uldaman/pymdown-styles) 供使用 (我将它 Fork 回自己的仓库, 做了点更改, 让它更像 Github 的高亮风格).
 
 使用方法比较简单, clone 项目到本地, 执行 `python setup.py install`, 然后修改 `pelicanconf.py` 文件中 `MD_EXTENSIONS` 的 **codehilite**, 最终的 **MD_EXTENSIONS** 如下:
 
