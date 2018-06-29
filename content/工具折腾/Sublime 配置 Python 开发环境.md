@@ -38,6 +38,8 @@ Date: 2016-04-24 15:08
     "auto_complete_commit_on_tab": false,
     "auto_find_in_selection": true,
     "open_files_in_new_window": false,
+    "hot_exit": false,
+    "remember_open_files": false,
     "bold_folder_labels": true,
     "color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
     "theme": "Soda Dark.sublime-theme",
