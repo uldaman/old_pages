@@ -26,7 +26,7 @@ Date: 2016-04-24 15:08
 ```
 
 # 2. 主题、字体
-先安装字体, 我习惯的是 __M+ 1mn regular__
+先安装字体, 我习惯的是 [Microsoft YaHei Mono](https://pan.baidu.com/s/1mppyQNea7qHjuAvvp6B3Nw)
 
 再安装主题, __Monokai Extended__ 和 __Soda Dark__, 使用 package control 就可以安装了.
 
@@ -51,8 +51,8 @@ Date: 2016-04-24 15:08
     "draw_white_space": "selection",
     "ensure_newline_at_eof_on_save": true,
     "fallback_encoding": "UTF-8",
-    "font_face": "M+ 1mn regular",
-    "font_size": 14,
+    "font_face": "Microsoft YaHei Mono",
+    "font_size": 12,
     "highlight_line": true,
     "highlight_modified_tabs": true,
     "ignored_packages":
