@@ -155,9 +155,7 @@ Anaconda 可以通过 Package Control 直接安装.
 
 ```js
 {
-    "anaconda_linting": false,  // 对于全局不启用 pep8 检测, 在项目配置文件中再根据需要打开
-
-    "python_interpreter": "C:/Python27/python",
+    "python_interpreter": "C:/Python27/python",  // 应在项目配置
 
     "pep8_ignore":
         [
@@ -190,17 +188,6 @@ Anaconda 可以通过 Package Control 直接安装.
                 "characters": "."
             }
         ],
-}
-```
-
-[\*.sublime-project]
-
-```js
-{
-    "settings": {
-        "python_interpreter": "E:/Workspace/ZEBU-KNOWLEDGE/environment/develop_env/Scripts/python",  // 添加 virtualenv 支持
-        "anaconda_linting": true,
-    }
 }
 ```
 
