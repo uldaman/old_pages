@@ -34,12 +34,11 @@ Date: 2016-04-24 15:08
 
 ```js
 {
-    "always_show_minimap_viewport": true,
     "auto_complete_commit_on_tab": false,
     "auto_find_in_selection": true,
     "open_files_in_new_window": false,
     "hot_exit": false,
-    "remember_open_files": false,
+    "remember_open_files": true,
     "bold_folder_labels": true,
     "color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
     "theme": "Soda Dark.sublime-theme",
@@ -382,12 +381,14 @@ def test_function():
 
 # 7. 侧边栏扩展
 __SideBarEnhancements__ 插件
-安装好几乎不需要设置, 当打开__项目__时, 在项目文件上右键就能显示扩展.
+
+安装好, `view -> Side Bar -> Hide Open Files`, 其它的几乎不需要设置, 当打开__项目__时, 在项目文件上右键就能显示扩展.
 
 如果安装好 SideBarEnhancements 后没有显示侧边栏, 可以用快捷键 __ctrl + k__, __ctrl + b__ 来打开侧边栏 (不是 ctrl + k + b, 是先按 ctrl + k, 松开再按 ctrl + b), 或者点击菜单: 查看 \-\> 侧边栏 \-\> 显示\\隐藏侧边栏
 
 # 8. 代码调试
 __SublimeREPL__ 插件
+
 这个插件允许在编辑界面直接运行 Python 解释器
 
 ![](http://i63.tinypic.com/2pzz760.jpg)
@@ -695,8 +696,19 @@ class ProjectVenvReplCommand(sublime_plugin.TextCommand):
 - f6: 直接运行项目设置中的 __python\_interpreter__
 - f7: 以项目设置中的 __python\_interpreter__  来运行指定 py 文件, 更新 open\_file 就可以了.
 
-# 9. 编译 Pyc 文件
-## 9.1 生成单个的 pyc 文件
+# 9. outline
+__Outline__ 插件
+
+安装好后, 打开它的配置文件:
+
+```
+{
+    "color_scheme": "Packages/Outline/outline-Dark.hidden-tmTheme"
+}
+```
+
+# 10. 编译 Pyc 文件
+## 10.1 生成单个的 pyc 文件
 ```python
 import py_compile
 py_compile.compile(r'H:/game/test.py')
@@ -704,7 +716,7 @@ py_compile.compile(r'H:/game/test.py')
 
 执行上面的代码, 就能将 test.py 生成 test.pyc 了.
 
-## 9.2 将整个目录下的 py 文件都生成 pyc
+## 10.2 将整个目录下的 py 文件都生成 pyc
 ```python
 import compileall
 compileall.compile_dir(r'H:/game')
