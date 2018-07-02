@@ -21,29 +21,32 @@ FEED_ATOM = None
 FEED_RSS = None
 
 # Social widget
-SOCIAL = (('CSDN', 'http://blog.csdn.net/u010850265'),)
+SOCIAL = (
+    ('CSDN', 'http://blog.csdn.net/u010850265'),
+    ('VeChain Thor', 'https://github.com/vechain/thor'),
+)
 
 DEFAULT_PAGINATION = False  # 不分页
 
 THEME = 'pelican-themes/notebook'
 
-USE_FOLDER_AS_CATEGORY = True # 这个可以让 pelican 根据 content 里的文件夹结构自动生成文章分类
+USE_FOLDER_AS_CATEGORY = True  # 这个可以让 pelican 根据 content 里的文件夹结构自动生成文章分类
 
-DELETE_OUTPUT_DIRECTORY = True # 编译之前删除 output 目录，这样保证 output 下生成的内容干净
+DELETE_OUTPUT_DIRECTORY = True  # 编译之前删除 output 目录，这样保证 output 下生成的内容干净
 
-SUMMARY_MAX_LENGTH = 30 # 文章摘要最大字数
+SUMMARY_MAX_LENGTH = 30  # 文章摘要最大字数
 
 MARKDOWN = {
     'extension_configs': {
-      "markdown.extensions.extra": {},
-      "markdown.extensions.toc": {},
-      "markdown.extensions.headerid": {},
-      "markdown.extensions.meta": {},
-      "markdown.extensions.sane_lists": {},
-      "markdown.extensions.smarty": {},
-      "markdown.extensions.wikilinks": {},
-      "markdown.extensions.admonition": {},
-      "markdown.extensions.codehilite": {"guess_lang":False,"pygments_style":"perldoc","noclasses":True},
+        "markdown.extensions.extra": {},
+        "markdown.extensions.toc": {},
+        "markdown.extensions.headerid": {},
+        "markdown.extensions.meta": {},
+        "markdown.extensions.sane_lists": {},
+        "markdown.extensions.smarty": {},
+        "markdown.extensions.wikilinks": {},
+        "markdown.extensions.admonition": {},
+        "markdown.extensions.codehilite": {"guess_lang": False, "pygments_style": "perldoc", "noclasses": True},
     },
     'output_format': 'html5',
 }
