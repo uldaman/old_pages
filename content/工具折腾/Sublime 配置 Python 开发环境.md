@@ -263,6 +263,7 @@ def test_function():
                 "-m",
                 "${project_base_name}.${file_base_name}"
             ],
+            "encoding":"cp936",  // 仅 windows 下需要，否则会输出 Decode error - output not utf-8
             "env":
             {
                 "LANG": "de_DE.utf-8",
