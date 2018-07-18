@@ -8,6 +8,7 @@ Date: 2016-03-13 13:00
 - git config \-\-list
 - git config \-\-global user.name "your name"
 - git config \-\-global user.email "email@example.com"
+- git config \-\-global push.followTags true
 - git config \-\-global core.autocrlf  false  // 关闭换行符检测, windows 的换行有点问题
 - git config \-\-global merge.ff false  // 关闭 merge 的 fast forwarding 选项, 能保证每次 merge 都有原始分支信息
 - git config \-\-global pull.ff only  // pull 也走的 merge 过程, 需要覆盖上一条的设置, 否则 pull 也会产生一条 Merge message

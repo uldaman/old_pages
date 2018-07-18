@@ -276,7 +276,7 @@ http://api.server/user/friends
 http://api.server/user/timeline/list
 ```
 
-如果要调用这些 API, 那不是要给每个 URL 对应的 API 都写一个方法? 这还不得累死, 而且, API 一旦改动, 我们写的方法也要改...
+如果要为这些 API 提供 SDK, 那不是要给每个 URL 对应的 API 都写一个方法? 这还不得累死, 而且, API 一旦改动, 我们写的 SDK 也要改...
 
 这里就可以利用完全动态的 **\_\_getattr\_\_**, 我们可以写出一个链式调用:
 
@@ -300,8 +300,40 @@ class Chain(object):
 '/status/user/timeline/list'
 ```
 
+这样, 无论 API 有多少, 后面有多少改动, 我们都可以通过上面这种链式调用的方法去访问!
 
-这样, 无论 API 有多少, 我们都可以通过上面这种链式调用的方法去访问!
+还有些 REST API 会把参数放到 URL 中, 比如 GitHub 的 API:
+
+```
+GET /users/:user/repos
+```
+
+调用时，需要把 `:user` 替换为实际用户名, 此时可以配合 `__call__` 写出链式调用:
+
+```python
+class Chain(object):
+
+    def __init__(self, path=''):
+        self._path = path
+
+    def __call__(self, parameter):
+        if parameter is not None:
+            return Chain('%s/%s' % (self._path, parameter))
+        return self
+
+    def __getattr__(self, resource):
+        return Chain('%s/%s' % (self._path, resource))
+
+    def __str__(self):
+        return self._path
+```
+
+试试:
+
+```
+>>> Chain().users('michael').repos
+'/users/michael/repos'
+```
 
 # \_\_getitem\_\_、\_\_setitem\_\_、\_\_delitem\_\_
 通过这三个方法, 可以将自己定义的类表现得和内置的 **list、tuple、dict** 没什么区别, 但这么做的话, 还有很多工作要做, 以后需要用到的时候再来补充吧.
