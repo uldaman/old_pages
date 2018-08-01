@@ -1,6 +1,6 @@
 Title: PyQt5 初识
 Author: Martin
-Date: 2018 - 07 - 27 15: 44
+Date: 2018-07-27 15:44
 
 [TOC]
 
