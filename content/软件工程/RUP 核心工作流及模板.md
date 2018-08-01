@@ -1,4 +1,4 @@
-Title: RUP 核心工作流及模板.
+Title: RUP 核心工作流及模板
 Author: Martin
 Date: 2016-11-14 19:02
 
