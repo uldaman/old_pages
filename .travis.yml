@@ -16,7 +16,7 @@ install:
 - sudo pip install "fabric<2"
 - sudo pip install ghp-import
 - sudo pip install pelican
-- sudo pip install Markdown
+- sudo pip install 'markdown<3'
 script:
 - fab gh_pages
 branches:
