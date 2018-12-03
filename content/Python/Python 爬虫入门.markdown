@@ -1,9 +1,0 @@
-author: Martin
-date: 2015-08-19 19:38
-title: Python 爬虫入门
-
-[Python 爬虫的工具列表](http://python.jobbole.com/82633/)
-
-[使用 PhantomJS 和 Selenium 模拟浏览器行为爬取网页](http://www.168seo.cn/selenium/1393.html)
-
-![](http://i60.tinypic.com/6zsun9.jpg)
