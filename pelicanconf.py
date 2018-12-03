@@ -22,6 +22,7 @@ FEED_RSS = None
 
 # Social widget
 SOCIAL = (
+    ('Learning Notes', 'https://zhuec.gitbook.io/learning-notes/'),
     ('CSDN', 'http://blog.csdn.net/u010850265'),
     ('VeChain Thor', 'https://github.com/vechain/thor'),
 )
