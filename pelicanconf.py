@@ -23,8 +23,10 @@ FEED_RSS = None
 # Social widget
 SOCIAL = (
     ('Learning Notes', 'https://zhuec.gitbook.io/learning-notes/'),
-    ('CSDN', 'http://blog.csdn.net/u010850265'),
+    ('Ramda Docs', 'http://ramda.cn/docs/'),
+    ('TypeScript', 'https://www.tslang.cn/docs/home.html'),
     ('VeChain Thor', 'https://github.com/vechain/thor'),
+    ('CSDN', 'http://blog.csdn.net/u010850265'),
 )
 
 DEFAULT_PAGINATION = False  # 不分页
