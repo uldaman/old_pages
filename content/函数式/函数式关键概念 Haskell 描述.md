@@ -235,3 +235,17 @@ x <- Just 3
 y <- Just "!"
 Just (show x ++ y)
 ```
+
+## Functor & Applicative & Monda
+
+这三者是有联系的, 所有的 Applicative 都必然是 Functor, 而所有的 Monda 都必然是 Applicative:
+
+```hs
+class Functor f => Applicative f where
+    -- ...
+
+class Applicative m => Monda m where
+    -- ...
+```
+
+> PS: 要注意, 这种 `class =>` 表示法是依赖关系而不是实现顺序关系, 并不是说一个结构要实现 Monad 要先去实现 Applicative, 而是说实现了 Monda 的结构必然是自实现了 Applicative 的.
