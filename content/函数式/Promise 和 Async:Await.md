@@ -6,11 +6,11 @@ Date: 2018-12-16 19:00
 
 [TOC]
 
-# promise 处理回调嵌套
+# Promise 处理回调嵌套
 
-## 什么是 promise
+## 什么是 Promise
 
-promise 通常用于处理函数的异步调用, 通过链式调用的方式, 使得代码更加直观, 举例来说:
+Promise 通常用于处理函数的异步调用, 通过链式调用的方式, 使得代码更加直观, 举例来说:
 
 ```js
 var myPromise = function(tag) {
@@ -28,13 +28,13 @@ myPromise(true).then(function(message) {
 })
 ```
 
-我们可以看到设置 promise 只要 `new Promise()` 就可以, 并且接受一个函数, 该函数里面会执行 resolve 方法, 表示异步调用成功时执行, reject 表示异步调用失败时候调用.
+我们可以看到设置 Promise 只要 `new Promise()` 就可以, 并且接受一个函数, 该函数里面会执行 resolve 方法, 表示异步调用成功时执行, reject 表示异步调用失败时候调用.
 
-在链式调用时候, then 后面接的第一个函数为成功之时调用的函数 \-\- resolve, 并且这里的默认参数等同于 promise 中 resolve 中的初始参数.
+在链式调用时候, then 后面接的第一个函数为成功之时调用的函数 \-\- resolve, 并且这里的默认参数等同于 Promise 中 resolve 中的初始参数.
 
 ## then 和 catch
 
-**then**: 可以在 promise 中实现链式调用, 在上文中已经介绍. 补充, then 里面的第二个函数, 为异步调用失败之时执行, 接上面的例子:
+**then**: 可以在 Promise 中实现链式调用, 在上文中已经介绍. 补充, then 里面的第二个函数, 为异步调用失败之时执行, 接上面的例子:
 
 ```js
 myPromise(false).then(null, function(err) {
@@ -92,12 +92,12 @@ Promise.race([p1, p2]).then(function (result) {
 });
 ```
 
-# 为什么 Async/Await 比 promise 更好
+# 为什么 Async/Await 比 Promise 更好
 
 ## 简洁
 
 使用 Promise 是这样的:
-getJSON 函数返回一个 promise, 这个 promise 成功 resolve 时会返回一个 json 对象. 我们只是调用这个函数, 打印返回的JSON对象, 然后返回 "done".
+getJSON 函数返回一个 Promise, 这个 Promise 成功 resolve 时会返回一个 json 对象. 我们只是调用这个函数, 打印返回的JSON对象, 然后返回 "done".
 
 ```js
 const makeRequest = () =>
@@ -121,13 +121,13 @@ const makeRequest = async () => {
 makeRequest()
 ```
 
-函数前面多了一个 aync 关键字. await 关键字只能用在 aync 定义的函数内. async 函数会隐式地返回一个 promise, 该 promise 的 reosolve 值就是函数 return 的值. (示例中 reosolve 值就是字符串 "done"). `await getJSON()` 表示 console.log 会等到 getJSON 的 promise 成功 reosolve 之后再执行.
+函数前面多了一个 aync 关键字. await 关键字只能用在 aync 定义的函数内. async 函数会隐式地返回一个 Promise, 该 Promise 的 reosolve 值就是函数 return 的值. (示例中 reosolve 值就是字符串 "done"). `await getJSON()` 表示 console.log 会等到 getJSON 的 Promise 成功 reosolve 之后再执行.
 
 ## 错误处理
 
 Async/Await 让 try/catch 可以同时处理同步和异步错误.
 
-在下面的 promise 示例中, try/catch 不能处理 JSON.parse 的错误, 因为它在 Promise 中. 我们需要使用 catch, 这样错误处理代码非常冗余. 并且, 在我们的实际生产代码会更加复杂.
+在下面的 Promise 示例中, try/catch 不能处理 JSON.parse 的错误, 因为它在 Promise 中. 我们需要使用 catch, 这样错误处理代码非常冗余. 并且, 在我们的实际生产代码会更加复杂.
 
 ```js
 const makeRequest = () => {
@@ -204,15 +204,15 @@ const makeRequest = async () => {
 
 ## 模拟串行
 
-你很可能遇到过这样的场景, 调用 promise1, 使用 promise1 返回的结果去调用 promise2, 然后使用两者的结果去调用 promise3. 你的代码很可能是这样的:
+你很可能遇到过这样的场景, 调用 Promise1, 使用 Promise1 返回的结果去调用 Promise2, 然后使用两者的结果去调用 Promise3. 你的代码很可能是这样的:
 
 ```js
 const makeRequest = () => {
-  return promise1()
+  return Promise1()
     .then(value1 => {
-      return promise2(value1)
+      return Promise2(value1)
         .then(value2 => {
-          return promise3(value1, value2)
+          return Promise3(value1, value2)
         })
     })
 }
@@ -222,9 +222,9 @@ const makeRequest = () => {
 
 ```js
 const makeRequest = async () => {
-  const value1 = await promise1()
-  const value2 = await promise2(value1)
-  return promise3(value1, value2)
+  const value1 = await Promise1()
+  const value2 = await Promise2(value1)
+  return Promise3(value1, value2)
 }
 ```
 
