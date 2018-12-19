@@ -2,9 +2,9 @@ Title: Promise 和 Async/Await
 Author: Martin
 Date: 2018-12-16 19:00
 
-> 转自 [Promise 处理回调以及 Async/Await 替代 Promise 的六大理由](https://blog.csdn.net/haley_guo/article/details/80069872)
-
 [TOC]
+
+> 转自 [Promise 处理回调以及 Async/Await 替代 Promise 的六大理由](https://blog.csdn.net/haley_guo/article/details/80069872)
 
 # Promise 处理回调嵌套
 
