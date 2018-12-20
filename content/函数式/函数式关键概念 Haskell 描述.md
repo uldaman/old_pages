@@ -249,3 +249,11 @@ class Applicative m => Monda m where
 ```
 
 > PS: 要注意, 这种 `class =>` 表示法是依赖关系而不是实现顺序关系, 并不是说一个结构要实现 Monad 要先去实现 Applicative, 而是说实现了 Monda 的结构必然是自实现了 Applicative 的.
+
+## Maybe & Either
+
+Haskell 中 Maybe & Either 都是一个 Monad (如上小节所说, 它们也会是 Functor & Applicative).
+
+它们会被用来处理一些错误情况, 以 Maybe 来说, 对于 `fmap / <*> / >>=` 这此操作, 如果 Maybe 的值是 Nothing, 那这些操作将什么也不做, 仅仅再次返回 Nothing, 在一堆的链式操作中, 如果某一轮出错, 我们让这一轮返回 Nothing, 那后续的操作都将持续返回 Nohing, 最后的结果也将是 Nothing.
+
+Maybe 对于错误只是简单返回 Nothing, 我们会丢失错误信息, 某些时候可能需要这些信息, 这时可用 Either 代替 Maybe, 可以用 Right 表示正确值, 而用 Left 表示错误的信息.
