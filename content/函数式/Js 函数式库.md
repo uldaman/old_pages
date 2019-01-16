@@ -82,9 +82,11 @@ ghci> concat [[3, 4, 5], [2, 3, 4], [2, 1, 1]]
 
 ## ChainRec
 
+这个类型我找到的资料比较少.
+
 `chainRec :: ChainRec m => ((a -> c, b -> c, a) -> m c, a) -> m b`
 
-这个类型我找到的资料比较少, 在声明上没有看到 ~>, 这个函数是在 [type representative](https://github.com/fantasyland/fantasy-land#type-representatives) 上进行调用.
+在声明上没有看到 ~>, 是在 [type representative](https://github.com/fantasyland/fantasy-land#type-representatives) 上进行调用.
 
 该函数接收两个参数 `(f, i)`, f 是一个函数, 这个函数有三个参数:
 
