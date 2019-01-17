@@ -135,14 +135,14 @@ R.traverse(Just, safeDiv(10), [2, 4, 5])
 有许多的库让 JS 支持函数式风格编程, 大体上它们分为两大类:
 
 - 提供诸多高阶函数的工具库
-  + Ramda
-  + Lodash-FP
-  + Underscore
+    + Ramda
+    + Lodash-FP
+    + Underscore
 - 提供了 Fantasy land 中 TypeClass 的实现
-  + Folktale
-  + Ramda-Fantasy (已废弃)
-  + Fluture
-  + Sanctuary
+    + Folktale
+    + Ramda-Fantasy (已废弃)
+    + Fluture
+    + Sanctuary
 
 这里有一些推荐:
 
