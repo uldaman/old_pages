@@ -122,9 +122,17 @@ article .entry-content blockquote {
 
 /* Code */
 
-code, pre, codehilite {
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #000;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+pre, codehilite {
   font-size: 12px;
-  font-family: 'Ubuntu Mono', 'Oxygen Mono', sans-serif;
+  font-family: 'Menlo', 'Microsoft YaHei';
   color: #2E2E2E;
   word-wrap: break-word;
   border: 1px solid #73D12E;
