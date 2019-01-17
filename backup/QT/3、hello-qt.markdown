@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:11
 title: 3、Hello qt
 

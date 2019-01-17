@@ -1,5 +1,5 @@
 Title: 搭建 Hadoop 分布式实验环境
-Author: Martin
+Author: HanXiao
 Date: 2016-10-16 11:42
 
 **实验最终成品**:
@@ -325,15 +325,15 @@ Ubuntu 默认并没有安装 **ssh** 服务, 需要自己手动安装 **openssh-
 ## 5.2. 配置 smallcpp02 和 smallcpp03
 首先也是先安装好 **ssh** 服务生成一对 `id_rsa`、`id_rsa.pub` 文件;
 
-然后**不要**执行 `cp id_rsa.pub authorized_keys`, 而是执行 `ssh-copy-id -i ~/.ssh/id_rsa.pub martin@smallcpp01` 将公钥追加到 **smallcpp01** 的 **authorized_keys** 中.
+然后**不要**执行 `cp id_rsa.pub authorized_keys`, 而是执行 `ssh-copy-id -i ~/.ssh/id_rsa.pub hanxiao@smallcpp01` 将公钥追加到 **smallcpp01** 的 **authorized_keys** 中.
 
 操作好后到 smallcpp01 中 `vim authorized_keys` 可以看到里面已经多出了 smallcpp02 和 smallcpp03 的公钥了.
 
 最后将 **authorized_keys** 远程拷贝到 smallcpp02 和 smallcpp03 中.
 
 ```
-scp authorized_keys martin@smallcpp02:/home/martin/.ssh/authorized_keys
-scp authorized_keys martin@smallcpp03:/home/martin/.ssh/authorized_keys
+scp authorized_keys hanxiao@smallcpp02:/home/hanxiao/.ssh/authorized_keys
+scp authorized_keys hanxiao@smallcpp03:/home/hanxiao/.ssh/authorized_keys
 ```
 
 # 6. 启动集群
@@ -412,13 +412,13 @@ hdfs://smallcpp01:9000
 ## 7.1. 上传文件
 在 smallcpp01 (不一定是 smallcpp01, 可以集群中的任意一台进行测试) 的桌面上准备了一份大文件, 如 `ubuntu-16.04-desktop-amd64.iso`, 现在把它上传到 Hadoop 的 HDFS 文件系统上去.
 
-`hadoop fs -put /home/martin/桌面/ubuntu-16.04-desktop-amd64.iso hdfs://smallcpp01:9000/ubuntu-amd64.iso`
+`hadoop fs -put /home/hanxiao/桌面/ubuntu-16.04-desktop-amd64.iso hdfs://smallcpp01:9000/ubuntu-amd64.iso`
 
 上传文件到 `hdfs://smallcpp01:9000/` 并命名为 `ubuntu-amd64.iso`; 同样功能的命令除了 `put` 还有 `copyFromLocal` (过时).
 
 `hdfs://smallcpp01:9000/` 表示的是 HDFS 的**根目录**, 可以简写成 `/`, 如上面的上传文件命令可以写成这样:
 
-`hadoop fs -put /home/martin/桌面/ubuntu-16.04-desktop-amd64.iso /ubuntu-amd64.iso`
+`hadoop fs -put /home/hanxiao/桌面/ubuntu-16.04-desktop-amd64.iso /ubuntu-amd64.iso`
 
 Hadoop 的 **HDFS** 系统使用起来就像是 Linux 的文件系统, 如 `hadoop fs -ls /` 查看的就是 HDFS 根目录下的列表, 切不要将它们混淆了, HDFS 的根目录可不在 Linux 的根目录 (`/`) 下, 是两套完全不同的体系.
 
@@ -429,7 +429,7 @@ Hadoop 的 **HDFS** 系统使用起来就像是 Linux 的文件系统, 如 `hado
 ![](http://www.smallcpp.cn/theme/images/搭建Hadoop分布式实验环境/hadoopinfo.png)
 
 ## 7.2. 下载文件
-`hadoop fs -get /ubuntu-amd64.iso /home/martin/桌面/ubuntu-amd64.iso`
+`hadoop fs -get /ubuntu-amd64.iso /home/hanxiao/桌面/ubuntu-amd64.iso`
 
 下载文件到 Linux 系统.
 
@@ -449,7 +449,7 @@ hello tom
 hello jerry
 hello kitty
 hello world
-hello martin
+hello hanxiao
 ```
 
 所有的 MR 都是执行在 **hdfs** 上的, 所以要先上传文件: `hadoop fs -put words.txt /words.txt`
@@ -467,10 +467,10 @@ hadoop jar hadoop-mapreduce-examples-2.7.3.jar wordcount /words.txt /result
 
 ```
 Found 4 items
-drwxr-xr-x   - martin supergroup          0 2016-10-16 21:33 /result
-drwxrwx---   - martin supergroup          0 2016-10-16 20:27 /tmp
--rw-r--r--   2 martin supergroup 1485881344 2016-10-16 21:01 /ubuntu-amd64.iso
--rw-r--r--   2 martin supergroup         59 2016-10-16 21:30 /words.txt
+drwxr-xr-x   - hanxiao supergroup          0 2016-10-16 21:33 /result
+drwxrwx---   - hanxiao supergroup          0 2016-10-16 20:27 /tmp
+-rw-r--r--   2 hanxiao supergroup 1485881344 2016-10-16 21:01 /ubuntu-amd64.iso
+-rw-r--r--   2 hanxiao supergroup         59 2016-10-16 21:30 /words.txt
 
 ```
 
@@ -478,8 +478,8 @@ drwxrwx---   - martin supergroup          0 2016-10-16 20:27 /tmp
 
 ```
 Found 2 items
--rw-r--r--   2 martin supergroup          0 2016-10-16 21:36 /result/_SUCCESS
--rw-r--r--   2 martin supergroup         47 2016-10-16 21:36 /result/part-r-00000
+-rw-r--r--   2 hanxiao supergroup          0 2016-10-16 21:36 /result/_SUCCESS
+-rw-r--r--   2 hanxiao supergroup         47 2016-10-16 21:36 /result/part-r-00000
 ```
 
 其中 `_SUCCESS` 表示 MR 作业执行成功, `part-r-00000` 为结果文件, 用 `hadoop fs -cat /result/part-r-00000` 查看下:
@@ -488,7 +488,7 @@ Found 2 items
 hello   5
 jerry   1
 kitty   1
-martin  1
+hanxiao  1
 tom     1
 world   1
 ```

@@ -1,8 +1,8 @@
 Title: GOPATH in VSCode
-Author: Martin
+Author: HanXiao
 Date: 2017-11-22 16:58
 
-打开用户设置 (首选项 -> 设置): 
+打开用户设置 (首选项 -> 设置):
 
 ```json
 {

@@ -1,5 +1,5 @@
 Title: 前端 Js 插件汇总
-Author: Martin
+Author: HanXiao
 Date: 2016-11-02 20:29
 
 [TOC]

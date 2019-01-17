@@ -1,5 +1,5 @@
 ﻿Title: Git 简明手册
-Author: Martin
+Author: HanXiao
 Date: 2016-03-13 13:00
 
 [TOC]
@@ -135,7 +135,7 @@ windows:
 [difftool]
     prompt = false
 [difftool "bc3"]
-    cmd = "\"D:/martin/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\""
+    cmd = "\"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\""
 
 [merge]
     tool = bc3
@@ -143,7 +143,7 @@ windows:
     prompt = false
     keepBackup = false
 [mergetool "bc3"]
-    cmd = "\"D:/martin/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
+    cmd = "\"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
     trustExitCode = true
 ```
 
@@ -194,7 +194,7 @@ window 系统的 git bash 的 git\-diff\-wrapper.sh
 #/bin/sh
 # diff is called by git with 7 parameters:
 # path old-file old-hex old-mode new-file new-hex new-mode
-"D:/martin/i/l/u/Beyond Compare/BCompare.exe" "$2" "$5" | cat
+"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe" "$2" "$5" | cat
 ```
 
 mac 系统的 git\-diff\-wrapper.sh

@@ -1,5 +1,5 @@
 Title: JSHint 速查
-Author: Martin
+Author: HanXiao
 Date: 2016-10-24 13:40
 
 [TOC]

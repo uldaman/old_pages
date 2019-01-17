@@ -1,5 +1,5 @@
 Title: 05. 使用 Java Api 操作 HDFS
-Author: Martin
+Author: HanXiao
 Date: 2016-10-23 20:26
 Summary: 使用 Java Api 操作 HDFS
 
@@ -122,7 +122,7 @@ public class CopyLocalToHdfs {
         String hdfs_uri = args[1];
         InputStream in = new BufferedInputStream(new FileInputStream(local_uri));
         in.skip(100);
-        FileSystem fs = FileSystem.get(URI.create(hdfs_uri), new Configuration(), "martin");
+        FileSystem fs = FileSystem.get(URI.create(hdfs_uri), new Configuration(), "hanxiao");
         OutputStream out = fs.create(new Path(hdfs_uri));
         IOUtils.copyBytes(in, out, (long)20, true);
     }
@@ -150,7 +150,7 @@ public class CopyHdfsToLocal {
     public static void main(String[] args) throws Exception {
         String hdfs_uri = args[0];
         String local_uri = args[1];
-        FileSystem fs = FileSystem.get(URI.create(hdfs_uri), new Configuration(), "martin");
+        FileSystem fs = FileSystem.get(URI.create(hdfs_uri), new Configuration(), "hanxiao");
         InputStream in = fs.open(new Path(hdfs_uri));
         in.skip(100);
         OutputStream out = new BufferedOutputStream(new FileOutputStream(local_uri));

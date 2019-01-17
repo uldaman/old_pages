@@ -1,5 +1,5 @@
 Title: 折腾 Travis CI
-Author: Martin
+Author: HanXiao
 Date: 2016-05-28 21:04
 
 [TOC]
@@ -145,4 +145,3 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 [gem install 出现Errno::ECONNRESET: Connection reset by peer - SSL_connect (https://api.rubygems.org)](http://www.cnblogs.com/ToDoToTry/p/4422454.html)
 
 [修改 gem sources 后遇到的问题](https://ruby-china.org/topics/15260)
-

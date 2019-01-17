@@ -1,5 +1,5 @@
 Title: 打磨 gem
-Author: Martin
+Author: HanXiao
 Date: 2016-05-28 22:56
 
 [TOC]
@@ -44,4 +44,3 @@ sudo gem sources -l
 
 http://ruby.taobao.org
 ```
-

@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:18
 title: 3、[C++]设计模式与GRASP
 

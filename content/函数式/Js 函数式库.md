@@ -1,5 +1,5 @@
 Title: Js 函数式库
-Author: Martin
+Author: HanXiao
 Date: 2019-01-16 15:00
 
 [TOC]

@@ -1,5 +1,5 @@
 Title: mac tools
-Author: Martin
+Author: HanXiao
 Date: 2017-11-29 19:00
 
 - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)

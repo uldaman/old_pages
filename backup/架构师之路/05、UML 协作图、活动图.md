@@ -1,5 +1,5 @@
 Title: 05、UML 协作图、活动图
-Author: Martin
+Author: HanXiao
 Date: 2016-04-06 17:04
 Summary: 协作图 与 时序图是可以互转, 活动图就是最早就接触过的流程图.
 

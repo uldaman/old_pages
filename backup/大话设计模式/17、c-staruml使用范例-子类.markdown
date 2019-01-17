@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-11 13:36
 title: 17、[C++] StarUML使用范例 -- 子类
 

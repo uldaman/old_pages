@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-13 12:13
 title: (二十) Java 中的字符串
 

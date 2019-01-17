@@ -1,5 +1,5 @@
 Title: 29、使用 pyqt 帮助文档
-Author: Martin
+Author: HanXiao
 Date: 2016-05-15 01:18
 Summary: 官方文档永远是最好的学习资料...
 

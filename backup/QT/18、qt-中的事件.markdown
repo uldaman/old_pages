@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-05-30 12:23
 title: 18、Qt 中的事件
 

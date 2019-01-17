@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-05-26 08:25
 title: 17、通用对话框之 QFileDialog
 

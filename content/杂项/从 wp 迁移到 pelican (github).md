@@ -1,5 +1,5 @@
 Title: 从 wp 迁移到 pelican (github)
-Author: Martin
+Author: HanXiao
 Date: 2016-01-03 23:00
 Summary: 考虑了很久, 终于下定决心把博客从 wordpress 迁移到 github 上了, 这里作个记录, 方便以后查询.
 
@@ -22,7 +22,7 @@ pip install Markdown
 ```
 > Where do you want to create your new web site? [.]
 > What will be the title of this web site? SmallCpp
-> Who will be the author of this web site? Martin
+> Who will be the author of this web site? HanXiao
 > What will be the default language of this web site? [en] zh
 > Do you want to specify a URL prefix? e.g., http://example.com   (Y/n)
 > What is your URL prefix? (see above example; no trailing slash) http://uldaman.github.com
@@ -127,7 +127,7 @@ zurb-F5-basic 主题现在有个 Bug, 那就是第一篇博文竟然是全文显
 对于 `pelicanconf.py`, 除了 THEME 外, 还有一些有用的设置:
 
 ```python
-AUTHOR = u'martin'
+AUTHOR = u'hanxiao'
 SITENAME = u'Small Cpp'
 SITEURL = 'http://uldaman.github.com'
 

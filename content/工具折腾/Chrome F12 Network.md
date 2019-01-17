@@ -1,5 +1,5 @@
 Title: Chrome F12 Network
-Author: Martin
+Author: HanXiao
 Date: 2017-08-15 11:00
 
 ![](http://www.smallcpp.cn/theme/images/chromef12/network.png)

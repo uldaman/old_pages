@@ -1,5 +1,5 @@
 Title: 迁移 Github Project Page
-Author: Martin
+Author: HanXiao
 Date: 2016-05-25 18:45
 Summary: 将我的博客从 User Pages site 迁移到 Project Pages site.
 

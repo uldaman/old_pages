@@ -1,5 +1,5 @@
 Title: 使用 Eclipse 开发 HDFS
-Author: Martin
+Author: HanXiao
 Date: 2016-10-22 22:08
 
 先在 windows 7 下搭建好 eclipse 项目环境, 参考 [Eclipse 配置 Java 开发环境](http://www.smallcpp.cn/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/Eclipse%20%E9%85%8D%E7%BD%AE%20Java%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83.html)
@@ -50,4 +50,3 @@ Date: 2016-10-22 22:08
 不过在 Hadoop 2.x 中扩展了个 kerberos 项目用来控制 Hadoop 的权限, 如有必要可以再去研究.
 
 > 另外好像还有个 Apache ranger 项目, 也是一个 Hadoop 集群权限框架, 提供操作、监控、管理复杂的数据权限.
-

@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-13 15:47
 title: (二十五) Math 类(基本数学运算)
 

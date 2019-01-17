@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:03
 title: (四)、解决"复制出来的虚拟机不能启动 DataNode"
 

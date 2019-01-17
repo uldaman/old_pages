@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-14 15:04
 title: (二十八) Scanner 类的 close() 方法引起的異常
 

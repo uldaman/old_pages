@@ -1,5 +1,5 @@
 Title: VMware 安装 Ubuntu
-Author: Martin
+Author: HanXiao
 Date: 2016-10-16 03:04
 
 [TOC]

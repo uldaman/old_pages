@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:08
 title: 1、QT基础
 

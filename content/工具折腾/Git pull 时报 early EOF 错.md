@@ -1,5 +1,5 @@
 Title: Git pull/clone 时报 early EOF 错
-Author: Martin
+Author: HanXiao
 Date: 2017-07-24 21:28
 
 错误信息如下:

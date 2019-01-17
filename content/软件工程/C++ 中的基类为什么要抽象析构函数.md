@@ -1,5 +1,5 @@
 Title: C++ 中的基类为什么要抽象析构函数
-Author: Martin
+Author: HanXiao
 Date: 2015-03-12 11:40
 
 [TOC]

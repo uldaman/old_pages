@@ -1,5 +1,5 @@
 Title: 03. Hadoop 2.x 新特性
-Author: Martin
+Author: HanXiao
 Date: 2016-10-23 19:21
 Summary: Hadoop 2.x 新特性
 

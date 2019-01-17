@@ -1,5 +1,5 @@
 Title: JDBC 为什么用 Class.forName 加载驱动
-Author: Martin
+Author: HanXiao
 Date: 2016-08-02 16:55
 
 [TOC]

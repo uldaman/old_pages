@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-11 15:50
 title: 19、[C++]StarUML使用范例 — 接口
 

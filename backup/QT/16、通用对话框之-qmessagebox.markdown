@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-05-25 18:05
 title: 16、通用对话框之 QMessageBox
 

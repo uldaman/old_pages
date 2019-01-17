@@ -1,5 +1,5 @@
 Title: 去除 golint 对 self this 的警告
-Author: Martin
+Author: HanXiao
 Date: 2017-12-01 14:00
 Summary: 去除 golint 对方法接收者命名为 self、this 的警告.
 

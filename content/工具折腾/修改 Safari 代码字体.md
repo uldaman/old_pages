@@ -1,5 +1,5 @@
 Title: 修改 Safari 代码字体
-Author: Martin
+Author: HanXiao
 Date: 2019-01-17 12:56
 
 工具: [油猴插件](https://tampermonkey.net/?browser=safari)

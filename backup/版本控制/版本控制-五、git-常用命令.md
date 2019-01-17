@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-20 08:05
 title: [版本控制] 五、Git 常用命令
 

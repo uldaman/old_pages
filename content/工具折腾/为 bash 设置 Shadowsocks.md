@@ -1,5 +1,5 @@
 Title: 为 bash 设置 Shadowsocks
-Author: Martin
+Author: HanXiao
 Date: 2017-11-22 16:56
 
 [TOC]

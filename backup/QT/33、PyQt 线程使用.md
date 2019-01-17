@@ -1,5 +1,5 @@
 Title: 33、PyQt 线程使用
-Author: Martin
+Author: HanXiao
 Date: 2016-05-16 20:40
 Summary: 由于 Python 的线程历史性原因, 所以在 PyQt 中还是推荐使用 Qt 的线程机制.
 

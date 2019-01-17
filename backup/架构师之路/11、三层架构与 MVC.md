@@ -1,5 +1,5 @@
 Title: 11、三层架构与 MVC
-Author: Martin
+Author: HanXiao
 Date: 2016-05-04 18:55
 Summary: 最近在研究三层架构和 MVC 的关系, 感觉这种问题有点教条化了, 总结了一些经验.
 

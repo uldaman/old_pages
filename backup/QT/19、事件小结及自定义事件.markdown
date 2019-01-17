@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-01 04:14
 title: 19、事件小结及自定义事件
 

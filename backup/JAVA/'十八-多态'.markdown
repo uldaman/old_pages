@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-12 17:15
 title: (十八) 多态及接口
 

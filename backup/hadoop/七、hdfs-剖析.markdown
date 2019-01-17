@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:06
 title: (七)、HDFS 剖析
 

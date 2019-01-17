@@ -1,5 +1,5 @@
 Title: 02. HDFS 简介
-Author: Martin
+Author: HanXiao
 Date: 2016-10-20 20:52
 Summary: HDFS 简介
 
@@ -67,8 +67,8 @@ NameNode 是管理节点, 维护集群的[命名空间](http://wiki.smallcpp.cn/
 
 存储细节: 为了性能和安全兼具, Metadata 在 HDFS 中会存储**两**份, 内存一份, 磁盘一份(镜像).
 
-| `/test/a.log` |   3    | `{blk_1, blk_2}` | `[{blk_1: [h0, h1, h3]}, {blk_2: [h0, h2, h4]}]` |
-|---------------|--------|------------------|--------------------------------------------------|
+| `/test/a.log` | 3      | `{blk_1, blk_2}` | `[{blk_1: [h0, h1, h3]}, {blk_2: [h0, h2, h4]}]` |
+| ------------- | ------ | ---------------- | ------------------------------------------------ |
 | 文件名        | 副本数 | 文件被分多少块   | 每个块分别被保存在哪个 DataNode 上               |
 
 HDFS 通过 CRC 校验块的完整性.
@@ -88,7 +88,7 @@ Hadoop 会维护一个 **fsimage** 文件, 也就是 NameNode 中 MetaData 的�
 在 `/tmp/dfs/name/current` 目录下, 除了那三个文件外, 还有个 **VERSION** 文件:
 
 ```shell
-martin@smallcpp01:/usr/smallcpp/hadoop-2.7.3/tmp/dfs/name/current$ cat VERSION
+hanxiao@smallcpp01:/usr/smallcpp/hadoop-2.7.3/tmp/dfs/name/current$ cat VERSION
 #Sun Oct 16 17:28:41 CST 2016
 namespaceID=1526300018
 clusterID=CID-cc6f47f9-4021-4f9b-87a6-ad7ad82b7af7

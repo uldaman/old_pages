@@ -1,4 +1,4 @@
-Author: Martin
+Author: HanXiao
 Date: 2015-02-15 14:16
 Title: 1、[C++]设计模式与面向对象
 

@@ -1,5 +1,5 @@
 Title: 让 Putty 自动登陆 [转]
-Author: Martin
+Author: HanXiao
 Date: 2016-05-05 14:04
 
 [TOC]

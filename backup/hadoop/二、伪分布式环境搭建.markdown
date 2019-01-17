@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:01
 title: (二)、伪分布式环境搭建
 
@@ -254,7 +254,7 @@ hello tom
 hello jerry
 hello kitty
 hello world
-hello martin
+hello hanxiao
 ```
 
 所有的 MR 都是执行在 hdfs 上的, 所以要先上传文件.
@@ -287,7 +287,7 @@ drwx------ - itcast supergroup 0 2015-09-19 11:46 hdfs://itcast01:9000/tmp
 hello 5
 jerry 1
 kitty 1
-martin 1
+hanxiao 1
 tom 1
 world 1
 ```

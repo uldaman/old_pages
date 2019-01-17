@@ -1,5 +1,5 @@
 Title: 06. 使用 Rest 操作 HDFS
-Author: Martin
+Author: HanXiao
 Date: 2016-11-03 22:07
 Summary: 使用 rest 操作 HDFS
 

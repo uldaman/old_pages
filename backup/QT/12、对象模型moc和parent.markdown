@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-08 14:02
 title: 12、对象模型(moc和parent)
 

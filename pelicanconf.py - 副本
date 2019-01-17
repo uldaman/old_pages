@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = u'martin'
+AUTHOR = u'hanxiao'
 SITENAME = u'Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.'
 SITEURL = 'http://www.smallcpp.cn'
 

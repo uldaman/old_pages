@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-11 15:30
 title: 18、[C++]StarUML使用范例 — 聚合
 

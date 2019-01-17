@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-19 19:40
 title: [版本控制] 四、Git 的安裝(Windows)
 

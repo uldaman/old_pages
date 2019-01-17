@@ -1,5 +1,5 @@
 Title: 09、RUP 软件工程管理概述
-Author: Martin
+Author: HanXiao
 Date: 2016-05-03 18:38
 Summary: 熟悉常见的软件工程模型, 了解迭代式开发及敏捷开发的特点, 学习 RUP 软件工程模型.
 

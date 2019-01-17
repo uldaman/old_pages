@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:07
 title: (八)、HDFS Java 接口
 

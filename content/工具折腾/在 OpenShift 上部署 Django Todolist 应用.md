@@ -1,5 +1,5 @@
 Title: 在 OpenShift 上部署 Django Todolist 应用
-Author: Martin
+Author: HanXiao
 Date: 2016-05-11 10:23
 
 [TOC]

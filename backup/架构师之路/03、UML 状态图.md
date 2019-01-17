@@ -1,5 +1,5 @@
 Title: 03、UML 状态图
-Author: Martin
+Author: HanXiao
 Date: 2016-04-01 20:17
 Summary: 状态图是一种"开关", 描述的是状态变化的图形.
 
@@ -16,8 +16,8 @@ Summary: 状态图是一种"开关", 描述的是状态变化的图形.
 <<__Logical View__\>\> \-\-\> Add Diagram \-\-\> Statechart Diagram<br>
 界面左边就出现了 Statechart 工具栏.
 
-|     StarUML     |             翻译             |
-|-----------------|------------------------------|
+| StarUML         | 翻译                         |
+| --------------- | ---------------------------- |
 | State           | 状态节点                     |
 | SubmachineState | 状态子节点                   |
 | InitialState    | 初始状态                     |

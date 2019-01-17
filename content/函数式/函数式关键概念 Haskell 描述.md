@@ -1,5 +1,5 @@
 Title: 函数式关键概念 Haskell 描述
-Author: Martin
+Author: HanXiao
 Date: 2018-12-03 18:00
 
 学习 Haskell 过程中接触到的 FP (functional programming) 的一些概念, 并不是 FP 的全部 (PS: 为了容易理解, 尽可能的忽略了数学描述, 而改用开发容易理解的字眼, 所以某些概念可能会描述的并不准确).

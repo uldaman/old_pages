@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-10 00:12
 title: 15、[C++] 正确辨析类图的两种存在形式[转]
 

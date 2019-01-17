@@ -1,5 +1,5 @@
 Title: mysql transaction 与 autocommit
-Author: Martin
+Author: HanXiao
 Date: 2016-08-01 15:42
 
 [TOC]

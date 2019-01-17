@@ -1,5 +1,5 @@
 Title: win7 与 VMware ubuntu 虚拟机实现文件共享
-Author: Martin
+Author: HanXiao
 Date: 2016-04-23 14:55
 
 [TOC]

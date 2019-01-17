@@ -1,5 +1,5 @@
 Title: 高可用高并发网站架构演化 (nginx + keepalived)
-Author: Martin
+Author: HanXiao
 Date: 2016-10-27 22:27
 
 [TOC]

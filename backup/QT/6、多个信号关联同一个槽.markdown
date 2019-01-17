@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-28 09:51
 title: 7、多个信号关联同一个槽
 

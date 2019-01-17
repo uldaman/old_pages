@@ -1,5 +1,5 @@
 Title: 01、UML 架构及 StarUML
-Author: Martin
+Author: HanXiao
 Date: 2016-03-31 21:28
 Summary: UML 图形分三大类, 对象图、交互图和状态图, 细分又有八种图形, 用例图、时序图、协作图、状态图、活动图、类图、组件图 及 部署图.
 

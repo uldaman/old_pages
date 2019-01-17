@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-08 11:33
 title: 8、带参数的信号槽和自定义信号槽
 

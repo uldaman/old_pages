@@ -1,5 +1,5 @@
 Title: 07、UML 部署图
-Author: Martin
+Author: HanXiao
 Date: 2016-05-03 10:23
 Summary: 是用来建模系统的物理部署, 例如计算机和设备, 以及它们之间是如何连接的, 部署图的使用者是开发人员、系统集成人员和测试人员.
 

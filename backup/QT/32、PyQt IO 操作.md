@@ -1,5 +1,5 @@
 Title: 32、PyQt IO 操作
-Author: Martin
+Author: HanXiao
 Date: 2016-05-16 15:58
 Summary: Qt 有自己的一套 I/O 体系, 但 Python 也有一套, 并且同样强大, 习惯于 Python 的我更倾向于使用 Python 的 I/O 系统来编程.
 

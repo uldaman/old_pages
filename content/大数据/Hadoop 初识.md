@@ -1,5 +1,5 @@
 Title: 01. Hadoop 初识
-Author: Martin
+Author: HanXiao
 Date: 2016-10-16 23:32
 Summary: Hadoop 初识
 

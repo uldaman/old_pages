@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-11 13:09
 title: 16、[C++] StarUML使用范例 -- 虚类
 

@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:02
 title: (三)、配置 SecureCRT、SSH 及 ShadowSocks
 

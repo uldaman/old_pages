@@ -1,5 +1,5 @@
 Title: 27、pyqt 中文问题
-Author: Martin
+Author: HanXiao
 Date: 2016-05-14 20:33
 Summary: 解决 PyQt 中文乱码...
 

@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-18 18:20
 title: [版本控制] 三、Git 初識
 

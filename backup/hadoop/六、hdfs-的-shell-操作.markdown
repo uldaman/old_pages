@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2016-01-19 21:05
 title: (六)、HDFS 常用 shell 操作
 

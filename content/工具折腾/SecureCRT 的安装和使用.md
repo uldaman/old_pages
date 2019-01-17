@@ -1,5 +1,5 @@
 Title: SecureCRT 的安装和使用
-Author: Martin
+Author: HanXiao
 Date: 2016-11-11 21:09
 
 **SecureCRT** 是一款支持 SSH（SSH1 和 SSH2）的终端仿真程序, 同时支持 Telnet 和 rlogin 协议; 它可用于连接运行包括 Windows、Unis 和 linux 在内的远程系统.

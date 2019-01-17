@@ -1,5 +1,5 @@
 Title: Sublime 配置 Python 开发环境
-Author: Martin
+Author: HanXiao
 Date: 2016-04-24 15:08
 
 [TOC]
@@ -738,4 +738,3 @@ compileall.compile_dir(r'H:/game')
     "shell_cmd": "python -m compileall \"C:/Users/Administrator/Desktop/Scripts\""
 }
 ```
-

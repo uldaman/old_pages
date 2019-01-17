@@ -1,5 +1,5 @@
 Title: 配置 SSH 免密码登录
-Author: Martin
+Author: HanXiao
 Date: 2016-11-03 22:30
 
 ![](http://www.smallcpp.cn/theme/images/SSH/免密码登录原理.png)

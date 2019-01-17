@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:23
 title: 8、[C++]代理模式
 

@@ -1,5 +1,5 @@
 Title: 06、UML 类图
-Author: Martin
+Author: HanXiao
 Date: 2016-04-14 18:17
 Summary: 类图, 豪不夸张的说, 是 UML 里最复杂的图了...
 
@@ -17,8 +17,8 @@ __在 StarUML 中新建类图__:<br>
 <<__Logical View__\>\> \-\-\> Add Diagram \-\-\> Class Diagram<br>
 界面左边就出现了 Class 工具栏.
 
-|       StarUML       |   翻译   |
-|---------------------|----------|
+| StarUML             | 翻译     |
+| ------------------- | -------- |
 | Subsystem           | 子系统   |
 | Package             | 包       |
 | Class               | 类       |

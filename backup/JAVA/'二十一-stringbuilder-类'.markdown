@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-13 12:29
 title: (二十一) StringBuilder 类
 

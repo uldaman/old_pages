@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-10 02:38
 title: XMind (思维导图制作软件) 零基础教程
 

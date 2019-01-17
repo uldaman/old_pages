@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:13
 title: 5、QT 中文乱码
 

@@ -1,5 +1,5 @@
 Title: Sublime 配置 Markdown 写作环境
-Author: Martin
+Author: HanXiao
 Date: 2016-03-05 13:00
 
 [TOC]
@@ -175,7 +175,7 @@ OmniMarkupPreviewer 的默认配置已经满足日常需求了, 不过可以在�
 
 ```
 Title: Git 简明手册
-Author: Martin
+Author: HanXiao
 Date: 2016-03-13 13:00
 Summary: Git 学习笔记, 记录一些常用的操作, 以及 SourceTree、Github 的用法.
 ```
@@ -187,7 +187,7 @@ Summary: Git 学习笔记, 记录一些常用的操作, 以及 SourceTree、Gith
 ```xml
 <snippet>
     <content><![CDATA[Title: ${1}
-Author: Martin
+Author: HanXiao
 Date: ${2}
 Summary:
 

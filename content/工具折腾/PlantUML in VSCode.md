@@ -1,5 +1,5 @@
 Title: PlantUML in VSCode
-Author: Martin
+Author: HanXiao
 Date: 2017-12-01 13:00
 
 [PlantUML for VSCode](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)

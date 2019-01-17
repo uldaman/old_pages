@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-23 05:05
 title: 12、[C++] 2014 小结
 

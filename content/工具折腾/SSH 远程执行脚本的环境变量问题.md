@@ -1,5 +1,5 @@
 Title: SSH 远程执行脚本的环境变量问题
-Author: Martin
+Author: HanXiao
 Date: 2016-11-03 23:59
 
 [TOC]

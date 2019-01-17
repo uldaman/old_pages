@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-03-08 12:20
 title: 9、Qt 各模块简介
 

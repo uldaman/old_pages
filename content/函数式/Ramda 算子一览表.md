@@ -1,5 +1,5 @@
 Title: Ramda 算子一览表
-Author: Martin
+Author: HanXiao
 Date: 2018-12-16 19:00
 
 | list            | function     | object            | relation                | logic         | math     | string   | type   |

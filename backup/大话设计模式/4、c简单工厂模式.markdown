@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-02-15 14:19
 title: 4、[C++]简单工厂模式
 

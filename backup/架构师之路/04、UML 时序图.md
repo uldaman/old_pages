@@ -1,5 +1,5 @@
 Title: 04、UML 时序图
-Author: Martin
+Author: HanXiao
 Date: 2016-04-05 15:26
 Summary: 描述一个时间段内不同对象之间的业务情况.
 
@@ -22,8 +22,8 @@ __在 StarUML 中新建时序图__:<br>
 <<__Logical View__\>\> \-\-\> Add Diagram \-\-\> Sequence Diagram<br>
 界面左边就出现了 Sequence 工具栏.
 
-|       StarUML       |     翻译     |
-|---------------------|--------------|
+| StarUML             | 翻译         |
+| ------------------- | ------------ |
 | Object              | 对象         |
 | Stimulus            | 消息传递     |
 | SelfStimulus        | 自我消息传递 |

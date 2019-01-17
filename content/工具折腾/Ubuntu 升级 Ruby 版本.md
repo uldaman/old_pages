@@ -1,5 +1,5 @@
 Title: Ubuntu 升级 Ruby 版本
-Author: Martin
+Author: HanXiao
 Date: 2016-05-28 21:47
 
 [TOC]

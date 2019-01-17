@@ -1,5 +1,5 @@
 Title: Hadoop 集群添加新节点
-Author: Martin
+Author: HanXiao
 Date: 2016-10-22 14:05
 
 仅为**实验**集群或者**小型**集群的添加节点方法, 一般**大型**的集群都有专门的运维.
@@ -14,13 +14,13 @@ Date: 2016-10-22 14:05
 
 `vim slaves` 将新节点的域名添加进来;
 
-`sudo vim /etc/hosts` 修改 [ip 域名] 对应表, 将新节点的 `IP 域名` 添加进来, 然后将**远程拷贝**到新节点中, 如我的新添加的节点主机名是 smallcpp04, 用户是 martin:
+`sudo vim /etc/hosts` 修改 [ip 域名] 对应表, 将新节点的 `IP 域名` 添加进来, 然后将**远程拷贝**到新节点中, 如我的新添加的节点主机名是 smallcpp04, 用户是 hanxiao:
 
-`scp /etc/hosts martin@smallcpp04:/home/martin/.ssh/authorized_keys`
+`scp /etc/hosts hanxiao@smallcpp04:/home/hanxiao/.ssh/authorized_keys`
 
 同时也将 Hadoop 的配置目录拷贝过去:
 
-`scp /usr/smallcpp/hadoop-2.7.3/etc/hadoop martin@smallcpp04:/usr/smallcpp/hadoop-2.7.3/etc/hadoop`
+`scp /usr/smallcpp/hadoop-2.7.3/etc/hadoop hanxiao@smallcpp04:/usr/smallcpp/hadoop-2.7.3/etc/hadoop`
 
 下面两个操作不知道是不是必须的, 待研究~
 

@@ -1,5 +1,5 @@
 Title: Ubuntu 安装 ShadowSocks
-Author: Martin
+Author: HanXiao
 Date: 2016-11-03 22:32
 
 [TOC]

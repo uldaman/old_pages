@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-14 14:53
 title: (二十七) Map 和 HashMap
 

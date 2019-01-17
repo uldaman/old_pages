@@ -1,5 +1,5 @@
 Title: GenShi Templates
-Author: Martin
+Author: HanXiao
 Date: 2016-08-19 12:56
 
 [TOC]
@@ -281,8 +281,8 @@ When used this way, the py:match directive can also be annotated with a couple o
 
 The following optimization hints are recognized:
 
-| Attribute | Default |                                                                                                                                                                                                    Description                                                                                                                                                                                                    |
-|-----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Attribute | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                       |
+| --------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | buffer    | true    | Whether the matched content should be buffered in memory. Buffering can improve performance a bit at the cost of needing more memory during rendering. Buffering is ''required'' for match templates that contain more than one invocation of the select() function. If there is only one call, and the matched content can potentially be very long, consider disabling buffering to avoid excessive memory use. |
 | once      | false   | Whether the engine should stop looking for more matching elements after the first match. Use this on match templates that match elements that can only occur once in the stream, such as the <head> or <body> elements in an HTML template, or elements with a specific ID.                                                                                                                                       |
 | recursive | true    | Whether the match template should be applied to its own output. Note that once implies non-recursive behavior, so this attribute only needs to be set for match templates that don't also have once set.                                                                                                                                                                                                          |

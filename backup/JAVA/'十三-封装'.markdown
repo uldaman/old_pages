@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-06-12 10:06
 title: (十三) 封装
 

@@ -1,4 +1,4 @@
-author: Martin
+author: HanXiao
 date: 2015-05-25 18:00
 title: 15、对话框间通信
 

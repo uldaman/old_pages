@@ -1,5 +1,5 @@
 Title: 2、搭建VS + QT 项目环境
-Author: Martin
+Author: HanXiao
 Date: 2015-02-15 14:10
 Summary: 介绍如何在 Windows 下安装 QT, 及用 VS 新建一个 QT 项目.
 

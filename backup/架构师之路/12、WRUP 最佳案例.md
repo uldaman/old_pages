@@ -1,5 +1,5 @@
 Title: 12、WRUP 最佳案例
-Author: Martin
+Author: HanXiao
 Date: 2016-05-04 20:54
 Summary: Sandy 共享了一份项目案例 androidtalk_2010_11_17, 我们以这个案例为基础, 分析下怎么在项目中应用 WRUP.
 
