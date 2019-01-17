@@ -97,21 +97,76 @@ ghci> concat [[3, 4, 5], [2, 3, 4], [2, 1, 1]]
 chainRec 调用时, 将 i 做第三个参数调用 f, f 的逻辑需要有分支判断, 用来处理是 next, 还是 done, 以下是 sanctuary-maybe 的例子:
 
 ```js
-Maybe.chainRec (
+const Maybe = require("sanctuary-maybe")
+const Just = Maybe.Just
+const Nothing = Maybe.Nothing
+
+Maybe['fantasy-land/chainRec'] (
     (next, done, x) =>
         x <= 1 ? Nothing : Just (x >= 1000 ? done (x) : next (x * x)),
         // sanctuary-maybe 内置函数 done, next 两个函数,
         // 不用管它, 把 done 和 next 的逻辑像上面那样写在函数体内就可以了.
     1
 )
-Nothing
+// Nothing
 ```
 
 ## Traversable
 
+`traverse :: Applicative f, Traversable t => t a ~> (TypeRep f, a -> f b) -> f (t b)`
+
+将返回值为 Applicative 类型的函数映射到一个 Traversable 上, 然后将结果由 Traversable of Applicative 转换为 Applicative of Traversable. 相当于先 chain 再 反转.
+
+```js
+const Maybe = require("sanctuary-maybe")
+const Just = Maybe.Just
+const Nothing = Maybe.Nothing
+const safeDiv = n => d => d === 0 ? Nothing() : Just(n / d)
+
+R.chain(safeDiv(10), [2, 4, 5])
+// [ Just (5), Just (2.5), Just (2) ]
+
+R.traverse(Just, safeDiv(10), [2, 4, 5])
+// Just ([5, 2.5, 2])
+```
+
 # Fantasy land 的实现
 
-# References
+有许多的库让 JS 支持函数式风格编程, 大体上它们分为两大类:
+
+- 提供诸多高阶函数的工具库
+  + Ramda
+  + Lodash-FP
+  + Underscore
+- 提供了 Fantasy land 中 TypeClass 的实现
+  + Folktale
+  + Ramda-Fantasy (已废弃)
+  + Fluture
+  + Sanctuary
+
+这里有一些推荐:
+
+* Maybe: [sanctuary-js/sanctuary-maybe](https://github.com/sanctuary-js/sanctuary-maybe)
+* Either: [sanctuary-js/sanctuary-either](https://github.com/sanctuary-js/sanctuary-either)
+* Future: [fluture-js/Fluture](https://github.com/fluture-js/Fluture)
+* State: [fantasyland/fantasy-states](https://github.com/fantasyland/fantasy-states)
+* Tuple: [fantasyland/fantasy-tuples](https://github.com/fantasyland/fantasy-tuples)
+* Reader: [fantasyland/fantasy-readers](https://github.com/fantasyland/fantasy-readers)
+* IO: [fantasyland/fantasy-io](https://github.com/fantasyland/fantasy-io)
+* Identity: [sanctuary-js/sanctuary-identity](https://github.com/sanctuary-js/sanctuary-identity)
+
+|          | Functor | Applicative | Monad  | Foldable | Setoid | Semigroup | ChainRec | Traversable |
+| -------- | :-----: | :---------: | :----: | :------: | :----: | :-------: | :------: | :---------: |
+| Maybe    | **✔︎**  |   **✔︎**    | **✔︎** |  **✔︎**  | **✔︎** |  **✔︎**   |  **✔︎**  |   **✔︎**    |
+| Either   | **✔︎**  |   **✔︎**    | **✔︎** |          | **✔︎** |           |  **✔︎**  |   **✔︎**    |
+| Future   | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
+| Identity | **✔︎**  |   **✔︎**    | **✔︎** |          | **✔︎** |           |  **✔︎**  |   **✔︎**    |
+| Reader   | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |          |             |
+| Tuple    | **✔︎**  |             |        |          | **✔︎** |  **✔︎**   |          |             |
+| State    | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
+| IO       | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
+
+# Tutorials
 
 [实例讲解 JS 函数式编程 (第一部分)](http://www.xiaojichao.com/post/functional-programming-in-js-with-practical-examples-part-1.html)
 
