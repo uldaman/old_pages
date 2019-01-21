@@ -135,25 +135,26 @@ R.traverse(Just, safeDiv(10), [2, 4, 5])
 有许多的库让 JS 支持函数式风格编程, 大体上它们分为两大类:
 
 - 提供诸多高阶函数的工具库
+    + Sanctuary
     + Ramda
     + Lodash-FP
     + Underscore
 - 提供了 Fantasy land 中 TypeClass 的实现
-    + Folktale
-    + Ramda-Fantasy (已废弃)
-    + Fluture
     + Sanctuary
+    + Folktale
+    + Fluture
+    + Ramda-Fantasy (已废弃)
 
 这里有一些推荐:
 
 * Maybe: [sanctuary-js/sanctuary-maybe](https://github.com/sanctuary-js/sanctuary-maybe)
 * Either: [sanctuary-js/sanctuary-either](https://github.com/sanctuary-js/sanctuary-either)
+* Pair: [sanctuary-js/sanctuary-pair](https://github.com/sanctuary-js/sanctuary-pair)
+* Identity: [sanctuary-js/sanctuary-identity](https://github.com/sanctuary-js/sanctuary-identity)
 * Future: [fluture-js/Fluture](https://github.com/fluture-js/Fluture)
 * State: [fantasyland/fantasy-states](https://github.com/fantasyland/fantasy-states)
-* Tuple: [fantasyland/fantasy-tuples](https://github.com/fantasyland/fantasy-tuples)
 * Reader: [fantasyland/fantasy-readers](https://github.com/fantasyland/fantasy-readers)
 * IO: [fantasyland/fantasy-io](https://github.com/fantasyland/fantasy-io)
-* Identity: [sanctuary-js/sanctuary-identity](https://github.com/sanctuary-js/sanctuary-identity)
 
 |          | Functor | Applicative | Monad  | Foldable | Setoid | Semigroup | ChainRec | Traversable |
 | -------- | :-----: | :---------: | :----: | :------: | :----: | :-------: | :------: | :---------: |
@@ -162,9 +163,69 @@ R.traverse(Just, safeDiv(10), [2, 4, 5])
 | Future   | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
 | Identity | **✔︎**  |   **✔︎**    | **✔︎** |          | **✔︎** |           |  **✔︎**  |   **✔︎**    |
 | Reader   | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |          |             |
-| Tuple    | **✔︎**  |             |        |          | **✔︎** |  **✔︎**   |          |             |
+| Pair     | **✔︎**  |             |        |          | **✔︎** |  **✔︎**   |          |             |
 | State    | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
 | IO       | **✔︎**  |   **✔︎**    | **✔︎** |          |        |           |  **✔︎**  |             |
+
+## Sanctuary
+
+Sanctuary 是一套相对完整的解决方案, 它比 Ramda 更严格, 并提供了一套类似的函数, 同时还提供三个与 Fantasy Land 兼容的数据类型: `Maybe`, `Either` 和 `Pair`.
+
+Sanctuary 认为函数比方法更容易使用 ([issue#8](https://github.com/sanctuary-js/sanctuary-maybe/issues/8)), 所以像 `Maybe(10).map(...).filtr(...)...` 这样的链式调用是不支持的, 但可以 `pipe` 来组合调用:
+
+```js
+S.pipe ([
+  S.map (...),
+  S.filter (...),
+  S.reverse,
+  S.map (...),
+])
+```
+
+另外, Sanctuary 的 `curry` 函数不提供任意长度的函数转换, 只提供了 `curry2~5`, 而且没提供 `partial` 函数, 附上我自己的实现:
+
+```js
+"use strict"
+
+/**
+ * Returns a curried equivalent of the provided function.
+ *
+ * let add = (x, y) => x + y
+ * add10 = curry(add)(10)
+ */
+const curry = (fn) => {
+    return curriedFn = (...x) => {
+        if (x.length < fn.length) {
+            return (...y) => {
+                return curriedFn(...x, ...y)
+            }
+        }
+        return fn(...x)
+    }
+}
+
+/**
+ * Allowing partial application of any combination of
+ * arguments, regardless of their positions.
+ *
+ * Use `undefined` for a special placeholder values.
+ *
+ * let delay10Ms = partial(setTimeout, undefined, 10)
+ * delay10Ms(() => console.log("10 Ms passed"))
+ */
+const partial = (fn, ...partialArgs) => {
+    return (...fullArgs) => {
+        let args = []
+        let position = 0
+        for (let i = 0; i < partialArgs.length; i++) {
+            args[i] = partialArgs[i] === undefined
+                ? fullArgs[position++]
+                : partialArgs[i]
+        }
+        return fn(...args)
+    }
+}
+```
 
 # Tutorials
 
