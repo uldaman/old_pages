@@ -149,6 +149,10 @@ windows:
 
 OX:
 
+参考: [Beyond Compar](ehttp://www.scootersoftware.com/support.php?zz=kb_vcs_osx)官网介绍.
+
+**下面是之前的方法, 现在已经不用了, 仅留个备份.**
+
 ```
 [diff]
     tool = bc3
@@ -184,7 +188,7 @@ OX:
 
 You often need to see all four of these pieces of information to make intelligent choices. Where you came from (LOCAL), where the other person’s changes came from (REMOTE), where you both started (BASE) and where you are now (MERGE_RESULT).
 
-**下面是之前的方法, 现在已经不用了, 仅留个备份.**
+**下面是更早之前的方法, 现在已经不用了, 仅留个备份.**
 
 首先在 `~/bin/` 目录下 (windows 是用户主目录, 如 `C:\Users\Administrator`) 新建一个 git-diff-wrapper.sh 文件
 
