@@ -149,7 +149,28 @@ windows:
 
 OX:
 
-参考: [Beyond Compar](ehttp://www.scootersoftware.com/support.php?zz=kb_vcs_osx)官网介绍.
+安装 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.
+
+然后参考: [Beyond Compar](ehttp://www.scootersoftware.com/support.php?zz=kb_vcs_osx)官网介绍.
+
+暴露一个无限试用的方式.
+
+新建一个 bash 脚本, 命名为 **Beyond Compare**, 添加如下代码:
+
+```bash
+#!/bin/bash
+
+rm "~/Library/Application Support/Beyond Compare/registry.dat"
+
+"/Applications/Beyond Compare.app/Contents/MacOS/bcomp" "$@"
+```
+
+然后将 `/usr/local/bin/bcomp` 和 `/usr/local/bin/bcompare` 的软链接改为刚才的 bash 脚本 **Beyond Compare**:
+
+```
+ln -sf "Beyond Compare" /usr/local/bin/bcomp
+ln -sf "Beyond Compare" /usr/local/bin/bcompare
+```
 
 **下面是之前的方法, 现在已经不用了, 仅留个备份.**
 
@@ -170,8 +191,6 @@ OX:
     cmd = bcomp $LOCAL $REMOTE $BASE $MERGED
     trustExitCode = true
 ```
-
-注意：你在 mac 系统中装了 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.
 
 参数说明:
 
