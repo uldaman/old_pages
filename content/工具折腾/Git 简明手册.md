@@ -155,7 +155,13 @@ OX:
 
 暴露一个无限试用的方式.
 
-新建一个 bash 脚本, 命名为 **Beyond Compare**, 添加如下代码:
+新建一个 bash 脚本, 命名为 **Beyond Compare**, 并修改权限:
+
+```
+chmod 755 Beyond Compare
+```
+
+脚本里添加如下代码:
 
 ```bash
 #!/bin/bash
