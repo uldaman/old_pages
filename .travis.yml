@@ -12,8 +12,8 @@ before_install:
 - git config --global user.email "zhuec@hotmail.com"
 - git remote set-url --push origin git@github.com:uldaman/uldaman.github.com.git
 - git fetch origin master:refs/remotes/origin/master
-- rm -rf /usr/lib/python2.7/dist-packages/OpenSSL
-- rm -rf /usr/lib/python2.7/dist-packages/pyOpenSSL-0.15.1.egg-info
+- sudo rm -rf /usr/lib/python2.7/dist-packages/OpenSSL
+- sudo rm -rf /usr/lib/python2.7/dist-packages/pyOpenSSL-0.15.1.egg-info
 install:
 - sudo pip install pyopenssl
 - sudo pip install "fabric<2"
