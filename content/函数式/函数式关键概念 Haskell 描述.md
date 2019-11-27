@@ -205,16 +205,16 @@ class Applicative f where
 
 Applicative 的使用场景我遇到的很少...这里就不过多介绍了.
 
-## Monda
+## Monad
 
 ```hs
-class Monda m where
+class Monad m where
   return :: a -> m a
   (>>=) :: m a -> (a -> m b) -> m b
   ... -- 其它不重要, 关键就是 >>=
 ```
 
-在其它语言中, 这对应的就是 **flatMap** 操作, 这个 type class 应用的也蛮广泛, 因为在某些情况下, 函数会被设计成返回包裹的值用以封装异常/错误 (例如使用 Maybe), 如果此时对其使用 map 那返回的将是 `Maybe[Maybe]`, 换句话说, Functor 类型自动给结果包裹上 context, 而 Monda 则不会, 函数返回的是什么就是什么;
+在其它语言中, 这对应的就是 **flatMap** 操作, 这个 type class 应用的也蛮广泛, 因为在某些情况下, 函数会被设计成返回包裹的值用以封装异常/错误 (例如使用 Maybe), 如果此时对其使用 map 那返回的将是 `Maybe[Maybe]`, 换句话说, Functor 类型自动给结果包裹上 context, 而 Monad 则不会, 函数返回的是什么就是什么;
 
 再次对比下两者的区别:
 
@@ -225,7 +225,7 @@ fmap :: (a -> b) -> f a -> f b
 
 可以看到 `fmap` 接收的函数其返回类型是 b, 但 fmap 自己却返回了 f b; 而 `>>=` 接收的函数其返回类型是 m b, 而其本身也就是返回了 m b.
 
-对于 Monda 会有 `do` 语法糖来使代码更容易阅读:
+对于 Monad 会有 `do` 语法糖来使代码更容易阅读:
 
 ```hs
 Just 3 >>= (\x -> Just "!" >>= (\y -> Just (show x ++ y)))
@@ -236,19 +236,19 @@ y <- Just "!"
 Just (show x ++ y)
 ```
 
-## Functor & Applicative & Monda
+## Functor & Applicative & Monad
 
-这三者是有联系的, 所有的 Applicative 都必然是 Functor, 而所有的 Monda 都必然是 Applicative:
+这三者是有联系的, 所有的 Applicative 都必然是 Functor, 而所有的 Monad 都必然是 Applicative:
 
 ```hs
 class Functor f => Applicative f where
     -- ...
 
-class Applicative m => Monda m where
+class Applicative m => Monad m where
     -- ...
 ```
 
-> PS: 要注意, 这种 `class =>` 表示法是依赖关系而不是实现顺序关系, 并不是说一个结构要实现 Monad 要先去实现 Applicative, 而是说实现了 Monda 的结构必然是自实现了 Applicative 的.
+> PS: 要注意, 这种 `class =>` 表示法是依赖关系而不是实现顺序关系, 并不是说一个结构要实现 Monad 要先去实现 Applicative, 而是说实现了 Monad 的结构必然是自实现了 Applicative 的.
 
 ## Maybe & Either
 
