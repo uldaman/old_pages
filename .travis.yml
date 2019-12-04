@@ -1,21 +1,12 @@
 group: deprecated-2017Q4
 language: python
 before_install:
-- openssl aes-256-cbc -K $encrypted_2d72b4f713b1_key -iv $encrypted_2d72b4f713b1_iv
-  -in .travis/id_rsa.enc -out ~/.ssh/id_rsa -d
-- chmod 600 ~/.ssh/id_rsa
-- eval $(ssh-agent)
-- ssh-add ~/.ssh/id_rsa
-- cp .travis/ssh_config ~/.ssh/config
 - git config --global user.name "uldaman"
 - git config --global user.email "zhuec@hotmail.com"
-- git remote set-url --push origin git@github.com:uldaman/uldaman.github.com.git
-- git fetch origin master:refs/remotes/origin/master
-- sudo rm -rf /usr/lib/python3.*/dist-packages/OpenSSL
-- sudo rm -rf /usr/lib/python3.*/dist-packages/pyOpenSSL-0.15.1.egg-info
+- sed -i "s#https://github.com#https://${GHTOKEN}@github.com#g" .git/config
+- sed -i "s#git@github.com:#https://${GHTOKEN}@github.com/#g" .git/config
 install:
 - pip install bulrush==0.3.2
-- pip install pyopenssl
 - pip install invoke
 - pip install ghp-import
 - pip install pelican

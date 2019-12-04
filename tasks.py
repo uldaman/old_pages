@@ -129,4 +129,4 @@ def gh_pages(c):
 
     c.run('ghp-import -b {github_pages_branch} '
           '-m {commit_message} '
-          '{deploy_path} -p'.format(**CONFIG))
+          '{deploy_path} -p -f'.format(**CONFIG))
