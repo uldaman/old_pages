@@ -15,8 +15,8 @@
     <div class="section">
       {% if article.toc %}
       {{ article.toc }}
-      {% endif %}
       <hr />
+      {% endif %}
       {{ article.content }}
     </div>
     {% if DISQUS_SITENAME and SITEURL and article.status != "draft" %}
