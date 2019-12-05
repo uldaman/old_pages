@@ -5,7 +5,7 @@ Date: 2017-08-26 21:28
 [TOC]
 
 # Watch、star、fork
-![]({filename}/images/github/watch.png)
+![]({static}/images/github/watch.png)
 
 如上图所示, 每个 github 项目的右上角, 都有三个按钮: `Watch`、`star`、`fork`.
 
@@ -37,7 +37,7 @@ Github 中的 `Watch` 也是类似的功能, 当你监视某个项目后, 如果
 `fork` 别人的源项目后, 应该谨遵 [pull request](http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#pull-request) 的建议去贡献自己的代码.
 
 # issue
-![]({filename}/images/github/issues.png)
+![]({static}/images/github/issues.png)
 
 问题列表, 可当该项目的 **todolist** 使用, 可以选择 issue 的类型, 如 feature、bug 等.
 
@@ -73,11 +73,11 @@ issue 中还可以通过指定 `Assignee` 则可以将 issue 分配到某位项�
 - 从 fork 源的 master 分支发起同步 Pull Request 到自己仓库项目的 master 分支
 - 删除开发分支, Pull Request 工作流结束
 
-![]({filename}/images/github/newrequest.png)
+![]({static}/images/github/newrequest.png)
 
 点击 `New pull request` 按钮创建一个新请求.
 
-![]({filename}/images/github/comparing.png)
+![]({static}/images/github/comparing.png)
 
 该请求是**双向**的:
 

@@ -11,15 +11,15 @@ Date: 2018-05-05 18:09
 
 这么多内容导致的结果就是都不够深入, 但也起到一个非常好的知识点梳理作用.
 
-![]({filename}/images/UML和模式应用/AUP.png)
+![]({static}/images/UML和模式应用/AUP.png)
 
-![]({filename}/images/UML和模式应用/迭代.png)
+![]({static}/images/UML和模式应用/迭代.png)
 
 注意: 所有制品都是可选的. 我们应遵循敏捷建模的原则, 只对具有创造性、最困难的部分进行建模, 其目的是为理解和沟通, 而不是文档本身.
 
 OOD 阶段的主要输入/输出我总结如下:
 
-![]({filename}/images/UML和模式应用/制品.png)
+![]({static}/images/UML和模式应用/制品.png)
 
 因为是迭代式开发, 所以 OOA 虽然是 OOD 的输入, 但是反过来, OOD 也会促进 OOA 更加成熟. 这是个螺旋式增量精化的过程.
 
@@ -38,7 +38,7 @@ OOD 阶段的关键目标就是**用例实现**: 描述某个用例基于协作�
 # GRASP
 GRASP 定义了 9 个基本的 OO 设计原则/模式, 根据我的理解, 将他们划分成两大类: 应用性模式 和 指导性原则. 如下图所示.
 
-![]({filename}/images/UML和模式应用/GRASP.png)
+![]({static}/images/UML和模式应用/GRASP.png)
 
 应用性模式包含了 6 种软件设计的职责分配方案, 而 3 种指导性原则是对方案的评估.
 
@@ -98,7 +98,7 @@ GRASP 定义了 9 个基本的 OO 设计原则/模式, 根据我的理解, 将�
 
 如下是一个重构的例子:
 
-![]({filename}/images/UML和模式应用/高内聚.png)
+![]({static}/images/UML和模式应用/高内聚.png)
 
 **低内聚的问题:**<br>
 - 难以理解
@@ -121,7 +121,7 @@ GRASP 定义了 9 个基本的 OO 设计原则/模式, 根据我的理解, 将�
 
 如下图所示:
 
-![]({filename}/images/UML和模式应用/防止变异.png)
+![]({static}/images/UML和模式应用/防止变异.png)
 
 除了基于上面这些 GRASP 模式/原则外, **GOF** 中提到的里氏替换原则及迪米特法则也是防止变异有效手段.
 
@@ -145,7 +145,7 @@ Lod 还有个前提原则: 如果一个方法放在本类中, 即不增加类间
 
 如以下例子:
 
-![]({filename}/images/UML和模式应用/LOD.png)
+![]({static}/images/UML和模式应用/LOD.png)
 
 打叉的语句依赖于实际中 Sale 对象与 Payment 对象的连接, 这种设计是不稳定的, 因为你不能保证 Sale 对象与 Payment 对象的连接长期有效. 而且这种设计让 Register 与 Payment 耦合.
 
@@ -226,7 +226,7 @@ Money amount = slae.getThenderedAmountOfPayment()
 
 例如, 如下结构, 虽然对 A 使用了多态, 但是对使用者 B 而言, 它还是需要知道 A\_1、A\_2、A\_3 的存在, 而且如果新增了 A\_4, 那 B 又得增加 `A a = new A_4()` 的代码, 显然这种设计不是我们想要的, 因此可以使用工厂模式对其 A 进行封装.
 
-![]({filename}/images/UML和模式应用/工厂.png)
+![]({static}/images/UML和模式应用/工厂.png)
 
 ## 控制器
 控制器的针对性非常强.

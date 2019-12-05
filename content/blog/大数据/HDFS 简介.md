@@ -113,7 +113,7 @@ Secondary NameNode 的作用主要体现在 Hadoop 1.x 下,  Secondary NameNode 
 
 从 NameNode 下载元数据信息 (**fsimage**, **edits**), 然后合并二者, 生成新的 **fsimage**, 在本地保存一份后推送到 NameNode, 替换旧的 **fsimage**.
 
-![]({filename}/images/Hdfs简介/SecondaryNameNode.jpg)
+![]({static}/images/Hdfs简介/SecondaryNameNode.jpg)
 
 **什么时候同步?**
 
@@ -141,4 +141,4 @@ HDFS client 上传数据到 HDFS 时, 会首先在本地**缓存**数据, 当数
 
 由于 Hadoop 有副本机制, 例如三个, 所以 NameNode 会寻找三个空闲 block 组成 pipeline, 依次将目标数据块写入各个 DataNode, 建立多个副本, 待所以副本数据都上传完毕后, HDFS client 会继续下一个 block 的操作.
 
-![]({filename}/images/Hdfs简介/hdfswriteflow.png)
+![]({static}/images/Hdfs简介/hdfswriteflow.png)

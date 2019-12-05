@@ -2,7 +2,7 @@ Title: Chrome F12 Network
 Author: HanXiao
 Date: 2017-08-15 11:00
 
-![]({filename}/images/chromef12/network.png)
+![]({static}/images/chromef12/network.png)
 
 - 序号 **0**: 保存 Log, 页面跳转后, 控制台和网络控制台的内容暂时不清空, 保留下来
 - 序号 **1**: 禁用缓存, 打钩后, 刷新页面, 所有请求都是 200, 不打勾当你打开重复页面会出现 304

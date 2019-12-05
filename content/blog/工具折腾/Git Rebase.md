@@ -9,7 +9,7 @@ rebase 比较复杂, 应该是 git 中的高级应用了, 所以单独拿出来�
 # 使用 git rebase 避免無謂的 merge
 `git pull` 預設的行為是將遠端的 repo. 與本地的 repo. 合併, 這也是 DVCS 的初衷, 將兩個 branch 合併. 但是, 很多時候會發生以下這種情形:
 
-![]({filename}/images/gitRebase/git-`merge`.jpg)
+![]({static}/images/gitRebase/git-`merge`.jpg)
 
 這是因為, 我們團隊的開發模式是本地的 branch 和遠端的 branch 會同步地非常頻繁(通常就是同名稱的 branch, 例如 master), 這兩個 branch 幾乎是完全同步. 這時候就會發現這些 `merge` 動作其實沒有必要, 會造成線圖無謂的複雜. 這時候, 會推薦使用以下這個指令:
 

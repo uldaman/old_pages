@@ -44,15 +44,15 @@ gateway 192.168.31.2
 
 但是需要注意, 并不所有的都是 `eth0`, 采用的 Ubuntu 版本不同, 也有可能是其他的接口, 如 `ens32`; 可以先使用 `ifconfig` 看下系统使用的是哪个接口.
 
-![]({filename}/images/搭建Hadoop分布式实验环境/ifconfig.png)
+![]({static}/images/搭建Hadoop分布式实验环境/ifconfig.png)
 
 另外就是 **gateway** (网关), 虚拟机的网关可以通过虚拟网络编辑器查看.
 
-![]({filename}/images/搭建Hadoop分布式实验环境/虚拟网络编辑器.png)
+![]({static}/images/搭建Hadoop分布式实验环境/虚拟网络编辑器.png)
 
-![]({filename}/images/搭建Hadoop分布式实验环境/NAT.png)
+![]({static}/images/搭建Hadoop分布式实验环境/NAT.png)
 
-![]({filename}/images/搭建Hadoop分布式实验环境/gateway.png)
+![]({static}/images/搭建Hadoop分布式实验环境/gateway.png)
 
 所以上面的第八行的 **gateway** 要填: `192.168.142.2`.
 
@@ -132,7 +132,7 @@ source ~/.bashrc
 
 此时, 不管在哪个目录输入 `java -version` 都可以找到执行文件.
 
-![]({filename}/images/搭建Hadoop分布式实验环境/javaversion.png)
+![]({static}/images/搭建Hadoop分布式实验环境/javaversion.png)
 
 # 3. 安装 Hadoop
 ## 3.1
@@ -144,7 +144,7 @@ source ~/.bashrc
 
 ![](http://i58.tinypic.com/2nuon4o.jpg)
 
-![]({filename}/images/搭建Hadoop分布式实验环境/hadoopdown.png)
+![]({static}/images/搭建Hadoop分布式实验环境/hadoopdown.png)
 
 下载完成后, 拖到 Ubuntu 桌面.
 
@@ -172,7 +172,7 @@ export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 
 `source ~/.bashrc` 退回根目录, 测试下 hadoop 命令: `hadoop version`
 
-![]({filename}/images/搭建Hadoop分布式实验环境/hadoopversion.png)
+![]({static}/images/搭建Hadoop分布式实验环境/hadoopversion.png)
 
 # 4. 配置 Hadoop
 `cd /usr/smallcpp/hadoop-2.7.3/etc/hadoop` 进入 Hadoop 配置文件所在目录.
@@ -391,7 +391,7 @@ mr-jobhistory-daemon.sh stop historyserver
 
 还可以通过 `hdfs dfsadmin -report` 来查看所有 DataNode 的信息.
 
-![]({filename}/images/搭建Hadoop分布式实验环境/dfsadmin.png)
+![]({static}/images/搭建Hadoop分布式实验环境/dfsadmin.png)
 
 **Live datanodes** 表示当前集群有几个 DataNode 在运行.
 
@@ -424,9 +424,9 @@ Hadoop 的 **HDFS** 系统使用起来就像是 Linux 的文件系统, 如 `hado
 
 上传完毕后可以在 Web 界面的文件管理模块可以看到变化:
 
-![]({filename}/images/搭建Hadoop分布式实验环境/hadoopfile.png)
+![]({static}/images/搭建Hadoop分布式实验环境/hadoopfile.png)
 
-![]({filename}/images/搭建Hadoop分布式实验环境/hadoopinfo.png)
+![]({static}/images/搭建Hadoop分布式实验环境/hadoopinfo.png)
 
 ## 7.2. 下载文件
 `hadoop fs -get /ubuntu-amd64.iso /home/hanxiao/桌面/ubuntu-amd64.iso`

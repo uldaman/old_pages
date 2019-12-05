@@ -525,7 +525,7 @@ git config --global i18n.logoutputencoding utf-8
 
 然后还要把 `LESSCHARSET=utf-8` 添加到系统环境变量中：
 
-![]({filename}/images/Git简明手册/LESSCHARSET.jpg)
+![]({static}/images/Git简明手册/LESSCHARSET.jpg)
 
 ## 13. 区分文件大小写
 默认的 Git 监控是**不区分**文件大小写的 ~
