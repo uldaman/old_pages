@@ -9,8 +9,10 @@
     Next page
   </a>
   {% endif %}
+  {% if articles_paginator.num_pages > 1 %}
   <ul class="pagination-list">
     <li>Page {{ articles_page.number }} / {{ articles_paginator.num_pages }}</li>
   </ul>
+  {% endif %}
 </nav>
 <br>

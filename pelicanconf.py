@@ -42,7 +42,7 @@ USE_FOLDER_AS_CATEGORY = True  # 这个可以让 pelican 根据 content 里的�
 
 DELETE_OUTPUT_DIRECTORY = True  # 编译之前删除 output 目录，这样保证 output 下生成的内容干净
 
-SUMMARY_MAX_LENGTH = 25  # 文章摘要最大字数
+SUMMARY_MAX_LENGTH = 15  # 文章摘要最大字数
 
 MARKDOWN = {
     'extension_configs': {
