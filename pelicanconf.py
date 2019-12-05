@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
-import bulrush
+import filters
 
-THEME = bulrush.PATH
-JINJA_ENVIRONMENT = bulrush.ENVIRONMENT
-JINJA_FILTERS = bulrush.FILTERS
+THEME = 'theme/bulrush'
+JINJA_ENVIRONMENT = filters.ENVIRONMENT
+JINJA_FILTERS = filters.FILTERS
 
 PLUGIN_PATHS = ['pelican-plugins']
 PLUGINS = ['assets']
