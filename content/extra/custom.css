@@ -73,3 +73,6 @@ article a:hover > code {
     color: #00d1b2;
 }
 
+.navbar-item img {
+  max-height: none;
+}
