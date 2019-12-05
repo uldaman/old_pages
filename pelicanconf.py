@@ -26,7 +26,6 @@ ARTICLE_PATHS = ['blog']
 EXTRA_PATH_METADATA = {
     'extra/custom.css': {'path': 'custom.css'},
     'extra/robots.txt': {'path': 'robots.txt'},
-    'extra/favicon.ico': {'path': 'favicon.ico'},
 }
 
 # Feed generation is usually not desired when developing
