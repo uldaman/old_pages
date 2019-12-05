@@ -13,11 +13,15 @@ PLUGINS = ['assets', 'extract_toc']
 AUTHOR = u'HanXiao'
 SITENAME = 'Small Cpp'
 SITEURL = 'http://www.smallcpp.cn'
-PATH = 'content'
 TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = 'zh'
 GITHUB_URL = 'https://github.com/uldaman'
 SITESUBTITLE = u'勿在浮沙筑高台, 练从难处练, 用从易处用.'
+AVATAR = '/content/images/avatar.png'
+
+PATH = 'content'
+STATIC_PATHS = ['images']
+ARTICLE_PATHS = ['blog']
 
 # Feed generation is usually not desired when developing
 FEED_ATOM = None
@@ -42,7 +46,7 @@ USE_FOLDER_AS_CATEGORY = True  # 这个可以让 pelican 根据 content 里的�
 
 DELETE_OUTPUT_DIRECTORY = True  # 编译之前删除 output 目录，这样保证 output 下生成的内容干净
 
-SUMMARY_MAX_LENGTH = 15  # 文章摘要最大字数
+SUMMARY_MAX_LENGTH = 30  # 文章摘要最大字数
 
 MARKDOWN = {
     'extension_configs': {
