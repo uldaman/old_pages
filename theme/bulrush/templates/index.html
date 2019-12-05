@@ -9,10 +9,11 @@
       <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a>
     </h1>
     {% include 'article_infos.html' %}
-    {% if article.toc %}
-    {{ article.toc }}
-    {% endif %}
     <div class="section">
+      {% if article.toc %}
+      {{ article.toc }}
+      {% endif %}
+      <hr />
       {{ article.content }}
       {% include 'comments.html' %}
     </div>
