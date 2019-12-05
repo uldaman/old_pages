@@ -17,7 +17,7 @@ TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = 'zh'
 GITHUB_URL = 'https://github.com/uldaman'
 SITESUBTITLE = u'勿在浮沙筑高台, 练从难处练, 用从易处用.'
-AVATAR = 'avatar.png'
+AVATAR = 'extra/avatar.png'
 
 PATH = 'content'
 STATIC_PATHS = ['images', 'extra']
@@ -25,6 +25,7 @@ ARTICLE_PATHS = ['blog']
 
 EXTRA_PATH_METADATA = {
     'extra/custom.css': {'path': 'custom.css'},
+    'extra/robots.txt': {'path': 'robots.txt'},
     'extra/favicon.ico': {'path': 'favicon.ico'},
 }
 

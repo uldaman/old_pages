@@ -172,6 +172,12 @@
 .highlight .il {
   color: #2aa198;
 }
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
 article .section p,
 article .section ul,
 article .section ol,
