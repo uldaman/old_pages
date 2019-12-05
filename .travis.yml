@@ -6,6 +6,7 @@ before_install:
 - sed -i "s#https://github.com#https://${GHTOKEN}@github.com#g" .git/config
 - sed -i "s#git@github.com:#https://${GHTOKEN}@github.com/#g" .git/config
 install:
+- pip install BeautifulSoup4
 - pip install webassets
 - pip install invoke
 - pip install ghp-import

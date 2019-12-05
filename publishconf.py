@@ -13,9 +13,15 @@ from pelicanconf import *
 SITEURL = 'http://www.smallcpp.cn'
 RELATIVE_URLS = False
 
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
-CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
-
+# Feed generation is usually not desired when developing
+FEED_ATOM = None
+FEED_RSS = None
+FEED_ALL_ATOM = None
+FEED_ALL_RSS = None
+CATEGORY_FEED_ATOM = None
+CATEGORY_FEED_RSS = None
+TAG_FEED_ATOM = None
+TAG_FEED_RSS = None
 DELETE_OUTPUT_DIRECTORY = True
 
 # Following items are often useful when publishing

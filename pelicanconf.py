@@ -8,7 +8,7 @@ JINJA_ENVIRONMENT = filters.ENVIRONMENT
 JINJA_FILTERS = filters.FILTERS
 
 PLUGIN_PATHS = ['pelican-plugins']
-PLUGINS = ['assets']
+PLUGINS = ['assets', 'extract_toc']
 
 AUTHOR = u'HanXiao'
 SITENAME = 'Small Cpp'
@@ -47,7 +47,7 @@ SUMMARY_MAX_LENGTH = 15  # 文章摘要最大字数
 MARKDOWN = {
     'extension_configs': {
         "markdown.extensions.extra": {},
-        "markdown.extensions.toc": {},
+        'markdown.extensions.toc': {},
         "markdown.extensions.headerid": {},
         "markdown.extensions.meta": {},
         "markdown.extensions.sane_lists": {},
