@@ -209,10 +209,11 @@ article .section h3 {
 }
 article .section blockquote,
 article .section .highlight {
-  background-color: #f5f5f5;
-  color: #4a4a4a;
-  margin: 0.25em 0.25em 0.5em 0.25em !important;
-  padding: 0.5em;
+  font-style: italic;
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: .25em solid #dfe2e5;
+  margin-bottom: 0.5em;
 }
 article .section ul:not(.pagination-list) {
   list-style-type: disc;
@@ -333,4 +334,7 @@ footer.footer .github-fork-ribbon-wrapper .github-fork-ribbon:hover a {
 abbr[title],
 acronym[title] {
   text-decoration: none;
+}
+.codehilite {
+  margin-bottom: 0.5em;
 }
