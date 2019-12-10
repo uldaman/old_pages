@@ -66,6 +66,7 @@ MARKDOWN = {
         "markdown.extensions.codehilite": {"guess_lang": False, "pygments_style": "perldoc", "noclasses": True},
     },
     'output_format': 'html5',
+    'tab_length': 2,
 }
 
 # Uncomment following line if you want document-relative URLs when developing
