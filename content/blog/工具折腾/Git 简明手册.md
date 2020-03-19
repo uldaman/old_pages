@@ -155,27 +155,17 @@ OX:
 
 暴露一个无限试用的方式.
 
-新建一个 bash 脚本, 命名为 **Beyond Compare**, 并修改权限:
+打开终端
+
+1. 进入 `Beyond Compare` 目录，命令是 `cd /Applications/Beyond\ Compare.app/Contents/MacOS`
+3. 重命名文件 `BCompare` 为 `BCompare.real`, 命令是 `sudo mv BCompare BCompare.real`
+4. 创建新的 `BComapre` 文件, 命令是 `sudo touch BCompare`
+5. 打开文件 `sudo vim BCompare` 写入以下内容后, 并修改权限 `sudo chmod a+x BCompare`
 
 ```
-chmod 755 Beyond Compare
-```
-
-脚本里添加如下代码:
-
-```bash
 #!/bin/bash
-
-rm "~/Library/Application Support/Beyond Compare/registry.dat"
-
-"/Applications/Beyond Compare.app/Contents/MacOS/bcomp" "$@"
-```
-
-然后将 `/usr/local/bin/bcomp` 和 `/usr/local/bin/bcompare` 的软链接改为刚才的 bash 脚本 **Beyond Compare**:
-
-```
-ln -sf "Beyond Compare" /usr/local/bin/bcomp
-ln -sf "Beyond Compare" /usr/local/bin/bcompare
+rm "/Users/$(whoami)/Library/Application Support/BeyondCompare/registry.dat"
+"`dirname "$0"`"/BCompare.real $@
 ```
 
 **下面是之前的方法, 现在已经不用了, 仅留个备份.**
