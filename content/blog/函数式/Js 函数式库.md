@@ -6,7 +6,7 @@ Date: 2019-01-16 15:00
 
 # Fantasy land
 
-[Fantasy Land](https://github.com/fantasyland/fantasy-land) 是一套 [TypeClass](http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-Haskell-miao-shu.html#_7) 的 JS 描述, 包括但不限于 Functor, Applicative, Monad.
+[Fantasy Land](https://github.com/fantasyland/fantasy-land) 是一套 [TypeClass](http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-haskell-miao-shu.html#_7) 的 JS 描述, 包括但不限于 Functor, Applicative, Monad.
 
 以下是几个常用的 TypeClass.
 
