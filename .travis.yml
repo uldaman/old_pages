@@ -10,7 +10,7 @@ install:
 - pip install webassets
 - pip install invoke
 - pip install ghp-import
-- pip install pelican
+- pip install 'pelican==4.2.0'
 - pip install 'markdown<3'
 script:
 - invoke gh-pages
