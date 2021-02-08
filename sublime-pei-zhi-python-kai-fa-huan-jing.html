@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>Sublime 配置 Python 开发环境</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - Sublime 配置 Python 开发环境">
+  <meta property="og:description" content="1. 中文文件名方框 这个是 sublime text 3 的 bug, 当 Windows 个性化显示中的设置自定义文本大小 (DPI) 大于默认的 100% 的时候, 就会出现这个bug. 解决方法: 在 sublime text 3 中, Preference, Settings - User, 最后加上一行 "dpi_scale": 1.0 覆盖操作系统设置的 …">
+<meta property="og:url" content="http://www.smallcpp.cn/sublime-pei-zhi-python-kai-fa-huan-jing.html">
+    <meta property="og:image" content="http://i66.tinypic.com/2z4zbjb.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-04-24T15:08:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/sublime-pei-zhi-python-kai-fa-huan-jing.html" rel="bookmark"
+        title="Permalink to Sublime 配置 Python 开发环境">Sublime 配置 Python 开发环境</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-04-24T15:08:00+08:00">
+    Published <span class="is-info">Sun 24 April 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#1">1. 中文文件名方框</a></li>
+<li><a href="#2">2. 主题、字体</a></li>
+<li><a href="#3">3. 代码提示</a><ul>
+<li><a href="#31-jedi">3.1 Jedi</a></li>
+<li><a href="#32-anaconda">3.2 Anaconda</a></li>
+</ul>
+</li>
+<li><a href="#4">4. 代码规范检查</a></li>
+<li><a href="#5">5. 自动生成注释</a></li>
+<li><a href="#6">6. 项目设置</a></li>
+<li><a href="#7">7. 侧边栏扩展</a></li>
+<li><a href="#8">8. 代码调试</a><ul>
+<li><a href="#81-sublimerepl">8.1 SublimeREPL 基础</a><ul>
+<li><a href="#811-virtualenv">8.1.1 添加 virtualenv 支持</a></li>
+<li><a href="#812">8.1.2 以交互式运行当前文件</a></li>
+<li><a href="#813">8.1.3 关联快捷键</a></li>
+</ul>
+</li>
+<li><a href="#82-sulimerepl">8.2 更好的 SulimeREPL 设置</a></li>
+</ul>
+</li>
+<li><a href="#9-outline">9. outline</a></li>
+<li><a href="#10-pyc">10. 编译 Pyc 文件</a><ul>
+<li><a href="#101-pyc">10.1 生成单个的 pyc 文件</a></li>
+<li><a href="#102-py-pyc">10.2 将整个目录下的 py 文件都生成 pyc</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      <hr />
+      
+<h1 id="1">1. 中文文件名方框</h1>
+<p>这个是 sublime text 3 的 bug, 当 Windows 个性化显示中的设置自定义文本大小 (DPI) 大于默认的 100% 的时候, 就会出现这个bug.</p>
+<p>解决方法:</p>
+<p>在 sublime text 3 中, Preference, Settings - User, 最后加上一行 <code>"dpi_scale": 1.0</code> 覆盖操作系统设置的 DPI:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    <span style="color: #CD5555">"color_scheme"</span>: <span style="color: #CD5555">"Packages/Nil-Theme/Sanakan.tmTheme"</span>,
+    <span style="color: #CD5555">"font_size"</span>: <span style="color: #B452CD">11.0</span>,
+    <span style="color: #CD5555">"ignored_packages"</span>:
+    [
+        <span style="color: #CD5555">"Vintage"</span>
+    ],
+    <span style="color: #CD5555">"update_check"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"word_wrap"</span>: <span style="color: #CD5555">"auto"</span>,
+    <span style="color: #CD5555">"dpi_scale"</span>:<span style="color: #B452CD">1.0</span> <span style="color: #228B22">// &lt;= 这里</span>
+}
+</pre></div>
+<h1 id="2">2. 主题、字体</h1>
+<p>先安装字体, 我习惯的是 <a href="https://pan.baidu.com/s/1mppyQNea7qHjuAvvp6B3Nw">Microsoft YaHei Mono</a></p>
+<p>再安装主题, <strong>Monokai Extended</strong> 和 <strong>Soda Dark</strong>, 使用 package control 就可以安装了.</p>
+<p>然后是 sublime 的设置了, 首选项 -&gt; 设置 - 用户</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    <span style="color: #CD5555">"auto_complete_commit_on_tab"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"auto_find_in_selection"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"open_files_in_new_window"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"hot_exit"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"remember_open_files"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"bold_folder_labels"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"color_scheme"</span>: <span style="color: #CD5555">"Packages/Monokai Extended/Monokai Extended.tmTheme"</span>,
+    <span style="color: #CD5555">"theme"</span>: <span style="color: #CD5555">"Soda Dark.sublime-theme"</span>,
+    <span style="color: #CD5555">"default_line_ending"</span>: <span style="color: #CD5555">"unix"</span>,
+    <span style="color: #CD5555">"detect_indentation"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"detect_slow_plugins"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"dpi_scale"</span>: <span style="color: #B452CD">1.0</span>,
+    <span style="color: #CD5555">"drag_text"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"draw_white_space"</span>: <span style="color: #CD5555">"selection"</span>,
+    <span style="color: #CD5555">"ensure_newline_at_eof_on_save"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"fallback_encoding"</span>: <span style="color: #CD5555">"UTF-8"</span>,
+    <span style="color: #CD5555">"font_face"</span>: <span style="color: #CD5555">"Microsoft YaHei Mono"</span>,
+    <span style="color: #CD5555">"font_size"</span>: <span style="color: #B452CD">12</span>,
+    <span style="color: #CD5555">"highlight_line"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"highlight_modified_tabs"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"ignored_packages"</span>:
+    [
+        <span style="color: #CD5555">"Vintageous"</span>,
+        <span style="color: #CD5555">"Vintage"</span>
+    ],
+    <span style="color: #CD5555">"indent_guide_options"</span>:
+    [
+        <span style="color: #CD5555">"draw_active"</span>,
+        <span style="color: #CD5555">"draw_normal"</span>
+    ],
+    <span style="color: #CD5555">"indent_to_bracket"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"line_padding_bottom"</span>: <span style="color: #B452CD">1</span>,
+    <span style="color: #CD5555">"line_padding_top"</span>: <span style="color: #B452CD">1</span>,
+    <span style="color: #CD5555">"preview_on_click"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"rulers"</span>:
+    [
+        <span style="color: #B452CD">120</span>
+    ],
+    <span style="color: #CD5555">"scroll_past_end"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"shift_tab_unindent"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"show_encoding"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"tab_size"</span>: <span style="color: #B452CD">4</span>,
+    <span style="color: #CD5555">"translate_tabs_to_spaces"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"trim_automatic_white_space"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"trim_trailing_white_space_on_save"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"update_check"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+    <span style="color: #CD5555">"word_wrap"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+    <span style="color: #CD5555">"wrap_width"</span>: <span style="color: #B452CD">120</span>
+}
+</pre></div>
+<p>保存重启就能看到效果了.</p>
+<h1 id="3">3. 代码提示</h1>
+<p>代码提示插件, 有 <strong>SublimeCodeIntel</strong>、<strong>Anaconda</strong>、<strong>sublimePythonIDE</strong> 以及 <strong>Jedi</strong> 等.</p>
+<p>不过 winodows 下 <strong>SublimeCodeIntel</strong>、<strong>Anaconda</strong>、<strong>sublimePythonIDE</strong> 配置有点问题, 总不能达到预期目标, 最终选取了 <strong>Jedi</strong>.</p>
+<p>(不过始终觉得 <strong>Anaconda</strong> 比较好…太可惜了, 装不上.. )</p>
+<h2 id="31-jedi">3.1 Jedi</h2>
+<p>Jedi 貌似现在不能通过 Package Control 来安装, 可以直接去 GitHub 上下载 <a href="https://github.com/srusskih/SublimeJEDI">https://github.com/srusskih/SublimeJEDI</a></p>
+<p>下载好后, 解压文件, 重命名为 Jedi - Python autocompletion, 然后复制到 Sublime Text 3\Data\Packages 目录下.</p>
+<p>然后再打开 sublime 插件里就有 Jedi 了.</p>
+<p><img alt="" src="http://i66.tinypic.com/2z4zbjb.jpg"/></p>
+<p>接下来就是要配置插件的默认设置…</p>
+<p>添加按点(dot)[.]后出现代码提示.</p>
+<p>到 Sublime Text 3\Data\Packages\User 下添加一个文件 Python.sublime-settings (如果没有的话), 添加如下内容:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+   <span style="color: #CD5555">"auto_complete_triggers"</span>: [
+        {
+            <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+            <span style="color: #CD5555">"characters"</span>: <span style="color: #CD5555">"."</span>
+        }
+    ],
+
+    <span style="color: #CD5555">"auto_complete_selector"</span>: <span style="color: #CD5555">"-"</span>,
+}
+</pre></div>
+<p>然后, 打开 Jedi 的默认设置文件, 更改下面两条:</p>
+<p><img alt="" src="http://i64.tinypic.com/211v22p.jpg"/></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #CD5555">"python_interpreter"</span>: <span style="color: #CD5555">"D:/Python/python.exe"</span>,
+
+<span style="color: #CD5555">"python_package_paths"</span>: [
+    <span style="color: #CD5555">"D:/Python"</span>,
+    <span style="color: #CD5555">"D:/Python/DLLs"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib/lib-tk"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib/site-packages"</span>
+],
+</pre></div>
+<h2 id="32-anaconda">3.2 Anaconda</h2>
+<p>Anaconda 是一个终极 Python 插件, 它为 ST3 增添了多项 IDE 类似的功能，例如:</p>
+<ul>
+<li>Autocompletion: 自动完成，该选项默认开启，同时提供多种配置选项</li>
+<li>Code linting: 使用支持 pep8 标准的 PyLint 或者 PyFlakes</li>
+<li>McCabe code complexity checker: 让你可以在特定的文件中使用 <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">McCabe complexity checker</a>. 如果你对软件复杂度检查工具不太熟悉的话，请务必先浏览上边的链接</li>
+<li>Goto Definitions: 能够在你的整个工程中查找并且显示任意一个变量，函数，或者类的定义</li>
+<li>Find Usage: 能够快速的查找某个变量，函数或者类在某个特定文件中的什么地方被使用了</li>
+<li>Show Documentation:  能够显示一个函数或者类的说明性字符串(当然，是在定义了字符串的情况下, 目前只支持英文)</li>
+</ul>
+<p>Anaconda 可以通过 Package Control 直接安装.</p>
+<p>通常, 我的 Anaconda 配置如下:</p>
+<p>[Preferences -&gt; 插件设置 -&gt; Anaconda -&gt; Settings-User]</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    <span style="color: #CD5555">"python_interpreter"</span>: <span style="color: #CD5555">"C:/Python27/python"</span>,  <span style="color: #228B22">// 应在项目配置</span>
+
+    <span style="color: #CD5555">"pep8_ignore"</span>:
+        [
+            <span style="color: #CD5555">"E309"</span>,
+            <span style="color: #CD5555">"E501"</span> <span style="color: #228B22">// 忽略长度限制</span>
+        ],
+
+    <span style="color: #CD5555">"auto_formatting"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+
+    <span style="color: #CD5555">"autoformat_ignore"</span>:
+        [
+            <span style="color: #CD5555">"E309"</span>,
+            <span style="color: #CD5555">"E501"</span> <span style="color: #228B22">// 忽略长度限制</span>
+        ],
+
+    <span style="color: #CD5555">"anaconda_linter_mark_style"</span>: <span style="color: #CD5555">"none"</span>,
+
+    <span style="color: #CD5555">"anaconda_linter_underlines"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,
+
+    <span style="color: #CD5555">"complete_parameters"</span>: <span style="color: #8B008B; font-weight: bold">true</span>, <span style="color: #228B22">// 输 ( 时补充函数的非默认参数</span>
+
+    <span style="color: #CD5555">"complete_all_parameters"</span>: <span style="color: #8B008B; font-weight: bold">false</span>, <span style="color: #228B22">// 输 ( 时补充函数的所有参数</span>
+
+    <span style="color: #CD5555">"auto_python_builder_enabled"</span>: <span style="color: #8B008B; font-weight: bold">false</span>,  <span style="color: #228B22">// 自动为当前项目生成编译系统, 通常不需要, 我们自己配置, 参照 6. 项目设置</span>
+
+    <span style="color: #CD5555">"auto_complete_triggers"</span>:  <span style="color: #228B22">// 点(dot)\[.\]后出现代码提示</span>
+        [
+            {
+                <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python - string - comment - constant.numeric"</span>,
+                <span style="color: #CD5555">"characters"</span>: <span style="color: #CD5555">"."</span>
+            }
+        ],
+}
+</pre></div>
+<h1 id="4">4. 代码规范检查</h1>
+<p>如果上一步你能安装 <strong>3.2 Anaconda</strong> 就不需要这一步了, <strong>Anaconda</strong> 已经帮你集成好了.</p>
+<p><strong>pylinter</strong> 插件</p>
+<p>这个插件依赖于 python 的 <strong>pylint</strong> 库, 所以首先, 我们得 <code>pip install pylint</code></p>
+<p>安装好后还要对 pylinter 插件做下设置</p>
+<p>首选项 -&gt; 插件设置 -&gt; Pylinter -&gt; Settings-Default</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #CD5555">"python_bin"</span>: <span style="color: #CD5555">"D:/Python/python.exe"</span>,
+
+<span style="color: #228B22">// The following paths will be added Pylint's Python path</span>
+<span style="color: #CD5555">"python_path"</span>: [
+    <span style="color: #CD5555">"D:/Python"</span>,
+    <span style="color: #CD5555">"D:/Python/DLLs"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib/lib-tk"</span>,
+    <span style="color: #CD5555">"D:/Python/Lib/site-packages"</span>
+],
+<span style="color: #228B22">// Full path to the lint.py module in the pylint package</span>
+<span style="color: #CD5555">"pylint_path"</span>: <span style="color: #CD5555">"D:/Python/Lib/site-packages/pylint"</span>,
+
+<span style="color: #228B22">// Set to true to automtically run Pylint on save</span>
+<span style="color: #CD5555">"run_on_save"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+
+<span style="color: #228B22">// Set to true to use graphical error icons</span>
+<span style="color: #CD5555">"use_icons"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+<span style="color: #CD5555">"disable_outline"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+
+<span style="color: #228B22">// Status messages stay as long as cursor is on an error line</span>
+<span style="color: #CD5555">"message_stay"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+</pre></div>
+<h1 id="5">5. 自动生成注释</h1>
+<p><strong>DocBlockr</strong> 插件</p>
+<p>在 Python 文件中, 文件头、类头以及函数头输入 “”” 再按回车即可, 例如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>class TestClass():
+    """ &lt;-- Press [enter]
+
+def test_function():
+    """ &lt;-- Press [enter]
+</pre></div>
+<h1 id="6">6. 项目设置</h1>
+<p>由於 Python 可以透過 virtualenv 來設定不同的虛擬環境, 透過這些環境來對不同開發專案, 達到環境獨立的優點, 因此我們也會期望在使用 sublime 開發時, 也可以偵測到不同的環境.
+首先先用 sublime 创建一个项目, 很简单, 直接 <strong>项目 -&gt; 项目另存为</strong> 就可以了.</p>
+<p>保存好后选择 <strong>项目 -&gt; 编辑项目</strong>, 设置使用 virtualenv 环境:</p>
+<blockquote>
+<p>2018.06.26 update for mac, python3.6</p>
+</blockquote>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// mac, python3.6</span>
+{
+    <span style="color: #CD5555">"build_systems"</span>:
+    [
+        {
+            <span style="color: #CD5555">"cmd"</span>:
+            [
+                <span style="color: #CD5555">"${project_path}/venv/bin/python"</span>,
+                <span style="color: #CD5555">"-i"</span>,
+                <span style="color: #CD5555">"-u"</span>,
+                <span style="color: #CD5555">"-m"</span>,
+                <span style="color: #CD5555">"${project_base_name}.${file_base_name}"</span>
+            ],
+            <span style="color: #CD5555">"encoding"</span>:<span style="color: #CD5555">"cp936"</span>,  <span style="color: #228B22">// 仅 windows 下需要，否则会输出 Decode error - output not utf-8</span>
+            <span style="color: #CD5555">"env"</span>:
+            {
+                <span style="color: #CD5555">"LANG"</span>: <span style="color: #CD5555">"de_DE.utf-8"</span>,
+                <span style="color: #CD5555">"LC_ALL"</span>: <span style="color: #CD5555">"de_DE.utf-8"</span>
+            },
+            <span style="color: #CD5555">"name"</span>: <span style="color: #CD5555">"project_venv builder"</span>,
+            <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+            <span style="color: #CD5555">"working_dir"</span>: <span style="color: #CD5555">"${project_path:${folder}}"</span>  <span style="color: #228B22">// project_path == nil 时取 folder</span>
+        }
+    ],
+    <span style="color: #CD5555">"folders"</span>:
+    [
+        {
+            <span style="color: #CD5555">"path"</span>: <span style="color: #CD5555">"."</span>,
+            <span style="color: #CD5555">"follow_symlinks"</span>: <span style="color: #8B008B; font-weight: bold">true</span>
+        }
+    ],
+    <span style="color: #CD5555">"settings"</span>:
+    {
+        <span style="color: #CD5555">"python_interpreter"</span>: <span style="color: #CD5555">"${project_path}/venv/bin/python"</span>
+    }
+}
+
+<span style="color: #228B22">// window, python2.7</span>
+{
+    <span style="color: #CD5555">"build_systems"</span>: [  <span style="color: #228B22">// 添加 [Tools / Build System]</span>
+        {
+            <span style="color: #CD5555">"name"</span>: <span style="color: #CD5555">"project_venv builder"</span>,
+            <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+            <span style="color: #CD5555">"shell_cmd"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python -u \"$file\""</span>
+        }
+    ],
+
+    <span style="color: #CD5555">"folders"</span>: [
+        {
+          <span style="color: #CD5555">"follow_symlinks"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+          <span style="color: #CD5555">"path"</span>: <span style="color: #CD5555">"."</span>
+        }
+     ]
+}
+</pre></div>
+<p>然后是覆盖 <strong>Jedi</strong> 默认设置中的 python_interpreter 和 python_package_paths (如果你安装了 <strong>Jedi</strong> 的话):</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// window, python2.7</span>
+{
+    <span style="color: #CD5555">"build_systems"</span>: [
+        {
+            <span style="color: #CD5555">"name"</span>: <span style="color: #CD5555">"project_venv builder"</span>,
+            <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+            <span style="color: #CD5555">"shell_cmd"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python -u \"$file\""</span>
+        }
+    ],
+
+    <span style="color: #CD5555">"folders"</span>: [
+        {
+          <span style="color: #CD5555">"follow_symlinks"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+          <span style="color: #CD5555">"path"</span>: <span style="color: #CD5555">"."</span>
+        }
+     ],
+
+    <span style="color: #CD5555">"settings"</span>: {
+        <span style="color: #CD5555">"python_interpreter"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python.exe"</span>,
+
+        <span style="color: #CD5555">"python_package_paths"</span>: [
+            <span style="color: #CD5555">"D:/pydj/project_venv/Scripts"</span>,
+            <span style="color: #CD5555">"D:/pydj/project_venv/Lib"</span>,
+            <span style="color: #CD5555">"D:/pydj/project_venv/Lib/site-packages"</span>
+        ],
+    }
+}
+</pre></div>
+<p>另外是覆盖 <strong>pylinter</strong> 的设置 (如果使用的是 <strong>pylinter</strong> 的话, 另外, virtualenv 里也需要 <code>pip install pylint</code>):</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// window, python2.7</span>
+{
+    <span style="color: #CD5555">"build_systems"</span>: [
+        {
+            <span style="color: #CD5555">"name"</span>: <span style="color: #CD5555">"project_venv builder"</span>,
+            <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+            <span style="color: #CD5555">"shell_cmd"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python -u \"$file\""</span>
+        }
+    ],
+
+    <span style="color: #CD5555">"folders"</span>: [
+        {
+          <span style="color: #CD5555">"follow_symlinks"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+          <span style="color: #CD5555">"path"</span>: <span style="color: #CD5555">"."</span>
+        }
+     ],
+
+    <span style="color: #CD5555">"settings"</span>: {
+        <span style="color: #CD5555">"python_interpreter"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python.exe"</span>,
+
+        <span style="color: #CD5555">"python_package_paths"</span>: [
+            <span style="color: #CD5555">"D:/pydj/project_venv/Scripts"</span>,
+            <span style="color: #CD5555">"D:/pydj/project_venv/Lib"</span>,
+            <span style="color: #CD5555">"D:/pydj/project_venv/Lib/site-packages"</span>
+        ],
+
+        <span style="color: #CD5555">"pylinter"</span>: {
+            <span style="color: #CD5555">"python_bin"</span>: <span style="color: #CD5555">"D:/pydj/project_venv/Scripts/python.exe"</span>,
+
+            <span style="color: #CD5555">"python_path"</span>: [
+                <span style="color: #CD5555">"D:/pydj/project_venv/Scripts"</span>,
+                <span style="color: #CD5555">"D:/pydj/project_venv/Lib"</span>,
+                <span style="color: #CD5555">"D:/pydj/project_venv/Lib/site-packages"</span>
+            ],
+        }
+    }
+}
+</pre></div>
+<h1 id="7">7. 侧边栏扩展</h1>
+<p><strong>SideBarEnhancements</strong> 插件</p>
+<p>安装好, <code>view -&gt; Side Bar -&gt; Hide Open Files</code>, 其它的几乎不需要设置, 当打开__项目__时, 在项目文件上右键就能显示扩展.</p>
+<p>如果安装好 SideBarEnhancements 后没有显示侧边栏, 可以用快捷键 <strong>ctrl + k</strong>, <strong>ctrl + b</strong> 来打开侧边栏 (不是 ctrl + k + b, 是先按 ctrl + k, 松开再按 ctrl + b), 或者点击菜单: 查看 -&gt; 侧边栏 -&gt; 显示\隐藏侧边栏</p>
+<h1 id="8">8. 代码调试</h1>
+<p><strong>SublimeREPL</strong> 插件</p>
+<p>这个插件允许在编辑界面直接运行 Python 解释器</p>
+<p><img alt="" src="http://i63.tinypic.com/2pzz760.jpg"/></p>
+<h2 id="81-sublimerepl">8.1 SublimeREPL 基础</h2>
+<p>这部分内容仅做了解, 可直接用 <strong>[8.2 更好的 SulimeREPL 设置]</strong> 替代.</p>
+<h3 id="811-virtualenv">8.1.1 添加 virtualenv 支持</h3>
+<p>打开 SublimeREPL 的用户设置: 首选项 -&gt; 插件设置 -&gt; SulimeREPL -&gt; Setting-User.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    <span style="color: #CD5555">"python_virtualenv_paths"</span>: [
+        <span style="color: #CD5555">"D:/pydj"</span>
+    ]
+}
+</pre></div>
+<p>在这里写入 virtualenv 项目的根目录路径, 如我的 virtualenv 项目路径是 <code>D:/pydj/project_venv</code>, 所以这里填入 <code>D:/pdj</code></p>
+<p>当需要运行 virtualenv 时, 选择 Python - virtualenv 后, 界面上会出现 virtualenv 选择框:</p>
+<p><img alt="" src="http://i65.tinypic.com/2q2lhg2.jpg"/></p>
+<p><img alt="" src="http://i66.tinypic.com/2n7ianq.jpg"/></p>
+<p>选择后就能打开该 virtualenv 的 python 交互解释器了.</p>
+<h3 id="812">8.1.2 以交互式运行当前文件</h3>
+<p>SublimeREPL 里最常用的应该就是 Python 和 Python - RUN current file, 前者是打开交互式环境, 后者是直接运行当前文件, 但是一些常见的 python ide 都是把这两者结合起来, SublimeREPL 通过设置也能实现这个功能.</p>
+<p>打开 Sublime Text 3\Packages\SublimeREPL\config\Python\Main.sublime-menu 文件 (先备份一份).</p>
+<p><strong>删除</strong> “id” 为 “repl_python” 的项(如果想保留也可以不删除), <strong>修改</strong> “id” 为 “repl_python_run” 的项:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[
+    {
+        <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"tools"</span>,
+        <span style="color: #CD5555">"children"</span>:[
+            {
+                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"SublimeREPL"</span>,
+                <span style="color: #CD5555">"mnemonic"</span>: <span style="color: #CD5555">"r"</span>,
+                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"SublimeREPL"</span>,
+                <span style="color: #CD5555">"children"</span>: [
+                    {
+                        <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python"</span>,
+                        <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"Python"</span>,
+                        <span style="color: #CD5555">"children"</span>: [
+                            {
+                                <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"repl_open"</span>,
+                                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python"</span>,
+                                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"repl_python"</span>,  <span style="color: #228B22">// &lt;= 这里</span>
+                                <span style="color: #CD5555">"mnemonic"</span>: <span style="color: #CD5555">"p"</span>,
+                                <span style="color: #CD5555">"args"</span>: {
+                                    <span style="color: #CD5555">"type"</span>: <span style="color: #CD5555">"subprocess"</span>,
+                                    <span style="color: #CD5555">"encoding"</span>: <span style="color: #CD5555">"utf8"</span>,
+                                    <span style="color: #CD5555">"cmd"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-i"</span>, <span style="color: #CD5555">"-u"</span>],
+                                    <span style="color: #CD5555">"cwd"</span>: <span style="color: #CD5555">"$file_path"</span>,
+                                    <span style="color: #CD5555">"syntax"</span>: <span style="color: #CD5555">"Packages/Python/Python.tmLanguage"</span>,
+                                    <span style="color: #CD5555">"external_id"</span>: <span style="color: #CD5555">"python"</span>,
+                                    <span style="color: #CD5555">"extend_env"</span>: {<span style="color: #CD5555">"PYTHONIOENCODING"</span>: <span style="color: #CD5555">"utf-8"</span>}
+                                }
+                            },
+                            {
+                                <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"repl_open"</span>,
+                                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python - RUN current file"</span>,
+                                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"repl_python_run"</span>, <span style="color: #228B22">// &lt;= 这里</span>
+                                <span style="color: #CD5555">"mnemonic"</span>: <span style="color: #CD5555">"d"</span>,
+                                <span style="color: #CD5555">"args"</span>: {
+                                    <span style="color: #CD5555">"type"</span>: <span style="color: #CD5555">"subprocess"</span>,
+                                    <span style="color: #CD5555">"encoding"</span>: <span style="color: #CD5555">"utf8"</span>,
+                                    <span style="color: #CD5555">"cmd"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-i"</span>, <span style="color: #CD5555">"-u"</span>, <span style="color: #CD5555">"$file_basename"</span>],
+                                    <span style="color: #CD5555">"cwd"</span>: <span style="color: #CD5555">"$file_path"</span>,
+                                    <span style="color: #CD5555">"syntax"</span>: <span style="color: #CD5555">"Packages/Python/Python.tmLanguage"</span>,
+                                    <span style="color: #CD5555">"external_id"</span>: <span style="color: #CD5555">"python"</span>,
+                                    <span style="color: #CD5555">"extend_env"</span>: {<span style="color: #CD5555">"PYTHONIOENCODING"</span>: <span style="color: #CD5555">"utf-8"</span>}
+                                }
+                            },
+                            {
+                                <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"repl_open"</span>,
+                                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python - PDB current file"</span>,
+                                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"repl_python_pdb"</span>,
+                                <span style="color: #CD5555">"mnemonic"</span>: <span style="color: #CD5555">"d"</span>,
+                                <span style="color: #CD5555">"args"</span>: {
+                                    <span style="color: #CD5555">"type"</span>: <span style="color: #CD5555">"subprocess"</span>,
+                                    <span style="color: #CD5555">"encoding"</span>: <span style="color: #CD5555">"utf8"</span>,
+                                    <span style="color: #CD5555">"cmd"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-i"</span>, <span style="color: #CD5555">"-u"</span>, <span style="color: #CD5555">"-m"</span>, <span style="color: #CD5555">"pdb"</span>, <span style="color: #CD5555">"$file_basename"</span>],
+                                    <span style="color: #CD5555">"cwd"</span>: <span style="color: #CD5555">"$file_path"</span>,
+                                    <span style="color: #CD5555">"syntax"</span>: <span style="color: #CD5555">"Packages/Python/Python.tmLanguage"</span>,
+                                    <span style="color: #CD5555">"external_id"</span>: <span style="color: #CD5555">"python"</span>,
+                                    <span style="color: #CD5555">"extend_env"</span>: {<span style="color: #CD5555">"PYTHONIOENCODING"</span>: <span style="color: #CD5555">"utf-8"</span>}
+                                }
+                            },
+                            {
+                                <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"python_virtualenv_repl"</span>,
+                                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"python_virtualenv_repl"</span>,
+                                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python - virtualenv"</span>
+                            },
+                            {
+                                <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"repl_open"</span>,
+                                <span style="color: #CD5555">"caption"</span>: <span style="color: #CD5555">"Python - IPython"</span>,
+                                <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"repl_python_ipython"</span>,
+                                <span style="color: #CD5555">"mnemonic"</span>: <span style="color: #CD5555">"p"</span>,
+                                <span style="color: #CD5555">"args"</span>: {
+                                    <span style="color: #CD5555">"type"</span>: <span style="color: #CD5555">"subprocess"</span>,
+                                    <span style="color: #CD5555">"encoding"</span>: <span style="color: #CD5555">"utf8"</span>,
+                                    <span style="color: #CD5555">"autocomplete_server"</span>: <span style="color: #8B008B; font-weight: bold">true</span>,
+                                    <span style="color: #CD5555">"cmd"</span>: {
+                                        <span style="color: #CD5555">"osx"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-u"</span>, <span style="color: #CD5555">"${packages}/SublimeREPL/config/Python/ipy_repl.py"</span>],
+                                        <span style="color: #CD5555">"linux"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-u"</span>, <span style="color: #CD5555">"${packages}/SublimeREPL/config/Python/ipy_repl.py"</span>],
+                                        <span style="color: #CD5555">"windows"</span>: [<span style="color: #CD5555">"python"</span>, <span style="color: #CD5555">"-u"</span>, <span style="color: #CD5555">"${packages}/SublimeREPL/config/Python/ipy_repl.py"</span>]
+                                    },
+                                    <span style="color: #CD5555">"cwd"</span>: <span style="color: #CD5555">"$file_path"</span>,
+                                    <span style="color: #CD5555">"syntax"</span>: <span style="color: #CD5555">"Packages/Python/Python.tmLanguage"</span>,
+                                    <span style="color: #CD5555">"external_id"</span>: <span style="color: #CD5555">"python"</span>,
+                                    <span style="color: #CD5555">"extend_env"</span>: {
+                                        <span style="color: #CD5555">"PYTHONIOENCODING"</span>: <span style="color: #CD5555">"utf-8"</span>,
+                                        <span style="color: #CD5555">"SUBLIMEREPL_EDITOR"</span>: <span style="color: #CD5555">"$editor"</span>
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
+</pre></div>
+<blockquote>
+<p>补充下: ipython 是一个 python 的交互式 shell, 比默认的 python shell 好用得多, 支持变量自动补全, 自动缩进, 支持 bash shell 命令, 内置了许多很有用的功能和函数.
+不过 SublimeREPL 的 ipython 不怎么好用, 所以一般也不用…</p>
+</blockquote>
+<h3 id="813">8.1.3 关联快捷键</h3>
+<p>首选项 -&gt; 按键绑定 - 用户</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[
+    {
+        <span style="color: #CD5555">"keys"</span>: [<span style="color: #CD5555">"f5"</span>],
+        <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"run_existing_window_command"</span>,
+        <span style="color: #CD5555">"args"</span>: {
+            <span style="color: #CD5555">"id"</span>: <span style="color: #CD5555">"repl_python_run"</span>,
+            <span style="color: #CD5555">"file"</span>: <span style="color: #CD5555">"config/Python/Main.sublime-menu"</span>
+        }
+    },
+]
+</pre></div>
+<h2 id="82-sulimerepl">8.2 更好的 SulimeREPL 设置</h2>
+<p>在 stackoverflow 上找到一个解决方案 <a href="http://stackoverflow.com/questions/24963030/sublime-text3-and-virtualenvs">http://stackoverflow.com/questions/24963030/sublime-text3-and-virtualenvs</a></p>
+<p>该方案有很好兼容性, 完全可以替代上面的所有设置, 设置好后, 通过快捷键来触发 SublimeREPL, 并且以后切换 virtualenv 时, 只需要设置项目设置中的 <strong>python_interpreter</strong> 就可以了.</p>
+<p>首选项 -&gt; 浏览插件, 创建一个 py 文件: <code>project_venv_repl.py</code></p>
+<blockquote>
+<p>2018.06.26 update for mac, python3.6</p>
+</blockquote>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22"># mac, python3.6</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sublime</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sublime_plugin</span>
+
+
+<span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">expand</span>(view, path):
+    <span style="color: #CD5555">"""Expand the given path</span>
+<span style="color: #CD5555">    """</span>
+    window = view.window()
+    <span style="color: #8B008B; font-weight: bold">if</span> window <span style="color: #8B008B">is</span> <span style="color: #8B008B">not</span> <span style="color: #8B008B; font-weight: bold">None</span>:
+        tmp = sublime.expand_variables(path, window.extract_variables())
+        tmp = os.path.expanduser(os.path.expandvars(tmp))
+    <span style="color: #8B008B; font-weight: bold">else</span>:
+        <span style="color: #8B008B; font-weight: bold">return</span> path
+    <span style="color: #8B008B; font-weight: bold">return</span> tmp
+
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">ProjectVenvReplCommand</span>(sublime_plugin.TextCommand):
+    <span style="color: #CD5555">"""</span>
+<span style="color: #CD5555">    Starts a SublimeREPL, attempting to use project"s specified</span>
+<span style="color: #CD5555">    python interpreter.</span>
+<span style="color: #CD5555">    """</span>
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">run</span>(<span style="color: #658b00">self</span>, edit, no_file=<span style="color: #8B008B; font-weight: bold">False</span>):
+        <span style="color: #CD5555">"""Called on project_venv_repl command"""</span>
+        cmd_list = [<span style="color: #658b00">self</span>.get_project_interpreter(), <span style="color: #CD5555">"-i"</span>, <span style="color: #CD5555">"-u"</span>]
+        <span style="color: #8B008B; font-weight: bold">if</span> <span style="color: #8B008B">not</span> no_file:
+            file = <span style="color: #CD5555">"{}.{}"</span>.format(<span style="color: #658b00">self</span>.get_variable(<span style="color: #CD5555">"project_base_name"</span>), <span style="color: #658b00">self</span>.get_variable(<span style="color: #CD5555">"file_base_name"</span>))
+            cmd_list.append(<span style="color: #CD5555">"-m"</span>)
+            cmd_list.append(file)
+        <span style="color: #658b00">self</span>.repl_open(cmd_list=cmd_list)
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">get_variable</span>(<span style="color: #658b00">self</span>, key):
+        <span style="color: #8B008B; font-weight: bold">return</span> <span style="color: #658b00">self</span>.view.window().extract_variables()[key]
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">get_project_interpreter</span>(<span style="color: #658b00">self</span>):
+        <span style="color: #CD5555">"""Return the project"s specified python interpreter, if any"""</span>
+        settings = <span style="color: #658b00">self</span>.view.settings()
+        <span style="color: #8B008B; font-weight: bold">return</span> expand(<span style="color: #658b00">self</span>.view, settings.get(<span style="color: #CD5555">"python_interpreter"</span>, <span style="color: #CD5555">"python"</span>))
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">repl_open</span>(<span style="color: #658b00">self</span>, cmd_list):
+        <span style="color: #CD5555">"""Open a SublimeREPL using provided commands"""</span>
+        <span style="color: #658b00">self</span>.view.window().run_command(
+            <span style="color: #CD5555">"repl_open"</span>, {
+                <span style="color: #CD5555">"encoding"</span>: <span style="color: #CD5555">"utf8"</span>,
+                <span style="color: #CD5555">"type"</span>: <span style="color: #CD5555">"subprocess"</span>,
+                <span style="color: #CD5555">"cmd"</span>: cmd_list,
+                <span style="color: #CD5555">"cwd"</span>: <span style="color: #658b00">self</span>.get_variable(<span style="color: #CD5555">"project_path"</span>),
+                <span style="color: #CD5555">"syntax"</span>: <span style="color: #CD5555">"Packages/Python/Python.tmLanguage"</span>,
+                <span style="color: #CD5555">"extend_env"</span>: {
+                    <span style="color: #CD5555">"LANG"</span>: <span style="color: #CD5555">"de_DE.utf-8"</span>,
+                    <span style="color: #CD5555">"LC_ALL"</span>: <span style="color: #CD5555">"de_DE.utf-8"</span>
+                },
+            }
+        )
+
+<span style="color: #228B22"># windows, python2.7</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sublime_plugin</span>
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">ProjectVenvReplCommand</span>(sublime_plugin.TextCommand):
+    <span style="color: #CD5555">"""</span>
+<span style="color: #CD5555">    Starts a SublimeREPL, attempting to use project's specified</span>
+<span style="color: #CD5555">    python interpreter.</span>
+<span style="color: #CD5555">    """</span>
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">run</span>(<span style="color: #658b00">self</span>, edit, open_file=<span style="color: #CD5555">'$file'</span>):
+        <span style="color: #CD5555">"""Called on project_venv_repl command"""</span>
+        cmd_list = [<span style="color: #658b00">self</span>.get_project_interpreter(), <span style="color: #CD5555">'-i'</span>, <span style="color: #CD5555">'-u'</span>]
+        <span style="color: #8B008B; font-weight: bold">if</span> open_file:
+            cmd_list.append(open_file)
+        <span style="color: #658b00">self</span>.repl_open(cmd_list=cmd_list)
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">get_project_interpreter</span>(<span style="color: #658b00">self</span>):
+        <span style="color: #CD5555">"""Return the project's specified python interpreter, if any"""</span>
+        settings = <span style="color: #658b00">self</span>.view.settings()
+        <span style="color: #8B008B; font-weight: bold">return</span> settings.get(<span style="color: #CD5555">'python_interpreter'</span>, <span style="color: #CD5555">'python'</span>)
+
+    <span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">repl_open</span>(<span style="color: #658b00">self</span>, cmd_list):
+        <span style="color: #CD5555">"""Open a SublimeREPL using provided commands"""</span>
+        <span style="color: #658b00">self</span>.view.window().run_command(
+            <span style="color: #CD5555">'repl_open'</span>, {
+                <span style="color: #CD5555">'encoding'</span>: <span style="color: #CD5555">'utf8'</span>,
+                <span style="color: #CD5555">'type'</span>: <span style="color: #CD5555">'subprocess'</span>,
+                <span style="color: #CD5555">'cmd'</span>: cmd_list,
+                <span style="color: #CD5555">'cwd'</span>: <span style="color: #CD5555">'$file_path'</span>,
+                <span style="color: #CD5555">'syntax'</span>: <span style="color: #CD5555">'Packages/Python/Python.tmLanguage'</span>
+            }
+        )
+</pre></div>
+<p>首选项 -&gt; 按键绑定 - 用户</p>
+<blockquote>
+<p>2018.06.26 update for mac, python3.6</p>
+</blockquote>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// mac, python3.6</span>
+[
+    <span style="color: #228B22">// Runs currently open file in repl</span>
+    {
+        <span style="color: #CD5555">"keys"</span>:[
+            <span style="color: #CD5555">"super+b"</span>
+        ],
+        <span style="color: #CD5555">"command"</span>:<span style="color: #CD5555">"project_venv_repl"</span>
+    },
+
+    <span style="color: #228B22">// Runs repl without any file</span>
+    {
+        <span style="color: #CD5555">"keys"</span>:[
+            <span style="color: #CD5555">"super+shift+b"</span>
+        ],
+        <span style="color: #CD5555">"command"</span>:<span style="color: #CD5555">"project_venv_repl"</span>,
+        <span style="color: #CD5555">"args"</span>:{
+            <span style="color: #CD5555">"no_file"</span>:<span style="color: #8B008B; font-weight: bold">true</span>
+        }
+    }
+]
+
+<span style="color: #228B22">// windows, python2.7</span>
+[
+    <span style="color: #228B22">// Runs currently open file in repl</span>
+    {
+        <span style="color: #CD5555">"keys"</span>: [<span style="color: #CD5555">"f5"</span>],
+        <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"project_venv_repl"</span>
+    },
+    <span style="color: #228B22">// Runs repl without any file</span>
+    {
+        <span style="color: #CD5555">"keys"</span>: [<span style="color: #CD5555">"f6"</span>],
+        <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"project_venv_repl"</span>,
+        <span style="color: #CD5555">"args"</span>: {
+            <span style="color: #CD5555">"open_file"</span>: <span style="color: #8B008B; font-weight: bold">null</span>
+        }
+    },
+    <span style="color: #228B22">// Runs a specific file in repl, change main.py to desired file</span>
+    {
+        <span style="color: #CD5555">"keys"</span>: [<span style="color: #CD5555">"f7"</span>],
+        <span style="color: #CD5555">"command"</span>: <span style="color: #CD5555">"project_venv_repl"</span>,
+        <span style="color: #CD5555">"args"</span>: {
+            <span style="color: #CD5555">"open_file"</span>: <span style="color: #CD5555">"/home/user/example/main.py"</span>
+        }
+    }
+]
+</pre></div>
+<ul>
+<li>f5: 以项目设置中的 <strong>python_interpreter</strong>  来运行当前文件</li>
+<li>f6: 直接运行项目设置中的 <strong>python_interpreter</strong></li>
+<li>f7: 以项目设置中的 <strong>python_interpreter</strong>  来运行指定 py 文件, 更新 open_file 就可以了.</li>
+</ul>
+<h1 id="9-outline">9. outline</h1>
+<p><strong>Outline</strong> 插件</p>
+<p>安装好后, 打开它的配置文件:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    "color_scheme": "Packages/Outline/outline-Dark.hidden-tmTheme"
+}
+</pre></div>
+<h1 id="10-pyc">10. 编译 Pyc 文件</h1>
+<h2 id="101-pyc">10.1 生成单个的 pyc 文件</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">py_compile</span>
+py_compile.compile(<span style="color: #CD5555">r'H:/game/test.py'</span>)
+</pre></div>
+<p>执行上面的代码, 就能将 test.py 生成 test.pyc 了.</p>
+<h2 id="102-py-pyc">10.2 将整个目录下的 py 文件都生成 pyc</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">compileall</span>
+compileall.compile_dir(<span style="color: #CD5555">r'H:/game'</span>)
+</pre></div>
+<p>执行上面的代码, 就将 game 目录下的所有 py 文件(包含子目录)都生成 pyc 文件了.</p>
+<p>当编写项目时, 可以把这个功能做到 <strong>[工具 -&gt; 编译系统]</strong> 里或者 <strong>[SublimeREPL]</strong> 里:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{
+    <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+    <span style="color: #CD5555">"shell_cmd"</span>: <span style="color: #CD5555">"python -m py_compile \"test.py\""</span>
+}
+
+{
+    <span style="color: #CD5555">"selector"</span>: <span style="color: #CD5555">"source.python"</span>,
+    <span style="color: #CD5555">"shell_cmd"</span>: <span style="color: #CD5555">"python -m compileall \"C:/Users/Administrator/Desktop/Scripts\""</span>
+}
+</pre></div>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-04-24T15:08:00+08:00", "headline": "Sublime \u914d\u7f6e Python \u5f00\u53d1\u73af\u5883", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/sublime-pei-zhi-python-kai-fa-huan-jing.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "1. \u4e2d\u6587\u6587\u4ef6\u540d\u65b9\u6846 \u8fd9\u4e2a\u662f sublime text 3 \u7684 bug, \u5f53 Windows \u4e2a\u6027\u5316\u663e\u793a\u4e2d\u7684\u8bbe\u7f6e\u81ea\u5b9a\u4e49\u6587\u672c\u5927\u5c0f (DPI) \u5927\u4e8e\u9ed8\u8ba4\u7684 100% \u7684\u65f6\u5019, \u5c31\u4f1a\u51fa\u73b0\u8fd9\u4e2abug. \u89e3\u51b3\u65b9\u6cd5: \u5728 sublime text 3 \u4e2d, Preference, Settings - User, \u6700\u540e\u52a0\u4e0a\u4e00\u884c \"dpi_scale\": 1.0 \u8986\u76d6\u64cd\u4f5c\u7cfb\u7edf\u8bbe\u7f6e\u7684 \u2026", "image": {"@type": "ImageObject", "url": "http://i66.tinypic.com/2z4zbjb.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

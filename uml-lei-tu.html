@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>UML 类图</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - UML 类图">
+  <meta property="og:description" content="类图和接口图 首先动物矩形框, 它就代表一个类图, 分三层: 第一层显示类的名称, 如果是抽象类, 则用斜体表示 第二层是类的属性 第三层是类的方法 注意前面的符号: ‘+’ –> public ‘-’ –> private ‘#’ –> protected 左下角的”飞翔”矩形框, 它是一个接口图, 它与类图的区别是顶端有interface显示, 然后它只有二层, 第二层是接口方法....">
+<meta property="og:url" content="http://www.smallcpp.cn/uml-lei-tu.html">
+    <meta property="og:image" content="http://img.blog.csdn.net/20150211193154259">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2015-02-15T14:17:00+08:00">
+  <meta property="article:section" content="软件工程">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/uml-lei-tu.html" rel="bookmark"
+        title="Permalink to UML 类图">UML 类图</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2015-02-15T14:17:00+08:00">
+    Published <span class="is-info">Sun 15 February 2015</span>
+    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <p><img alt="UML类图样例" src="http://img.blog.csdn.net/20150211193154259"></p>
+<h4 id="_1">类图和接口图</h4>
+<p>首先<strong>动物</strong>矩形框, 它就代表一个<strong>类图</strong>, 分三层:</p>
+<ul>
+<li>第一层显示类的名称, 如果是<strong>抽象类</strong>, 则用斜体表示</li>
+<li>第二层是类的属性</li>
+<li>第三层是类的方法</li>
+</ul>
+<p>注意前面的符号:</p>
+<ul>
+<li>‘+’ –&gt; public</li>
+<li>‘-’ –&gt; private</li>
+<li>‘#’ –&gt; protected</li>
+</ul>
+<p>左下角的”飞翔”矩形框, 它是一个<strong>接口图</strong>, 它与类图的区别是顶端有<strong>interface</strong>显示, 然后它只有二层, 第二层是接口方法.</p>
+<p>另外接口还有另一种表示法, 叫棒棒糖表示法, 看正下方的”唐老鸭”那个类, 它实现了一个”讲人话”的接口.</p>
+<h4 id="_2">类与类, 类与接口之间的关系</h4>
+<p>首先看 动物 –&gt; 鸟 –&gt; 鸭 –&gt; 唐老鸭 这条线, 它们都是继承关系, 用<strong>空心三角 +实线</strong>来表示．</p>
+<p>然后看 大雁 –&gt; 飞翔, 大雁实现了飞翔接口, 用<strong>空心三角 + 虚线</strong>来表示.</p>
+<p>再看 企鹅 –&gt; 气候, 企鹅不继承气候, 也不实现气候, 但它需要知道气候的变化, 也就是说在企鹅这个类中需要引用到气候这个类, 这就是<strong>“关联”</strong>关系, 用<strong>实线箭头</strong>来表示.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Penguin</span> : <span style="color: #8B008B; font-weight: bold">public</span> Bird {
+<span style="color: #8B008B; font-weight: bold">public</span>:
+    Climate climage; <span style="color: #228B22">// 企鹅类中引用到了气候对象</span>
+}
+</pre></div>
+
+
+<p>再看 雁群 –&gt; 大雁, 大雁是群居动物, 每只大雁都属于一个雁群, 一个雁群可以有多只大雁, 就是<strong>“聚合”</strong>关系, 用<strong>空心菱形 + 实线箭头</strong>来表示.</p>
+<blockquote>
+<p>“聚合”是一种弱拥有关系, 体现的是A对象可以包含B对象, 但B对象又不是A对象的一部分</p>
+</blockquote>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">WideGooseAggregate</span> {
+<span style="color: #8B008B; font-weight: bold">public</span>:
+    WideGoose[] arrayWideGoose; <span style="color: #228B22">// 在雁群中有大雁数组对象</span>
+}
+</pre></div>
+
+
+<blockquote>
+<p>聚合是关联的一种，是强的关联关系, 在代码层面上，聚合和关联表现是一致的，只能从语义级别来区分；<br>
+聚合关系是整体和个体的关系;<br>
+普通关联关系的两个类处于同一层次上, 而聚合关系的两个类处于不同的层次，一个是整体，一个是部分.</p>
+</blockquote>
+<p>现在看 鸟 –&gt; 羽毛, 这是一种”合成”的强拥有关系, 体现了严格的部分和整体的关系, 部分和整体的生命同期一样, 它用<strong>实心菱形 + 实线箭头</strong>表示, 另外注意到合成关的连线下方有<strong>数字</strong>说明, 这被称为<strong>基数</strong>, 表明菱形这一端的类可以有几个箭头端的实例, 如果一个类可能有无数个实例, 则用’n’来表示.</p>
+<blockquote>
+<p>关联 和 聚合 关系也可以有基数</p>
+</blockquote>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Bird</span> {
+<span style="color: #8B008B; font-weight: bold">public</span>:
+    Bird() {
+        m_LeftWing = <span style="color: #8B008B; font-weight: bold">new</span> Wing();
+        m_RightWing = <span style="color: #8B008B; font-weight: bold">new</span> Wing();
+    }
+
+<span style="color: #8B008B; font-weight: bold">protected</span>:
+    Wing m_LeftWing;
+    Wing m_RightWing;
+}
+</pre></div>
+
+
+<p>可以看到, 在 Bird 构造时同时构造翅膀.</p>
+<p>最后看 动物 –&gt; 氧气, 动物 –&gt; 水, 动物中有新陈代谢方法, 而新陈代谢又需要用到氧气和水, 因此它们是一种依赖关系, 新陈代谢依赖于氧气和水<strong>(换个角度说就是新陈代谢这个方法有两个参数 氧气和水).</strong></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">Animal</span> {
+<span style="color: #8B008B; font-weight: bold">public</span>:
+    <span style="color: #00688B; font-weight: bold">void</span> Metabolism(Oxygen oxygen, Water water)
+}
+</pre></div>
+
+
+<p>搞明白这些, 就能看懂大部分UML类图了.</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2015-02-15T14:17:00+08:00", "headline": "UML \u7c7b\u56fe", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/uml-lei-tu.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u7c7b\u56fe\u548c\u63a5\u53e3\u56fe \u9996\u5148\u52a8\u7269\u77e9\u5f62\u6846, \u5b83\u5c31\u4ee3\u8868\u4e00\u4e2a\u7c7b\u56fe, \u5206\u4e09\u5c42: \u7b2c\u4e00\u5c42\u663e\u793a\u7c7b\u7684\u540d\u79f0, \u5982\u679c\u662f\u62bd\u8c61\u7c7b, \u5219\u7528\u659c\u4f53\u8868\u793a \u7b2c\u4e8c\u5c42\u662f\u7c7b\u7684\u5c5e\u6027 \u7b2c\u4e09\u5c42\u662f\u7c7b\u7684\u65b9\u6cd5 \u6ce8\u610f\u524d\u9762\u7684\u7b26\u53f7: \u2018+\u2019 \u2013> public \u2018-\u2019 \u2013> private \u2018#\u2019 \u2013> protected \u5de6\u4e0b\u89d2\u7684\u201d\u98de\u7fd4\u201d\u77e9\u5f62\u6846, \u5b83\u662f\u4e00\u4e2a\u63a5\u53e3\u56fe, \u5b83\u4e0e\u7c7b\u56fe\u7684\u533a\u522b\u662f\u9876\u7aef\u6709interface\u663e\u793a, \u7136\u540e\u5b83\u53ea\u6709\u4e8c\u5c42, \u7b2c\u4e8c\u5c42\u662f\u63a5\u53e3\u65b9\u6cd5. \u53e6\u5916\u63a5\u53e3\u8fd8\u6709\u53e6\u4e00\u79cd\u8868\u793a\u6cd5, \u53eb\u68d2\u68d2\u7cd6\u8868\u793a\u6cd5, \u770b\u6b63\u4e0b\u65b9\u7684 \u2026", "image": {"@type": "ImageObject", "url": "http://img.blog.csdn.net/20150211193154259"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>函数式关键概念 Haskell 描述</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 函数式关键概念 Haskell 描述">
+  <meta property="og:description" content="学习 Haskell 过程中接触到的 FP (functional programming) 的一些概念, 并不是 FP 的全部 (PS: 为了容易理解, 尽可能的忽略了数学描述, 而改用开发容易理解的字眼, 所以某些概念可能会描述的并不准确). 函数式 纯函数 函数式编程中的函数式指的是数学函数, 即我们要编写具有数学函数性质的函数. 数学中的函数, 为两集合间的一种对应关系:...">
+<meta property="og:url" content="http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-haskell-miao-shu.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2018-12-03T18:00:00+08:00">
+  <meta property="article:section" content="函数式">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-haskell-miao-shu.html" rel="bookmark"
+        title="Permalink to 函数式关键概念 Haskell 描述">函数式关键概念 Haskell 描述</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2018-12-03T18:00:00+08:00">
+    Published <span class="is-info">Mon 03 December 2018</span>
+    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#_1">函数式</a><ul>
+<li><a href="#_2">纯函数</a></li>
+<li><a href="#_3">声明式 &amp; 抽象</a></li>
+</ul>
+</li>
+<li><a href="#lambda">柯里化, 函数组合 与 lambda</a></li>
+<li><a href="#_4">代数数据类型</a></li>
+<li><a href="#_5">模式匹配</a></li>
+<li><a href="#_6">类型变量</a></li>
+<li><a href="#_7">类型类</a><ul>
+<li><a href="#what-is">What is</a></li>
+<li><a href="#functor">Functor</a></li>
+<li><a href="#applicative-functor">Applicative Functor</a></li>
+<li><a href="#monad">Monad</a></li>
+<li><a href="#functor-applicative-monad">Functor &amp; Applicative &amp; Monad</a></li>
+<li><a href="#maybe-either">Maybe &amp; Either</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      <hr />
+      <p>学习 Haskell 过程中接触到的 FP (functional programming) 的一些概念, 并不是 FP 的全部 (PS: 为了容易理解, 尽可能的忽略了数学描述, 而改用开发容易理解的字眼, 所以某些概念可能会描述的并不准确).</p>
+
+<h1 id="_1">函数式</h1>
+<h2 id="_2">纯函数</h2>
+<p>函数式编程中的函数式指的是<strong>数学函数</strong>, 即我们要编写具有数学函数性质的函数.</p>
+<p>数学中的函数, 为两集合间的一种对应关系:<br/>
+输入值集合中的每项元素 x, 对其施加某个法则 f, 皆能对应<strong>唯一</strong>一项输出值集合中的元素 y, 记作: <code>y = f(x)</code>.</p>
+<p>而在编程中, 意味着我们要创建仅依赖输入就可以完成自身逻辑的函数, 并且对于同一个给定输入, 函数的执行结果总是相同的, 这一属性被称为<strong>引用透明性</strong>, 而这样的函数则被称为<strong>纯函数</strong>.</p>
+<p>对于纯函数, 我们可以应用<strong>代换模型</strong> (数学中的函数推导), 这让代码具有可推导性, 遵循这一原则, 可以产出<strong>可测试</strong>, <strong>可并发</strong>以及<strong>可缓存</strong>的代码.</p>
+<h2 id="_3">声明式 &amp; 抽象</h2>
+<p>对于一个问题, 通常分解为两部分:</p>
+<ol>
+<li>要做什么?</li>
+<li>如何去做?</li>
+</ol>
+<p>以 js 举例来说, 假设有一个数组, 我想要打印出它的每个元素.</p>
+<p>对于这个问题, 很容易知道”要做什么”指的是: 打印数组元素, 即 <code>console.log()</code>, 现在我们告诉编译器如何去做:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">var</span> array = [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+<span style="color: #8B008B; font-weight: bold">for</span> (i=<span style="color: #B452CD">0</span>; i&lt;array.length; i++) {
+  console.log(array[i])
+}
+</pre></div>
+<p>这就是命令式编程, 大部分的代码都在指明<strong>如何去做</strong>.</p>
+<p>而函数式不同, 其重心是在声明<strong>要做什么</strong>, 至于如何去做则被<strong>抽象</strong>到一些高阶函数中:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">var</span> array = [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+array.forEach(e =&gt; console.log(e))
+</pre></div>
+<p>这就是函数式, 它主张<strong>声明式</strong>编程和编写<strong>抽象</strong>的代码. 这就要求选用的编程语言必须支持函数是一等公民.</p>
+<p>把”如何去做”<strong>抽象</strong>为函数是函数式编程的核心思想, 抽象让我们专注于预订的目标而无须关心”底层”的事情, 上例的 <code>forEach</code> 是 js 的”底层”函数, 它内置了如何遍历数据的逻辑.</p>
+<p>当然我们也可以自己进行抽象, 这一过程就是<strong>公共模式</strong>的提取, 参考 <a href="http://www.smallcpp.cn/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html#_9">计算机程序的构造与解释 - 高阶抽象和公共模式</a>.</p>
+<h1 id="lambda">柯里化, 函数组合 与 lambda</h1>
+<p>这三个的概念就不多说了, 只提下需要注意的地方, 因为不熟悉 curried 的朋友会写出很多 lambda, 但其实是没必要的. 例如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #008b45">map</span> (<span style="color: #008b45">\</span>x <span style="color: #8B008B">-&gt;</span> x + <span style="color: #B452CD">3</span>) [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+
+<span style="color: #008b45">map</span> (+<span style="color: #B452CD">3</span>) [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+</pre></div>
+<p>这两个是等价的. 同理还有函数组合:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #008b45">map</span> (<span style="color: #008b45">\</span>x <span style="color: #8B008B">-&gt;</span> negate (abs x)) [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+
+<span style="color: #008b45">map</span> (negate . abs) [<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>]
+</pre></div>
+<p>另外就是关于组合, 之前常见到说: <strong>函数组合满足结合律</strong>. 即 <code>f . g . z === (f . g) . z == f . (g . z)</code>.</p>
+<p>那么这只是定义, 实际应用是什么呢? 举例来说.</p>
+<p>一开始通过组合搞出一个新函数 <code>let one = f . g . z</code>, 然后又有了新需求通过组合 f 和 g 实现 <code>let two = f . g</code>, 那此时就可以进行重构 <code>let one = two . z</code> (我目前只发现结合律这一种实际应用, 如果有另外的, 会再更新).</p>
+<h1 id="_4">代数数据类型</h1>
+<p>代数数据类型 (ADT, Algebraic data type), 代数数据类型是一种复合类型, 即通过组合其他类型形成的类型.</p>
+<p>之所以叫<strong>代数</strong>, 是因为类型间的组合形式可以是<strong>和</strong>或者<strong>积</strong>, 例如:</p>
+<ul>
+<li>和: <code>data Pair = I Int | D Double</code>,  此时 Pair 取值范围就是 Int 的范围 <code>+</code> Double 的范围, 例如 <code>I(10)</code>, <code>D(5.5)</code></li>
+<li>积: <code>data Pair = P Int Double</code>,  此时 Pair 取值范围就是 Int 的范围 <code>*</code> Double 的范围, 例如 <code>P(10, 5.5)</code>, <code>P(10, 5.6)</code></li>
+</ul>
+<blockquote>
+<p>上面的定义中, <code>I</code>, <code>D</code>, <code>P</code> 是<strong>值构造子</strong>(/器),  而 <code>Pair</code> 是<strong>类型构造子</strong>(/器).<br/>
+类型构造子也是可以有参数的, 那被称为类型参数, 参见下节的<em>类型变量</em>.</p>
+</blockquote>
+<p>用<strong>ADT</strong>以及<strong>递归</strong>两者结合实现一个保存 int 型数据的 binary trees:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">data</span> <span style="color: #00688B; font-weight: bold">Tree</span> <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">Empty</span> | <span style="color: #00688B; font-weight: bold">Leaf</span> <span style="color: #00688B; font-weight: bold">Int</span> | <span style="color: #00688B; font-weight: bold">Node</span> <span style="color: #00688B; font-weight: bold">Tree</span> <span style="color: #00688B; font-weight: bold">Tree</span>
+<span style="color: #8B008B; font-weight: bold">let</span> tree <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">Leaf</span> <span style="color: #B452CD">10</span>
+
+<span style="color: #00688B; font-weight: bold">:</span>t tree
+<span style="color: #008b45">tree</span> <span style="color: #8B008B">::</span> <span style="color: #00688B; font-weight: bold">Tree</span>
+</pre></div>
+<p>建立 ADT 只是开始, 我们要做的是对它们使用<strong>模式匹配</strong>.</p>
+<h1 id="_5">模式匹配</h1>
+<p>对于某个 ADT 的值来说, 应该可以做到以下两点:</p>
+<ul>
+<li>如果这个类型有一个以上的值构造器, 那么应该可以知道, 这个值是由哪个构造器创建的.</li>
+<li>如果一个值构造器包含不同的成分, 那么应该有办法提取这些成分.</li>
+</ul>
+<p>对于以上两个问题, Haskell 有一个简单且有效的解决方式, 那就是模式匹配.</p>
+<p>模式匹配允许我们查看值的内部, 并将值所包含的数据绑定到变量上 (这个绑定的过程叫<strong>解构</strong>).</p>
+<p>模式匹配实际匹配的是<strong>值构造子(/器)</strong>, 以下是一个例子, 定义了一个二元搜索树, 然后实现了 treeElem 函数来检查元素是否在树中:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">data</span> <span style="color: #00688B; font-weight: bold">Tree</span> a <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">Empty</span> | <span style="color: #00688B; font-weight: bold">Node</span> a (<span style="color: #00688B; font-weight: bold">Tree</span> a) (<span style="color: #00688B; font-weight: bold">Tree</span> a)
+
+<span style="color: #008b45">treeElem</span> <span style="color: #8B008B">::</span> <span style="color: #00688B; font-weight: bold">Ord</span> a <span style="color: #8B008B">=&gt;</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Tree</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Bool</span>
+<span style="color: #008b45">treeElem</span> x <span style="color: #00688B; font-weight: bold">Empty</span> <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">False</span>  <span style="color: #228B22">-- 匹配第一个值构造子 Empty</span>
+<span style="color: #008b45">treeElem</span> x (<span style="color: #00688B; font-weight: bold">Node</span> a left rigth) <span style="color: #228B22">-- 匹配第二个值构造子  Node a (Tree a) (Tree a)</span>
+    | x == a <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">True</span>
+    | x &lt; a <span style="color: #8B008B">=</span> treeElem x left
+    | x &gt; a <span style="color: #8B008B">=</span> treeElem x right
+</pre></div>
+<p>如果一个 ADT 有很多个值构造子, 需求只用匹配其中一个返回 True, 其它的都返回 False, 这就要用到<strong>万能匹配</strong>:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #008b45">luck</span> <span style="color: #8B008B">::</span> <span style="color: #00688B; font-weight: bold">Int</span> a <span style="color: #8B008B">=&gt;</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Bool</span>
+<span style="color: #008b45">luck</span> <span style="color: #B452CD">7</span> <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">True</span>
+<span style="color: #008b45">luck</span> x <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">False</span> <span style="color: #228B22">-- 万能匹配</span>
+</pre></div>
+<h1 id="_6">类型变量</h1>
+<p>类型变量 (type variable), 是对类型的抽象, 它只是一个抽象, 并不具有实际分配的内存空间.</p>
+<p>一个普通的变量, 例如 int, 它表示任意一个合法范围内的整数, 而一个类型变量, 则表示它可以取任何一种类型, 可以是 int, 可以是 string.</p>
+<p>类型变量主要被用来定义 <strong>ADT</strong>, 此时它可以被称作<strong>参数化类型</strong> (Parameterized Type), 例如 Maybe 类型:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">data</span> <span style="color: #00688B; font-weight: bold">Maybe</span> a <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">Nothing</span> | <span style="color: #00688B; font-weight: bold">Just</span> a
+</pre></div>
+<p><code>Maybe</code> 是<strong>类型构造子</strong>(/器), 而 a 就是一个类型参数, 即传递给 Maybe 一个类型, 就能拿到一个新的类型回来, 例如给它 Char 就可以得到一个 <code>Maybe Char</code> 的新类型;</p>
+<p>再例如, 用<strong>类型变量</strong>, <strong>ADT</strong>以及<strong>递归</strong>三者结合实现 List:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">data</span> <span style="color: #00688B; font-weight: bold">List</span> a <span style="color: #8B008B">=</span> <span style="color: #00688B; font-weight: bold">Empty</span> | <span style="color: #00688B; font-weight: bold">Cons</span> a (<span style="color: #00688B; font-weight: bold">List</span> a)
+</pre></div>
+<p>是的, 没错, type variable 就是<strong>泛型编程</strong>的基础. Haskell 中的泛型实际是针对<strong>值构造子</strong>(/器)编程, 例如 head 函数:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #00688B; font-weight: bold">:</span>t head
+<span style="color: #008b45">head</span> <span style="color: #8B008B">::</span> [a] <span style="color: #8B008B">-&gt;</span> a  <span style="color: #228B22">-- 可以看到 head 的实现只与 [] 有关, 而不关心 [] 里是包裹的究竟是何种类型</span>
+</pre></div>
+<h1 id="_7">类型类</h1>
+<h2 id="what-is">What is</h2>
+<p>类型类 (type class), 是在参数多态 (parametric polymorphism) 中为类型变量定义约束, 可以联想面向对象中接口对类的行为约束, 接口定义一类必须实现了某些行为, 而类型类定义了必须为类型变量实现某些行为.</p>
+<p>我们针对类型变量进行泛型编程, 但我们的”通用”逻辑只针对某些类型生效, 而不是全部, 例如 <code>(==)</code>, 这个函数只能接收可以比较大小的类型为参数, 看看它在 haskell 中的定义:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #00688B; font-weight: bold">:</span>t (==)
+(==) <span style="color: #8B008B">::</span> <span style="color: #00688B; font-weight: bold">Eq</span> a <span style="color: #8B008B">=&gt;</span> a <span style="color: #8B008B">-&gt;</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Bool</span>
+</pre></div>
+<p><code>Eq</code> 就是一个类型类, 它约束了类型变量 a 的一些行为, 现在来看看 <code>Eq</code> 定义的行为:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Eq</span> a <span style="color: #8B008B; font-weight: bold">where</span>
+  (==) <span style="color: #8B008B">::</span> a <span style="color: #8B008B">-&gt;</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Bool</span>
+  (/=) <span style="color: #8B008B">::</span> a <span style="color: #8B008B">-&gt;</span> a <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Bool</span>
+</pre></div>
+<p>它表示一个 Eq 类型必须实现了 <code>==</code> 和 <code>/=</code> 操作.</p>
+<h2 id="functor">Functor</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Functor</span> f <span style="color: #8B008B; font-weight: bold">where</span>
+  fmap <span style="color: #8B008B">::</span> (a <span style="color: #8B008B">-&gt;</span> b) <span style="color: #8B008B">-&gt;</span> f a <span style="color: #8B008B">-&gt;</span> f b
+</pre></div>
+<p>很简单的定义, 只要一个类型实现 <code>fmap</code> 操作, 那它就是一个 Functor.</p>
+<p>很多语言中, Functor 就是那些支持 <strong>map</strong> 操作的集合/容器, 如 List.</p>
+<h2 id="applicative-functor">Applicative Functor</h2>
+<p>Functor 定义了把一个普通函数应用在 Functor 上的操作, 但如果函数也被包裹在 Functor 内, 那就无法应用, Applicative Functor 就是解决这个问题的:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Applicative</span> f <span style="color: #8B008B; font-weight: bold">where</span>
+  pure <span style="color: #8B008B">::</span> a <span style="color: #8B008B">-&gt;</span> f a
+  (&lt;*&gt;) <span style="color: #8B008B">::</span> f (a <span style="color: #8B008B">-&gt;</span> b) <span style="color: #8B008B">-&gt;</span> f a <span style="color: #8B008B">-&gt;</span> f b
+</pre></div>
+<p>Applicative 的使用场景我遇到的很少…这里就不过多介绍了.</p>
+<h2 id="monad">Monad</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Monad</span> m <span style="color: #8B008B; font-weight: bold">where</span>
+  return <span style="color: #8B008B">::</span> a <span style="color: #8B008B">-&gt;</span> m a
+  (&gt;&gt;=) <span style="color: #8B008B">::</span> m a <span style="color: #8B008B">-&gt;</span> (a <span style="color: #8B008B">-&gt;</span> m b) <span style="color: #8B008B">-&gt;</span> m b
+  ... <span style="color: #228B22">-- 其它不重要, 关键就是 &gt;&gt;=</span>
+</pre></div>
+<p>在其它语言中, 这对应的就是 <strong>flatMap</strong> 操作, 这个 type class 应用的也蛮广泛, 因为在某些情况下, 函数会被设计成返回包裹的值用以封装异常/错误 (例如使用 Maybe), 如果此时对其使用 map 那返回的将是 <code>Maybe[Maybe]</code>, 换句话说, Functor 类型自动给结果包裹上 context, 而 Monad 则不会, 函数返回的是什么就是什么;</p>
+<p>再次对比下两者的区别:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #008b45">fmap</span> <span style="color: #8B008B">::</span> (a <span style="color: #8B008B">-&gt;</span> b) <span style="color: #8B008B">-&gt;</span> f a <span style="color: #8B008B">-&gt;</span> f b
+(&gt;&gt;=) <span style="color: #8B008B">::</span> m a <span style="color: #8B008B">-&gt;</span> (a <span style="color: #8B008B">-&gt;</span> m b) <span style="color: #8B008B">-&gt;</span> m b
+</pre></div>
+<p>可以看到 <code>fmap</code> 接收的函数其返回类型是 b, 但 fmap 自己却返回了 f b; 而 <code>&gt;&gt;=</code> 接收的函数其返回类型是 m b, 而其本身也就是返回了 m b.</p>
+<p>对于 Monad 会有 <code>do</code> 语法糖来使代码更容易阅读:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #00688B; font-weight: bold">Just</span> <span style="color: #B452CD">3</span> &gt;&gt;= (<span style="color: #008b45">\</span>x <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Just</span> <span style="color: #CD5555">"!"</span> &gt;&gt;= (<span style="color: #008b45">\</span>y <span style="color: #8B008B">-&gt;</span> <span style="color: #00688B; font-weight: bold">Just</span> (show x ++ y)))
+
+<span style="color: #8B008B; font-weight: bold">do</span> <span style="color: #228B22">-- 与上面的代码等价</span>
+<span style="color: #008b45">x</span> <span style="color: #8B008B">&lt;-</span> <span style="color: #00688B; font-weight: bold">Just</span> <span style="color: #B452CD">3</span>
+<span style="color: #008b45">y</span> <span style="color: #8B008B">&lt;-</span> <span style="color: #00688B; font-weight: bold">Just</span> <span style="color: #CD5555">"!"</span>
+<span style="color: #00688B; font-weight: bold">Just</span> (show x ++ y)
+</pre></div>
+<h2 id="functor-applicative-monad">Functor &amp; Applicative &amp; Monad</h2>
+<p>这三者是有联系的, 所有的 Applicative 都必然是 Functor, 而所有的 Monad 都必然是 Applicative:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Functor</span> f <span style="color: #8B008B">=&gt;</span> <span style="color: #00688B; font-weight: bold">Applicative</span> f <span style="color: #8B008B; font-weight: bold">where</span>
+    <span style="color: #228B22">-- ...</span>
+
+<span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #00688B; font-weight: bold">Applicative</span> m <span style="color: #8B008B">=&gt;</span> <span style="color: #00688B; font-weight: bold">Monad</span> m <span style="color: #8B008B; font-weight: bold">where</span>
+    <span style="color: #228B22">-- ...</span>
+</pre></div>
+<blockquote>
+<p>PS: 要注意, 这种 <code>class =&gt;</code> 表示法是依赖关系而不是实现顺序关系, 并不是说一个结构要实现 Monad 要先去实现 Applicative, 而是说实现了 Monad 的结构必然是自实现了 Applicative 的.</p>
+</blockquote>
+<h2 id="maybe-either">Maybe &amp; Either</h2>
+<p>Haskell 中 Maybe &amp; Either 都是一个 Monad (如上小节所说, 它们也会是 Functor &amp; Applicative).</p>
+<p>它们会被用来处理一些错误情况, 以 Maybe 来说, 对于 <code>fmap / &lt;*&gt; / &gt;&gt;=</code> 这此操作, 如果 Maybe 的值是 Nothing, 那这些操作将什么也不做, 仅仅再次返回 Nothing, 在一堆的链式操作中, 如果某一轮出错, 我们让这一轮返回 Nothing, 那后续的操作都将持续返回 Nohing, 最后的结果也将是 Nothing.</p>
+<p>Maybe 对于错误只是简单返回 Nothing, 我们会丢失错误信息, 某些时候可能需要这些信息, 这时可用 Either 代替 Maybe, 可以用 Right 表示正确值, 而用 Left 表示错误的信息.</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2018-12-03T18:00:00+08:00", "headline": "\u51fd\u6570\u5f0f\u5173\u952e\u6982\u5ff5 Haskell \u63cf\u8ff0", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-haskell-miao-shu.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u5b66\u4e60 Haskell \u8fc7\u7a0b\u4e2d\u63a5\u89e6\u5230\u7684 FP (functional programming) \u7684\u4e00\u4e9b\u6982\u5ff5, \u5e76\u4e0d\u662f FP \u7684\u5168\u90e8 (PS: \u4e3a\u4e86\u5bb9\u6613\u7406\u89e3, \u5c3d\u53ef\u80fd\u7684\u5ffd\u7565\u4e86\u6570\u5b66\u63cf\u8ff0, \u800c\u6539\u7528\u5f00\u53d1\u5bb9\u6613\u7406\u89e3\u7684\u5b57\u773c, \u6240\u4ee5\u67d0\u4e9b\u6982\u5ff5\u53ef\u80fd\u4f1a\u63cf\u8ff0\u7684\u5e76\u4e0d\u51c6\u786e). \u51fd\u6570\u5f0f \u7eaf\u51fd\u6570 \u51fd\u6570\u5f0f\u7f16\u7a0b\u4e2d\u7684\u51fd\u6570\u5f0f\u6307\u7684\u662f\u6570\u5b66\u51fd\u6570, \u5373\u6211\u4eec\u8981\u7f16\u5199\u5177\u6709\u6570\u5b66\u51fd\u6570\u6027\u8d28\u7684\u51fd\u6570. \u6570\u5b66\u4e2d\u7684\u51fd\u6570, \u4e3a\u4e24\u96c6\u5408\u95f4\u7684\u4e00\u79cd\u5bf9\u5e94\u5173\u7cfb: \u8f93\u5165\u503c\u96c6\u5408\u4e2d\u7684\u6bcf\u9879\u5143\u7d20 x, \u5bf9\u5176\u65bd\u52a0\u67d0\u4e2a\u6cd5\u5219 f, \u7686\u80fd\u5bf9\u5e94\u552f\u4e00\u4e00\u9879\u8f93\u51fa\u503c\u96c6\u5408\u4e2d\u7684\u5143\u7d20 y \u2026"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>在 OpenShift 上部署 Django Todolist 应用</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 在 OpenShift 上部署 Django Todolist 应用">
+  <meta property="og:description" content="一、初始化 Openshift Django 应用 首先去 Openshift 上创建一个 Django 应用, 关于怎么创建 Openshift 应用参考我另一篇笔记 我这里创建了一个 todolist-smallcpp.rhcloud.com, 然后, 利用另一篇笔记的知识用 SecureCRT 连上我们的服务器. 补充一下用 putty.exe 连接的方法. 首先, 和 …">
+<meta property="og:url" content="http://www.smallcpp.cn/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html">
+    <meta property="og:image" content="http://i66.tinypic.com/zvu6o3.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-05-11T10:23:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html" rel="bookmark"
+        title="Permalink to 在 OpenShift 上部署 Django Todolist 应用">在 OpenShift 上部署 Django Todolist 应用</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-05-11T10:23:00+08:00">
+    Published <span class="is-info">Wed 11 May 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#openshift-django">一、初始化 Openshift Django 应用</a></li>
+<li><a href="#django">二、配置默认的 Django</a></li>
+<li><a href="#todolist">三、安装 todolist 项目</a></li>
+<li><a href="#diy-todolist">四、DIY todolist</a></li>
+<li><a href="#_1">五、最后</a></li>
+</ul>
+</div>
+      <hr />
+      
+<h1 id="openshift-django">一、初始化 Openshift Django 应用</h1>
+<p>首先去 Openshift 上创建一个 Django 应用, 关于怎么创建 Openshift 应用参考我<a href="http://www.smallcpp.cn/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html">另一篇笔记</a></p>
+<p>我这里创建了一个 <code>todolist-smallcpp.rhcloud.com</code>, 然后, 利用<a href="http://www.smallcpp.cn/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html">另一篇笔记</a>的知识用 SecureCRT 连上我们的服务器.</p>
+<p><strong>补充一下用 putty.exe 连接的方法.</strong></p>
+<p>首先, 和<a href="http://www.smallcpp.cn/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html">另一篇笔记</a>中一样, 通过 <a href="http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Git%20%E7%AE%80%E6%98%8E%E6%89%8B%E5%86%8C.html#101-ssh-key">Git 简明手册</a> 拿到了两个密钥文件: id_rsa(私钥) 和 id_rsa.pub(公钥), 将 id_rsa.pub(公钥) 部署到刚创建的 Django 应用上.</p>
+<p>putty.exe 不能识别直接从服务器拷贝来的私钥, 需要使用 <code>puttygen.exe</code> 进行格式转换.</p>
+<ul>
+<li>开 puttygen.exe --&gt; Conversions --&gt; Import Key</li>
+<li>选择私钥文件 id_rsa</li>
+<li>Save private key -&gt; id_rsa.ppk (保存私钥)</li>
+</ul>
+<p>最后, 打开 putty.exe</p>
+<ul>
+<li>Session --&gt; Host Name (填写服务器地址或者域名)</li>
+<li>Connection --&gt; SSH --&gt; Auth (点 Browse 选择刚生成的 id_rsa.ppk)</li>
+<li>Connection --&gt; Data (填写 Auto-login username)</li>
+<li>open</li>
+</ul>
+<p>成功连接后出现下面这样的提示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>login as: your login user name
+Authenticating with public key <span style="color: #CD5555">"imported-openssh-key"</span>
+...
+[todolist-smallcpp.rhcloud.com your login user name]<span style="color: #CD5555">\&gt;</span>
+</pre></div>
+<h1 id="django">二、配置默认的 Django</h1>
+<p>用 Openshift 创建的 Django 应用默认有一个 <code>Hello World</code> (你懂的…), 但此时我们直接访问 <a href="https://todolist-smallcpp.rhcloud.com">https://todolist-smallcpp.rhcloud.com</a> 是会报错的…需要配置下.</p>
+<p>我们先用 git 把 Openshift 上的 Django 项目 pull 回本地 (git 地址在创建应用时网站上会提示), 该项目目录如下:</p>
+<p><img alt="" src="http://i66.tinypic.com/zvu6o3.jpg"/></p>
+<p>里面有个 <code>Readme.md</code>, 阅读后发现下面这些信息:</p>
+<ul>
+<li>Django project name 是 myproject (在 wsgi 目录下)</li>
+<li>数据库保存在 $OPENSHIFT_DATA_DIR/db.sqlite3 ($OPENSHIFT_DATA_DIR 是一个 Link, 指向 app-root/data)</li>
+<li>初次使用, 必须创建/修改 admin 的密码
+    + <code>python $OPENSHIFT_REPO_DIR/wsgi/myproject/manage.py createsuperuser</code> ($OPENSHIFT_REPO_DIR 是一个 Link, 指向 app-root/runtime/repo)
+    + 登录地址: <a href="https://todolist-smallcpp.rhcloud.com/admin">https://todolist-smallcpp.rhcloud.com/admin</a> (已被修改为 <a href="https://todolist-smallcpp.rhcloud.com/todos">https://todolist-smallcpp.rhcloud.com/todos</a>)</li>
+<li>要注意使用 <code>python $OPENSHIFT_REPO_DIR/wsgi/myproject/manage.py syncdb</code> 同步数据库
+    + 由于 <code>syncdb</code> 的尿性, 如果修改了数据库结构, 需要先执行 <code>rm -f $OPENSHIFT_DATA_DIR/db.sqlite3</code>
+    + 关于 <code>syncdb</code> 的说明参考我另一篇笔记 <code>44. Django migration vs syncdb</code></li>
+</ul>
+<h1 id="todolist">三、安装 todolist 项目</h1>
+<p>todolist 我弄了个<a href="https://github.com/zongxiao/Django-Simple-Todo">开源的源码</a>, clone 到本地, 将目录更名为 <code>todolist</code> 并放到步骤二 pull 回本地的 Django 项目根目录的 <code>wsgi</code> 目录下, 并删除自带的 <code>myproject</code> 目录 (注意, 备份下 <code>myproject</code> 里的 <code>settings.py</code>, 后面有用).</p>
+<p><img alt="" src="http://i67.tinypic.com/2ijixar.jpg"/></p>
+<p><img alt="" src="http://i63.tinypic.com/24yza51.jpg"/></p>
+<p><img alt="" src="http://i67.tinypic.com/j0fyc9.jpg"/></p>
+<p>然后有几个关键地方要配置:</p>
+<p>首先是 <code>setup.py</code> 文件, 其中有一项 <code>install_requires</code> 很重要, 它表示项目中用到的第三方 python 库, 填在里面的项 push 到 openshift 后, openshift 会自动调用 easy_install 进行安装, 例如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>install_requires = [<span style="color: #CD5555">'Django&lt;=1.8'</span>, <span style="color: #CD5555">'django-markdown'</span>, <span style="color: #CD5555">'django-markdown-deux==1.0.5'</span>, <span style="color: #CD5555">'markdown2==2.3.0'</span>, <span style="color: #CD5555">'markdown'</span>]
+</pre></div>
+<p>然后打开 <code>\todolist\.openshift\action_hooks</code> 目录下的 <code>deploy</code> 文件, 这里面保存的是当 push 到 openshift 后执行的动作, 我们把里面的 <code>myproject</code> 改为 <code>todolist</code>.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">#!/bin/bash</span>
+<span style="color: #228B22"># This deploy hook gets executed after dependencies are resolved and the</span>
+<span style="color: #228B22"># build hook has been run but before the application has been started back</span>
+<span style="color: #228B22"># up again.  This script gets executed directly, so it could be python, php,</span>
+<span style="color: #228B22"># ruby, etc.</span>
+
+<span style="color: #8B008B; font-weight: bold">if</span> [ <span style="color: #a61717; background-color: #e3d2d2">!</span> -f <span style="color: #CD5555">"$OPENSHIFT_DATA_DIR"</span>secrets.json ]; then
+    echo <span style="color: #CD5555">"Generating $OPENSHIFT_DATA_DIR/secrets.json"</span>
+    python <span style="color: #CD5555">"$OPENSHIFT_REPO_DIR"</span>libs/secrets.py &gt; <span style="color: #CD5555">"$OPENSHIFT_DATA_DIR"</span>secrets.json
+fi
+
+<span style="color: #228B22"># GETTING-STARTED: change 'todolist' to your project name:</span>
+echo <span style="color: #CD5555">"Executing 'python $OPENSHIFT_REPO_DIR/wsgi/todolist/manage.py migrate --noinput'"</span>
+<span style="color: #228B22"># GETTING-STARTED: change 'todolist' to your project name:</span>
+python <span style="color: #CD5555">"$OPENSHIFT_REPO_DIR"</span>wsgi/todolist/manage.py migrate --noinput
+
+<span style="color: #228B22"># GETTING-STARTED: change 'todolist' to your project name:</span>
+echo <span style="color: #CD5555">"Executing 'python $OPENSHIFT_REPO_DIR/wsgi/todolist/manage.py collectstatic --noinput'"</span>
+<span style="color: #228B22"># GETTING-STARTED: change 'todolist' to your project name:</span>
+python <span style="color: #CD5555">"$OPENSHIFT_REPO_DIR"</span>wsgi/todolist/manage.py collectstatic --noinput
+</pre></div>
+<p>再进入 <code>wsgi</code> 文件夹, 里面有个 <code>application</code> 的文件</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">#!/usr/bin/env python</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sys</span>
+<span style="color: #228B22">## GETTING-STARTED: make sure the next line points to your settings.py:</span>
+os.environ[<span style="color: #CD5555">'DJANGO_SETTINGS_MODULE'</span>] = <span style="color: #CD5555">'openshift.settings'</span>
+<span style="color: #228B22">## GETTING-STARTED: make sure the next line points to your django project dir:</span>
+sys.path.append(os.path.join(os.environ[<span style="color: #CD5555">'OPENSHIFT_REPO_DIR'</span>], <span style="color: #CD5555">'wsgi'</span>, <span style="color: #CD5555">'openshift'</span>))
+virtenv = os.environ[<span style="color: #CD5555">'APPDIR'</span>] + <span style="color: #CD5555">'/virtenv/'</span>
+<span style="color: #228B22">## GETTING-STARTED: make sure the next line has the right python version:</span>
+os.environ[<span style="color: #CD5555">'PYTHON_EGG_CACHE'</span>] = os.path.join(virtenv, <span style="color: #CD5555">'lib/python2.7/site-packages'</span>)
+virtualenv = os.path.join(virtenv, <span style="color: #CD5555">'bin/activate_this.py'</span>)
+<span style="color: #8B008B; font-weight: bold">try</span>:
+    execfile(virtualenv, <span style="color: #658b00">dict</span>(<span style="color: #00688B">__file__</span>=virtualenv))
+<span style="color: #8B008B; font-weight: bold">except</span>:
+    <span style="color: #8B008B; font-weight: bold">pass</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">django.core.wsgi</span>
+application = django.core.wsgi.get_wsgi_application()
+</pre></div>
+<p>注意这两行:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>os.environ[<span style="color: #CD5555">'DJANGO_SETTINGS_MODULE'</span>] = <span style="color: #CD5555">'myproject.settings'</span>
+sys.path.append(os.path.join(os.environ[<span style="color: #CD5555">'OPENSHIFT_REPO_DIR'</span>], <span style="color: #CD5555">'wsgi'</span>, <span style="color: #CD5555">'myproject'</span>))
+</pre></div>
+<p>改为:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>os.environ[<span style="color: #CD5555">'DJANGO_SETTINGS_MODULE'</span>] = <span style="color: #CD5555">'simple_todo.settings'</span>
+sys.path.append(os.path.join(os.environ[<span style="color: #CD5555">'OPENSHIFT_REPO_DIR'</span>], <span style="color: #CD5555">'wsgi'</span>, <span style="color: #CD5555">'todolist'</span>))
+</pre></div>
+<p><strong>注意</strong>, 别改错了,  第一个是 <code>simple_todo.settings</code>, 别改成 <code>todolist.settings</code> 了.</p>
+<p>最后, 进入 <code>\todolist\wsgi\todolist\simple_todo</code> 目录, 用之前从 <code>myproject</code> 里备份的 <code>settings.py</code> 替换掉 <code>simple_todo</code> 里的 <code>settings.py</code>.</p>
+<p>但要做下修改, 把 <code>settings.py</code> 里的 <code>myproject</code> 替换成 <code>simple_todo</code>, 然后在 <code>INSTALLED_APPS</code> 里添加一项 <code>todo</code>, 再把 <code>Debug</code> 属性改为 <code>False</code> (如果部署到 openshift 后发现有问题, 可以改为 <code>True</code> 后进行调试, 调试完毕再改为 <code>False</code>), 改完后的 <code>settings.py</code> 如下:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #CD5555">"""</span>
+<span style="color: #CD5555">Django settings for simple_todo project.</span>
+
+<span style="color: #CD5555">For more information on this file, see</span>
+<span style="color: #CD5555">https://docs.djangoproject.com/en/1.8/topics/settings/</span>
+
+<span style="color: #CD5555">For the full list of settings and their values, see</span>
+<span style="color: #CD5555">https://docs.djangoproject.com/en/1.8/ref/settings/</span>
+<span style="color: #CD5555">"""</span>
+
+<span style="color: #228B22"># Build paths inside the project like this: os.path.join(BASE_DIR, ...)</span>
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">os</span>
+DJ_PROJECT_DIR = os.path.dirname(<span style="color: #00688B">__file__</span>)
+BASE_DIR = os.path.dirname(DJ_PROJECT_DIR)
+WSGI_DIR = os.path.dirname(BASE_DIR)
+REPO_DIR = os.path.dirname(WSGI_DIR)
+DATA_DIR = os.environ.get(<span style="color: #CD5555">'OPENSHIFT_DATA_DIR'</span>, BASE_DIR)
+
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">sys</span>
+sys.path.append(os.path.join(REPO_DIR, <span style="color: #CD5555">'libs'</span>))
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">secrets</span>
+SECRETS = secrets.getter(os.path.join(DATA_DIR, <span style="color: #CD5555">'secrets.json'</span>))
+
+<span style="color: #228B22"># Quick-start development settings - unsuitable for production</span>
+<span style="color: #228B22"># See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/</span>
+
+<span style="color: #228B22"># SECURITY WARNING: keep the secret key used in production secret!</span>
+SECRET_KEY = SECRETS[<span style="color: #CD5555">'secret_key'</span>]
+
+<span style="color: #228B22"># SECURITY WARNING: don't run with debug turned on in production!</span>
+DEBUG = <span style="color: #8B008B; font-weight: bold">False</span>
+TEMPLATE_DEBUG = DEBUG
+
+<span style="color: #8B008B; font-weight: bold">from</span> <span style="color: #008b45; text-decoration: underline">socket</span> <span style="color: #8B008B; font-weight: bold">import</span> gethostname
+ALLOWED_HOSTS = [
+    gethostname(), <span style="color: #228B22"># For internal OpenShift load balancer security purposes.</span>
+    os.environ.get(<span style="color: #CD5555">'OPENSHIFT_APP_DNS'</span>), <span style="color: #228B22"># Dynamically map to the OpenShift gear name.</span>
+    <span style="color: #228B22">#'example.com', # First DNS alias (set up in the app)</span>
+    <span style="color: #228B22">#'www.example.com', # Second DNS alias (set up in the app)</span>
+]
+
+<span style="color: #228B22"># Application definition</span>
+
+INSTALLED_APPS = (
+    <span style="color: #CD5555">'django.contrib.auth'</span>,
+    <span style="color: #CD5555">'django.contrib.contenttypes'</span>,
+    <span style="color: #CD5555">'django.contrib.sessions'</span>,
+    <span style="color: #CD5555">'django.contrib.messages'</span>,
+    <span style="color: #CD5555">'django.contrib.staticfiles'</span>,
+    <span style="color: #CD5555">'todo'</span>,
+)
+
+MIDDLEWARE_CLASSES = (
+    <span style="color: #CD5555">'django.contrib.sessions.middleware.SessionMiddleware'</span>,
+    <span style="color: #CD5555">'django.middleware.common.CommonMiddleware'</span>,
+    <span style="color: #CD5555">'django.middleware.csrf.CsrfViewMiddleware'</span>,
+    <span style="color: #CD5555">'django.contrib.auth.middleware.AuthenticationMiddleware'</span>,
+    <span style="color: #CD5555">'django.contrib.auth.middleware.SessionAuthenticationMiddleware'</span>,
+    <span style="color: #CD5555">'django.contrib.messages.middleware.MessageMiddleware'</span>,
+    <span style="color: #CD5555">'django.middleware.clickjacking.XFrameOptionsMiddleware'</span>,
+)
+
+<span style="color: #228B22"># GETTING-STARTED: change 'simple_todo' to your project name:</span>
+ROOT_URLCONF = <span style="color: #CD5555">'simple_todo.urls'</span>
+
+TEMPLATES = [
+    {
+        <span style="color: #CD5555">'BACKEND'</span>: <span style="color: #CD5555">'django.template.backends.django.DjangoTemplates'</span>,
+        <span style="color: #CD5555">'DIRS'</span>: [],
+        <span style="color: #CD5555">'APP_DIRS'</span>: <span style="color: #8B008B; font-weight: bold">True</span>,
+        <span style="color: #CD5555">'OPTIONS'</span>: {
+            <span style="color: #CD5555">'context_processors'</span>: [
+                <span style="color: #CD5555">'django.template.context_processors.debug'</span>,
+                <span style="color: #CD5555">'django.template.context_processors.request'</span>,
+                <span style="color: #CD5555">'django.contrib.auth.context_processors.auth'</span>,
+                <span style="color: #CD5555">'django.contrib.messages.context_processors.messages'</span>,
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = <span style="color: #CD5555">'simple_todo.wsgi.application'</span>
+
+<span style="color: #228B22"># Database</span>
+<span style="color: #228B22"># https://docs.djangoproject.com/en/1.8/ref/settings/#databases</span>
+
+DATABASES = {
+    <span style="color: #CD5555">'default'</span>: {
+        <span style="color: #CD5555">'ENGINE'</span>: <span style="color: #CD5555">'django.db.backends.sqlite3'</span>,
+        <span style="color: #228B22"># GETTING-STARTED: change 'db.sqlite3' to your sqlite3 database:</span>
+        <span style="color: #CD5555">'NAME'</span>: os.path.join(DATA_DIR, <span style="color: #CD5555">'db.sqlite3'</span>),
+    }
+}
+
+<span style="color: #228B22"># Internationalization</span>
+<span style="color: #228B22"># https://docs.djangoproject.com/en/1.8/topics/i18n/</span>
+
+LANGUAGE_CODE = <span style="color: #CD5555">'en-us'</span>
+
+TIME_ZONE = <span style="color: #CD5555">'UTC'</span>
+
+USE_I18N = <span style="color: #8B008B; font-weight: bold">True</span>
+
+USE_L10N = <span style="color: #8B008B; font-weight: bold">True</span>
+
+USE_TZ = <span style="color: #8B008B; font-weight: bold">True</span>
+
+<span style="color: #228B22"># Static files (CSS, JavaScript, Images)</span>
+<span style="color: #228B22"># https://docs.djangoproject.com/en/1.8/howto/static-files/</span>
+
+STATIC_URL = <span style="color: #CD5555">'/static/'</span>
+STATIC_ROOT = os.path.join(WSGI_DIR, <span style="color: #CD5555">'static'</span>)
+</pre></div>
+<p><strong>静态文件的处理</strong></p>
+<p>比如 CSS、图片等等, 一般 Django 应用的静态文件的目录是在 settings.py 中配置的, 但是 OpenShift 使用了不一样的方式, 所有的静态文件都将被放置在 <code>wsgi/static</code> 目录下.</p>
+<blockquote>
+<p>貌似在 openshift 中, css 文件中的 url 属性不生效, 我现在把 css 中的 url 属性都移到 html 标签中嵌套了…</p>
+</blockquote>
+<h1 id="diy-todolist">四、DIY todolist</h1>
+<p>上面的开源项目基于实现了 todolist 的功能, 不好的是暂时缺少用户管理系统 (所有人访问都是同一个 todolist), 所以准备 DIY 一下, 加一个用户系统.</p>
+<h1 id="_1">五、最后</h1>
+<p>重要的事再说一次:</p>
+<p>由于 <code>syncdb</code> 的尿性, 如果修改了数据库结构, 需要先执行 <code>rm -f $OPENSHIFT\_DATA\_DIR/db.sqlite3</code>, 再执行次 <code>python $OPENSHIFT_REPO_DIR/wsgi/myproject/manage.py syncdb</code>.</p>
+<p>修改后的项目, 我放在 git@oschina 上了, 可以参考参考…</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-05-11T10:23:00+08:00", "headline": "\u5728 OpenShift \u4e0a\u90e8\u7f72 Django Todolist \u5e94\u7528", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u4e00\u3001\u521d\u59cb\u5316 Openshift Django \u5e94\u7528 \u9996\u5148\u53bb Openshift \u4e0a\u521b\u5efa\u4e00\u4e2a Django \u5e94\u7528, \u5173\u4e8e\u600e\u4e48\u521b\u5efa Openshift \u5e94\u7528\u53c2\u8003\u6211\u53e6\u4e00\u7bc7\u7b14\u8bb0 \u6211\u8fd9\u91cc\u521b\u5efa\u4e86\u4e00\u4e2a todolist-smallcpp.rhcloud.com, \u7136\u540e, \u5229\u7528\u53e6\u4e00\u7bc7\u7b14\u8bb0\u7684\u77e5\u8bc6\u7528 SecureCRT \u8fde\u4e0a\u6211\u4eec\u7684\u670d\u52a1\u5668. \u8865\u5145\u4e00\u4e0b\u7528 putty.exe \u8fde\u63a5\u7684\u65b9\u6cd5. \u9996\u5148, \u548c \u2026", "image": {"@type": "ImageObject", "url": "http://i66.tinypic.com/zvu6o3.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

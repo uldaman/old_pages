@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>需求分析 (定义用例)</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 需求分析 (定义用例)">
+  <meta property="og:description" content="在 AUP 中, 需求也不是一次性分析完的, 会是一个不断迭代精化的过程. 先来个总结: 摘要/非正式/用例图, 用来快速收集需求, 表达用户可以利用系统作什么, 是粗粒度级别的 详述用例, 用来详细的描述完成用例的所有步骤及各种变化, 不仅仅是用户的操作, 还包括系统处理的事件流和业务流, 注意是黑盒, 不涉及代码. 迭代过程 先进行高阶需求分析, 仅仅确定用例的名称,...">
+<meta property="og:url" content="http://www.smallcpp.cn/xu-qiu-fen-xi-ding-yi-yong-li.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/如何进行用例分析/用例图.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-08-05T01:30:00+08:00">
+  <meta property="article:section" content="软件工程">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/xu-qiu-fen-xi-ding-yi-yong-li.html" rel="bookmark"
+        title="Permalink to 需求分析 (定义用例)">需求分析 (定义用例)</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2017-08-05T01:30:00+08:00">
+    Published <span class="is-info">Sat 05 August 2017</span>
+    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#_1">迭代过程</a></li>
+<li><a href="#furps">需求分类 (FURPS+)</a></li>
+<li><a href="#_2">如何管理?</a></li>
+<li><a href="#_3">用例模型</a><ul>
+<li><a href="#_4">什么是用例?</a></li>
+<li><a href="#_5">用例元素</a></li>
+<li><a href="#_6">如何发现用例 (寻找参与者与目标)?</a></li>
+<li><a href="#_7">如何记录参与者与目标?</a></li>
+<li><a href="#uml">UML 制图准则</a></li>
+<li><a href="#_8">详述用例</a><ul>
+<li><a href="#_9">模板参考</a></li>
+<li><a href="#_10">编写指南</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+      <hr />
+      
+<p>在 AUP 中, 需求也不是一次性分析完的, 会是一个不断迭代精化的过程.</p>
+<p>先来个<strong>总结</strong>:</p>
+<ul>
+<li><strong>摘要/非正式/用例图</strong>, 用来快速收集需求, 表达用户可以利用系统作什么, 是粗粒度级别的</li>
+<li><strong>详述用例</strong>, 用来详细的描述完成用例的所有步骤及各种变化, 不仅仅是用户的操作, 还包括系统处理的事件流和业务流, 注意是黑盒, 不涉及代码.</li>
+</ul>
+<h1 id="_1">迭代过程</h1>
+<ol>
+<li>先进行高阶需求分析, 仅仅确定用例的名称, 以及关键的非功能性需求</li>
+<li>从高阶需求列表中选取 10% 的列表项进行详细的分析
+    1. 核心架构
+    2. 高业务价值
+    3. 高风险</li>
+<li>结合早期时间定量的迭代开发, 进行迭代和进化式需求分析, 并且引入频繁的涉众参与、评估和对局部结果的反馈</li>
+<li>根据第 3 步的反馈, 返回第 1 步进行下一轮迭代</li>
+</ol>
+<h1 id="furps">需求分类 (FURPS+)</h1>
+<ul>
+<li>功能性 (Functional): 特性、功能、安全性</li>
+<li>可用性 (Usability): 人性化因素、帮助、文档</li>
+<li>可靠性 (Reliability): 故障频率、可恢复性、可预测性</li>
+<li>性能 (Performance): 响应时间、吞吐量、准确性、有效性、资源利用率</li>
+<li>可支持性 (Supportability): 适应性、可维护性、国际化、可配置性</li>
+<li>辅助性及次要的因素 (+):
+    + 实现 (Implementation): 资源限制、语言和工具、硬件等
+    + 接口 (Interface): 强加于外部系统接口之上的约束
+    + 操作 (Operation): 对其操作设置的系统管理
+    + 包装 (Packaging): 例如物理的包装盒
+    + 授权 (Legal): 许可证或其它方式</li>
+</ul>
+<h1 id="_2">如何管理?</h1>
+<p>需求分析会通常会有两个产出:</p>
+<ul>
+<li>用例模型: 管理功能需求</li>
+<li>补充性规格说明: 管理所有非功能需求</li>
+</ul>
+<h1 id="_3">用例模型</h1>
+<blockquote>
+<p>用例模型并不是特指 UML 用例图, 用例图只是用例模型的一种方式.</p>
+</blockquote>
+<p>用例是 OOA 阶段非常重要的产出 (另外一个是领域), 也是 OOD 阶段非常重要的输入, OOD 阶段的关键目标之一是<strong>用例实现</strong>, 即通过 UML 交互图来描述用例基于软件对象如何在设计模型中实现.</p>
+<h2 id="_4">什么是用例?</h2>
+<ul>
+<li>用例就是功能性需求, 或者说是用来描述系统的功能性需求</li>
+<li>通过编写使用系统实现用户目标的情节 (流程) 来发现和记录功能性需求 (强调的是 FURPS+ 中的 F)</li>
+<li>用例的本质是<strong>文本</strong>形式的情节描述, UML 只是辅助工具, 用例的重点是用文本描述出用户如何使用系统, 而不是 UML 图形, 但并不是 UML 用例图毫无用处, 在用例收集阶段, 可以用来快速构建用例语境图. 参考下面的<a href="http://www.smallcpp.cn/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%20(%E5%AE%9A%E4%B9%89%E7%94%A8%E4%BE%8B).html#_7">如何记录</a></li>
+<li>三种常用形式
+    + 摘要: 简洁的一段式概要, 通常用于主成功场景, 可用 <a href="http://www.smallcpp.cn/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%20(%E5%AE%9A%E4%B9%89%E7%94%A8%E4%BE%8B).html#_7">UML 用例图</a>替代 (目标: 用于早期需求分析, 快速了解主题和范围)
+    + 非正式: 非正式的段落格式, 用段落覆盖不能场景 (目标和摘要一样)
+    + <strong>详述</strong>: 详细的所有步骤及各种变化 (事件流), 包含补充部分, 如前置条件和成功保证 (目标: 用于详细描述下一次迭代的 10 %~20% 用例)</li>
+</ul>
+<h2 id="_5">用例元素</h2>
+<ul>
+<li>参与者: 具有行为的事物, 可以是人、另一个系统等
+    + 主要参与者: 具有用户目标, 并通过使用系统功能来完成 (目标: 发现驱动用例的用户目标, 主要是人)
+    + 协助参与者: 为系统提供服务 (目标: 为了明确外部接口和协议, 主要是另一个系统)
+    + 幕后参与者: 在用例行为中具有影响或利益, 但又不是主要或协助参与者, 如政府税收机构 (目标: 为了确保确定并满足所有必要的重要事物)</li>
+<li>场景: 参与者与系统间的交互, 简单的说就是用户操作了什么</li>
+<li>用例: 场景的集合, 描述参与者如何使用系统来实现其目标</li>
+</ul>
+<h2 id="_6">如何发现用例 (寻找参与者与目标)?</h2>
+<p>首先应识别出<strong>系统边界</strong>, 然后在系统边界内找出<strong>主要参与者</strong>, 然后分析其<strong>目标</strong>. 用例强调参与者的目标和观点, 所以提问总是围绕参与者目标而不是系统本身.</p>
+<ol>
+<li>谁来使用系统?</li>
+<li>谁来启动和停止系统?</li>
+<li>谁来完成用户管理和安全管理?</li>
+<li>谁来完全系统管理?</li>
+<li>时间是参与者吗? 即需要定时任务吗?</li>
+<li>当系统失败时, 是否存在监控进程将系统重新启动?</li>
+<li>软件升级是如何处理的? 是推模式, 还是拉模式?</li>
+<li>除了人作为主要参与者外, 还有其他外部的软件或系统调用该系统的服务吗?</li>
+<li>谁来考察系统活动或性能?</li>
+<li>谁来考察日志? 是否可以远程检索?</li>
+<li>系统发生错误或故障时应通知谁?</li>
+</ol>
+<h2 id="_7">如何记录参与者与目标?</h2>
+<p>发现用例后, 有两种记录方式:</p>
+<ol>
+<li><strong>UML 用例图</strong> (推荐)</li>
+<li><strong>参与者 - 目标</strong> 列表, 如果使用这种方式, 该表可做为设想制品的一部分</li>
+</ol>
+<p>用例的本质虽然是<strong>文本</strong>形式的情节描述, 但并不是每一次迭代都需要详述所有的用例, 可以用 UML 用例图快速收集需求 (代替摘要用例), 从而产出用例语境图. 迭代时, 从语境图中选取一部分进行详述.</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/如何进行用例分析/用例图.png"/></p>
+<p>UML 用例图中允许使用<strong>包含</strong>和<strong>扩展</strong>两种关系, 虽然也可以绘制出用户在系统上实现目标的情节 (流程), 但 AUP 不建议使用用例图去描述流程控制, 因为 UML 比较专业, 为了让用户早期参与项目, 所以<strong>建议</strong>用文本形式进行详述. 当场景工作流复杂到文本无法描述时, <strong>UML 活动图</strong>是很好的选择.</p>
+<h2 id="uml">UML 制图准则</h2>
+<ul>
+<li>以本质风格编写用例, 摒除用户界面并且关注参与者的意图
+    + 本质风格: 摒除 UI 细节并集中于用户真实意图的用例风格
+    + 并不是说关注 UI 不好, 只是这并不是早期的需求分析工作</li>
+<li>用语应尽量简洁, 以动词开头, 删除没必要的词汇</li>
+<li>编写黑盒用例
+    + 不对系统内部工作、构件或设计进行描述
+    + 只通过职责来描述系统
+    + 规定系统必须做什么, 而不是如何去做 (这也正是分析与设计的区别)</li>
+<li>采用参与者和参与者目标的视点
+    + 关注系统的用户或参与者来编写需求, 询问其目标和典型情况
+    + 关注理解参与者所考虑的有价值结果</li>
+</ul>
+<p>总结: 用例应产生对特定参与者具有价值的可观察结果.</p>
+<h2 id="_8">详述用例</h2>
+<h3 id="_9">模板参考</h3>
+<blockquote>
+<p>alistair.cockburn.us 上提供的模板, 由 Alistair Cockburn 创建, 它是用例建模方法和畅销书的作者.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>用例元素</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>用例编号 (*)</strong></td>
+<td>用例的编号</td>
+</tr>
+<tr>
+<td><strong>用例名 (*)</strong></td>
+<td>以动词开始, 描述一个用户的具体动作</td>
+</tr>
+<tr>
+<td><strong>范围 (*)</strong></td>
+<td>要设计的是什么系统</td>
+</tr>
+<tr>
+<td>级别</td>
+<td>用户目标或者子功能</td>
+</tr>
+<tr>
+<td><strong>涉众及其关注点 (*)</strong></td>
+<td>关注该用例的人, 及其关注的地方</td>
+</tr>
+<tr>
+<td>前置条件</td>
+<td>值得告知读者的, 开始前必须为真的条件</td>
+</tr>
+<tr>
+<td><strong>成功保证(后置条件) (*)</strong></td>
+<td>值得告知读者的, 成功完成必须满足的条件</td>
+</tr>
+<tr>
+<td><strong>主成功场景 (*)</strong></td>
+<td>典型的、理想方式的成功场景</td>
+</tr>
+<tr>
+<td><strong>扩展   (*)</strong></td>
+<td>成功或失败的替代场景</td>
+</tr>
+<tr>
+<td>特殊需求</td>
+<td>相关的非功能性需求 (通常最终会整理到补充规格说明中)</td>
+</tr>
+<tr>
+<td>技术和数据变元表</td>
+<td>不同的 I/O 方法和数据格式</td>
+</tr>
+<tr>
+<td>发生频率</td>
+<td>影响对实现的调查、测试和时间安排</td>
+</tr>
+<tr>
+<td>杂项</td>
+<td>例如未决问题</td>
+</tr>
+</tbody>
+</table>
+<p>带 (*) 的是相对重要的选项, 通常是必填项</p>
+<h3 id="_10">编写指南</h3>
+<ul>
+<li><strong>级别</strong>分为用户目标或子功能, 大部分情况下都是用户目标级别, 子功能级别的含义在于当若干用例共享某同一批步骤时, 则将这批步骤分离出来, 创建成子功能级别用例, 以避免重复的公共文本</li>
+<li><strong>用例编号</strong>, alistair.cockburn.us 上并没有要求, 是我加上的, 主要为了对用例进行整理、排序</li>
+<li><strong>涉众及其关注点</strong>比看上去重要的多, 它捕获的是最原始的需求, 系统的目标就是实现涉众的关注点, 所以用例应该包含满足所有涉众关注点的事物</li>
+<li><strong>前置条件</strong>与<strong>成功保证</strong>(后置条件)
+    + 前置条件是用户使用系统前的条件, 应只列出需要<strong>引起注意</strong>、<strong>警惕</strong>的条件, 例如要使用 POS 机的话收银员必须先完成登录用例; 而有些条件也必须为真, 但并不值得写出, 如必须要有供电
+    + 成功保证是指用例场景成功后会产生的<strong>必然的影响</strong> (即系统必须要执行的扫尾操作, 如更新账务和库存信息、生成票据等), 应该满足所有涉众需求, 通常会是主成功场景的最后几个步骤</li>
+<li><strong>主成功场景</strong>
+    + 描述了满足涉众关注点的典型成功路径 (即所有涉众都得到理想状态)
+    + 通常不包括任何条件或分支, 只有一条<strong>主成功路径</strong>, 因此要用”确认”语句, 而不是”是否”语句, 例如系统验证密码正确, 而不是系统检查密码是否正确, 所有条件或分支都应<strong>推延到扩展</strong>部分进行说明
+    + 描述中<strong>不要涉及 UI</strong>, 例如以下方式不可取: 用户在输入框中输入账号, 用户在下拉框中选择第二项
+    + 场景主要记录以下信息:
+        * <strong>参与者之间的交互</strong>
+            * 系统本身也是参与者之一, 每个步骤都要能找到<strong>操作人</strong>, 应按<strong>主动语态</strong>来描述, 如用户xxx, 系统xxx
+            * 需指出参与者之间的<strong>交互信息</strong>
+                + 如果信息简单, 可直接在步骤中描述: 用户输入用户名和密码
+                + 如果信息复杂, 可在<strong>词汇表</strong>中进行定义: 用户输入注册信息 (参考词汇表 - 注册信息)
+        * <strong>确认过程</strong>
+            + 即系统对参与者输入的处理流程, 注意是<strong>业务</strong>流程, 所以不要暴露系统任何内部组件
+            + 如果流程过于复杂, 可以使用 <strong>UML 活动图</strong>
+            + 应将<strong>系统边界</strong>外的<strong>协助参与者</strong>体现出来, 并标明是<strong>外部</strong>参与者, 否则研发会误认为这个功能是属于系统边界内的
+                - 如果这个步骤是<strong>系统</strong>发起的, 可以描述成: 系统通过外部账务系统确认客户缴过费
+                - 如果这个步骤是<strong>用户</strong>发起的, 可以描述成: 用户通过系统从外部账务系统获取充值记录
+        * <strong>系统的状态变更</strong>
+            + 通常和成功保证/后置条件有关联, 注意是<strong>黑盒</strong>描述, 例如系统记录销售信息, 而不是系统将销售信息写入数据库</li>
+<li><strong>扩展</strong>
+    + 主要包括主成功场景的分支
+    + 与主成功场景相结合应该满足几乎所有涉众关注点 (有些非功能性关注点则应该放到补充规格说明中描述)
+    + 由于扩展场景是主成功场景的分支, 因为通常用与主成功场景对应的序号来标识
+        * 如主成功场景中第一步的扩展用 1a、1b 这样描述
+        * 某些扩展是几个步骤共用, 如主成功场景第一步到第三步中都有可能出现的扩展则用 1-3a、1-3b 这样描述
+        * 还有些扩展贯穿整个主成功场景, 则用 *a、*b 这样描述
+        * 某些扩展可能需要执行其他用例 (或者扩展非常复杂, 并且有一定的通用性, 则可单独抽出来形成另一个用例), 此时使用下划线标识这是另一个用例, 如果是用有超链接功能的工具编写用例, 那么点击下划线应可跳转到其所标识的用例
+        * 在每一步的扩展结束时应重新回到主成功场景的步骤, 除非扩展指出来其他路径</li>
+<li><strong>特殊需求</strong>, 这些需求最终会被整理到补充规格说明中作为整体来考虑
+    + 与本用例相关的非功能性需求
+    + 质量属性 (如性能、可靠性和可用性)
+    + 设计约束 (通常对于 I/O 设备)</li>
+<li><strong>技术和数据变元表</strong> (翻译感觉有点问题, 原文是 Technology and Data Variations List), 介绍特殊的标准和技术, 指定必须如何实现系统 (而非实现系统哪些功能).</li>
+</ul>
+<blockquote>
+<p>实例参考 《UML 和模式应用》 P50</p>
+</blockquote>
+<p><img alt="" src="http://www.smallcpp.cn/images/如何进行用例分析/主成功场景..png"/></p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-08-05T01:30:00+08:00", "headline": "\u9700\u6c42\u5206\u6790 (\u5b9a\u4e49\u7528\u4f8b)", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/xu-qiu-fen-xi-ding-yi-yong-li.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u5728 AUP \u4e2d, \u9700\u6c42\u4e5f\u4e0d\u662f\u4e00\u6b21\u6027\u5206\u6790\u5b8c\u7684, \u4f1a\u662f\u4e00\u4e2a\u4e0d\u65ad\u8fed\u4ee3\u7cbe\u5316\u7684\u8fc7\u7a0b. \u5148\u6765\u4e2a\u603b\u7ed3: \u6458\u8981/\u975e\u6b63\u5f0f/\u7528\u4f8b\u56fe, \u7528\u6765\u5feb\u901f\u6536\u96c6\u9700\u6c42, \u8868\u8fbe\u7528\u6237\u53ef\u4ee5\u5229\u7528\u7cfb\u7edf\u4f5c\u4ec0\u4e48, \u662f\u7c97\u7c92\u5ea6\u7ea7\u522b\u7684 \u8be6\u8ff0\u7528\u4f8b, \u7528\u6765\u8be6\u7ec6\u7684\u63cf\u8ff0\u5b8c\u6210\u7528\u4f8b\u7684\u6240\u6709\u6b65\u9aa4\u53ca\u5404\u79cd\u53d8\u5316, \u4e0d\u4ec5\u4ec5\u662f\u7528\u6237\u7684\u64cd\u4f5c, \u8fd8\u5305\u62ec\u7cfb\u7edf\u5904\u7406\u7684\u4e8b\u4ef6\u6d41\u548c\u4e1a\u52a1\u6d41, \u6ce8\u610f\u662f\u9ed1\u76d2, \u4e0d\u6d89\u53ca\u4ee3\u7801. \u8fed\u4ee3\u8fc7\u7a0b \u5148\u8fdb\u884c\u9ad8\u9636\u9700\u6c42\u5206\u6790, \u4ec5\u4ec5\u786e\u5b9a\u7528\u4f8b\u7684\u540d\u79f0, \u4ee5\u53ca\u5173\u952e\u7684\u975e\u529f\u80fd\u6027\u9700\u6c42 \u4ece\u9ad8\u9636\u9700\u6c42\u5217\u8868\u4e2d\u9009\u53d6 10% \u7684\u5217\u8868\u9879\u8fdb\u884c\u8be6\u7ec6\u7684\u5206\u6790 1. \u6838\u5fc3\u67b6\u6784 2. \u9ad8\u4e1a\u52a1\u4ef7\u503c \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/\u5982\u4f55\u8fdb\u884c\u7528\u4f8b\u5206\u6790/\u7528\u4f8b\u56fe.png"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

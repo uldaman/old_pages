@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>三层架构与 MVC</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 三层架构与 MVC">
+  <meta property="og:description" content="近来对架构这块又有了新认识, MVC 也好, 三层也罢, 都是结构性模式, 由于结构化, 而可能忽视了行为事件, 这类的架构大多是一种 “失血”、”贫血” 模式 (这段话不理解先看完下面的分析, 再看下最后的小结, 然后回过头来理解这段话). 现在, 我更推荐领域驱动设计配合六边形架构 (领域驱动设计继承了职责驱动设计, 或者可以说是职责驱动设计的进化). 推荐本书: UML 和模式应用,...">
+<meta property="og:url" content="http://www.smallcpp.cn/san-ceng-jia-gou-yu-mvc.html">
+    <meta property="og:image" content="http://i65.tinypic.com/2af0nyd.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-07-29T11:24:00+08:00">
+  <meta property="article:section" content="软件工程">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/san-ceng-jia-gou-yu-mvc.html" rel="bookmark"
+        title="Permalink to 三层架构与 MVC">三层架构与 MVC</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-07-29T11:24:00+08:00">
+    Published <span class="is-info">Fri 29 July 2016</span>
+    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#_1">三层</a></li>
+<li><a href="#mvc">MVC</a></li>
+<li><a href="#_2">区别及联系</a></li>
+<li><a href="#_3">小结</a></li>
+</ul>
+</div>
+      <hr />
+      
+<p>近来对架构这块又有了新认识, MVC 也好, 三层也罢, 都是结构性模式, 由于结构化, 而可能忽视了行为事件, 这类的架构大多是一种 “失血”、”贫血” 模式 (这段话不理解先看完下面的分析, 再看下最后的<a href="http://www.smallcpp.cn/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E4%B8%8E%20MVC.html#_3">小结</a>, 然后回过头来理解这段话).</p>
+<p>现在, 我更推荐<a href="http://www.smallcpp.cn/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/DDD%20%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%85%AD%E8%BE%B9%E5%BD%A2%E6%9E%B6%E6%9E%84.html">领域驱动设计配合六边形架构</a> (领域驱动设计继承了职责驱动设计, 或者可以说是职责驱动设计的进化).</p>
+<blockquote>
+<p>推荐本书: <a href="https://share.weiyun.com/ffebfff0ea72831e6d0a96905f359d06">UML 和模式应用</a>, 这本书介绍了对象职责的分配原则</p>
+<p>参考资料:</p>
+<p><a href="http://www.jdon.com/38045">对象的责任与职责</a></p>
+<p><a href="http://www.jdon.com/37976">DCI 架构是什么？</a></p>
+<p><a href="http://www.jdon.com/38071">如何从职责和协作中发现丰富对象？</a></p>
+<p><a href="http://www.jdon.com/38448">MVC 模式已死</a></p>
+<p><a href="http://kb.cnblogs.com/page/117717/">分享我对领域驱动设计 (DDD) 的学习成果</a></p>
+<p><a href="http://www.cnblogs.com/tsoukw/archive/2007/09/28/908983.html">别在领域模型迷失了自己</a></p>
+</blockquote>
+<h3 id="_1">三层</h3>
+<p>三层是从整个应用程序架构的角度来分的三层 (如果程序需要, 还可以分多层).</p>
+<p>三层是为了解决整个应用程序中各个业务操作过程中不同阶段的代码封装的问题, 为了使程序员更加专注的处理某阶段的业务逻辑.</p>
+<p>比如将数据库操作代码封装到一层中, 提供一些方法根据参数直接返回用户需要的相应数据, 这样在处理具体的业务逻辑的时候, 就不用关心数据的存储问题了.</p>
+<p><strong>三层架构是界面层 (UI) 业务逻辑层 (BLL) 和数据访问层 (DAL) 构成的.</strong></p>
+<h3 id="mvc">MVC</h3>
+<p>MVC 是在应用程序 (BS结构) 的视图层划分出来的不同功能的几个模块.</p>
+<p>MVC 主要是为了解决应用程序用户界面的样式替换问题, 把展示数据的 HTML 页面尽可能的和业务代码分离.</p>
+<p>MVC 把纯净的界面展示逻辑 (用户界面) 独立到一些文件中 (Views), 把一些和用户交互的程序逻辑 (Controller) 单独放在一些文件中, 在 Views 和 Controller 中传递数据使用一些专门封装数据的实体对象, 这些对象, 统称为 Models.</p>
+<p><strong>MVC是模型层 (M) 界面层 (View) 和控制层 (Controller) 构成的.</strong></p>
+<h3 id="_2">区别及联系</h3>
+<blockquote>
+<p>三层架构是界面层 (UI) 业务逻辑层 (BLL) 和数据访问层 (DAL) 构成的.</p>
+<p>MVC是模型层 (M) 界面层 (View) 和控制层 (Controller) 构成的.</p>
+</blockquote>
+<p>而且他们之间其实并不对应, 如果硬要给他们对应的话, 那么三层架构中的UI对应MVC中的 view (jsp) , 都是用于显示以及获取界面的数据; 三层架构中的 BLL 层和 DAL 层对应 MVC 中的 Model (javabean) 层, 都是用于处理上层传递来的数据以及从数据库获取的数据的; MVC 中的 Controller (Servlet) 最多算是三层架构中的 UI 的一部分, 也就我们常说的是 Servlet.</p>
+<p>如下图所示：</p>
+<p><img alt="" src="http://i65.tinypic.com/2af0nyd.jpg"/></p>
+<p>然而, 从更高层面看, 其实三层架构和MVC还是一个东西~</p>
+<p>我们所看到的不一样只是表面上的不一样, 核心的东西是一致的, 那么什么是核心？</p>
+<p><strong>答曰</strong>：分层, 解耦!</p>
+<p>如果从解耦的角度来看三层架构和MVC其实他们是一致的, 只不过划分的方法不一样罢了, 就像上面的图所示. 从这一点说他们可以说是一个东西, 这就相当于我们看到馒头和面条一样, 表面上看他们不一样 (注意仅仅是表面) 但是他们核心是一致的, 都是面做的……</p>
+<h3 id="_3">小结</h3>
+<p>三层也好, MVC 也罢, 从我的感觉上, 都是对设计模式中六大设计原则的具现形式.</p>
+<p>比如在三层中, 将数据库操作代码封装到一层中, 提供一些方法根据参数直接返回用户需要的相应数据, 这不就是<strong>单一原则</strong>的体现吗?</p>
+<p>只要依照设计原则去开发程序, 不管什么模型, 都能开发出好的程序, 现在网上不流传一篇文章吗 <strong>&lt;&lt;别学框架, 学架构&gt;&gt;</strong>, 是的, 架构, 这种核心的东西才是值得去探讨的....</p>
+<p>但是, 这两个架构都是<strong>更高层次</strong>的抽象, 是结构性的架构, 整个过程是”死”的, 不会去指导具体类的设计, 也不会去指导职责的划分, 这将导致逻辑控制层臃肿, 产生很多超大的“业务逻辑”类, 最终出现<a href="http://www.smallcpp.cn/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84%E4%B8%8E%20MVC.html">开篇</a>的问题, 不方便维护, 不方便扩展.</p>
+<p><a href="http://www.smallcpp.cn/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html">DDD (领域驱动设计) 配合六边形架构</a>是更好的替代架构 (领域驱动设计继承了职责驱动设计, 或者可以说是职责驱动设计的进化), 应用场景更广, 扩展更简单.</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-07-29T11:24:00+08:00", "headline": "\u4e09\u5c42\u67b6\u6784\u4e0e MVC", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/san-ceng-jia-gou-yu-mvc.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u8fd1\u6765\u5bf9\u67b6\u6784\u8fd9\u5757\u53c8\u6709\u4e86\u65b0\u8ba4\u8bc6, MVC \u4e5f\u597d, \u4e09\u5c42\u4e5f\u7f62, \u90fd\u662f\u7ed3\u6784\u6027\u6a21\u5f0f, \u7531\u4e8e\u7ed3\u6784\u5316, \u800c\u53ef\u80fd\u5ffd\u89c6\u4e86\u884c\u4e3a\u4e8b\u4ef6, \u8fd9\u7c7b\u7684\u67b6\u6784\u5927\u591a\u662f\u4e00\u79cd \u201c\u5931\u8840\u201d\u3001\u201d\u8d2b\u8840\u201d \u6a21\u5f0f (\u8fd9\u6bb5\u8bdd\u4e0d\u7406\u89e3\u5148\u770b\u5b8c\u4e0b\u9762\u7684\u5206\u6790, \u518d\u770b\u4e0b\u6700\u540e\u7684\u5c0f\u7ed3, \u7136\u540e\u56de\u8fc7\u5934\u6765\u7406\u89e3\u8fd9\u6bb5\u8bdd). \u73b0\u5728, \u6211\u66f4\u63a8\u8350\u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u914d\u5408\u516d\u8fb9\u5f62\u67b6\u6784 (\u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u7ee7\u627f\u4e86\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1, \u6216\u8005\u53ef\u4ee5\u8bf4\u662f\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1\u7684\u8fdb\u5316). \u63a8\u8350\u672c\u4e66: UML \u548c\u6a21\u5f0f\u5e94\u7528, \u8fd9\u672c\u4e66\u4ecb\u7ecd\u4e86\u5bf9\u8c61\u804c\u8d23\u7684\u5206\u914d\u539f\u5219 \u53c2\u8003\u8d44\u6599: \u5bf9\u8c61\u7684\u8d23\u4efb\u4e0e\u804c\u8d23 DCI \u67b6\u6784\u662f\u4ec0\u4e48\uff1f \u5982\u4f55\u4ece\u804c\u8d23\u548c\u534f\u4f5c\u4e2d\u53d1\u73b0\u4e30\u5bcc\u5bf9\u8c61\uff1f MVC \u2026", "image": {"@type": "ImageObject", "url": "http://i65.tinypic.com/2af0nyd.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>JSHint 速查</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - JSHint 速查">
+  <meta property="og:description" content="Missing semicolon: + 缺少分号 Use the function form of "use strict": + 使用标准化定义 function Unexpected space after ‘-’: + 在’-‘后面不应出现空格 Expected a JSON value: + 请传入一个json的值 Mixed spaces and tabs: +...">
+<meta property="og:url" content="http://www.smallcpp.cn/jshint-su-cha.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-10-24T13:40:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/jshint-su-cha.html" rel="bookmark"
+        title="Permalink to JSHint 速查">JSHint 速查</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-10-24T13:40:00+08:00">
+    Published <span class="is-info">Mon 24 October 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul></ul>
+</div>
+<ul>
+<li><code>Missing semicolon</code>:
+    + 缺少分号</li>
+<li><code>Use the function form of "use strict"</code>:
+    + 使用标准化定义 function</li>
+<li><code>Unexpected space after ‘-’</code>:
+    + 在’-&lsquo;后面不应出现空格</li>
+<li><code>Expected a JSON value</code>:
+    + 请传入一个json的值</li>
+<li><code>Mixed spaces and tabs</code>:
+    + 空格和TAB重复</li>
+<li><code>Unsafe character</code>:
+    + 不安全的字符</li>
+<li><code>Line too long</code>:
+    + 本行中的字符超过设定的最大长度</li>
+<li><code>Trailing whitespace</code>:
+    + 本行末尾有过多无用空格</li>
+<li><code>Script URL</code>:
+    + 脚本URL</li>
+<li><code>Unexpected {a} in ‘{b}’</code>:
+    + 在 ‘{b}’ 中不该出现 {a}</li>
+<li><code>Unexpected ‘{a}’</code>:
+    + 不该在此出现‘{a}’</li>
+<li><code>Strings must use doublequote</code>:
+    + 字符串需要用双引号</li>
+<li><code>Unnecessary escapement</code>:
+    + 不需要转义</li>
+<li><code>Control character in string: {a}</code>:
+    + 在字符串中出现了 Control 的字符</li>
+<li><code>Avoid \\’</code>:
+    + 避免 \</li>
+<li><code>Avoid \\v</code>:
+    + 避免 \v</li>
+<li><code>Avoid \\x-</code>:
+    + 避免 \x-</li>
+<li><code>Bad escapement</code>:
+    + 错误的转义字符</li>
+<li><code>Bad number ‘{a}’</code>:
+    + 错误的数字 ‘{a}’</li>
+<li><code>Missing space after ‘{a}’</code>:
+    + 在‘{a}’之后缺少空格</li>
+<li><code>Don’t use extra leading zeros ‘{a}’</code>:
+    + 不要再‘{a}’的前面用多余的0</li>
+<li><code>Avoid 0x-. ‘{a}’</code>:
+    + 避免使用 0x-. ‘{a}’</li>
+<li><code>A trailing decimal point can be confused with a dot ‘{a}’</code>:
+    + 在‘{a}’中使用点尾随小数点</li>
+<li><code>Unexpected comment</code>:
+    + 不该在此处出现注释</li>
+<li><code>Unescaped ‘{a}’</code>:
+    + 没有转义 ‘{a}’</li>
+<li><code>Unexpected control character in regular expression</code>:
+    + 在正则表达式中出现了 control 字符</li>
+<li><code>Unexpected escaped character ‘{a}’ in regular expression</code>:
+    + 在正则表达式中出现了没有转义的字符 ‘{a}’</li>
+<li><code>Expected ‘{a}’ and instead saw ‘{b}’</code>:
+    + 应该用 ‘{a}’代替‘{b}’</li>
+<li><code>Spaces are hard to count. Use {{a}}</code>:
+    + 空格难以统计，请使用 {{a}}</li>
+<li><code>Insecure ‘{a}’</code>:
+    + 不安全的 ‘{a}’</li>
+<li><code>Empty class</code>:
+    + 空的class</li>
+<li><code>Expected a number and instead saw ‘{a}’</code>:
+    + 应该用数字代替‘{a}’</li>
+<li><code>‘{a}’ should not be greater than ‘{b}’</code>:
+    + ‘{a}’不应该比‘{b}’大</li>
+<li><code>‘hasOwnProperty’ is a really bad name</code>:
+    + ‘hasOwnProperty’ 是关键字</li>
+<li><code>‘{a}’ was used before it was defined</code>:
+    + ‘{a}’未定义就已经使用了</li>
+<li><code>‘{a}’ is already defined</code>:
+    + ‘{a}’被重复定义</li>
+<li><code>A dot following a number can be confused with a decimal point</code>:
+    + 数字后面的一个点会被误认为是十进制的小数点</li>
+<li><code>Confusing minusses</code>:
+    + 容易混淆的负数表达-</li>
+<li><code>Confusing plusses</code>:
+    + 容易混淆的正数表达+</li>
+<li><code>Unmatched ‘{a}’</code>:
+    + 无法匹配的‘{a}’</li>
+<li><code>Expected ‘{a}’ to match ‘{b}’ from line {c} and instead saw ‘{d}’</code>:
+    + 在行{c}中需要用‘{a}’和‘{b}’匹配，用来代替‘{d}’</li>
+<li><code>Unexpected early end of program</code>:
+    + 程序不可预期的提前终止</li>
+<li><code>A leading decimal point can be confused with a dot: ‘.{a}’</code>:
+    + ‘{a}’前的点容易混淆成小数点</li>
+<li><code>Use the array literal notation []</code>:
+    + 使用数组的符号 []</li>
+<li><code>Expected an operator and instead saw ‘{a}’</code>:
+    + 需要用一个符号来代替‘{a}’</li>
+<li><code>Unexpected space after ‘{a}’</code>:
+    + 在‘{a}’之后不能出现空格</li>
+<li><code>Unexpected space before ‘{a}’</code>:
+    + 在‘{a}’之前不能出现空格</li>
+<li><code>Bad line breaking before ‘{a}’</code>:
+    + 在‘{a}’之前错误的换行</li>
+<li><code>Expected ‘{a}’ to have an indentation at {b} instead at {c}</code>:
+    + ‘{a}’需要在{c}而不是{b}处缩进</li>
+<li><code>Line breaking error ‘{a}’</code>:
+    + 换行错误 ‘{a}’</li>
+<li><code>Unexpected use of ‘{a}’</code>:
+    + 此处不能用‘{a}’</li>
+<li><code>Bad operand</code>:
+    + 错误的操作数</li>
+<li><code>Use the isNaN function to compare with NaN</code>:
+    + 使用isNaN来与NaN比较</li>
+<li><code>Confusing use of ‘{a}’</code>:
+    + 容易混淆的‘{a}’的使用</li>
+<li><code>Read only</code>:
+    + 只读的属性</li>
+<li><code>‘{a}’ is a function</code>:
+    + ‘{a}’是一个函数</li>
+<li><code>Bad assignment</code>:
+    + 错误的赋值</li>
+<li><code>Do not assign to the exception parameter</code>:
+    + 不要给额外的参数赋值</li>
+<li><code>Expected an identifier in an assignment and instead saw a function invocation</code>:
+    + 在赋值的语句中需要有一个标识符，而不是一个方法的调用</li>
+<li><code>Expected an identifier and instead saw ‘{a}’ (a reserved word)</code>:
+    + 需要有一个标识符，而不是‘{a}’(保留字符)</li>
+<li><code>Missing name in function declaration</code>:
+    + 在方法声明中缺少名称</li>
+<li><code>Expected an identifier and instead saw ‘{a}’</code>:
+    + 需要有一个标识符，而不是‘{a}’</li>
+<li><code>Inner functions should be listed at the top of the outer function</code>:
+    + 内部函数的声明应该放在此函数的顶部。</li>
+<li><code>Unreachable ‘{a}’ after ‘{b}’</code>:
+    + 在‘{b}’之后无法获取‘{a}’</li>
+<li><code>Unnecessary semicolon</code>:
+    + 不必要的分号</li>
+<li><code>Label ‘{a}’ on {b} statement</code>:
+    + 将‘{a}’放在{b}的声明中</li>
+<li><code>Label ‘{a}’ looks like a javascript url</code>:
+    + ‘{a}’看上去像一个js的链接</li>
+<li><code>Expected an assignment or function call and instead saw an expression</code>:
+    + 需要一个赋值或者一个函数调用，而不是一个表达式</li>
+<li><code>Do not use ‘new’ for side effects</code>:
+    + 不要用’new’语句</li>
+<li><code>Unnecessary "use strict"</code>:
+    + 不必要的 &ldquo;use strict&rdquo;</li>
+<li><code>Missing "use strict" statement</code>:
+    + 缺少 &ldquo;use strict&rdquo; 的声明</li>
+<li><code>Empty block</code>:
+    + 空的模块</li>
+<li><code>Unexpected /*member ‘{a}’</code>:
+    + 不应出现 /*元素 ‘{a}’</li>
+<li><code>‘{a}’ is a statement label</code>:
+    + ‘{a}’是一个声明</li>
+<li><code>‘{a}’ used out of scope</code>:
+    + ‘{a}’使用超出范围</li>
+<li><code>‘{a}’ is not allowed</code>:
+    + 不允许使用‘{a}’</li>
+<li><code>‘{a}’ is not defined</code>:
+    + ‘{a}’没有被定义</li>
+<li><code>Use ‘{a}’ to compare with ‘{b}’</code>:
+    + 使用‘{a}’与‘{b}’相比</li>
+<li><code>Variables should not be deleted</code>:
+    + 变量需要被删除</li>
+<li><code>Use the object literal notation {}</code>:
+    + 使用对象的文字符号 {}</li>
+<li><code>Do not use {a} as a constructor</code>:
+    + 不要使用{a}作为一个构造对象</li>
+<li><code>The Function constructor is eval</code>:
+    + The Function constructor is eval</li>
+<li><code>A constructor name should start with an uppercase letter</code>:
+    + 一个构造对象的名称必须用大写字母开头</li>
+<li><code>Bad constructor</code>:
+    + 错误的构造对象</li>
+<li><code>Weird construction. Delete ‘new’</code>:
+    + 构造对象有误，请删除’new’</li>
+<li><code>Missing ‘()’ invoking a constructor</code>:
+    + 缺少括号()</li>
+<li><code>Avoid arguments.{a}</code>:
+    + 避免参数.{a}</li>
+<li><code>document.write can be a form of eval</code>:
+    + document.write 是 eval 的一种形式</li>
+<li><code>eval is evil</code>:
+    + 尽量不要使用eval</li>
+<li><code>Math is not a function</code>:
+    + Math不是一个函数</li>
+<li><code>Missing ‘new’ prefix when invoking a constructor</code>:
+    + 此处缺少了’new’</li>
+<li><code>Missing radix parameter</code>:
+    + 缺少参数</li>
+<li><code>Implied eval is evil. Pass a function instead of a string</code>:
+    + 传递一个函数，而不是一个字符串</li>
+<li><code>Bad invocation</code>:
+    + 错误的调用</li>
+<li><code>['{a}'] is better written in dot notation</code>:
+    + [&lsquo;{a}&rsquo;]最好用点.的方式</li>
+<li><code>Extra comma</code>:
+    + 多余的逗号</li>
+<li><code>Don’t make functions within a loop</code>:
+    + 不要用循环的方式创建函数</li>
+<li><code>Unexpected parameter ‘{a}’ in get {b} function</code>:
+    + 在{b}方法中不该用到参数‘{a}’</li>
+<li><code>Duplicate member ‘{a}’</code>:
+    + 重复的‘{a}’</li>
+<li><code>Expected to see a statement and instead saw a block</code>:
+    + 此处应该是语句声明</li>
+<li><code>Too many var statements</code>:
+    + 过多var的声明</li>
+<li><code>Redefinition of ‘{a}’</code>:
+    + ‘{a}’被重复定义</li>
+<li><code>It is not necessary to initialize ‘{a}’ to ‘undefined’</code>:
+    + 无需将‘{a}’初始化为 ’undefined’</li>
+<li><code>Expected a conditional expression and instead saw an assignment</code>:
+    + 此处需要一个表达式，而不是赋值语句</li>
+<li><code>Expected a ‘break’ statement before ‘case’</code>:
+    + 在 ’case’ 之前需要有 ’break’</li>
+<li><code>Expected a ‘break’ statement before ‘default’</code>:
+    + 在 ’default’ 之前需要有 ’break’</li>
+<li><code>This ‘switch’ should be an ‘if’</code>:
+    + 此处 ’switch’ 应该是 ’if’</li>
+<li><code>All ‘debugger’ statements should be removed</code>:
+    + 请删除 ’debugger’ 的语句</li>
+<li><code>‘{a}’ is not a statement label</code>:
+    + ‘{a}’不是一个声明标签</li>
+<li><code>Expected an assignment or function call and instead saw an expression</code>:
+    + 需要一个语句或者一个函数调用，而不是一个表达式</li>
+<li><code>Function declarations should not be placed in blocks. Use a function expression or move the statement to the top of the outer function</code>:
+    + 函数的声明不能放在类似if的块中，需要放在外部函数的顶部</li>
+</ul>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-24T13:40:00+08:00", "headline": "JSHint \u901f\u67e5", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/jshint-su-cha.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "Missing semicolon: + \u7f3a\u5c11\u5206\u53f7 Use the function form of \"use strict\": + \u4f7f\u7528\u6807\u51c6\u5316\u5b9a\u4e49 function Unexpected space after \u2018-\u2019: + \u5728\u2019-\u2018\u540e\u9762\u4e0d\u5e94\u51fa\u73b0\u7a7a\u683c Expected a JSON value: + \u8bf7\u4f20\u5165\u4e00\u4e2ajson\u7684\u503c Mixed spaces and tabs: + \u7a7a\u683c\u548cTAB\u91cd\u590d Unsafe character: + \u4e0d\u5b89\u5168\u7684\u5b57\u7b26 \u2026"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

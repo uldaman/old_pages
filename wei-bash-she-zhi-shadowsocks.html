@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>为 bash 设置 Shadowsocks</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 为 bash 设置 Shadowsocks">
+  <meta property="og:description" content="socks5 设置方式: export ALL_PROXY=socks5://127.0.0.1:1086 Shadowsocks 是常用的代理工具, 它使用 socks5 协议, 而终端很多工具目前只支持 http 和 https 等协议, 对 socks5 协议支持不够好, 所以为终端设置 shadowsocks 的思路就是将 socks 协议转换成 http 协议 …">
+<meta property="og:url" content="http://www.smallcpp.cn/wei-bash-she-zhi-shadowsocks.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-11-22T16:56:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/wei-bash-she-zhi-shadowsocks.html" rel="bookmark"
+        title="Permalink to 为 bash 设置 Shadowsocks">为 bash 设置 Shadowsocks</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2017-11-22T16:56:00+08:00">
+    Published <span class="is-info">Wed 22 November 2017</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#polipo">安装 polipo</a></li>
+<li><a href="#parentproxy">设置 parentProxy</a></li>
+<li><a href="#polipo_1">启动 polipo</a></li>
+<li><a href="#_1">验证</a></li>
+<li><a href="#_2">当前会话全局设置</a></li>
+<li><a href="#git">设置 Git 代理</a></li>
+</ul>
+</div>
+      <hr />
+      
+<blockquote>
+<p>socks5 设置方式:<br/>
+<code>export ALL_PROXY=socks5://127.0.0.1:1086</code></p>
+</blockquote>
+<p>Shadowsocks 是常用的代理工具, 它使用 socks5 协议, 而终端很多工具目前只支持 http 和 https 等协议, 对 socks5 协议支持不够好, 所以为终端设置 shadowsocks 的思路就是将 socks 协议转换成 http 协议, 然后为终端设置即可. 可以采用比较知名的 polipo 来实现, polipo 是一个轻量级的缓存 web 代理程序.</p>
+<h1 id="polipo">安装 polipo</h1>
+<p><code>brew install polipo</code></p>
+<h1 id="parentproxy">设置 parentProxy</h1>
+<p><code>vim /usr/local/opt/polipo/*.plist</code></p>
+<p>打开 <code>/usr/local/opt/polipo/homebrew.mxcl.polipo.plist</code></p>
+<p>在 array 标签组里添加 <code>&lt;string&gt;socksParentProxy=localhost:1086&lt;/string&gt;</code>, 端口是 Shadowsocks 中设置的 socks5 端口.</p>
+<h1 id="polipo_1">启动 polipo</h1>
+<p><code>brew services start(/restart) polipo</code></p>
+<h1 id="_1">验证</h1>
+<p>先用正常模式看下当前网络: <code>curl ip.gs</code>.</p>
+<p>再用代理模式看下: <code>http_proxy=http://localhost:8123 curl ip.gs</code>.</p>
+<p>为某个命令设置代理, 前面加上 <code>http_proxy=http://localhost:8123</code> 后接命令即可 (该方式对 Git 无效).</p>
+<blockquote>
+<p>8123 是 polipo 的默认端口, 如有需要, 可以修改成其他有效端口.</p>
+</blockquote>
+<h1 id="_2">当前会话全局设置</h1>
+<p>如果嫌每次为每一个命令设置代理比较麻烦, 可以为当前会话设置全局的代理: <code>export http_proxy=http://localhost:8123</code>.  如果想撤销当前会话的 http_proxy 代理, 使用 <code>unset http_proxy</code>.</p>
+<p>如果想长久设置, 将 export 命令加入 <code>.bashrc</code> 或者 <code>.bash_profile</code> 文件.</p>
+<h1 id="git">设置 Git 代理</h1>
+<p>使用上面的方式对 Git 无效, Git 走代理需要使用 config.</p>
+<p><code>git clone xxxx --config http.proxy=localhost:8123</code></p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-11-22T16:56:00+08:00", "headline": "\u4e3a bash \u8bbe\u7f6e Shadowsocks", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/wei-bash-she-zhi-shadowsocks.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "socks5 \u8bbe\u7f6e\u65b9\u5f0f: export ALL_PROXY=socks5://127.0.0.1:1086 Shadowsocks \u662f\u5e38\u7528\u7684\u4ee3\u7406\u5de5\u5177, \u5b83\u4f7f\u7528 socks5 \u534f\u8bae, \u800c\u7ec8\u7aef\u5f88\u591a\u5de5\u5177\u76ee\u524d\u53ea\u652f\u6301 http \u548c https \u7b49\u534f\u8bae, \u5bf9 socks5 \u534f\u8bae\u652f\u6301\u4e0d\u591f\u597d, \u6240\u4ee5\u4e3a\u7ec8\u7aef\u8bbe\u7f6e shadowsocks \u7684\u601d\u8def\u5c31\u662f\u5c06 socks \u534f\u8bae\u8f6c\u6362\u6210 http \u534f\u8bae \u2026"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

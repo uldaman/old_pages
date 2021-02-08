@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>SecureCRT 的安装和使用</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - SecureCRT 的安装和使用">
+  <meta property="og:description" content="SecureCRT 是一款支持 SSH（SSH1 和 SSH2）的终端仿真程序, 同时支持 Telnet 和 rlogin 协议; 它可用于连接运行包括 Windows、Unis 和 linux 在内的远程系统. 首先下载 SecureCRT 并安装(网上有中文版本下载, 注意找大网站下载, 别下载了被装后门的版本). 去 Ubuntu 中开启 SSH 功能. (SSH …">
+<meta property="og:url" content="http://www.smallcpp.cn/securecrt-de-an-zhuang-he-shi-yong.html">
+    <meta property="og:image" content="http://i62.tinypic.com/fvfr40.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-11-11T21:09:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/securecrt-de-an-zhuang-he-shi-yong.html" rel="bookmark"
+        title="Permalink to SecureCRT 的安装和使用">SecureCRT 的安装和使用</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-11-11T21:09:00+08:00">
+    Published <span class="is-info">Fri 11 November 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <p><strong>SecureCRT</strong> 是一款支持 SSH（SSH1 和 SSH2）的终端仿真程序, 同时支持 Telnet 和 rlogin 协议; 它可用于连接运行包括 Windows、Unis 和 linux 在内的远程系统.</p>
+<p>首先下载 SecureCRT 并安装(网上有中文版本下载, 注意找大网站下载, 别下载了被装后门的版本).</p>
+<p>去 Ubuntu 中开启 SSH 功能. (SSH 为 Secure Shell 的缩写, 即安全外壳协议, 它是由 IETF 的网络工作小组（Network Working Group）所制定; SSH 是建立在应用层和传输层基础上的安全协议; 它专为远程登录会话和其他网络服务提供安全性的协议.)
+在 Ubuntu 中开启 SSH 功能只需要一句命令: sudo apt-get install openssh-server openssh-client</p>
+<p>查看 Ubuntu 的 ip, 在终端输入命令: ifconfig(注意不是 ipconfig).</p>
+<p><img alt="" src="http://i62.tinypic.com/fvfr40.jpg"></p>
+<p>记录下 ip 地址.</p>
+<p>返回 SecureCRT 中, 选择 快速连接.</p>
+<p><img alt="" src="http://i61.tinypic.com/33lfmt1.jpg"></p>
+<p>输入 Ubuntu 的 ip 地址和用户名.</p>
+<p><img alt="" src="http://i60.tinypic.com/15zo868.jpg"></p>
+<p>点击连接, 会弹出对话框让输入密码, 输入确定即可.</p>
+<p><img alt="" src="http://i57.tinypic.com/6dyec6.jpg"></p>
+<p><img alt="" src="http://i60.tinypic.com/1zoj2hc.jpg"></p>
+<p>此时输入中文可能会显示乱码, 这是因为 Ubuntu 的 ssh 默认编码是 utf-8, 而 SecureCRT 却不是, 所以只要把 SecureCRT 的编码改成 utf-8 就可以了.</p>
+<p><img alt="" src="http://i60.tinypic.com/344qskp.jpg"></p>
+<p><img alt="" src="http://i58.tinypic.com/30u3j46.jpg"></p>
+<p>SecureCRT连接后如果稍长时间不用就会掉线, 往往会造成工作状态的丢失, 如下设置可以始终保持 SecureCRT 的连接:</p>
+<p><img alt="" src="http://i62.tinypic.com/2uhr0h3.jpg"></p>
+<p><img alt="" src="http://i61.tinypic.com/wl7m88.jpg"></p>
+<p>另外还有几个有用的配置:</p>
+<p><img alt="" src="http://i67.tinypic.com/sw6yrt.jpg"></p>
+<p><img alt="" src="http://i63.tinypic.com/34rjfvd.jpg"></p>
+<p>现在远程操作环境就搭建好了, 可以在 SecureCRT 中像 Ubuntu 终端那样使用.</p>
+<p><img alt="" src="http://i58.tinypic.com/ics9dd.jpg"></p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-11-11T21:09:00+08:00", "headline": "SecureCRT \u7684\u5b89\u88c5\u548c\u4f7f\u7528", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/securecrt-de-an-zhuang-he-shi-yong.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "SecureCRT \u662f\u4e00\u6b3e\u652f\u6301 SSH\uff08SSH1 \u548c SSH2\uff09\u7684\u7ec8\u7aef\u4eff\u771f\u7a0b\u5e8f, \u540c\u65f6\u652f\u6301 Telnet \u548c rlogin \u534f\u8bae; \u5b83\u53ef\u7528\u4e8e\u8fde\u63a5\u8fd0\u884c\u5305\u62ec Windows\u3001Unis \u548c linux \u5728\u5185\u7684\u8fdc\u7a0b\u7cfb\u7edf. \u9996\u5148\u4e0b\u8f7d SecureCRT \u5e76\u5b89\u88c5(\u7f51\u4e0a\u6709\u4e2d\u6587\u7248\u672c\u4e0b\u8f7d, \u6ce8\u610f\u627e\u5927\u7f51\u7ad9\u4e0b\u8f7d, \u522b\u4e0b\u8f7d\u4e86\u88ab\u88c5\u540e\u95e8\u7684\u7248\u672c). \u53bb Ubuntu \u4e2d\u5f00\u542f SSH \u529f\u80fd. (SSH \u2026", "image": {"@type": "ImageObject", "url": "http://i62.tinypic.com/fvfr40.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

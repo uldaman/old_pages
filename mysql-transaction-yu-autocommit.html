@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>mysql transaction 与 autocommit</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - mysql transaction 与 autocommit">
+  <meta property="og:description" content="在默认的情况下, MySQL 从自动提交 (autocommit) 模式运行, 这种模式会在每条语句执行完毕后把它作出的修改立刻提交给数据库并使之永久化. 事实上, 这相当于把每一条语句都隐含地当做一个事务来执行. 如果你想明确地执行事务, 需要禁用自动提交模式并告诉 MySQL 你想让它在何时提交或回滚有关的修改. 禁用自动提交模式有两种方式: 一种是直接设置 autocommit 为...">
+<meta property="og:url" content="http://www.smallcpp.cn/mysql-transaction-yu-autocommit.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-08-01T15:42:00+08:00">
+  <meta property="article:section" content="数据库">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/mysql-transaction-yu-autocommit.html" rel="bookmark"
+        title="Permalink to mysql transaction 与 autocommit">mysql transaction 与 autocommit</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-08-01T15:42:00+08:00">
+    Published <span class="is-info">Mon 01 August 2016</span>
+    in <a href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul></ul>
+</div>
+<p>在默认的情况下, MySQL 从自动提交 (autocommit) 模式运行, 这种模式会在每条语句执行完毕后把它作出的修改立刻提交给数据库并使之永久化. 事实上, 这相当于把每一条语句都<strong>隐含</strong>地当做一个<strong>事务</strong>来执行.</p>
+<p>如果你想明确地执行事务, 需要<strong>禁用</strong>自动提交模式并告诉 MySQL 你想让它在何时提交或回滚有关的修改.</p>
+<p><strong>禁用</strong>自动提交模式有两种方式:</p>
+<p><strong>一种</strong>是直接设置 <code>autocommit</code> 为 <code>false</code>, 此时, 在提交或回滚前的所有 sql 语句都会当成同一个事务来处理;</p>
+<p><strong>另一种</strong>常用的办法是发出一条 <code>START TRANSACTION</code> (或 BEGIN) 语句临时<strong>挂起</strong>自动提交模式, 在事务被提交或回滚之后, 该模式将恢复到开始本次事务的 <code>START TRANSACTION</code> 语句被执行之前的状态. (如果自动提交模式原来是激活的, 结束事务将回到自动提交模式; 如果它原来是禁用的, 结束当前事务将<strong>自动</strong>开始下一个事务.)</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u6570\u636e\u5e93", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-08-01T15:42:00+08:00", "headline": "mysql transaction \u4e0e autocommit", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/mysql-transaction-yu-autocommit.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u5728\u9ed8\u8ba4\u7684\u60c5\u51b5\u4e0b, MySQL \u4ece\u81ea\u52a8\u63d0\u4ea4 (autocommit) \u6a21\u5f0f\u8fd0\u884c, \u8fd9\u79cd\u6a21\u5f0f\u4f1a\u5728\u6bcf\u6761\u8bed\u53e5\u6267\u884c\u5b8c\u6bd5\u540e\u628a\u5b83\u4f5c\u51fa\u7684\u4fee\u6539\u7acb\u523b\u63d0\u4ea4\u7ed9\u6570\u636e\u5e93\u5e76\u4f7f\u4e4b\u6c38\u4e45\u5316. \u4e8b\u5b9e\u4e0a, \u8fd9\u76f8\u5f53\u4e8e\u628a\u6bcf\u4e00\u6761\u8bed\u53e5\u90fd\u9690\u542b\u5730\u5f53\u505a\u4e00\u4e2a\u4e8b\u52a1\u6765\u6267\u884c. \u5982\u679c\u4f60\u60f3\u660e\u786e\u5730\u6267\u884c\u4e8b\u52a1, \u9700\u8981\u7981\u7528\u81ea\u52a8\u63d0\u4ea4\u6a21\u5f0f\u5e76\u544a\u8bc9 MySQL \u4f60\u60f3\u8ba9\u5b83\u5728\u4f55\u65f6\u63d0\u4ea4\u6216\u56de\u6eda\u6709\u5173\u7684\u4fee\u6539. \u7981\u7528\u81ea\u52a8\u63d0\u4ea4\u6a21\u5f0f\u6709\u4e24\u79cd\u65b9\u5f0f: \u4e00\u79cd\u662f\u76f4\u63a5\u8bbe\u7f6e autocommit \u4e3a false, \u6b64\u65f6, \u5728\u63d0\u4ea4\u6216\u56de\u6eda\u524d\u7684\u6240\u6709 sql \u8bed\u53e5\u90fd\u4f1a\u5f53\u6210\u540c\u4e00\u4e2a\u4e8b\u52a1\u6765\u5904\u7406; \u53e6\u4e00\u79cd \u2026"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

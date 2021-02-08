@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>Small Cpp - 数据库</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<div class="is-hidden-print">
+  <div class="columns is-multiline">
+    <div class="column is-half-tablet is-one-third-desktop">
+      <div class="card is-fullwidth is-fullheight">
+        <div class="card-content">
+          <a href="http://www.smallcpp.cn/shi-wu-ge-chi-ji-bie.html">
+            <h3 class="title is-5">事务隔离级别</h3>
+            <div class="heading subtitle">Mon 01 August 2016</div>
+            <div>
+              <p>事务并发引起的问题 脏读 (Drity Read): 某个事务已更新一份数据, 另一个事务在此时读取了同一份数据, 由于某些原因, 前一个 RollBack 了操作, 则后一个事务所读取的数据就会是不正确的. 不可重复读...<br /></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="column is-half-tablet is-one-third-desktop">
+      <div class="card is-fullwidth is-fullheight">
+        <div class="card-content">
+          <a href="http://www.smallcpp.cn/mysql-transaction-yu-autocommit.html">
+            <h3 class="title is-5">mysql transaction 与 autocommit</h3>
+            <div class="heading subtitle">Mon 01 August 2016</div>
+            <div>
+              <p>在默认的情况下, MySQL 从自动提交 (autocommit) 模式运行, 这种模式会在每条语句执行完毕后把它作出的修改立刻提交给数据库并使之永久化. 事实上, 这相当于把每一条语句都隐含地当做一个事务来执行....<br /></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="column is-half-tablet is-one-third-desktop">
+      <div class="card is-fullwidth is-fullheight">
+        <div class="card-content">
+          <a href="http://www.smallcpp.cn/shi-wu-yu-suo.html">
+            <h3 class="title is-5">事务与锁</h3>
+            <div class="heading subtitle">Thu 28 July 2016</div>
+            <div>
+              <p>事务与锁是不同的, 事务具有 ACID (原子性、一致性、隔离性和持久性), 而锁是用于解决其中隔离性的一种机制. 事务的隔离级别通过锁的机制来实现. 隔离级别, 一般有四种: 读未提交 Read uncommitted...<br /></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="column is-half-tablet is-one-third-desktop">
+      <div class="card is-fullwidth is-fullheight">
+        <div class="card-content">
+          <a href="http://www.smallcpp.cn/bei-guan-suo-yu-le-guan-suo.html">
+            <h3 class="title is-5">悲观锁与乐观锁</h3>
+            <div class="heading subtitle">Thu 28 July 2016</div>
+            <div>
+              <p>悲观锁 (Pessimistic Lock), 顾名思义, 就是很悲观, 每次去拿数据的时候都认为别人会修改, 所以每次在拿数据的时候都会上锁, 这样别人想拿这个数据就会 block 直到它拿到锁....<br /></p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<nav class="pagination is-centered">
+</nav>
+<br></div>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

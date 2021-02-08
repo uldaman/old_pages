@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>Git Rebase</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - Git Rebase">
+  <meta property="og:description" content="rebase 比较复杂, 应该是 git 中的高级应用了, 所以单独拿出来做篇 wiki, 转自: ihower blog. 使用 git rebase 避免無謂的 merge git pull 預設的行為是將遠端的 repo. 與本地的 repo. 合併, 這也是 DVCS 的初衷, 將兩個 branch 合併. 但是, 很多時候會發生以下這種情形 …">
+<meta property="og:url" content="http://www.smallcpp.cn/git-rebase.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/gitRebase/git-merge.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2017-08-07T13:00:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/git-rebase.html" rel="bookmark"
+        title="Permalink to Git Rebase">Git Rebase</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2017-08-07T13:00:00+08:00">
+    Published <span class="is-info">Mon 07 August 2017</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#git-rebase-merge">使用 git rebase 避免無謂的 merge</a></li>
+<li><a href="#commit">重建 commit</a></li>
+</ul>
+</div>
+      <hr />
+      
+<p>rebase 比较复杂, 应该是 git 中的高级应用了, 所以单独拿出来做篇 wiki, 转自: <a href="https://ihower.tw/blog">ihower blog</a>.</p>
+<h1 id="git-rebase-merge">使用 git rebase 避免無謂的 merge</h1>
+<p><code>git pull</code> 預設的行為是將遠端的 repo. 與本地的 repo. 合併, 這也是 DVCS 的初衷, 將兩個 branch 合併. 但是, 很多時候會發生以下這種情形:</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/gitRebase/git-merge.jpg"/></p>
+<p>這是因為, 我們團隊的開發模式是本地的 branch 和遠端的 branch 會同步地非常頻繁(通常就是同名稱的 branch, 例如 master), 這兩個 branch 幾乎是完全同步. 這時候就會發現這些 <code>merge</code> 動作其實沒有必要, 會造成線圖無謂的複雜. 這時候, 會推薦使用以下這個指令:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git pull --`rebase`
+</pre></div>
+<p>加上 <code>rebase</code> 的意思是:</p>
+<ol>
+<li>把本地 repo. 從上次 pull 之後的變更暫存起來</li>
+<li>回復到上次 pull 時的情況</li>
+<li>套用遠端的變更</li>
+<li>最後再套用剛暫存下來的本地變更</li>
+</ol>
+<p>畫圖說明一下好了, 假設合併前是這樣:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>      D---E master
+     /
+A---B---C---F origin/master
+</pre></div>
+<p>使用 <code>merge</code> 合併後:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>      D--------E
+     /          \
+A---B---C---F----G   master, origin/master
+</pre></div>
+<p>如果是 <code>rebase</code> 的方式, 就不會有 <code>G</code> 合併點:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>A---B---C---F---D'---E'   master, origin/master
+</pre></div>
+<p>注意到, 其中 <code>D’</code>, <code>E’</code> 的 commit SHA 序號跟本來 <code>D</code>, <code>E</code> 是不同的, 因為算是砍掉重新 <code>commit</code> 了.</p>
+<p>你會問說, 有 <strong>conflict</strong> 怎麼辦?</p>
+<p><code>rebase</code> 跟 <code>merge</code> 類似, 出現 conflict 一會暫停 <code>rebase</code> 動作, 需要你手動修復後, 然後才可以繼續動作. 這也是 <code>rebase</code> 比 <code>merge</code> 複雜一點的地方:</p>
+<ul>
+<li><code>merge</code> 如果發生 conflict, 你只需要解決衝突一次, 然後 commit 出去就完成了.</li>
+<li><code>rebase</code> 的 conflict 可能會發生在上述步驟 4 的每一次重新套用上, 所以可能需要解決衝突好幾次 (<code>rebase</code> 時所謂的解決衝突, 其實是直接修改你之前的變更內容, 所以上圖中變成 <code>D’</code> 跟 <code>E’</code>).</li>
+</ul>
+<p>所以到底何時該用 <code>merge</code>? 何時可以 <code>rebase</code>? 你可能心理也有答案了, 如果你修改比較多, 預期會有較多的 conflict, 建議用 <code>merge</code> (不過, 如果是多次大範圍的主題式修改, 那是不是應該一開始就多開一個 branch 來做呢?). 如果修改範圍較小, 不太預期有 conflict, 則建議可以加上 <code>rebase</code> 參數.</p>
+<p>如果想要把 <code>rebase</code> 當做 <code>git pull</code> 的預設值, 可以:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>In git &gt;= 1.7.9:
+git config --global/local pull.rebase true
+
+In git &lt; 1.7.9:
+git config --global/local branch.autosetuprebase always
+</pre></div>
+<h1 id="commit">重建 commit</h1>
+<p><code>rebase</code> 的真正潛力是, 我們可以從指定的版號之後, 重新隨你意 commit 一次來重建 history, 超威的. 首先輸入 <code>git rebase -i</code> 版號 就會可以跳出 editor 可以編輯, 我們可以:</p>
+<ol>
+<li>變更 commit 順序</li>
+<li>將多個 commit 合併 squash</li>
+<li>將一個 commit 打散 (edit 會停著讓你可以 <code>git reset HEAD^</code> 打散重新 commit, 完成後 <code>git rebase –continue</code>)</li>
+</ol>
+<p>另一種 <code>rebase</code> 用法是不需要打 <code>-i</code>, 直接指定另一個 branch 或 tag, 這樣就會重新 commit 另一個 branch 的東西, 然後才 commit 自己的 (也就是上面那段的用法).</p>
+<p><code>git rebase</code> 若有 conflict 就會停下來, 跟 <code>merge</code> 一樣處理完 add, 然後 <code>git rebase –continue</code> 就會繼續 commit (也可以 <code>–skip</code> 或 <code>–abort</code> 放棄啦)</p>
+<p><code>rebase</code> 有個 onto 參數用法, 使用的情境是: 假設你有三個有 dependency 的 branch 分別叫做 master/contact/search, 後來發現 search branch 只有 depend on matser, 於是你可以輸入 <code>git rebase –onto master contact search</code> 這樣就會讓 search branch 從 master 的地方開始重新 commit.</p>
+<p>再次提醒, <code>rebase</code> 千萬只能適合東西還沒 push 的情境, 或是你自己的 local 專用私人 branch. <code>rebase</code> 一個已經 push 出去的 repository, 然後你又把修改的 history push 出去, 是會造成超級大災難的.</p>
+<p>在學習 <code>rebase</code> 的過程中, 很容易拿來跟 <code>merge</code> 比較一下. 我發現一個有趣的不同點: 如果有檔案在要被 merged 的 branch 中被刪除, 如果用 <code>rebase</code> 檔案最後會不存在, 但是用 <code>merge</code> 的話檔案最後還在.</p>
+<p>另外, 在 <code>rebase</code> branch 之後, 如果再做 <code>merge</code>, 就會發現因為 master 直接就是被 <code>merge</code> 的祖先, 所以線圖直接變成一條線, 而有這種 parent 關係的 <code>merge</code> 就叫做 fast-forward. 換句話說, 因為沒有發生任何 <code>merge commit</code>, 也不會發生 conflict, Git 內部單純只是變更 reference 參照, 所以謂之 fast-forward.</p>
+<p>好心提醒, 因為開 local branch 是如此便宜無害, 所以要做 <code>rebase</code> 時建議您可以先開一個 local branch 來實驗 <code>rebase</code>. 老實說, <code>rebase</code> 還挺危險的.</p>
+<p>最後, <code>rebase</code> 我認為算是 Git 初學者最難理解的功能吧, 但是如果不知道什麼是 <code>rebase</code>, 就不能說是懂 Git 啊.</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-08-07T13:00:00+08:00", "headline": "Git Rebase", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/git-rebase.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "rebase \u6bd4\u8f83\u590d\u6742, \u5e94\u8be5\u662f git \u4e2d\u7684\u9ad8\u7ea7\u5e94\u7528\u4e86, \u6240\u4ee5\u5355\u72ec\u62ff\u51fa\u6765\u505a\u7bc7 wiki, \u8f6c\u81ea: ihower blog. \u4f7f\u7528 git rebase \u907f\u514d\u7121\u8b02\u7684 merge git pull \u9810\u8a2d\u7684\u884c\u70ba\u662f\u5c07\u9060\u7aef\u7684 repo. \u8207\u672c\u5730\u7684 repo. \u5408\u4f75, \u9019\u4e5f\u662f DVCS \u7684\u521d\u8877, \u5c07\u5169\u500b branch \u5408\u4f75. \u4f46\u662f, \u5f88\u591a\u6642\u5019\u6703\u767c\u751f\u4ee5\u4e0b\u9019\u7a2e\u60c5\u5f62 \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/gitRebase/git-merge.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

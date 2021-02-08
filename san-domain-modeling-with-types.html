@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>三. Domain Modeling with Types</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 三. Domain Modeling with Types">
+  <meta property="og:description" content="Reviewing the Domain Model TODO: 补充需求. 现在让我们看下已有领域模型的伪代码 (在与领域专家讨论需求时记录下来的): context: Order-Taking // ---------------------- // Simple types // ---------------------- // Product codes data...">
+<meta property="og:url" content="http://www.smallcpp.cn/san-domain-modeling-with-types.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2019-12-03T15:00:00+08:00">
+    <meta property="article:tag" content="函数式">
+    <meta property="article:tag" content="领域驱动">
+    <meta property="article:tag" content="DDD">
+  <meta property="article:section" content="函数式">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/san-domain-modeling-with-types.html" rel="bookmark"
+        title="Permalink to 三. Domain Modeling with Types">三. Domain Modeling with Types</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2019-12-03T15:00:00+08:00">
+    Published <span class="is-info">Tue 03 December 2019</span>
+    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+      <span class="tag is-small is-rounded">
+        <a href="http://www.smallcpp.cn/tag/han-shu-shi.html">函数式</a>
+      </span>
+      <span class="tag is-small is-rounded">
+        <a href="http://www.smallcpp.cn/tag/ling-yu-qu-dong.html">领域驱动</a>
+      </span>
+      <span class="tag is-small is-rounded">
+        <a href="http://www.smallcpp.cn/tag/ddd.html">DDD</a>
+      </span>
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#reviewing-the-domain-model">Reviewing the Domain Model</a></li>
+<li><a href="#modeling-datas-with-types">Modeling Datas with Types</a><ul>
+<li><a href="#seeing-patterns-in-a-domain-mode">Seeing Patterns in a Domain Mode</a></li>
+<li><a href="#modeling-simple-values">Modeling Simple Values</a></li>
+<li><a href="#modeling-complex-data">Modeling Complex Data</a></li>
+<li><a href="#modeling-unknown-types">Modeling Unknown Types</a></li>
+<li><a href="#modeling-with-choice-types">Modeling with Choice Types</a></li>
+</ul>
+</li>
+<li><a href="#modeling-workflows-with-functions">Modeling Workflows with Functions</a><ul>
+<li><a href="#working-with-complex-inputs-and-outputs">Working with Complex Inputs and Outputs</a></li>
+<li><a href="#documenting-effects-in-the-function-signature">Documenting Effects in the Function Signature</a></li>
+</ul>
+</li>
+<li><a href="#a-question-of-identity-value-objects">A Question of Identity: Value Objects</a><ul>
+<li><a href="#implementing-equality-for-value-objects">Implementing Equality for Value Objects</a></li>
+</ul>
+</li>
+<li><a href="#a-question-of-identity-entities">A Question of Identity: Entities</a><ul>
+<li><a href="#identifiers-for-entities">Identifiers for Entities</a></li>
+<li><a href="#adding-identifiers-to-data-definitions">Adding Identifiers to Data Definitions</a></li>
+<li><a href="#implementing-equality-for-entities">Implementing Equality for Entities</a></li>
+</ul>
+</li>
+<li><a href="#immutability-and-identity">Immutability and Identity</a></li>
+<li><a href="#aggregates">Aggregates</a><ul>
+<li><a href="#aggregates-enforce-consistency-and-invariants">Aggregates Enforce Consistency and Invariants</a></li>
+<li><a href="#aggregate-references">Aggregate References</a></li>
+<li><a href="#important-role-of-aggregates">Important Role Of Aggregates</a></li>
+</ul>
+</li>
+<li><a href="#putting-it-all-together">Putting It All Together</a></li>
+</ul>
+</div>
+      <hr />
+      
+<h1 id="reviewing-the-domain-model">Reviewing the Domain Model</h1>
+<p>TODO: 补充需求.</p>
+<p>现在让我们看下已有领域模型的伪代码 (在与领域专家讨论需求时记录下来的):</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>context: Order-Taking
+// ----------------------
+// Simple types
+// ----------------------
+// Product codes
+data ProductCode = WidgetCode OR GizmoCode
+data WidgetCode = string starting with "W" then 4 digits
+data GizmoCode = ...
+
+// Order Quantity
+data OrderQuantity = UnitQuantity OR KilogramQuantity
+data UnitQuantity = ...
+data KilogramQuantity = ...
+
+// ----------------------
+// Order lifecycle
+// ----------------------
+// ----- unvalidated state -----
+data UnvalidatedOrder =
+    UnvalidatedCustomerInfo
+    AND UnvalidatedShippingAddress
+    AND UnvalidatedBillingAddress
+    AND list of UnvalidatedOrderLine
+
+data UnvalidatedOrderLine =
+    UnvalidatedProductCode
+    AND UnvalidatedOrderQuantity
+
+// ----- validated state -----
+data ValidatedOrder = ...
+data ValidatedOrderLine = ...
+
+// ----- priced state -----
+data PricedOrder = ...
+data PricedOrderLine = ...
+
+// ----- output events -----
+data OrderAcknowledgmentSent = ...
+data OrderPlaced = ...
+data BillableOrderPlaced = ...
+
+// ----------------------
+// Processes
+// ----------------------
+process "Place Order" =
+    input: UnvalidatedOrder
+    output (on success):
+        OrderAcknowledgmentSent
+        AND OrderPlaced (to send to shipping)
+        AND BillableOrderPlaced (to send to billing)
+    output (on error):
+        InvalidOrder
+
+// etc
+</pre></div>
+<p>我们的目标是将此转换为真实的代码.</p>
+<h1 id="modeling-datas-with-types">Modeling Datas with Types</h1>
+<h2 id="seeing-patterns-in-a-domain-mode">Seeing Patterns in a Domain Mode</h2>
+<p>可<strong>组合</strong>的类型系统是实践领域驱动设计的绝佳帮助, 因为只需将类型混合在一起, 即可快速创建复杂的模型. 并且, 在函数式领域建模中, 也有一些常用的模式:</p>
+<ul>
+<li>Simple values. 基础类型的包装. 因为不会直接使用像 int/string 之类的 “原始” 语言.</li>
+<li>Combinations of values with AND. 也许是它语言中的结构体或类.</li>
+<li>Choices with OR. 某种程序上类似枚举</li>
+<li>Processes. 具有输入和输出的流程</li>
+</ul>
+<h2 id="modeling-simple-values">Modeling Simple Values</h2>
+<p>领域专家们一般不会使用 <em>int</em> 之类的术语进行思考, 他们使用<a href="http://www.smallcpp.cn/yi-introducing-domain-driven-design.html#creating-a-ubiquitous-language">领域术语</a> –– <em>OrderId</em> 和 <em>ProductCode</em>. 此外, 使用领域术语不容易混淆一些概念, 比如 <em>OrderId</em> 和 <em>ProductCode</em> 都是 <em>int</em>, 但并不意味着它们可以互换. 所以, 为了明确这些类型是不同的, 我们将创建 “包装类型” –– 一种包装基础数据类型的类型.</p>
+<p>在 <em>F#</em> 中创建 Simple values 的最简单方法是创建 “single-case” 联合类型  –– 只有一个选项的 OR 类型, 比如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerId</span> =
+    | CustomerId <span style="color: #8B008B; font-weight: bold">of</span> int
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerId</span> = CustomerId <span style="color: #8B008B; font-weight: bold">of</span> int <span style="color: #228B22">// 缩写成一行</span>
+
+<span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">customerId</span> = CustomerId <span style="color: #B452CD">42</span>  <span style="color: #228B22">// 构造值</span>
+
+<span style="color: #8B008B; font-weight: bold">let</span> (CustomerId innerValue) = customerId  <span style="color: #228B22">// 解构, 模式匹配, innerValue is set to 42</span>
+</pre></div>
+<p>通常这种 “single-case” 的类型名与构造子名相同.</p>
+<p>现在我们可以审视一下<a href="http://www.smallcpp.cn/san-domain-modeling-with-types.html#reviewing-the-domain-model">领域模型</a>, 并转换成部分代码:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">WidgetCode</span> = WidgetCode <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnitQuantity</span> = UnitQuantity <span style="color: #8B008B; font-weight: bold">of</span> int
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">KilogramQuantity</span> = KilogramQuantity <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">decimal</span>
+</pre></div>
+<blockquote>
+<p>这里我们暂时忽视掉取值范围的约束, 后续会说明怎么建模有约束的 Simple values.</p>
+</blockquote>
+<p>另外, 遍历 Simple values 的列表要比直接遍历基础数据类型的列表多花费一些开销, 这是因为内存不连续引起的.<br/>
+当然, 这些开销通常不大需要关注, 除非我们的领域非常在意性能. 如果是这样的话, 可以使用下面这种方式代替直接建模 Simple values 的列表.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// type CustomerIds = CustomerIds of CustomerId[]</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerIds</span> = CustomerIds <span style="color: #8B008B; font-weight: bold">of</span> int<span style="color: #658b00">[]</span>
+</pre></div>
+<h2 id="modeling-complex-data">Modeling Complex Data</h2>
+<p>复杂的类型就要借助到<a href="http://www.smallcpp.cn/han-shu-shi-guan-jian-gai-nian-haskell-miao-shu.html#_4">代数数据类型</a>了.</p>
+<p>在领域模型中, 我们看到许多数据结构都是 AND 型关系, 例如, 我们最初的简单订单模型定义为:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>data Order =
+    CustomerInfo
+    AND ShippingAddress
+    AND BillingAddress
+    AND list of OrderLines
+    AND AmountToBill
+</pre></div>
+<p>这可以很方便的直接转换成 <em>F#</em> 代码:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+    CustomerInfo : CustomerInfo
+    ShippingAddress : ShippingAddress
+    BillingAddress : BillingAddress
+    OrderLines : OrderLine <span style="color: #00688B; font-weight: bold">list</span>
+    AmountToBill : ...
+}
+</pre></div>
+<p>建模的时候, 我们会发现存在一些未解答的领域问题.<br/>
+例如应该用什么类型来表示 <em>AmountToBill</em>?  <em>ShippingAddress</em> 与 <em>BillingAddress</em> 是相同的类型吗? 等等.</p>
+<p>理想情况是继续请求领域专家的帮助. 例如, 如果他们将帐单地址和发货地址作为不同内容进行讨论, 那么即使它们具有相同的结构, 也最好将它们逻辑上分开. 当然我们不需要<strong>立即</strong>去寻求帮助, 因为我们可以对<a href="http://www.smallcpp.cn/san-domain-modeling-with-types.html#modeling-unknown-types">未知类型</a>进行建模.</p>
+<h2 id="modeling-unknown-types">Modeling Unknown Types</h2>
+<p>在设计的早期阶段, 通常不会对某些建模问题给出明确答案. 例如我们知道待建模的类型的名字, 但并不清楚它的内部结构.</p>
+<p>这不是问题 –– 我们可以将它们建模为显式的未定义的类型, 该类型充当占位符, 直到在设计过程后期有更好的理解.</p>
+<p>如果要在 F# 中表示未定义的类型, 可以使用异常类型 <em>exn</em> 并将其别名为 <em>Undefined</em>; 然后, 就可以在设计模型时使用这个别名, 如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Undefined</span> = <span style="color: #00688B; font-weight: bold">exn</span>
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerInfo</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ShippingAddress</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillingAddress</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderLine</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillingAmount</span> = Undefined
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+    CustomerInfo : CustomerInfo
+    ShippingAddress : ShippingAddress
+    BillingAddress : BillingAddress
+    OrderLines : OrderLine <span style="color: #00688B; font-weight: bold">list</span>
+    AmountToBill : BillingAmount
+}
+</pre></div>
+<p>此方法意味着可以继续使用类型对领域进行建模, 并且编译代码; 但当尝试编写处理这些类型的函数时, 会被强制用更好一点的 “东西” 去替换 <em>Undefined</em>.</p>
+<h2 id="modeling-with-choice-types">Modeling with Choice Types</h2>
+<p>在我们的领域中, 我们也看到许多 OR 类型, 例如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>data ProductCode =
+    WidgetCode
+    OR GizmoCode
+
+data OrderQuantity =
+    UnitQuantity
+    OR KilogramQuantity
+</pre></div>
+<p>我们可以使用 <em>Choices with OR</em> 对它们进行建模.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ProductCode</span> =
+    | Widget <span style="color: #8B008B; font-weight: bold">of</span> WidgetCode
+    | Gizmo <span style="color: #8B008B; font-weight: bold">of</span> GizmoCode
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderQuantity</span> =
+    | Unit <span style="color: #8B008B; font-weight: bold">of</span> UnitQuantity
+    | Kilogram <span style="color: #8B008B; font-weight: bold">of</span> KilogramQuantity
+</pre></div>
+<p>在这种情况下, 区别于 “single-case”, 类型名与构造子名并不需要相同, 例如 <em>Widget</em> 和 <em>WidgetCode</em>.</p>
+<h1 id="modeling-workflows-with-functions">Modeling Workflows with Functions</h1>
+<p>现在我们已经对数据结构 – “the nouns of the ubiquitous language” 进行了建模. 接下来, 我们将对工作流进行建模 – “the verbs of the ubiquitous language”.</p>
+<p>例如, 如果我们有一个验证订单表单的工作流, 我们可能会将其记录为:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> = UnvalidatedOrder-&gt; ValidatedOrder
+</pre></div>
+<p>显而易见, 验证订单流程会将未验证的订单转换为已验证的订单.</p>
+<h2 id="working-with-complex-inputs-and-outputs">Working with Complex Inputs and Outputs</h2>
+<p>每个函数只有一个输入和一个输出, 但某些工作流可能具有多个输入和输出 –– 我们如何建模?</p>
+<p>我们将从输出开始. 如果工作流具有 <em>outputA</em> 和 <em>outputB</em>, 则可以创建 AND 类型来存储它们. 我们在 <em>order-placing</em> 工作流中看到了这一点: 输出需要三个不同的事件. 因此, 让我们创建一个复合类型来将它们建模为一条记录:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderEvents</span> = {
+    AcknowledgmentSent : AcknowledgmentSent
+    OrderPlaced : OrderPlaced
+    BillableOrderPlaced : BillableOrderPlaced
+}
+</pre></div>
+<p>然后, 可以将 <em>order-placing</em> 工作流建模为函数类型:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> = UnvalidatedOrder -&gt; PlaceOrderEvents
+</pre></div>
+<p>另一方面, 如果工作流具有 <em>outputA</em> 或 <em>outputB</em>, 则可以创建一个 OR 类型来存储它们. 例如, 我们简要讨论了将客户邮件分类为报价或订单. 这个过程对产出至少有两种不同的选择:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>process "Categorize Inbound Mail" =
+    input: Envelope contents
+    output:
+        QuoteForm (put on appropriate pile)
+        OR OrderForm (put on appropriate pile)
+        OR ...
+</pre></div>
+<p>很容易对此进行建模: 只需创建一个新的 OR 类型(例如 <em>CategorizedMail</em>)来表示结果, 然后让 <em>CategorizeInboundMail</em> 过程返回该类型. 最后, 我们的模型可能如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CategorizedMail</span> =
+    | Quote <span style="color: #8B008B; font-weight: bold">of</span> QuoteForm
+    | Order <span style="color: #8B008B; font-weight: bold">of</span> OrderForm
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CategorizeInboundMail</span> = EnvelopeContents -&gt; CategorizedMail
+</pre></div>
+<p>现在, 让我们来看看建模输入. 如果工作流具有不同的输入选择, 则可以创建 OR 类型. 但是, 如果流程有多个必需的输入, 例如下面的 <em>“Calculate Prices</em>, 我们可以在两种可能的方法之间进行选择.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>"Calculate Prices" =
+    input: OrderForm, ProductCatalog
+    output: PricedOrder
+</pre></div>
+<p>第一个最简单的方法是将每个输入作为单独的参数传递, 如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CalculatePrices</span> = OrderForm -&gt; ProductCatalog -&gt; PricedOrder
+</pre></div>
+<p>或者, 我们可以创建新的 AND 类型来同时包含它们, 例如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CalculatePricesInput</span> = {
+    OrderForm : OrderForm
+    ProductCatalog : ProductCatalog
+}
+</pre></div>
+<p>现在函数如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CalculatePrices</span> = CalculatePricesInput -&gt; PricedOrder
+</pre></div>
+<p>哪一种方式更好?</p>
+<p>在上面的例子中, 如果 <em>ProductCatalog</em> 是依赖项而不是 “<strong>实际</strong>” 输入, 则我们希望使用第一种方法(单独的参数). 这使我们能够使用函数式编程中的依赖注入. 我们将在后面 &lt;&lt;依赖注入&gt;&gt; 章节中详细讨论这一点, 届时我们将实现订单处理管道.</p>
+<p>另一方面, 如果两个输入始终是必需的, 并且彼此紧密相连, 则应使用 AND 类型.(在某些情况下, 可以使用 <em>tuples</em> 作为简单 AND 类型的替代方法, 但通常最好使用命名类型.)</p>
+<h2 id="documenting-effects-in-the-function-signature">Documenting Effects in the Function Signature</h2>
+<p>我们刚刚看到 <em>ValidateOrder</em> 可以这样编写:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> = UnvalidatedOrder -&gt; ValidatedOrder
+</pre></div>
+<p>但是, 这假定了验证过程始终有效, 并且始终返回已验证订单. 实际上, 这个过程可能会出错, 因此最好通过在函数签名中返回 Result 类型(Either in Haskell)来指示这一点:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+    UnvalidatedOrder -&gt; Result&lt;ValidatedOrder, ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt;
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidationError</span> = {
+    FieldName : <span style="color: #00688B; font-weight: bold">string</span>
+    ErrorDescription : <span style="color: #00688B; font-weight: bold">string</span>
+}
+</pre></div>
+<p>此签名显示输入是 <em>UnvalidatedOrder</em>, 如果成功, 则输出为 <em>ValidatedOrder</em>, 但如果验证失败, 则结果为 <em>ValidationError</em> 列表, 该列表又包含错误描述及其应用于哪个字段的说明.</p>
+<p>函数编程人员使用术语 “<strong>effects</strong>” 来描述函数除了其主要输出之外另外执行的事情(函数副作用). 通过使用 <em>Result</em> 类型, 我们现在已经表明出 <em>ValidateOrder</em> 可能具有 “error effects” – 类型签名中明确说明, 我们不能保证函数始终成功, 并且我们应该准备好处理错误.</p>
+<p>同样, 我们也可能会希望记录进程是<strong>异步</strong>的. 我们怎样才能做到这一点?</p>
+<p>在 <em>F#</em> 中, 我们使用 <em>Async</em> 类型来表示函数将具有异步效果. 因此, 如果 <em>ValidateOrder</em> 具有异步效应和错误效果, 我们将编写如下函数类型:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+    UnvalidatedOrder -&gt; Async&lt;Result&lt;ValidatedOrder,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt;&gt;
+</pre></div>
+<p>此类型签名现在明确表明:</p>
+<ol>
+<li>当我们尝试获取返回值的内容时, 代码不会立即返回.</li>
+<li>当它真的返回结果时, 结果可能是错误.</li>
+</ol>
+<p>像这样显式地列出所有效果很有用, 但它确实使类型签名变得丑陋且复杂, 因此我们通常会为此创建一个<strong>类型别名</strong>, 使其看起来更美观.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidationResponse</span>&lt;<span style="color: #8B008B; font-weight: bold">'</span>a&gt; = Async&lt;Result&lt;<span style="color: #8B008B; font-weight: bold">'</span>a,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt;&gt;
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+    UnvalidatedOrder -&gt; ValidationResponse&lt;ValidatedOrder&gt;
+</pre></div>
+<h1 id="a-question-of-identity-value-objects">A Question of Identity: Value Objects</h1>
+<p>我们已经了解了对领域数据和工作流建模的基本方法. 现在, 让我们继续研究一种对数据类型进行分类的重要方式 – 基于数据类型是否具有<strong>持久标识</strong>.</p>
+<p>在 DDD 术语中, 具有持久身份的对象称为 <strong>Entities</strong>(实体), 而没有持久身份的对象称为 <strong>Value Objects</strong>(值对象). 让我们首先讨论值对象.</p>
+<p>在许多情况下, 我们正在处理的数据对象没有身份 – 它们是可互换的. 例如, 出现在所有地方值为 W1234 的 WidgetCode 都彼此相等, 我们不需要区分它们.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">widgetCode1</span> = WidgetCode <span style="color: #CD5555">"W1234"</span>
+<span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">widgetCode2</span> = WidgetCode <span style="color: #CD5555">"W1234"</span>
+printfn <span style="color: #CD5555">"%b"</span> (widgetCode1 = widgetCode2) <span style="color: #228B22">// prints "true"</span>
+</pre></div>
+<p>“values without identity” 的概念在领域模型中经常出现, 无论是复杂类型还是简单类型. 例如, 一个 <em>PersonalName</em> 的 AND 类型可能具有 <em>FirstName</em> 和 <em>LastName</em> 两个字段, 因此它比简单的字符串复杂, 但它也是一个值对象, 因为具有相同字段的两个个人名称是可以互换的.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">name1</span> = {FirstName=<span style="color: #CD5555">"Alex"</span>; LastName=<span style="color: #CD5555">"Adams"</span>}
+<span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">name2</span> = {FirstName=<span style="color: #CD5555">"Alex"</span>; LastName=<span style="color: #CD5555">"Adams"</span>}
+printfn <span style="color: #CD5555">"%b"</span> (name1 = name2) <span style="color: #228B22">// prints "true</span>
+</pre></div>
+<p>例如 <em>“address”</em> 类型也是值对象, 如果两个值具有相同的街道地址以及城市和邮政编码, 则它们是相同的地址.</p>
+<h2 id="implementing-equality-for-value-objects">Implementing Equality for Value Objects</h2>
+<p>当我们使用 <em>F＃</em> 代数类型系统对领域建模时, 默认情况下, 我们创建的类型基于字段的相等性判断 – 我们不需要自己编写任何判断相等性的代码.</p>
+<p>准确地说, 在 <em>F＃</em> 中, 如果两个 AND 类型值的所有字段都相等, 则两个值(相同类型)相等; 如果两个 OR 类型的选择情况相同, 则两个选择值相等; 这称为结构平等.</p>
+<p>而在其它语言中, 我们可能需要重写 <em>Equals</em> 之类的方法.</p>
+<h1 id="a-question-of-identity-entities">A Question of Identity: Entities</h1>
+<p>但是, 我们也经常需要对在现实世界中具有独特标识的事物进行建模, 即使它们的组成发生变化, 但它们依然是同一个事物. 例如, 即使我更改了姓名或地址, 我仍然是同一个人.</p>
+<p>DDD 术语中, 这些事物被称为 <em>Entities</em>(实体).</p>
+<p>在我们实例的上下文中, 实体通常是某种类型的文档: 订单, 报价, 发票, 客户资料, 产品单等. 它们具有<strong>生命周期</strong>, 并通过各种业务流程从一种状态转换为另一种状态.</p>
+<p>值对象与实体之间的区别取决于其所在的上下文. 例如, 考虑手机的生命周期.</p>
+<ul>
+<li>在制造过程中, 每部手机都会获得一个唯一的序列号, 因此在这种情况下, 它们将被建模为实体.</li>
+<li>在出售时, 序列号无关紧要-所有规格相同的手机都是可以互换的-可以将它们建模为值对象.</li>
+<li>一旦将特定手机出售给特定客户, 身份就会再次变得相关, 应该将其建模为一个实体:  即使更换屏幕或电池, 客户也将其视为同一部手机.</li>
+</ul>
+<h2 id="identifiers-for-entities">Identifiers for Entities</h2>
+<p>在对实体进行建模时, 我们需要为它们提供唯一的标识符或键, 例如 <em>Order Id</em>, or <em>Customer Id</em>.</p>
+<p>例如下面的 <em>Contact</em> 类型, 不管 <em>PhoneNumber</em> 或 <em>EmailAddress</em> 属性怎么更改, 它的 <em>ContactId</em> 属性保持不变.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ContactId</span> = ContactId <span style="color: #8B008B; font-weight: bold">of</span> int
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Contact</span> = {
+    ContactId : ContactId
+    PhoneNumber : ...
+    EmailAddress: ...
+}
+</pre></div>
+<p>这些标识符从何而来?</p>
+<p>有时, 标识符是由真实世界本身提供的, 例如纸质订单和发票上总是写有某种单号; 但有时, 我们需要使用 UUID, 自动递增数据库表, ID 生成服务等技术自己创建一个人工标识符. 在我们的实例中, 仅假设客户已向我们提供了标识符.</p>
+<h2 id="adding-identifiers-to-data-definitions">Adding Identifiers to Data Definitions</h2>
+<p>向 AND 类型添加标识符很简单, 只需添加一个字段, 但是如何向 OR 类型添加标识符? 我们应该将标识符放在内部(与每个 case 关联)还是在外部(与任何 case 都不关联)?</p>
+<p>例如, 假设我们有两个发票选项: <em>Unpaid</em> 和 <em>Paid</em>.</p>
+<p>如果我们使用外部方式对其进行建模, 我们将有一个包含 <em>InvoiceId</em> 的 AND 类型, 然后在该类型内有一个选择类型 <em>InvoiceInfo</em>, 其中包含每种发票类型的信息. 该代码将如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// Info for the unpaid case (without id)</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnpaidInvoiceInfo</span> = ...
+
+<span style="color: #228B22">// Info for the paid case (without id)</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PaidInvoiceInfo</span> = ...
+
+<span style="color: #228B22">// Combined information (without id)</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">InvoiceInfo</span> =
+    | Unpaid <span style="color: #8B008B; font-weight: bold">of</span> UnpaidInvoiceInfo
+    | Paid <span style="color: #8B008B; font-weight: bold">of</span> PaidInvoiceInfo
+
+<span style="color: #228B22">// Id for invoice</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">InvoiceId</span> = ...
+
+<span style="color: #228B22">// Top level invoice type</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Invoice</span> = {
+    InvoiceId : InvoiceId <span style="color: #228B22">// "outside" the two child cases</span>
+    InvoiceInfo : InvoiceInfo
+}
+</pre></div>
+<p>如果使用内部方式, 我们将创建两个单独的类型(<em>UnpaidInvoice</em> 和 <em>PaidInvoice</em>), 这两个类型都有自己的 <em>InvoiceId</em>, 然后是一个在它们之间进行选择的顶级 OR 类型 <em>Invoice</em>. 该代码将如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnpaidInvoice</span> = {
+    InvoiceId : InvoiceId <span style="color: #228B22">// id stored "inside"</span>
+    <span style="color: #228B22">// and other info for the unpaid case</span>
+}
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PaidInvoice</span> = {
+    InvoiceId : InvoiceId <span style="color: #228B22">// id stored "inside"</span>
+    <span style="color: #228B22">// and other info for the paid case</span>
+}
+
+<span style="color: #228B22">// top level invoice type</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Invoice</span> =
+    | Unpaid <span style="color: #8B008B; font-weight: bold">of</span> UnpaidInvoice
+    | Paid <span style="color: #8B008B; font-weight: bold">of</span> PaidInvoice
+</pre></div>
+<p>相对于外部方式, 内部方式都易于使用模式匹配, 它将所有的数据都放在一起, 包括 <em>id</em>:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">invoice</span> = Paid {InvoiceId = ...}
+
+<span style="color: #8B008B; font-weight: bold">match</span> invoice <span style="color: #8B008B; font-weight: bold">with</span>
+    | Unpaid unpaidInvoice -&gt;
+      printfn <span style="color: #CD5555">"The unpaid invoiceId is %A"</span> unpaidInvoice.InvoiceId
+    | Paid paidInvoice -&gt;
+      printfn <span style="color: #CD5555">"The paid invoiceId is %A"</span> paidInvoice.InvoiceId
+</pre></div>
+<p><strong>在实践中, 更常见的是使用内部方法.</strong></p>
+<h2 id="implementing-equality-for-entities">Implementing Equality for Entities</h2>
+<p>前面我们看到, 默认情况下, <em>F＃</em> 中的相等性判断使用类型的所有字段. 但是, 当我们比较实体时, 我们只想使用标识符字段. 这意味着, 为了在 <em>F＃</em> 中正确建模实体, 我们必须更改默认行为.</p>
+<p>一种方法是重写相等性判断, 以便仅使用标识符. 要更改默认判断逻辑, 我们必须:</p>
+<ol>
+<li>重写 <em>Equals</em> 方法.</li>
+<li>重写 <em>GetHashCode</em> 方法.</li>
+<li>将 <em>CustomEquality</em> 和 <em>NoComparison</em> 属性添加到类型中, 以告知编译器我们要更改默认行为.</li>
+</ol>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[&lt;CustomEquality; NoComparison&gt;]
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Contact</span> = {
+    ContactId : ContactId
+    PhoneNumber : PhoneNumber
+    EmailAddress: EmailAddress
+}
+<span style="color: #8B008B; font-weight: bold">with</span>
+<span style="color: #8B008B; font-weight: bold">override</span> this.<span style="color: #008b45">Equals</span>(<span style="color: #00688B; font-weight: bold">obj</span>) =
+    <span style="color: #8B008B; font-weight: bold">match</span> <span style="color: #00688B; font-weight: bold">obj</span> <span style="color: #8B008B; font-weight: bold">with</span>
+        | :? Contact <span style="color: #8B008B; font-weight: bold">as</span> c -&gt; this.ContactId = c.ContactId
+        | _ -&gt; <span style="color: #8B008B; font-weight: bold">false</span>
+<span style="color: #8B008B; font-weight: bold">override</span> this.<span style="color: #008b45">GetHashCode</span><span style="color: #658b00">()</span> =
+    hash this.ContactId
+</pre></div>
+<h1 id="immutability-and-identity">Immutability and Identity</h1>
+<p>在函数式编程中, 值是不可变的, 这意味着到目前为止定义的对象在初始化后都无法更改.</p>
+<p>对于值对象, 这非常好. 但对实体而言, 则是另一回事. 因为实体有生命周期, 我们希望与实体相关的数据会随着生命周期变化 – 这就是拥有恒定标识符的全部意义. 那么如何使不可变数据结构实现这一点?</p>
+<p>答案是在保留身份的同时使用更改后的数据复制实体. 看起来这些复制操作似乎造成很多额外的工作, 但实际上并不是问题.</p>
+<p>下面是一个如何在 <em>F＃</em>中更新实体的示例.</p>
+<blockquote>
+<p>其它语言中, 可以使用 <a href="https://medium.com/zyseme-technology/functional-references-lens-and-other-optics-in-scala-e5f7e2fdafe">Lens(透镜)</a>.</p>
+</blockquote>
+<p>首先, 我们将从一个初始值开始:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">initialPerson</span> = {PersonId=PersonId <span style="color: #B452CD">42</span>; Name=<span style="color: #CD5555">"Joseph"</span>}
+</pre></div>
+<p>要在仅更改某些字段的同时复制值, <em>F＃</em> 具有 <em>with</em> 关键字, 其用法如下:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">updatedPerson</span> = {initialPerson <span style="color: #8B008B; font-weight: bold">with</span> Name=<span style="color: #CD5555">"Joe"</span>}
+</pre></div>
+<p>复制之后, <em>updatedPerson</em> 具有不同的名称, 但与 <em>initialPerson</em> 具有相同的 <em>PersonId</em>.</p>
+<p>使用不可变数据结构的好处是进行任何更改都必须在类型签名中明确表示. 例如, 如果我们要编写一个函数来更改 <em>Person</em> 中的 <em>Name</em> 字段, 则不能使用以下签名的函数:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UpdateName</span> = Person -&gt; Name -&gt; <span style="color: #00688B; font-weight: bold">unit</span>
+</pre></div>
+<p>该函数没有输出, 这意味着没有任何改变(或者说 <em>Person</em> 没有副使用). 我们的函数必须有一个 <em>Person</em> 类型作为输出, 如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UpdateName</span> = Person -&gt; Name -&gt; Person
+</pre></div>
+<p>这清楚地表明, 给定一个人和一个名字, 将返回原始人的某种变体.</p>
+<h1 id="aggregates">Aggregates</h1>
+<p>让我们仔细看看与我们的设计特别相关的两个数据类型: <em>Order</em> 和 <em>OrderLine</em>.</p>
+<blockquote>
+<p>What is <em>OrderLine</em>?<br/>
+下订单时, 订购的货物在订单中, 一种产品表现为一行, 也就是一个品项的产品.<br/>
+也就是说, <em>OrderLine</em> 从属 <em>Order</em>, 一个 <em>Order</em> 包含多个 <em>OrderLine</em>.</p>
+</blockquote>
+<p>首先, <em>Order</em> 是实体还是值对象? 显然, 这是一个实体 – <em>Order</em> 的详细信息可能会随着时间的流逝而变化(待验证-&gt;已验证…), 但是它是相同的一个 <em>Order</em>.</p>
+<p>那 <em>OrderLine</em> 呢? 如果我们更改特定 <em>OrderLine</em> 的数量, 它仍然是同一 <em>OrderLine</em> 吗?<br/>
+在大多数设计中, 是这样的, 即使数量或价格随时间发生了变化, 它仍然是相同的 <em>OrderLine</em>. 因此, <em>OrderLine</em> 也是一个具有其自身标识符的实体.</p>
+<p>那么问题是, 如果我们更改了一个 <em>OrderLine</em>, 是否也要更改它所在的 <em>Order</em>?<br/>
+我们的例子中, 答案很明显是更改了 <em>OrderLine</em> 也要更改整个 <em>Order</em>.</p>
+<p>但事实上, 因为使用了不可变的数据结构, 如果有一个包含不可变 <em>OrderLine</em> 列表的不可变 <em>Order</em>, 那么仅仅创建一份 <em>OrderLine</em> 的副本并不会创建 <em>Order</em> 的副本.</p>
+<p>所以, 为了更改 <em>Order</em> 中包含的 <em>OrderLine</em>, 需要在 <em>Order</em> 级别进行更改, 而不是 <em>OrderLine</em> 级别. 例如, 下面是一些用于更新 <em>OrderLine</em> 价格的伪代码(一个函数):</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #CD5555">/// We pass in three parameters:</span>
+<span style="color: #CD5555">/// * the top-level order</span>
+<span style="color: #CD5555">/// * the id of the order line we want to change</span>
+<span style="color: #CD5555">/// * the new price</span>
+<span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">changeOrderLinePrice</span> order orderLineId newPrice =
+    <span style="color: #228B22">// 1. find the line to change using the orderLineId</span>
+    <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">orderLine</span> = order.OrderLines |&gt; findOrderLine orderLineId
+
+    <span style="color: #228B22">// 2. make a new version of the OrderLine with the new price</span>
+    <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">newOrderLine</span> = {orderLine <span style="color: #8B008B; font-weight: bold">with</span> Price = newPrice}
+
+    <span style="color: #228B22">// 3. create a new list of lines, replacing</span>
+    <span style="color: #228B22">// the old line with the new line</span>
+    <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">newOrderLines</span> =
+        order.OrderLines |&gt; replaceOrderLine orderLineId newOrderLine
+
+    <span style="color: #228B22">// 4. make a new version of the entire order, replacing</span>
+    <span style="color: #228B22">// all the old lines with the new lines</span>
+    <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">newOrder</span> = {order <span style="color: #8B008B; font-weight: bold">with</span> OrderLines = newOrderLines}
+
+    <span style="color: #228B22">// 5. return the new order</span>
+    newOrder
+</pre></div>
+<p>最终结果(函数的输出)是包含新 <em>OrderLine</em> 列表的新 <em>Order</em>, 其中某一个 <em>OrderLine</em> 具有新价格.</p>
+<p>可以看到, 数据的不变性会导致数据结构中的连锁反应, 因此更改一个低级组件也要强制更改更高级别的组件. 此例中, 即使我们只是需要更改其 “子实体” 之一(<em>OrderLine</em>), 也总是必须对 <em>Order</em> 本身进行操作.</p>
+<p>这是一个非常常见的情况: 我们有一个实体的集合, 每个实体都有自己的 ID 以及一些包含它们的 “顶级” 实体. 在 DDD 术语中, 像这样的实体集合称为<strong>聚合</strong>, 顶层实体称为<strong>聚合根</strong>.</p>
+<p>在我们的例子中, 聚合包括 <em>Order</em> 和 <em>OrderLine</em> 的列表, 聚合根是 <em>Order</em> 本身.</p>
+<h2 id="aggregates-enforce-consistency-and-invariants">Aggregates Enforce Consistency and Invariants</h2>
+<p>在更新数据时, 聚合起着重要作用. 聚合充当<strong>一致性边界</strong> – 当聚合的一部分更新时, 可能还需要更新其他部分以确保一致性.</p>
+<p>例如, 我们可能会扩展此设计, 以便在顶级 <em>Order</em> 中存储额外的 <em>TotalPrice</em>. 那么, 如果其中某一个 <em>OrderLine</em> 更改了价格, 则还必须更新 <em>TotalPrice</em> 以保持数据一致. 上面的 <em>changeOrderLinePrice</em> 函数完成了这个操作. 显然, 知道如何保持一致性的唯一组件是顶级 <em>Order</em>(聚合根), 因此这是在 <em>Order</em> 级别而不是 <em>OrderLine</em> 级别执行更新的另一个原因.</p>
+<p>聚合也是确保<a href="https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/domain-model-layer-validations"><strong>不变性(Invariants)</strong></a>的地方. 假设有一个规则, <em>Order</em> 中始终至少有一个 <em>OrderLine</em>. 然后, 如果尝试删除 <em>OrderLine</em>, 则聚合应可确保在仅剩一个 <em>OrderLine</em> 时出现错误. 后续会有章节讨论这个话题.</p>
+<blockquote>
+<p><strong>Invariants</strong> are generally business rules/enforcements/requirements that you impose to maintain the <strong><a href="http://www.smallcpp.cn/si-integrity-and-consistency-in-the-domain.html">integrity</a></strong> of an object at any given time.</p>
+</blockquote>
+<h2 id="aggregate-references">Aggregate References</h2>
+<blockquote>
+<p>此引用非其它语言中的引用类型</p>
+</blockquote>
+<p>现在, 假设我们需要有关客户的信息与订单相关联. 可能会诱使你将客户添加为订单的字段, 如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+    OrderId : OrderId
+    Customer : Customer <span style="color: #228B22">// info about associated customer</span>
+    OrderLines : OrderLine <span style="color: #00688B; font-weight: bold">list</span>
+    <span style="color: #228B22">// etc</span>
+}
+</pre></div>
+<p>但是, 想想不变性的连锁反应 —— 如果改变了客户的任何部分, 也必须改变订单. 那真的是我们想要的吗?</p>
+<p>更好的设计是存储客户的引用, 而不是整个客户本身. 也就是说, 我们只将 <em>CustomerId</em> 存储在订单类型中, 如下所示:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+    OrderId : OrderId
+    CustomerId : CustomerId <span style="color: #228B22">// reference to associated customer</span>
+    OrderLines : OrderLine <span style="color: #00688B; font-weight: bold">list</span>
+    <span style="color: #228B22">// etc</span>
+}
+</pre></div>
+<p>使用这种方式, 如果我们需要有关客户的完整信息, 先从订单中获取 <em>CustomerId</em>, 然后从数据库中单独加载相关的客户数据, 而不是将其作为订单的一部分加载.  也就是说, 客户和订单是不同且独立的聚合. 它们各自负责自己的内部一致性, 它们之间的唯一连接是通过聚合根的对象标识符.</p>
+<p>这导致聚合的另一个重要方面: 它们是<strong>持久性</strong>的基本单位. 如果要从数据库中加载或保存对象, 则应加载或保存整个聚合. 每个数据库事务都应使用单个聚合, 并且不包括多个聚合或跨聚合边界. 后续章节会有案例参考.</p>
+<p>同样, 如果要序列化对象以将其进行传递, 则始终发送整个聚合, 而不是发送其中的一部分.</p>
+<p>明确一点, <strong>并不是所有实体的集合都能成为聚合</strong>. 例如, 客户列表是实体的集合, 但它不是 DDD 所说的 “聚合”, 因为它没有顶级实体作为聚合根, 并且它一个也不是一致性边界.</p>
+<h2 id="important-role-of-aggregates">Important Role Of Aggregates</h2>
+<p>以下是聚合在领域模型中的重要作用摘要:</p>
+<ul>
+<li>聚合是领域对象的集合, 可以被视为单个单元, 顶级实体充当聚合根.</li>
+<li>对聚合内对象的所有更改都必须通过聚合根进行, 并且聚合充当一致性边界, 以确保聚合内的所有数据同时正确更新.</li>
+<li>聚合是持久化、数据库事务和数据传输的原子单位.</li>
+</ul>
+<p>定义聚合是设计过程中的一个重要部分. 有时, 相关的实体是同一聚合(<em>OrderLine</em> 和 <em>Order</em>)的一部分, 有时它们不是(<em>Customer</em> 和 <em>Order</em>). 这是与领域专家协作至关重要的地方: 只有他们才能帮助我们了解实体之间的关系和一致性边界.</p>
+<h1 id="putting-it-all-together">Putting It All Together</h1>
+<p>我们已经创建了许多类型, 让我们回顾一下它们如何作为一个完整的领域模型组合在一起.</p>
+<p>首先, 我们将所有这些类型放在一个称为 <em>OrderOrder.Domain</em> 的命名空间中, 该空间用于将这些类型与其他命名空间分开. 换句话说, 我们使用 <em>F#</em> 中的命名空间来指示 DDD 界限上下文, 至少目前是这样.</p>
+<p>首先是一些值对象, 它们不需要标识符.</p>
+<p>然后是一些实体, 例如订单, 它是一个实体, 具有身份标识, 因此我们必须使用 <em>ID</em> 对其进行建模. 但我们现在不知道 <em>ID</em> 是 <em>string</em>, 还是 <em>int</em> 还是 <em>guid</em>, 但我们知道我们需要它, 因此, 现在让我们使用 <em>Undefined</em>. 我们将以同样的方式处理其他标识符.</p>
+<p>最后, 让我们以工作流本身结束. 工作流的输入 <em>UnvalidatedOrder</em> 将从订单表单 “原样” 生成, 因此将仅包含 <em>int</em> 和 <em>string</em> 等基础类型. 工作流的输出需要两种类型: 工作流成功时的事件类型以及失败类型.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">namespace</span> <span style="color: #008b45; text-decoration: underline">OrderTaking</span>.Domain
+
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">// 这些都是值对象, 不需要标识符.</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">// Product code related</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">WidgetCode</span> = WidgetCode <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
+<span style="color: #228B22">// constraint: starting with "W" then 4 digits</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">GizmoCode</span> = GizmoCode <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
+<span style="color: #228B22">// constraint: starting with "G" then 3 digits</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ProductCode</span> =
+    | Widget <span style="color: #8B008B; font-weight: bold">of</span> WidgetCode
+    | Gizmo <span style="color: #8B008B; font-weight: bold">of</span> GizmoCode
+
+<span style="color: #228B22">// Order Quantity related</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnitQuantity</span> = UnitQuantity <span style="color: #8B008B; font-weight: bold">of</span> int
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">KilogramQuantity</span> = KilogramQuantity <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">decimal</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderQuantity</span> =
+    | Unit <span style="color: #8B008B; font-weight: bold">of</span> UnitQuantity
+    | Kilos <span style="color: #8B008B; font-weight: bold">of</span> KilogramQuantity
+
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">// 一些 Undefined 标识符, 以及一些实体.</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Undefined</span> = <span style="color: #00688B; font-weight: bold">exn</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderId</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderLineId</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerId</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CustomerInfo</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ShippingAddress</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillingAddress</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Price</span> = Undefined
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillingAmount</span> = Undefined
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+    Id : OrderId <span style="color: #228B22">// id for entity</span>
+    CustomerId : CustomerId <span style="color: #228B22">// customer reference</span>
+    ShippingAddress : ShippingAddress
+    BillingAddress : BillingAddress
+    OrderLines : OrderLine <span style="color: #00688B; font-weight: bold">list</span>
+    AmountToBill : BillingAmount
+}
+
+<span style="color: #8B008B">and</span> OrderLine = {
+    Id : OrderLineId <span style="color: #228B22">// id for entity</span>
+    OrderId : OrderId
+    ProductCode : ProductCode
+    OrderQuantity : OrderQuantity
+    Price : Price
+}
+
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">// 定义工作流及其输入和输出.</span>
+<span style="color: #228B22">//</span>
+<span style="color: #228B22">//</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnvalidatedOrder</span> = {
+    OrderId : <span style="color: #00688B; font-weight: bold">string</span>
+    CustomerInfo : ...
+    ShippingAddress : ...
+    ...
+}
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderEvents</span> = {
+    AcknowledgmentSent : ...
+    OrderPlaced : ...
+    BillableOrderPlaced : ...
+}
+
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderError</span> =
+    | ValidationError <span style="color: #8B008B; font-weight: bold">of</span> ValidationError <span style="color: #00688B; font-weight: bold">list</span>
+    | ... <span style="color: #228B22">// other errors</span>
+
+<span style="color: #8B008B">and</span> ValidationError = {
+    FieldName : <span style="color: #00688B; font-weight: bold">string</span>
+    ErrorDescription : <span style="color: #00688B; font-weight: bold">string</span>
+}
+
+<span style="color: #CD5555">/// The "Place Order" process</span>
+<span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> =
+    UnvalidatedOrder -&gt; Result&lt;PlaceOrderEvents, PlaceOrderError&gt;
+</pre></div>
+<p>但我们的模型尚未完成. 例如, 该如何对订单的不同状态进行建模: 验证、定价等?</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2019-12-03T15:00:00+08:00", "headline": "\u4e09. Domain Modeling with Types", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/san-domain-modeling-with-types.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "Reviewing the Domain Model TODO: \u8865\u5145\b\u9700\u6c42. \u73b0\u5728\u8ba9\u6211\u4eec\u770b\u4e0b\u5df2\u6709\u9886\u57df\u6a21\u578b\u7684\u4f2a\u4ee3\u7801 (\u5728\u4e0e\u9886\u57df\u4e13\u5bb6\u8ba8\u8bba\u9700\u6c42\u65f6\u8bb0\u5f55\u4e0b\u6765\u7684): context: Order-Taking // ---------------------- // Simple types // ---------------------- // Product codes data ProductCode = WidgetCode OR GizmoCode data WidgetCode = string starting with \"W\" then 4 digits data \u2026"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

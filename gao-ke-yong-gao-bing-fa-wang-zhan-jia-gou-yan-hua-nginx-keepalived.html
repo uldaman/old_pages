@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>高可用高并发网站架构演化 (nginx + keepalived)</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 高可用高并发网站架构演化 (nginx + keepalived)">
+  <meta property="og:description" content="nginx + keepalived 的组合通常被用来实现前端高可用. 在这个组合中, 利用 nginx 的反向代理实现前端的动静分离和负载均衡, 如下图. 在以上的体系中, 我们接着将一些通用的服务从动态 Server 上抽离出来单独封装, 动态 Server 通过 RPC 远程调用通用服务, 这样就避免升级通用服务时会更改对所有动态 Server 的问题. 如上图, 如果 RPC...">
+<meta property="og:url" content="http://www.smallcpp.cn/gao-ke-yong-gao-bing-fa-wang-zhan-jia-gou-yan-hua-nginx-keepalived.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/高可用高并发架构/nginx.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-10-27T22:27:00+08:00">
+  <meta property="article:section" content="软件工程">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/gao-ke-yong-gao-bing-fa-wang-zhan-jia-gou-yan-hua-nginx-keepalived.html" rel="bookmark"
+        title="Permalink to 高可用高并发网站架构演化 (nginx + keepalived)">高可用高并发网站架构演化 (nginx + keepalived)</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-10-27T22:27:00+08:00">
+    Published <span class="is-info">Thu 27 October 2016</span>
+    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul></ul>
+</div>
+<p>nginx + keepalived 的组合通常被用来实现前端高可用.</p>
+<p>在这个组合中, 利用 <strong>nginx</strong> 的反向代理实现前端的<em>动静分离</em>和<em>负载均衡</em>, 如下图.</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/高可用高并发架构/nginx.jpg"></p>
+<p>在以上的体系中, 我们接着将一些通用的服务从动态 Server 上抽离出来单独封装, 动态 Server 通过 <strong>RPC</strong> 远程调用通用服务, 这样就避免升级通用服务时会更改对所有动态 Server 的问题.</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/高可用高并发架构/rpc.jpg"></p>
+<p>如上图, 如果 RPC 服务器挂掉了, 那所有的 RPC 请求都会出问题, 为此, 同一个通用服务可以准备多台 RPC 服务器, 通过 <strong>dubbo</strong> 来进行调度, 这样就实现了 RPC 服务器的<em>高并发</em>及<em>高可用</em>.</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/高可用高并发架构/dobbu.jpg"></p>
+<p>那么问题又来了, 如果 nginx 宕掉了怎么办?</p>
+<p>这时就要让 <strong>keepalived</strong> 出场了, 借助 keepalived 实现 nginx 的<em>高可用</em>.</p>
+<p>访问网站即访问 IP, keepalived 在这里就是充当着抢这个被访问 IP 的角色, 如下图所示, 我们准备了两台 nginx 服务器, 都装上 keepalived;</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/高可用高并发架构/keepalived.jpg"></p>
+<p>现在, 我们的网站 IP 被上面那个 keepalived 抢到了, 所以当有 IP 请求时, 是上面的 ngnix 在起作用, 一旦它出问题, 下面那个 keepalived 就会抢到前端网站 IP, 这样就实现了 ngnix 的<em>高可用</em>.</p>
+<p>在 keepalived 中, 可以通过自定义脚本实现监控任意进程, 一旦被监控进程挂掉, 就能让 keepalived 放弃对 IP 的抢占.</p>
+<p>另外, 在数据库层面上, 也有一些优化方案, 如读写分离、缓存系统、分库分表等 (<a href="http://www.jianshu.com/p/ddcc3643aec9">mongodb</a> 作为一个分布式数据库, 支持自动<a href="http://www.ttlsa.com/mongodb/the-architecture-of-mongodb-mongodb-fragment-cluster-and-simple-construction-scheme/">分片</a>); 值得一提的是, 现在有个应用叫 <strong>mycat</strong>.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>  mycat 能够帮我们实现分库分表的操作, 并且它也支持 mongodb, 开发者可以根据不同的需求将表分配不同的数据节点, 比如 Table A 存放在关系型数据库中 (如 MySQL), 而 Table B 可能更适合 NoSQL (如 MongoDB), 在 MyCAT 中开发者只需要简单配置, 即可让 MyCAT 完成这一系列操作的路由.
+</pre></div>
+
+
+<p>如果更进一步, 还可以上 <strong>CDN</strong> 服务, 把静态资源委托给 CDN.</p>
+<p>这里也顺便补充下 CDN 的知识:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>  CDN 内容分发网络
+
+  CDN 加速将网站的内容缓存在网络边缘 (离用户接入网络最近的地方), 然后在用户访问网站内容的时候, CDN 系统能够实时地根据网络流量和各节点的连接、负载状况以及到用户的距离和响应时间等综合信息将用户的请求重新导向离用户最近的服务节点上.
+
+  CDN 服务最初用于确保快速可靠地分发静态内容, 这些内容可以缓存, 最适合在网速庞大的网络中存储和分发, 该网络在几十多个国家的十几个网络中的覆盖 CDN 网络服务器.
+</pre></div>
+
+
+<p>这些知识比较偏硬件, 我认为更多的是 IT、运维或者架构师的职责, 对于目前的我来说, 简单的了解下, 知道有这些个东西就足够了, 更多的参考资料可参考:</p>
+<p><strong>Refrences</strong>:</p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1265304">Linux 高可用 (HA) 集群基本概念详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1265808">Linux 高可用 (HA) 集群之 Heartbeat 详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1270239">Linux 高可用 (HA) 集群之 heartbeat 基于 crm 进行资源管理详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1272417">Linux 高可用 (HA) 集群之 Corosync 详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1274533">Linux 高可用 (HA) 集群之 Pacemaker 详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1275384">Linux 高可用 (HA) 集群之 DRB 详解</a></p>
+<p><a href="http://freeloda.blog.51cto.com/2033581/1280962">Linux 高可用 (HA) 集群之 keepalived 详解</a></p>
+<p><a href="http://www.codes51.com/article/detail_573458_1.html">Nginx + Keepalived 实现站点高可用</a></p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-27T22:27:00+08:00", "headline": "\u9ad8\u53ef\u7528\u9ad8\u5e76\u53d1\u7f51\u7ad9\u67b6\u6784\u6f14\u5316 (nginx + keepalived)", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/gao-ke-yong-gao-bing-fa-wang-zhan-jia-gou-yan-hua-nginx-keepalived.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "nginx + keepalived \u7684\u7ec4\u5408\u901a\u5e38\u88ab\u7528\u6765\u5b9e\u73b0\u524d\u7aef\u9ad8\u53ef\u7528. \u5728\u8fd9\u4e2a\u7ec4\u5408\u4e2d, \u5229\u7528 nginx \u7684\u53cd\u5411\u4ee3\u7406\u5b9e\u73b0\u524d\u7aef\u7684\u52a8\u9759\u5206\u79bb\u548c\u8d1f\u8f7d\u5747\u8861, \u5982\u4e0b\u56fe. \u5728\u4ee5\u4e0a\u7684\u4f53\u7cfb\u4e2d, \u6211\u4eec\u63a5\u7740\u5c06\u4e00\u4e9b\u901a\u7528\u7684\u670d\u52a1\u4ece\u52a8\u6001 Server \u4e0a\u62bd\u79bb\u51fa\u6765\u5355\u72ec\u5c01\u88c5, \u52a8\u6001 Server \u901a\u8fc7 RPC \u8fdc\u7a0b\u8c03\u7528\u901a\u7528\u670d\u52a1, \u8fd9\u6837\u5c31\u907f\u514d\u5347\u7ea7\u901a\u7528\u670d\u52a1\u65f6\u4f1a\u66f4\u6539\u5bf9\u6240\u6709\u52a8\u6001 Server \u7684\u95ee\u9898. \u5982\u4e0a\u56fe, \u5982\u679c RPC \u670d\u52a1\u5668\u6302\u6389\u4e86, \u90a3\u6240\u6709\u7684 RPC \u8bf7\u6c42\u90fd\u4f1a\u51fa\u95ee\u9898 \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/\u9ad8\u53ef\u7528\u9ad8\u5e76\u53d1\u67b6\u6784/nginx.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

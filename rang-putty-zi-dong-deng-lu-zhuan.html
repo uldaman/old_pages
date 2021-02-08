@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>让 Putty 自动登陆 [转]</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 让 Putty 自动登陆 [转]">
+  <meta property="og:description" content="序言 Putty 基本是用来登陆 Linux/Unix 终端的不二之先, 因其小, 开源, 界面也非常实用. 可是当你要在私有的机器上, 经常性的要登陆很多机器的时候就觉得烦琐了, 不光打开一堆的窗口, 还要一遍一遍的输入用户名和密码. 当然登陆用户名是可以保存的, 我也是最近才注意到这一点的. Putty 不愿去保存密码是出于安全考虑, 相信在多数时候确实是非常必要的. 于是我选择了...">
+<meta property="og:url" content="http://www.smallcpp.cn/rang-putty-zi-dong-deng-lu-zhuan.html">
+    <meta property="og:image" content="http://i65.tinypic.com/svj5m1.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-05-05T14:04:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/rang-putty-zi-dong-deng-lu-zhuan.html" rel="bookmark"
+        title="Permalink to 让 Putty 自动登陆 [转]">让 Putty 自动登陆 [转]</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-05-05T14:04:00+08:00">
+    Published <span class="is-info">Thu 05 May 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#_1">序言</a></li>
+<li><a href="#puttygenexe-ssh">一. 用 PuTTYgen.exe 生成 ssh 证书, 可在特定的机器上自动登陆</a></li>
+<li><a href="#putty-v60">二. 用 Putty v6.0 修改版, 可保存登陆名和密码, 实现自动登陆</a></li>
+<li><a href="#putty-connection-manager-putty-tab">三. 有了个 PuTTY Connection Manager 管理你的 PuTTY 登陆, 还支持 Tab</a></li>
+<li><a href="#_2">四. 用快捷方式实现自动登陆</a></li>
+</ul>
+</div>
+      <hr />
+      
+<h3 id="_1">序言</h3>
+<p>Putty 基本是用来登陆 Linux/Unix 终端的不二之先, 因其小, 开源, 界面也非常实用. 可是当你要在私有的机器上, 经常性的要登陆很多机器的时候就觉得烦琐了, 不光打开一堆的窗口, 还要一遍一遍的输入用户名和密码. 当然登陆用户名是可以保存的, 我也是最近才注意到这一点的. Putty 不愿去保存密码是出于安全考虑, 相信在多数时候确实是非常必要的.</p>
+<p>于是我选择了 SecureCRT, 它能保存密码, 而且是多 Tab 的, 把 Session 改成 VT100 Linux 模式, 用着一直很顺溜. 然而今天却发现在 SecureCRT 终端中使用 vim 不能高亮显示语法, 试过多种设置, 在 Putty 中却行的, 就这样又重新回到了 Putty 的怀抱. 要相处得好, 必须更深层次的挖掘它的潜力, 其实它也可让你实现自动登陆、甚至是多 Tab 的方式.</p>
+<p>方法有四~</p>
+<h3 id="puttygenexe-ssh">一. 用 PuTTYgen.exe 生成 ssh 证书, 可在特定的机器上自动登陆</h3>
+<p>PuTTYgen.exe 也是从 <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">putty.exe 站点</a>下载, 对于 Linux to Linux 的 ssh 证书生成及自动登陆的方法也有一个<a href="http://unmi.cc/ssh-no-need-input-password">介绍</a>.</p>
+<p>而怎么使用 PuTTYgen.exe 请直接参考: <a href="http://www.shocr.com/sshcertificate-putty-linux/">SSH证书让Putty免密码登陆Linux</a>.</p>
+<p>这种方法需要在服务器端做相应的操作, 本文主要想介绍第二种方法.</p>
+<h3 id="putty-v60">二. 用 Putty v6.0 修改版, 可保存登陆名和密码, 实现自动登陆</h3>
+<p>Putty 默认版只能保存登陆名, 每次需输入登陆密码, 主机和登陆名是保存在注册表中的. 不过因为它是开源, 所以有相关需求者做了个能同时保存用户和密码的版本, 这些信息是保存在文件中的. 该保存登陆名和密码版可在些下载: <a href="http://unmi.cc/wp-content/uploads/2010/06/putty_v6.0.rar">putty_v6.0.rar</a>.</p>
+<p>就是设置起来有点是特别好理解, 默认版本也是这样子的. 操作步骤全写在下面这幅图片里了:</p>
+<p><img alt="" src="http://i65.tinypic.com/svj5m1.jpg"/></p>
+<p>可以看看人家是怎么改的 PuTTY 源代码的:  <a href="http://blog.csdn.net/free2o/article/details/2507023">修改Putty 0.6 代码支持SSH 密码保存功能</a></p>
+<h3 id="putty-connection-manager-putty-tab">三. 有了个 PuTTY Connection Manager 管理你的 PuTTY 登陆, 还支持 Tab</h3>
+<p>PuTTY Connection Manager 的<a href="http://puttycm.free.fr">官网</a>被 Blocked 了, 想窥个究竟的就勇敢的翻墙吧. 这是用 C# 写的对 PuTTY 的包装程序, 需要机器上安装 .NET Framework 2.0 或以上的版本, 另外, 可让你使用更新 PuTTY 版本. 从官方截个图让大家看看:</p>
+<p><img alt="" src="http://i65.tinypic.com/30jh1e9.jpg"/></p>
+<p><img alt="" src="http://i65.tinypic.com/wrgknc.jpg"/></p>
+<p>也能兼容原来的 PuTTY 保存登陆名的方式, 还可用自己的连接管理独立的保存登陆名和密码, 可多 Tab 使用. 如果你觉得界面复杂, 可以把菜单、工具栏、状态栏什么的全隐藏了起来, 看起来就和 PuTTY 一样清爽了.</p>
+<p>为给大家省事, 还是把 PuTTY Connection Manager 的程序从网站上捞下来放到这里来了: <a href="http://unmi.cc/wp-content/uploads/2010/06/puttycm.rar">puttycm.rar</a>. 其中 puttycm.exe 是个独立执行版, 要求你事前安装了 .NET Framework, puttycm0.7.1.136beta.exe 是安装版, 会自动检测有没有 .NET Freamework, 无则帮你下载安上.</p>
+<h3 id="_2">四. 用快捷方式实现自动登陆</h3>
+<p>首先创建 putty.exe 的快捷方式到桌面; 然后运行 putty, 输入host name、port、saved session’s name, 点击保存, 假设 session 名为”qa server”, 随后关闭窗口; 最后右击 putty 快捷方式, 属性, 目标, 加上如下参数 <code>-load "qa server" -ssh -l {username} -pw {password}</code>, 保存, 关闭;</p>
+<p>以后运行putty的快捷方式, 就能自动输入用户名和密码, 进入远程电脑.</p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-05-05T14:04:00+08:00", "headline": "\u8ba9 Putty \u81ea\u52a8\u767b\u9646 [\u8f6c]", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/rang-putty-zi-dong-deng-lu-zhuan.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u5e8f\u8a00 Putty \u57fa\u672c\u662f\u7528\u6765\u767b\u9646 Linux/Unix \u7ec8\u7aef\u7684\u4e0d\u4e8c\u4e4b\u5148, \u56e0\u5176\u5c0f, \u5f00\u6e90, \u754c\u9762\u4e5f\u975e\u5e38\u5b9e\u7528. \u53ef\u662f\u5f53\u4f60\u8981\u5728\u79c1\u6709\u7684\u673a\u5668\u4e0a, \u7ecf\u5e38\u6027\u7684\u8981\u767b\u9646\u5f88\u591a\u673a\u5668\u7684\u65f6\u5019\u5c31\u89c9\u5f97\u70e6\u7410\u4e86, \u4e0d\u5149\u6253\u5f00\u4e00\u5806\u7684\u7a97\u53e3, \u8fd8\u8981\u4e00\u904d\u4e00\u904d\u7684\u8f93\u5165\u7528\u6237\u540d\u548c\u5bc6\u7801. \u5f53\u7136\u767b\u9646\u7528\u6237\u540d\u662f\u53ef\u4ee5\u4fdd\u5b58\u7684, \u6211\u4e5f\u662f\u6700\u8fd1\u624d\u6ce8\u610f\u5230\u8fd9\u4e00\u70b9\u7684. Putty \u4e0d\u613f\u53bb\u4fdd\u5b58\u5bc6\u7801\u662f\u51fa\u4e8e\u5b89\u5168\u8003\u8651, \u76f8\u4fe1\u5728\u591a\u6570\u65f6\u5019\u786e\u5b9e\u662f\u975e\u5e38\u5fc5\u8981\u7684. \u4e8e\u662f\u6211\u9009\u62e9\u4e86 SecureCRT, \u5b83\u80fd\u4fdd\u5b58\u5bc6\u7801, \u800c\u4e14\u662f\u591a Tab \u7684, \u628a Session \u6539\u6210 VT100 Linux \u6a21\u5f0f \u2026", "image": {"@type": "ImageObject", "url": "http://i65.tinypic.com/svj5m1.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

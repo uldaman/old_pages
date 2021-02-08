@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>05. 使用 Java Api 操作 HDFS</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - 05. 使用 Java Api 操作 HDFS">
+  <meta property="og:description" content="使用 Java Api 操作 HDFS">
+<meta property="og:url" content="http://www.smallcpp.cn/05-shi-yong-java-api-cao-zuo-hdfs.html">
+    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-10-23T20:26:00+08:00">
+  <meta property="article:section" content="大数据">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/05-shi-yong-java-api-cao-zuo-hdfs.html" rel="bookmark"
+        title="Permalink to 05. 使用 Java Api 操作 HDFS">05. 使用 Java Api 操作 HDFS</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-10-23T20:26:00+08:00">
+    Published <span class="is-info">Sun 23 October 2016</span>
+    in <a href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#_1">环境变量</a></li>
+<li><a href="#hadoop">Hadoop 类目录</a></li>
+<li><a href="#_2">编译源码</a></li>
+<li><a href="#ant">ant</a></li>
+<li><a href="#_3">其他例子</a><ul>
+<li><a href="#1">例 1</a></li>
+<li><a href="#2">例 2</a></li>
+</ul>
+</li>
+<li><a href="#eclipse-hdfs">使用 Eclipse 开发 Hdfs 应用</a></li>
+<li><a href="#hdfs">Hdfs 源码分析</a></li>
+</ul>
+</div>
+      <hr />
+      
+<p>以 Hadoop 权威指南 (第三版) 3.5.2 为例.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.InputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.net.URI</span>;
+
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.conf.Configuration</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.FileSystem</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.Path</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.io.IOUtils</span>;
+
+<span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">FileSystemCat</span> {
+    <span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">static</span> <span style="color: #00688B; font-weight: bold">void</span> <span style="color: #008b45">main</span>(String[] args) <span style="color: #8B008B; font-weight: bold">throws</span> Exception {
+        String uri = args[<span style="color: #B452CD">0</span>];
+        FileSystem fs = FileSystem.<span style="color: #658b00">get</span>(URI.<span style="color: #658b00">create</span>(uri), <span style="color: #8B008B; font-weight: bold">new</span> Configuration());
+        InputStream in = <span style="color: #8B008B; font-weight: bold">null</span>;
+        <span style="color: #8B008B; font-weight: bold">try</span> {
+            in = fs.<span style="color: #658b00">open</span>(<span style="color: #8B008B; font-weight: bold">new</span> Path(uri));
+            IOUtils.<span style="color: #658b00">copyBytes</span>(<span style="color: #00688B; font-weight: bold">int</span>, System.<span style="color: #658b00">out</span>, <span style="color: #B452CD">4096</span>, <span style="color: #8B008B; font-weight: bold">false</span>);
+        } <span style="color: #8B008B; font-weight: bold">finally</span> {
+            IOUtils.<span style="color: #658b00">closeStream</span>(in);
+        }
+    }
+}
+</pre></div>
+<p>代码就不解释了, 主要记录一下环境设置.</p>
+<h1 id="_1">环境变量</h1>
+<p>如果你是参考我的 Wiki <a href="http://wiki.smallcpp.cn/Hadoop/%E6%90%AD%E5%BB%BA%20Hadoop%20%E5%88%86%E5%B8%83%E5%BC%8F%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83.html#33">搭建 Hadoop 分布式实验环境</a> 搭建的实验环境, 那环境变量应该是已经配好了.</p>
+<p><code>vim ~/.bashrc</code></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #658b00">export</span> <span style="color: #00688B">JAVA_HOME</span>=/usr/java/jdk1.8.0_101
+<span style="color: #658b00">export</span> <span style="color: #00688B">HADOOP_HOME</span>=/usr/smallcpp/hadoop-2.7.3
+<span style="color: #658b00">export</span> <span style="color: #00688B">PATH</span>=<span style="color: #00688B">$PATH</span>:<span style="color: #00688B">$JAVA_HOME</span>/bin:<span style="color: #00688B">$HADOOP_HOME</span>/bin:<span style="color: #00688B">$HADOOP_HOME</span>/sbin
+</pre></div>
+<p>运行 <code>source ~/.bashrc</code> 刷新环境变量.</p>
+<h1 id="hadoop">Hadoop 类目录</h1>
+<p>这个类目录的作用是当运行 hadoop 或者 hdfs 的命令时, 命令的搜索目录.</p>
+<p>首先到 Hadoop 的根目录下创建一个新目录:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #658b00">cd</span> /usr/smallcpp/hadoop-2.7.3/
+mkdir myclass
+</pre></div>
+<p>然后 <code>vim hadoop-env.sh</code> 设置 <code>HADOOP_CLASSPATH</code>:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22"># Extra Java CLASSPATH elements.  Automatically insert capacity-scheduler.</span>
+<span style="color: #658b00">export</span> <span style="color: #00688B">HADOOP_CLASSPATH</span>=/usr/smallcpp/hadoop-2.7.3/myclass
+
+<span style="color: #8B008B; font-weight: bold">for</span> f <span style="color: #8B008B; font-weight: bold">in</span> <span style="color: #00688B">$HADOOP_HOME</span>/contrib/capacity-scheduler/*.jar; <span style="color: #8B008B; font-weight: bold">do</span>
+  <span style="color: #8B008B; font-weight: bold">if</span> [ <span style="color: #CD5555">"</span><span style="color: #00688B">$HADOOP_CLASSPATH</span><span style="color: #CD5555">"</span> ]; <span style="color: #8B008B; font-weight: bold">then</span>
+    <span style="color: #658b00">export</span> <span style="color: #00688B">HADOOP_CLASSPATH</span>=<span style="color: #00688B">$HADOOP_CLASSPATH</span>:<span style="color: #00688B">$f</span>
+  <span style="color: #8B008B; font-weight: bold">else</span>
+    <span style="color: #658b00">export</span> <span style="color: #00688B">HADOOP_CLASSPATH</span>=<span style="color: #00688B">$f</span>
+  <span style="color: #8B008B; font-weight: bold">fi</span>
+<span style="color: #8B008B; font-weight: bold">done</span>
+</pre></div>
+<p>这样当执行 <code>hdfs FileSystemCat</code> 的时候, 就会去 <code>/usr/smallcpp/hadoop-2.7.3/myclass</code> 找我们写好的 <code>FileSystemCat</code> 应用了.</p>
+<h1 id="_2">编译源码</h1>
+<p>要将 Java 源码文件编译成 <code>.class</code> 文件才能被 Hadoop 识别, 编译 Hdfs 应用需要导入 Hadoop 的 jar 包, 这些包位于以下目录:</p>
+<ul>
+<li>/usr/smallcpp/hadoop-2.7.1/share/hadoop/common</li>
+<li>/usr/smallcpp/hadoop-2.7.1/share/hadoop/common/lib</li>
+<li>/usr/smallcpp/hadoop-2.7.1/share/hadoop/hdfs</li>
+<li>/usr/smallcpp/hadoop-2.7.1/share/hadoop/hdfs/lib</li>
+</ul>
+<p>我们这里的例子用到的是 <code>/usr/smallcpp/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar</code> 包, 执行 <code>javac</code> 命令时用 <code>-cp</code> 指定下就好.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>javac -cp /usr/smallcpp/hadoop-2.7.3/share/hadoop/common/hadoop-common-2.7.3.jar FileSystemCat.java
+</pre></div>
+<p>然后 <code>/usr/smallcpp/hadoop-2.7.3/myclass</code> 下就多了个 <code>FileSystemCat.class</code> 文件.</p>
+<p>这时执行 <code>hdfs FileSystemCat /xxx</code> 就能查看到 <code>xxx</code> 文件的内容啦, 类似 linux 的 <code>cat</code> 命令.</p>
+<h1 id="ant">ant</h1>
+<p>由于编译源码时需要指定 Hadoop 的 jar 包, 当引入的 jar 包多时, 这样就特别麻烦, 我们可以借用 ant 工具来编译源码, ant 可以在 <code>bulid.xml</code> 中设定 jar 包的所在目录, 这样就比较方便了.</p>
+<p>这里仅作介绍, 因为我是使用 <a href="http://www.smallcpp.cn/05-shi-yong-java-api-cao-zuo-hdfs.html#eclipse-hdfs">Eclipse</a> 进行开发的, 导入 jar 包相对于说, 还是比较方便的.</p>
+<h1 id="_3">其他例子</h1>
+<h2 id="1">例 1</h2>
+<p>读入本地文件系统一个大约一百多字节的文本文件, 并将其第 101-120 字节的内容写入 HDFS 成为一个新文件.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.BufferedInputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.FileInputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.InputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.OutputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.net.URI</span>;
+
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.conf.Configuration</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.FileSystem</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.Path</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.io.IOUtils</span>;
+
+
+<span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">CopyLocalToHdfs</span> {
+
+    <span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">static</span> <span style="color: #00688B; font-weight: bold">void</span> <span style="color: #008b45">main</span>(String[] args) <span style="color: #8B008B; font-weight: bold">throws</span> Exception {
+        String local_uri = args[<span style="color: #B452CD">0</span>];
+        String hdfs_uri = args[<span style="color: #B452CD">1</span>];
+        InputStream in = <span style="color: #8B008B; font-weight: bold">new</span> BufferedInputStream(<span style="color: #8B008B; font-weight: bold">new</span> FileInputStream(local_uri));
+        in.<span style="color: #658b00">skip</span>(<span style="color: #B452CD">100</span>);
+        FileSystem fs = FileSystem.<span style="color: #658b00">get</span>(URI.<span style="color: #658b00">create</span>(hdfs_uri), <span style="color: #8B008B; font-weight: bold">new</span> Configuration(), <span style="color: #CD5555">"hanxiao"</span>);
+        OutputStream out = fs.<span style="color: #658b00">create</span>(<span style="color: #8B008B; font-weight: bold">new</span> Path(hdfs_uri));
+        IOUtils.<span style="color: #658b00">copyBytes</span>(in, out, (<span style="color: #00688B; font-weight: bold">long</span>)<span style="color: #B452CD">20</span>, <span style="color: #8B008B; font-weight: bold">true</span>);
+    }
+}
+</pre></div>
+<h2 id="2">例 2</h2>
+<p>例 1 的反向操作, 读入 HDFS 文件系统一个大约一百多字节的文本文件, 并将其第 101-120 字节的内容写入本地文件系统成为一个新文件.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.BufferedOutputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.FileOutputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.InputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.io.OutputStream</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">java.net.URI</span>;
+
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.conf.Configuration</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.FileSystem</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.fs.Path</span>;
+<span style="color: #8B008B; font-weight: bold">import</span> <span style="color: #008b45; text-decoration: underline">org.apache.hadoop.io.IOUtils</span>;
+
+
+<span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">class</span> <span style="color: #008b45; font-weight: bold">CopyHdfsToLocal</span> {
+
+    <span style="color: #8B008B; font-weight: bold">public</span> <span style="color: #8B008B; font-weight: bold">static</span> <span style="color: #00688B; font-weight: bold">void</span> <span style="color: #008b45">main</span>(String[] args) <span style="color: #8B008B; font-weight: bold">throws</span> Exception {
+        String hdfs_uri = args[<span style="color: #B452CD">0</span>];
+        String local_uri = args[<span style="color: #B452CD">1</span>];
+        FileSystem fs = FileSystem.<span style="color: #658b00">get</span>(URI.<span style="color: #658b00">create</span>(hdfs_uri), <span style="color: #8B008B; font-weight: bold">new</span> Configuration(), <span style="color: #CD5555">"hanxiao"</span>);
+        InputStream in = fs.<span style="color: #658b00">open</span>(<span style="color: #8B008B; font-weight: bold">new</span> Path(hdfs_uri));
+        in.<span style="color: #658b00">skip</span>(<span style="color: #B452CD">100</span>);
+        OutputStream out = <span style="color: #8B008B; font-weight: bold">new</span> BufferedOutputStream(<span style="color: #8B008B; font-weight: bold">new</span> FileOutputStream(local_uri));
+        IOUtils.<span style="color: #658b00">copyBytes</span>(in, out, (<span style="color: #00688B; font-weight: bold">long</span>)<span style="color: #B452CD">20</span>, <span style="color: #8B008B; font-weight: bold">true</span>);
+    }
+}
+</pre></div>
+<h1 id="eclipse-hdfs">使用 Eclipse 开发 Hdfs 应用</h1>
+<p>参考我的 Wiki: <a href="http://wiki.smallcpp.cn/Hadoop/%E4%BD%BF%E7%94%A8%20Eclipse%20%E5%BC%80%E5%8F%91%20HDFS.html">使用 Eclipse 开发 HDFS</a></p>
+<h1 id="hdfs">Hdfs 源码分析</h1>
+<p>参考 <a href="http://blog.csdn.net/lipeng_bigdata/article/category/6049177">HDFS 2.6.0 源码分析</a></p>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5927\u6570\u636e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-23T20:26:00+08:00", "headline": "05. \u4f7f\u7528 Java Api \u64cd\u4f5c HDFS", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/05-shi-yong-java-api-cao-zuo-hdfs.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u4f7f\u7528 Java Api \u64cd\u4f5c HDFS"}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>

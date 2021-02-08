@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>Git 简明手册</title>
+  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
+  <style media="print">
+    .is-hidden-print {
+      display: none !important
+    }
+  </style>
+  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
+<meta property="og:title" content="Small Cpp - Git 简明手册">
+  <meta property="og:description" content="1. git 配置 git config --list git config --global user.name “your name” git config --global user.email “email@example.com” git config --global push.followTags true // 这会在 push 时推送有注释的 …">
+<meta property="og:url" content="http://www.smallcpp.cn/git-jian-ming-shou-ce.html">
+    <meta property="og:image" content="http://i67.tinypic.com/lees0.jpg">
+    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
+<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Small Cpp">
+<meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-03-13T13:00:00+08:00">
+  <meta property="article:section" content="工具折腾">
+</head>
+
+<body id="index" class="home">
+  <header class="hero is-primary">
+    <div class="hero-head">
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-brand">
+            <a class="navbar-item title is-3"
+              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar has-shadow is-hidden-print">
+    <div class="container">
+      <div class="navbar-center"></div>
+      <span id="navToggle" class="navbar-burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <div id="navMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
+          <a class="navbar-item is-tab is-active"
+            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
+          <a class="navbar-item is-tab "
+            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section columns">
+      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+<section id="content" class="body">
+  <article>
+    <h1 class="title">
+      <a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html" rel="bookmark"
+        title="Permalink to Git 简明手册">Git 简明手册</a></h1>
+<footer class="post-info">
+  <abbr class="published" title="2016-03-13T13:00:00+08:00">
+    Published <span class="is-info">Sun 13 March 2016</span>
+    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
+  </abbr>
+
+  <p class="author">
+    <em>by       HanXiao
+    </em>
+    &nbsp;
+  </p>
+  
+</footer>    <div class="section">
+      <div class="toc">
+<ul>
+<li><a href="#1-git">1. git 配置</a></li>
+<li><a href="#2">2. 初始化版本库</a></li>
+<li><a href="#3">3. 正常工作流程</a></li>
+<li><a href="#4">4. 分支</a></li>
+<li><a href="#5">5. 撤销</a><ul>
+<li><a href="#commit">未 commit</a><ul>
+<li><a href="#-">–版本层面上</a></li>
+<li><a href="#-_1">–文件层面上</a></li>
+</ul>
+</li>
+<li><a href="#commit_1">已 commit</a><ul>
+<li><a href="#-_2">–版本层面上</a><ul>
+<li><a href="#a-push">a. 修改或删除一个提交 (未 push)</a></li>
+<li><a href="#b-push">b. 创建一个撤销了上次提交的新提交 (已 push)</a></li>
+</ul>
+</li>
+<li><a href="#-_3">– 文件层面上</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#6">6. 比较差异</a><ul>
+<li><a href="#beyond-compare-diff">整合 beyond compare 与 diff</a></li>
+</ul>
+</li>
+<li><a href="#7">7. 忽略文件</a></li>
+<li><a href="#8">8. 远程操作</a><ul>
+<li><a href="#81">8.1 新建/克隆版本库</a><ul>
+<li><a href="#811">8.1.1 新建版本库</a></li>
+<li><a href="#812">8.1.2 克隆版本库</a></li>
+</ul>
+</li>
+<li><a href="#82-pull">8.2 拉取更新(pull)</a></li>
+<li><a href="#83-fetch">8.3 获取更新(fetch)</a></li>
+</ul>
+</li>
+<li><a href="#9-git-in-windows">9. Git In Windows</a></li>
+<li><a href="#10-sourcetree-in-github">10. SourceTree In GitHub</a><ul>
+<li><a href="#101-ssh-key">10.1 创建 SSH Key</a></li>
+<li><a href="#102-github">10.2 设置 GitHub</a></li>
+<li><a href="#103-sourcetree">10.3 设置 SourceTree</a></li>
+<li><a href="#104">10.4 克隆项目</a></li>
+</ul>
+</li>
+<li><a href="#11-git-stash">11. git stash 贮藏</a></li>
+<li><a href="#12">12. 中文显示问题</a></li>
+<li><a href="#13">13. 区分文件大小写</a></li>
+<li><a href="#14">14. 命令别名</a></li>
+<li><a href="#15-log">15. 自定义 Log</a></li>
+</ul>
+</div>
+      <hr />
+      
+<h2 id="1-git">1. git 配置</h2>
+<ul>
+<li>git config --list</li>
+<li>git config --global user.name “your name”</li>
+<li>git config --global user.email “email@example.com”</li>
+<li>git config --global push.followTags true  // 这会在 push 时推送有注释的 tag (git tag -am “xx” yy)</li>
+<li>git config --global core.autocrlf  false  // 关闭换行符检测, windows 的换行有点问题</li>
+<li>git config --global merge.ff false  // 关闭 merge 的 fast forwarding 选项, 能保证每次 merge 都有原始分支信息</li>
+<li>git config --global pull.ff only  // pull 也走的 merge 过程, 需要覆盖上一条的设置, 否则 pull 也会产生一条 Merge message</li>
+<li><a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html#12">中文显示</a></li>
+<li><a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html#13">区分大小写</a></li>
+<li><a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html#14">命令别名</a></li>
+<li><a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html#15-log">自定义 Log</a></li>
+</ul>
+<h2 id="2">2. 初始化版本库</h2>
+<p>打开 git bash, 进入目标目录, 执行 <strong>git init</strong>, 在目标目录下就会生成 <strong>.git</strong> 目录, 它存放的就是 git 版本库信息.</p>
+<h2 id="3">3. 正常工作流程</h2>
+<p>edit file (工作区) -&gt; git add (暂存区/index/stage) -&gt; git commit (commit)</p>
+<ul>
+<li>git add file1 file2
+    + 如果想将当前目录所有文件都加入 index, 可以用 git add . (点表示当前目录)</li>
+<li>git diff --cached 可以查看哪些文件将被 commit, 即 index 里的文件
+    + 或者可以用 git status 查看当前版本库的状况</li>
+<li>git commit -m “注释”</li>
+</ul>
+<blockquote>
+<p>如果不用 git add 命令, 可以用 git commit -a 参数来合并 add 和 commit 操作(不包括未加入版本控制的文件, 即新建立的文件).</p>
+</blockquote>
+<h2 id="4">4. 分支</h2>
+<ul>
+<li>创建一个新分支
+    + <code>git branch</code> 分支名</li>
+<li>查看本地分支表
+    + <code>git branch</code>, * 号表示当前所在分支</li>
+<li>查看所有分支表(包括远程)
+    + <code>git branch -a</code></li>
+<li>切换分支
+    + <code>git checkout</code> 分支名</li>
+<li>合并分支
+    + <code>git checkout master</code>, <code>git merge</code> 分支名, 这样就把分支的内容合并的 master 分支了 (<a href="http://www.smallcpp.cn/git-jian-ming-shou-ce.html#15-log">注意</a>)</li>
+<li>解决冲突
+    + 如果产生了冲突, 先 <code>git diff</code> 查看冲突, 解决冲突后, <code>git add</code>, <code>git commit</code> 重新提交</li>
+<li>查看图形化时间线
+    + <code>gitk</code></li>
+<li>比较分支
+    + <code>git diff</code> 分支名..分支名</li>
+<li>重命名本地分支
+    + <code>git branch -m</code> 原名 新名</li>
+<li>删除本地分支
+    + <code>git branch -d</code> 分支名, 删除已经合并的分支
+    + <code>git branch -D</code> 分支名, 强制删除分支, 不管有没有合并过</li>
+<li>删除远程分支
+    + 方法一: <code>git push --delete origin branch-name</code>
+    + 方法二: <code>git push origin :branch-name</code></li>
+<li>清理本地的远程分支追踪 (使用场景: 某一个远程分支被另一个开发删除)
+    + 方法一: <code>git fetch -p</code>
+    + 方法二: <code>git remote prune origin</code></li>
+</ul>
+<h2 id="5">5. 撤销</h2>
+<p>撤销的情况比较复杂</p>
+<p>首先是 <strong>reset --参数 commit id</strong> 命令, 这个命令有三个参数:</p>
+<ul>
+<li>--mixed：此为默认方式, 回退到某个版本, 只保留工作区, 回退 commit 和 index</li>
+<li>--soft：回退到某个版本, 只回退了 commit, 保留工作区和 index</li>
+<li>--hard：彻底回退到某个版本, 工作区、commit 和 index 都会改变</li>
+</ul>
+<p>再就是 <strong>HEAD</strong> ‘指针’, HEAD 表示当前版本, 上一个版本就是 HEAD^, 上上一个版本就是 HEAD^^, 当然往上100个版本写 100 个 ^ 比较容易数不过来, 所以写成 HEAD~100;</p>
+<p>另外还有个 <strong>ORIG_HEAD</strong> 指针, 它指向的是 HEAD 上一次所在的位置.</p>
+<p>使用 <strong>reset</strong> 命令, 就可以在各个版本之间穿梭了.
+穿梭前, 用 <strong>git log</strong> 可以查看提交历史, 以便确定要回退到哪个版本, 使用 <strong>--pretty=oneline</strong> 参数可以比较清晰的看到 log, 不过要注意, 一但回到某个版本, 那该版本之后的那些版本通过 git log 就看不到了, 如果还想要重返未来, 可以用 <strong>git reflog</strong> 查看命令历史, 就可以得到’未来’的 commit id 了.</p>
+<h3 id="commit">未 commit</h3>
+<h4 id="-">–版本层面上</h4>
+<p>如果你修改了工作区, 甚至已经提交到 index, 只要你还没 commit, 就可以通过 <strong>git reset --hard HEAD</strong> 可以回退到当前版本的初始状态.</p>
+<h4 id="-_1">–文件层面上</h4>
+<p>还有一种情况, 就是修改了工作区, 提交到了 index, 然后又修改了工作区, 然后, 只需要撤掉第二次工作区的修改, 如果使用 git reset --hard HEAD 命令, 那就会把工作区和 index 都给撤掉了, 我们可以使用 <strong>checkout</strong> 命令.</p>
+<p>命令 <strong>git checkout -- readme.txt</strong> 意思就是, 把 readme.txt 文件在工作区的修改全部撤销, 它可以让这个文件回到最近一次 git commit 或 git add 时的状态.</p>
+<h3 id="commit_1">已 commit</h3>
+<h4 id="-_2">–版本层面上</h4>
+<p>如果已经 commit, 有<strong>两种</strong>方式来撤销.</p>
+<h5 id="a-push">a. 修改或删除一个提交 (未 push)</h5>
+<p>使用 <code>git commit --amend</code> 可以将本次修改追加到上一次的提交, 还可以通过 <code>-c</code> 指定要追加的 <code>commit id</code>.</p>
+<p>如果确实要删除, 可以通过 <strong>git reset --hard ORIG_HEAD</strong> 或者 <strong>git reset --hard HEAD^</strong> 来恢复到上一个版本.</p>
+<h5 id="b-push">b. 创建一个撤销了上次提交的新提交 (已 push)</h5>
+<p><strong>git revert commit id</strong>, 这个命令将 commit id 的提交撤销(即回退到上一个版本), 然后创建一个新的提交, 这是一种比较安全的作法, 推荐使用.</p>
+<p>所以这里要注意下, 假设现在有两个版本, A 版本 和 B 版本, A 是刚提交的版本, B 是上一个版本, 如果想撤销 A 的提交.</p>
+<ul>
+<li>用 <strong>reset</strong> 的话, 直接指定 B 版本的 commit id, 它会直接回退到 B 版本</li>
+<li>用 <strong>revert</strong> 的话, 指定的是 A 版本的 commit id, 它会将 A 版本的上一个版本做为一个新提交</li>
+</ul>
+<p>注意, revert 后其实并不会直接 commit, 而是保存在 index 中, 需要执行 git commit 才是真正的提交.</p>
+<p>在 revert 下, 如果已经修改了当前工作区, 那就有可能和撤销后的版本有冲突, 需要解决冲突后, 再提交.</p>
+<h4 id="-_3">– 文件层面上</h4>
+<p>首先查看该文件的历史版本信息: git log default.txt</p>
+<p>记录下需要恢复的 commit 版本号, 如: 9aa51d89799716aa68cff3f30c26f8815408e926</p>
+<p>恢复该文件: <strong>git reset --hard 9aa51d89799716aa68cff3f30c26f8815408e926 default.txt</strong></p>
+<p>提交git: git commit -m “恢复单个文件”</p>
+<h2 id="6">6. 比较差异</h2>
+<p>之前也提到一些, 现在单独列出来:</p>
+<ul>
+<li>git diff 查看工作区与 index 的差异 (产生冲突时可以用该命令查看)</li>
+<li>git diff --cached, 查看 index 和 commit 的差异</li>
+<li>git diff 分支名..分支名, 比较分支</li>
+<li>git diff HEAD 查看 工作区 和 commit 的差异</li>
+<li>git diff 分支名, 查看工作区与另一个分支的差异</li>
+</ul>
+<h3 id="beyond-compare-diff">整合 beyond compare 与 diff</h3>
+<p>安装好 BCompare 后, 打开用户目录~下的 <code>.gitconfig</code> 文件, 进行如下修改:</p>
+<p>windows:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[diff]
+    tool = bc3
+[difftool]
+    prompt = false
+[difftool "bc3"]
+    cmd = "\"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\""
+
+[merge]
+    tool = bc3
+[mergetool]
+    prompt = false
+    keepBackup = false
+[mergetool "bc3"]
+    cmd = "\"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\""
+    trustExitCode = true
+</pre></div>
+<p>OX:</p>
+<p>安装 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.</p>
+<p>再参考: <a href="http://www.scootersoftware.com/support.php?zz=kb_vcs_osx">Beyond Compare</a>官网介绍.</p>
+<p>最后需要执行下面两行命令:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global difftool.prompt <span style="color: #658b00">false</span>
+git config --global mergetool.keepBackup <span style="color: #658b00">false</span>
+</pre></div>
+<p>参数说明:</p>
+<ul>
+<li><strong>prompt</strong>: 打开 tool 前是否出现提示 “是否打开 xx ?”, 一般不需要</li>
+<li><strong>keepBackup</strong>: 解决冲突时会生成一个原来冲突文件的备份, 一般也不需要</li>
+<li><strong>trustExitCode</strong>: 是否接受 tool 的成功解决冲突通知, 如果设为 false, 解决冲突后 git 还会再问一次 “是否解决冲突了?”, 简直多余, 所以也不需要</li>
+</ul>
+<p>三路合并:</p>
+<ul>
+<li><strong>LOCAL</strong>: your file with the changes you’ve made to it</li>
+<li><strong>REMOTE</strong>: the file you’re merging in, possibly authored by someone else</li>
+<li><strong>BASE</strong>: the common ancestor file that LOCAL and REMOTE came from</li>
+<li><strong>MERGE_RESULT</strong>: the file resulting from the merge where you resolve conflicts</li>
+</ul>
+<p>You often need to see all four of these pieces of information to make intelligent choices. Where you came from (LOCAL), where the other person’s changes came from (REMOTE), where you both started (BASE) and where you are now (MERGE_RESULT).</p>
+<p>暴露一个无限试用的方式.</p>
+<p>打开终端</p>
+<ol>
+<li>进入 <code>Beyond Compare</code> 目录，命令是 <code>cd /Applications/Beyond\ Compare.app/Contents/MacOS</code></li>
+<li>重命名文件 <code>BCompare</code> 为 <code>BCompare.real</code>, 命令是 <code>sudo mv BCompare BCompare.real</code></li>
+<li>创建新的 <code>BComapre</code> 文件, 命令是 <code>sudo touch BCompare</code></li>
+<li>打开文件 <code>sudo vim BCompare</code> 写入以下内容后, 并修改权限 <code>sudo chmod a+x BCompare</code></li>
+</ol>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span style="color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px;">1</span>
+<span style="color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px;">2</span>
+<span style="color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px;">3</span></pre></div></td><td class="code"><div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">#!/bin/bash</span>
+rm <span style="color: #CD5555">"/Users/</span><span style="color: #8B008B; font-weight: bold">$(</span>whoami<span style="color: #8B008B; font-weight: bold">)</span><span style="color: #CD5555">/Library/Application Support/BeyondCompare/registry.dat"</span>
+<span style="color: #CD5555">"`dirname "</span><span style="color: #00688B">$0</span><span style="color: #CD5555">"`"</span>/BCompare.real <span style="color: #00688B">$@</span>
+</pre></div>
+</td></tr></table>
+<p><strong>下面是之前的方法, 现在已经不用了, 仅留个备份.</strong></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[diff]
+    tool = bc3
+[difftool]
+    prompt = false
+[difftool "bc3"]
+    cmd = bcomp $REMOTE $LOCAL
+
+[merge]
+    tool = bc3
+[mergetool]
+    prompt = false
+    keepBackup = false
+[mergetool "bc3"]
+    cmd = bcomp $LOCAL $REMOTE $BASE $MERGED
+    trustExitCode = true
+</pre></div>
+<p><strong>下面是更早之前的方法, 现在已经不用了, 仅留个备份.</strong></p>
+<p>首先在 <code>~/bin/</code> 目录下 (windows 是用户主目录, 如 <code>C:\Users\Administrator</code>) 新建一个 git-diff-wrapper.sh 文件</p>
+<p>window 系统的 git bash 的 git-diff-wrapper.sh</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>#/bin/sh
+# diff is called by git with 7 parameters:
+# path old-file old-hex old-mode new-file new-hex new-mode
+"D:/hanxiao/i/l/u/Beyond Compare/BCompare.exe" "$2" "$5" | cat
+</pre></div>
+<p>mac 系统的 git-diff-wrapper.sh</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>#/bin/sh
+# diff is called by git with 7 parameters:
+# path old-file old-hex old-mode new-file new-hex new-mode
+bcompare "$2" "$5"|cat
+</pre></div>
+<p>在用户目录~下修改 .gitconfig 文件, 添加一行:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[diff]
+external = ~/bin/git-diff-wrapper.sh
+</pre></div>
+<p>注意: Mac上运行 git diff 时, 由于系统要保存历史文件到临时目录再进行比较, 而在保存到临时目录又需要很高的权限, 所以在 git diff 前加了 sudo 才能执行成功.</p>
+<h2 id="7">7. 忽略文件</h2>
+<p>即 .gitignore, 由于 windows 的特性, 可能无法直接新建这样文件名的文件, 可以在 git bash 中使用 linux 命令来新建.</p>
+<p>.gitignore 文件只对还没有加入版本管理的文件起作用, 如果之前已经在之前已经把这些文件加入了版本库, 忽略文件就不起作用了, 那么解决方法就是先把本地缓存删除(改变成未 track 状态), 然后再提交:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>  git rm -r --cached .
+  git add .
+  git commit -m 'update .gitignore'
+</pre></div>
+<p>这并不会改变已有的版本库历史信息, 可以放心使用.</p>
+<p>配置语法:</p>
+<ul>
+<li>以 “#” 开头的是注释</li>
+<li>以 “/” 开头表示目录</li>
+<li>以 “?” 通配单个字符</li>
+<li>以 “*” 通配多个字符</li>
+<li>以方括号 “[]” 包含单个字符的匹配列表, 如忽略所有的 *.txt 和 *.html 文件, *.[txthtml]</li>
+<li>以叹号 “!” 强制跟踪某个文件或目录</li>
+</ul>
+<p>例如在 .gitignore 写入 test.lib 后, 那么将忽略 test.lib 文件, 写入 /test(或者 /test/*) 就能忽略根目录下的 test 目录(包括这个目录下的所有內容).</p>
+<h2 id="8">8. 远程操作</h2>
+<h3 id="81">8.1 新建/克隆版本库</h3>
+<p>根据情况不同, 有两种操作.</p>
+<h4 id="811">8.1.1 新建版本库</h4>
+<p>现在的情景是, 你已经在本地创建了一个 Git 仓库后, 又想在 GitHub 创建一个 Git 仓库, 并且让这两个仓库进行远程同步, 这样, GitHub 上的仓库既可以作为备份, 又可以让其他人通过该仓库来协作, 真是一举多得.</p>
+<p>首先, 你要去 GitHub 上建立一个新的空版本库, 最好与本地的仓库同名, 好, 现在假设你已经建好了, 新库的地址为: git@github.com:xxx/yyy.git</p>
+<p>现在, 在本地打开 git bash(注意, 要进入本地待同步的仓库目录下), 执行下面的命令:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git remote add origin git@github.com:xxx/yyy.git
+</pre></div>
+<p>这个命令可以理解成, 给远程仓库(git@github.com:xxx/yyy.git)指定一个简名 origin, 以后在本地仓库目录下, 操作 origin 即是操作远程仓库, origin 是默认的叫法, 也可以改成别的, 但是 origin 这个名字一看就知道是远程库, 通常情况下, 我们也是用这个名字.</p>
+<p>下一步, 就可以把本地库的所有内容推送到远程库上:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git push -u origin master:master
+</pre></div>
+<p>推送到远程, 用 <strong>git push</strong> 命令.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git push &lt;远程主机名&gt; &lt;本地分支名&gt;:&lt;远程分支名&gt;
+</pre></div>
+<p>如果省略远程分支名, 则表示将本地分支推送与之存在”追踪关系”的远程分支, 通常两者同名, 如果该远程分支不存在, 则会被新建;</p>
+<p><strong>-u</strong> 参数相当于建立关联(追踪)关系, 将远程主机(这里是 origin)的 master 分支和本地仓库的 master 分支关联起来, 以后进行推送/拉取操作时就可以简化命令.
+<strong>如果你使用 branch -a 来查看当前所有分支, 则会看到这个关联(追踪)关系</strong>.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>$ git branch -a
+* master
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/master
+</pre></div>
+<blockquote>
+<p>remotes/origin/HEAD is the default branch for the remote named origin. This lets you simply say origin instead of origin/master.</p>
+</blockquote>
+<p><a href="http://www.yiibai.com/git/git_push.html">关于 git push 命令的详细参考链接</a></p>
+<p>推送成功后, 可以立刻在 GitHub 页面中看到远程库的内容已经和本地一模一样;</p>
+<p>从现在起, 只要本地作了提交, 就可以通过命令:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git push
+</pre></div>
+<p>把本地 master 分支的最新修改推送至 GitHub, 现在, 你就拥有了真正的分布式版本库.</p>
+<h4 id="812">8.1.2 克隆版本库</h4>
+<p>8.1.1 讲了先有本地库, 后有远程库的时候, 如何关联远程库, 现在, 假设已经有了一个远程库, 从远程库克隆到本地, 该如何操作.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>$ git clone git@github.com:xxx/yyy.git
+</pre></div>
+<p>如果是 clone 的方式, 那么, 我们就不需要手动去设置远程仓库的简名以及关联(追踪)关系了, 它会自动给它设置好, 我们可以通过 git config –list 查看.</p>
+<p>当然, 推送修改时, 你依然可以用 <strong>-u</strong> 参数来指定关联:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git push -u origin master:master
+</pre></div>
+<h3 id="82-pull">8.2 拉取更新(pull)</h3>
+<p>该操作取回远程主机某个分支的更新, 再<strong>与本地的指定分支合并</strong>.</p>
+<p><a href="http://www.yiibai.com/git/git_pull.html">参考链接</a></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
+</pre></div>
+<p>如果我们设置了关联(追踪)关系(参考 8.1.1), 则可以省略命令, 直接写: <strong>git pull</strong> 就可以了.</p>
+<h3 id="83-fetch">8.3 获取更新(fetch)</h3>
+<p>该操作取回远程主机某个分支的更新, 但并<strong>不与本地分支进行合并</strong>.</p>
+<p><a href="http://www.yiibai.com/git/git_fetch.html">参考链接</a></p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git fetch &lt;远程主机名&gt; &lt;分支名&gt;
+</pre></div>
+<p>所取回的更新, 在本地主机上要用 “<strong>远程主机名/分支名</strong>” 的形式读取, 比如 origin 主机的 master, 就要用 origin/master 读取.</p>
+<p>git branch -a 查看所有分支:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>$ git branch -a
+* master
+  remotes/origin/master
+</pre></div>
+<p>上面命令结果表示, 本地主机的当前分支是 master, 远程分支是 origin/master.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git log -p master..origin/master
+</pre></div>
+<p>取回远程主机的更新以后, 通过上面的命令比较本地仓库和远程参考的区别, 如果你需要详细的比较信息, 可以用 diff 命令:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git diff master..origin/master
+</pre></div>
+<p>当检查修正完后, 使用 git merge 在本地分支上合并远程分支:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>$ git merge origin/master
+</pre></div>
+<p>上面命令表示在当前分支上, 合并 origin/master.</p>
+<h2 id="9-git-in-windows">9. Git In Windows</h2>
+<p>首先, 先安装 Msysgit 和 SourceTree, 因为服务器在国外, 下载起来非常慢, 我下载好一份放在云盘上, 地址在下面:</p>
+<p>Git For Windows(Msysgit):
+<a href="https://yunpan.cn/cYR2UcrFIwrKM">https://yunpan.cn/cYR2UcrFIwrKM</a> 访问密码 1d91</p>
+<p>SourceTree:
+<a href="https://yunpan.cn/cYR2i2zBPbzce">https://yunpan.cn/cYR2i2zBPbzce</a> 访问密码 45cd</p>
+<blockquote>
+<p>除了 SourceTree 外也还有其他的选择, 如 TortoiseGit, 然而试用过后, 还是 SourceTree 比较好.</p>
+</blockquote>
+<p>Git For Windows(Msysgit) 自带一个 <strong>git bash</strong> 和 <strong>git gui</strong>, 哦, 对了, 还有一个 <strong>gitk</strong>.</p>
+<ul>
+<li>git bash 就是一个模拟 linux 的终端</li>
+<li>git gui 是一个轻量级的图形操作界面</li>
+<li>gitk  是一个 git 浏览器, 主要用于用户查看仓库的各类信息(更改信息、提交信息、版本信息、图形显示等)</li>
+</ul>
+<p>Msysgit 的图形化界面, 虽然能满足日常需求, 但确实比较粗糙, 而 SourceTree 就是一个很好的替代方案, 日常操作就用 SourceTree, 需要用到命令行时就用 git bash.</p>
+<p>其实 SourceTree 也可以自动下载 git, 只不过速度不敢恭维, 还是我们自己手动下载、安装好了, 安装好 SourceTree 后, 首次运行, 会让你进行一个<strong>初始化设置</strong>, 请<strong>直接跳过</strong>;
+因为我们已经安装好 Git 客服端了, 如果让 SourceTree 进行初始化, 它会给你重新下载一个 Git 还有 Mercurial.</p>
+<p>SourceTree 参考资料:</p>
+<ul>
+<li><a href="http://www.myexception.cn/other/1997033.html">用SourceTree轻巧Git项目图解</a></li>
+<li><a href="http://www.takobear.tw/2014/02/15/bear-git-flow-sourcetreegit-flow">如何在SOURCETREE使用GIT FLOW管理開發!</a></li>
+</ul>
+<h2 id="10-sourcetree-in-github">10. SourceTree In GitHub</h2>
+<p>假设已经有了 GitHub 上自己的远程仓库.</p>
+<h3 id="101-ssh-key">10.1 创建 SSH Key</h3>
+<p>首先, 到用户目录下(C:/Users/Administrator), 看看有没有 .ssh 目录, 如果有, 则进入这个目录, 看看有没有 <strong>id_rsa</strong>(私钥) 和 <strong>id_rsa.pub</strong>(公钥) 这两个文件, 如果有, 就可以跳过 10.1 后面的操作了, 直接开始 10.2, 如果没有, 则打开 gui bash, 运行下面的命令, 创建一个密钥对:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>$ ssh-keygen -t rsa -C "youremail@example.com" // 后面的 -C 邮件 是注释, 也可以省略
+</pre></div>
+<p>一路回车后, 就在刚才的目录下面生成了 <strong>id_rsa</strong>(私钥) 和 <strong>id_rsa.pub</strong>(公钥) 两个文件.</p>
+<h3 id="102-github">10.2 设置 GitHub</h3>
+<p>登录 GitHub 后, 设置 GitHub 的 “SSH Keys”, 就是刚才生成的 <strong>id_rsa.pub</strong>(公钥) 里面的内容, 直接复制进去就可以了.</p>
+<p>设置完后, 可以在 git bash 中执行下面的命令看看有没有设置成功:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>ssh git@github.com
+</pre></div>
+<h3 id="103-sourcetree">10.3 设置 SourceTree</h3>
+<p>打开 “工具”-&gt;”创建/导入SSH密钥”, 打开 PuTTY 后, 点击 “Load” 按钮, 选择 9.1 中生成的 <strong>id_rsa</strong>(私钥) 文件, 然后点击 “Save private key” 按钮, 保存为 <strong>id_rsa.ppk</strong>.</p>
+<h3 id="104">10.4 克隆项目</h3>
+<p>到你的 GitHub 上拷贝一个项目的 SSH 下来, 打开 SourceTree, 点击 “克隆/新建”, 填写好相关信息后, 点击 “克隆”, 首次使用, 可能会克隆不下来, SourceTree 会报个错.</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>...
+The server's rsa2 key fingerprint is:
+ssh-rsa 2048 9f:a7:a4:00:e4:f1:7a:bc:aa:c1:d3:ea:1e:d7:4d:79
+If you trust this host, enter "y" to add the key to
+PuTTY's cache and carry on connecting.
+If you want to carry on connecting just once, without
+adding the key to the cache, enter "n".
+If you do not trust this host, press Return to abandon the
+connection.
+</pre></div>
+<blockquote>
+<p>其实这里是让你输 yes / no, 可惜 sourcetree 中输入不了,  得我们手动在 cmd 中操作</p>
+</blockquote>
+<p>这是因为首次连接一个使用 SSH 协议的 Git 服务器的时候, 因为远程 SSH 服务器的公钥没有经过确认而导致 git 命令执行失败, 解决方法是在<strong>命令行</strong>下找到 SourceTree 安装目录里的 PuTTy 工具, 例如 “C:/Program Files (x86)/Atlassian/SourceTree/tools/putty/plink.exe”, 然后执行命令</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>plink.exe git@github.com
+</pre></div>
+<p>它会继续报刚才的错误, 我们在 cmd 中输入 yes 就可以了.</p>
+<p>然后重新在 SourceTree 中克隆项目, 然后它就会提示你, 让你选择私钥 key 文件, 点击桌面右下角任务栏的 “Pageant”, 点击 “add key” 按钮, 选择 9.3 中生成的 <strong>id_rsa.ppk</strong> 即可.</p>
+<blockquote>
+<p>每次重新启动电脑后, Pageant 都会清空, 又要重新选择 key 文件 . . . , 等找到解决方法后再来更新笔记.</p>
+</blockquote>
+<p>已经找到解决方法:
+点击 “工具”-&gt;”选项”-&gt;”一般”, 在 SSH 密钥那一栏里选择我们的 <strong>id_rsa.ppk</strong>, 就不需要每次都要 “add key” 了.</p>
+<h2 id="11-git-stash">11. git stash 贮藏</h2>
+<p>git stash 的功能是保存当前工作目录和暂存区, 并 reset –hard HEAD, 即恢复成最新 commit 时的状态.</p>
+<p>需要恢复的时候, 使用 <strong>git stash apply</strong> 就将过去贮藏(stashed)的工作区快照恢复了, 和 merge 一样，git stash apply 之前要保证当前目录是干净的(没有未提交的改变), 否则会保错:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>error: Your local changes to the following files would be overwritten by merge: Please, commit your changes or stash them before you can merge.
+</pre></div>
+<p>如果工作区在贮藏之后发生了变化(即更改过 file 并 commit 了), 恢复时就有可能产生冲突(conflict), 这种情况下 git stash apply 会对工作目录进行 merge 操作.</p>
+<p>git stash apply 只能恢复工作目录, 如果想把暂存区也按照贮藏时的暂存区恢复的话, 可以加上 <strong>–index</strong> 参数, 如果暂存区恢复时发生冲突了会怎么办呢? 它可不会让你进行 merge, 而是直接报错不允许你这么做:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>Conflicts in index. Try without --index.
+</pre></div>
+<p>所以不要指望让 stash 去恢复暂存区, 如果暂存区有文件, 还是先 commit 的吧, 不然很可能就找不回来了…</p>
+<p>在使用 SourceTree 的 stash 功能过程中, 我误解了一点东西, 这里也记录下:</p>
+<p>SourceTree 的 stash 操作会让选择一个选项 – “保存暂存的更改”</p>
+<p><img alt="" src="http://i67.tinypic.com/lees0.jpg"/></p>
+<p>我一开始以为, 这个选项是控制 –index 参数, 后来发现不管勾不勾这个选项, 恢复时都不会恢复暂存区的内容(估计 SourceTree 也认为不能指望让 stash 去恢复暂存区吧), 那这个选项是干什么的呢?</p>
+<ul>
+<li>不勾选, 就是正常的 git stash, 和我们使我 git bash 用命令一样的效果</li>
+<li>勾选, 贮藏后, 工作区的内容被回退到 HEAD, 但保留暂存区里的内容</li>
+</ul>
+<h2 id="12">12. 中文显示问题</h2>
+<p>参考: <a href="http://xstarcd.github.io/wiki/shell/git_chinese.html">http://xstarcd.github.io/wiki/shell/git_chinese.html</a></p>
+<p>解决 git status 和 push、pull 时, 中文文件名乱码, 如:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[/data/soft/xstarcd.github.io]$git status
+位于分支 master
+您的分支与上游分支 'origin/master' 一致。
+未跟踪的文件:
+  （使用 "git add &lt;文件&gt;..." 以包含要提交的内容）
+
+        "\346\265\213\350\257\225.txt"
+
+提交为空，但是存在尚未跟踪的文件（使用 "git add" 建立跟踪）
+</pre></div>
+<p>解决方式：</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global core.quotepath <span style="color: #658b00">false</span>
+</pre></div>
+<p>另外, 还会出现 commit/log 信息乱码:</p>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global i18n.commitencoding utf-8
+git config --global i18n.logoutputencoding utf-8
+</pre></div>
+<p>然后还要把 <code>LESSCHARSET=utf-8</code> 添加到系统环境变量中：</p>
+<p><img alt="" src="http://www.smallcpp.cn/images/Git简明手册/LESSCHARSET.jpg"/></p>
+<h2 id="13">13. 区分文件大小写</h2>
+<p>默认的 Git 监控是<strong>不区分</strong>文件大小写的 ~</p>
+<p>Git 控制是否忽略大小的选项是 <code>core.ignorecase</code> (true: 不区分, false: 区分), 但是这个选项在每个 Git 项目的配置里都是默认 true 的, 所以就算配了全局的 <code>core.ignorecase</code> 为 <code>false</code>, 也会被项目的配置给覆盖掉.</p>
+<p>所以一般这里有两种处理方法.</p>
+<ul>
+<li>第一种, 做全局设置 <code>git config --global core.ignorecase false</code>, 并且删除 Git 项目的 <code>core.ignorecase</code> 选项</li>
+<li>第二种, 就是只对当前项目做配置 <code>git config core.ignorecase false</code></li>
+</ul>
+<h2 id="14">14. 命令别名</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global alias.co checkout
+git config --global alias.cm commit -m
+git config --global alias.br branch
+git config --global alias.st status
+</pre></div>
+<h2 id="15-log">15. 自定义 Log</h2>
+<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global alias.lg <span style="color: #CD5555">"log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</span>
+</pre></div>
+    </div>
+
+  </article>
+</section>
+
+<script type="application/ld+json">
+  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-03-13T13:00:00+08:00", "headline": "Git \u7b80\u660e\u624b\u518c", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/git-jian-ming-shou-ce.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "1. git \u914d\u7f6e git config --list git config --global user.name \u201cyour name\u201d git config --global user.email \u201cemail@example.com\u201d git config --global push.followTags true // \u8fd9\u4f1a\u5728 push \u65f6\u63a8\u9001\u6709\u6ce8\u91ca\u7684 \u2026", "image": {"@type": "ImageObject", "url": "http://i67.tinypic.com/lees0.jpg"}}
+</script>
+      </div>
+
+      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
+        <aside class="menu">
+          <p class="menu-label">Links</p>
+          <ul class="menu-list">
+            <li><a href="https://zhuec.gitbook.io/learning-notes/">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">Learning Notes</span>
+              </a></li>
+            <li><a href="https://github.com/vechain/thor">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">VeChain Thor</span>
+              </a></li>
+            <li><a href="http://blog.csdn.net/u010850265">
+                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
+                <span class="link-text">CSDN</span>
+              </a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container has-text-centered">
+ <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
+        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+          <a href="https://blog.getpelican.com/">Pelican</a></span>
+        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
+        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
+        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      </div>
+    </div>
+  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+    <div class="github-fork-ribbon">
+      <a href="https://github.com/uldaman">
+        <i class="fa fa-github fa-fw"></i>
+        Fork me on GitHub
+      </a>
+    </div>
+  </div>
+  </footer>
+
+  <script type="text/javascript">
+    document.getElementById('navToggle').addEventListener('click', function () {
+      var nav = document.getElementById('navMenu');
+      var className = nav.getAttribute('class');
+      if (className == 'navbar-menu') {
+        nav.className = 'navbar-menu is-active';
+      } else {
+        nav.className = 'navbar-menu';
+      }
+    });
+  </script>
+</body>
+
+</html>
