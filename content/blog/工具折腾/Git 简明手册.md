@@ -151,7 +151,29 @@ OX:
 
 安装 beyong compare 后需要在菜单栏点击 “Install Command Line Tools” 把它加入到命令行.
 
-然后参考: [Beyond Compar](ehttp://www.scootersoftware.com/support.php?zz=kb_vcs_osx)官网介绍.
+再参考: [Beyond Compare](http://www.scootersoftware.com/support.php?zz=kb_vcs_osx)官网介绍.
+
+最后需要执行下面两行命令:
+
+```sh
+git config --global difftool.prompt false
+git config --global mergetool.keepBackup false
+```
+
+参数说明:
+
+- **prompt**: 打开 tool 前是否出现提示 "是否打开 xx ?", 一般不需要
+- **keepBackup**: 解决冲突时会生成一个原来冲突文件的备份, 一般也不需要
+- **trustExitCode**: 是否接受 tool 的成功解决冲突通知, 如果设为 false, 解决冲突后 git 还会再问一次 "是否解决冲突了?", 简直多余, 所以也不需要
+
+三路合并:
+
+- **LOCAL**: your file with the changes you’ve made to it
+- **REMOTE**: the file you’re merging in, possibly authored by someone else
+- **BASE**: the common ancestor file that LOCAL and REMOTE came from
+- **MERGE_RESULT**: the file resulting from the merge where you resolve conflicts
+
+You often need to see all four of these pieces of information to make intelligent choices. Where you came from (LOCAL), where the other person’s changes came from (REMOTE), where you both started (BASE) and where you are now (MERGE_RESULT).
 
 暴露一个无限试用的方式.
 
@@ -187,21 +209,6 @@ rm "/Users/$(whoami)/Library/Application Support/BeyondCompare/registry.dat"
     cmd = bcomp $LOCAL $REMOTE $BASE $MERGED
     trustExitCode = true
 ```
-
-参数说明:
-
-- **prompt**: 打开 tool 前是否出现提示 "是否打开 xx ?", 一般不需要
-- **keepBackup**: 解决冲突时会生成一个原来冲突文件的备份, 一般也不需要
-- **trustExitCode**: 是否接受 tool 的成功解决冲突通知, 如果设为 false, 解决冲突后 git 还会再问一次 "是否解决冲突了?", 简直多余, 所以也不需要
-
-三路合并:
-
-- **LOCAL**: your file with the changes you’ve made to it
-- **REMOTE**: the file you’re merging in, possibly authored by someone else
-- **BASE**: the common ancestor file that LOCAL and REMOTE came from
-- **MERGE_RESULT**: the file resulting from the merge where you resolve conflicts
-
-You often need to see all four of these pieces of information to make intelligent choices. Where you came from (LOCAL), where the other person’s changes came from (REMOTE), where you both started (BASE) and where you are now (MERGE_RESULT).
 
 **下面是更早之前的方法, 现在已经不用了, 仅留个备份.**
 
