@@ -1,214 +1,469 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>六. Implementation: Composing a Pipeline</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta
+      property="og:title"
+      content="Small Cpp - 六. Implementation: Composing a Pipeline"
+    />
+    <meta
+      property="og:description"
+      content="Understanding Functions 在很多现代语言中, 函数也是一等对象, 但只是使用函数并不意味着在进行函数式编程. 函数式编程范例的关键在于, 函数无处不在, 应有尽有, 程序中的任何问题都有函数式的解决方案. 例如, 假设我们有一个大型程序, 它是由较小的块组成的. 在面向对象的方法中, 这些部分将是类和对象. 在功能式的方法中, 这些部分将是函数...."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/liu-implementation-composing-a-pipeline.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/函数式领域建模/lowlevel.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2020-02-06T13:00:00+08:00"
+    />
+    <meta property="article:tag" content="函数式领域建模" />
+    <meta property="article:tag" content="函数式" />
+    <meta property="article:tag" content="领域驱动" />
+    <meta property="article:tag" content="DDD" />
+    <meta property="article:section" content="函数式" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>六. Implementation: Composing a Pipeline</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - 六. Implementation: Composing a Pipeline">
-  <meta property="og:description" content="Understanding Functions 在很多现代语言中, 函数也是一等对象, 但只是使用函数并不意味着在进行函数式编程. 函数式编程范例的关键在于, 函数无处不在, 应有尽有, 程序中的任何问题都有函数式的解决方案. 例如, 假设我们有一个大型程序, 它是由较小的块组成的. 在面向对象的方法中, 这些部分将是类和对象. 在功能式的方法中, 这些部分将是函数....">
-<meta property="og:url" content="http://www.smallcpp.cn/liu-implementation-composing-a-pipeline.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/函数式领域建模/lowlevel.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2020-02-06T13:00:00+08:00">
-    <meta property="article:tag" content="函数式领域建模">
-    <meta property="article:tag" content="函数式">
-    <meta property="article:tag" content="领域驱动">
-    <meta property="article:tag" content="DDD">
-  <meta property="article:section" content="函数式">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/liu-implementation-composing-a-pipeline.html" rel="bookmark"
-        title="Permalink to 六. Implementation: Composing a Pipeline">六. Implementation: Composing a Pipeline</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2020-02-06T13:00:00+08:00">
-    Published <span class="is-info">Thu 06 February 2020</span>
-    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/han-shu-shi-ling-yu-jian-mo.html">函数式领域建模</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/han-shu-shi.html">函数式</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/ling-yu-qu-dong.html">领域驱动</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/ddd.html">DDD</a>
-      </span>
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#understanding-functions">Understanding Functions</a><ul>
-<li><a href="#building-an-entire-application-from-functions">Building an Entire Application from Functions</a></li>
-</ul>
-</li>
-<li><a href="#implementation-composing-a-pipeline">Implementation: Composing a Pipeline</a><ul>
-<li><a href="#working-with-simple-types">Working With Simple Types</a></li>
-<li><a href="#using-function-types-to-guide-the-implementation">Using Function Types to Guide the Implementation</a></li>
-<li><a href="#implementing-steps">Implementing Steps</a><ul>
-<li><a href="#validation-step">Validation Step</a><ul>
-<li><a href="#create-customer-info">Create Customer Info</a></li>
-<li><a href="#creating-a-valid-checked-address">Creating a Valid, Checked, Address</a></li>
-<li><a href="#creating-the-order-lines">Creating the Order Lines</a></li>
-<li><a href="#creating-function-adapters">Creating Function Adapters</a></li>
-</ul>
-</li>
-<li><a href="#priceorder-step">PriceOrder Step</a></li>
-<li><a href="#acknowledgement-step">Acknowledgement Step</a></li>
-<li><a href="#createevents-step">CreateEvents Step</a></li>
-</ul>
-</li>
-<li><a href="#composing-the-pipeline-steps-together">Composing the Pipeline Steps Together</a></li>
-<li><a href="#injecting-dependencies">Injecting Dependencies</a><ul>
-<li><a href="#too-many-dependencies">Too Many Dependencies?</a></li>
-<li><a href="#testing-dependencies">Testing Dependencies</a></li>
-</ul>
-</li>
-<li><a href="#the-assembled-pipeline">The Assembled Pipeline</a></li>
-</ul>
-</li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="understanding-functions">Understanding Functions</h1>
-<p>在很多现代语言中, 函数也是一等对象, 但只是使用函数并不意味着在进行函数式编程.</p>
-<p>函数式编程范例的关键在于, 函数无处不在, 应有尽有, 程序中的任何问题都有函数式的解决方案.</p>
-<p>例如, 假设我们有一个大型程序, 它是由较小的块组成的.</p>
-<ul>
-<li>在面向对象的方法中, 这些部分将是类和对象.</li>
-<li>在功能式的方法中, 这些部分将是函数.</li>
-</ul>
-<p>再比如我们需要参数化程序的某些方面, 或者想减少组件之间的耦合.</p>
-<ul>
-<li>在面向对象的方法中, 我们将使用接口和依赖注入.</li>
-<li>在函数式的方法中, 我们将使用函数进行参数化.</li>
-</ul>
-<p>又比如我们要遵循 “不要重复自己” 的原则, 并在许多组件之间重用代码.</p>
-<ul>
-<li>在面向对象的方法中, 我们可能会使用继承或类似装饰者模式的技术.</li>
-<li>在函数式的方法中, 我们将所有可重复使用的代码放入函数中, 并使用组合将它们组合在一起.</li>
-</ul>
-<p>实际上, 函数式编程是一种完全不同的<strong>编程思维方式</strong>. 比如我们日常编程中经常会思考的「如何遍历集合」以及「如何实现策略模式」这两个问题, 现在换个角度, 我们原本真的是想要解决这些问题吗?</p>
-<p>不是! 这些问题仅仅是「如何对集合的每个元素执行操作」以及「如何对行为进行参数化」的编程解决方案. 换句话说, 我们实际上要解决的是「如何对集合的每个元素执行操作」以及「如何对行为进行参数化」这些 “潜在” 的问题.</p>
-<p>作为程序员, 我们面临的这些真正要解决的 “潜在” 问题是相同的, 但函数式编程中使用的解决方案与面向对象编程中使用的解决方案却有很大不同, 这是我们要学习并掌握的地方.</p>
-<h2 id="building-an-entire-application-from-functions">Building an Entire Application from Functions</h2>
-<p>在函数式编程中, 我们使用 <em>composition</em> 的方式来构建程序.</p>
-<p>我们先从程序的最底层几个函数开始:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/lowlevel.png"/></p>
-<p>然后将它们组合成一些服务函数:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/service.png"/></p>
-<p>接下来, 我们可以使用这些服务函数并将它们粘合在一起, 以创建一个处理完整工作流的函数:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/workflowf.png"/></p>
-<p>最后, 我们可以通过并行组合这些工作流来构建应用程序, 并创建一个 <em>controller/dispatcher</em>, 该 <em>controller/dispatcher</em> 根据输入来选择要调用的特定工作流.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/workflowc.png"/></p>
-<h1 id="implementation-composing-a-pipeline">Implementation: Composing a Pipeline</h1>
-<p>在上一章中, 我们已经花费了很多时间仅使用类型领域进行建模, 现在是时候使用函数式来实现它了.</p>
-<p>回顾上一章中的设计, 可以将工作流视为一系列文档转换(管道):</p>
-<ol>
-<li>从 <em>UnvalidatedOrder</em> 开始, 并将其转换为 <em>ValidatedOrder</em>, 如果验证失败, 则返回错误.</li>
-<li>获取验证步骤的输出(<em>ValidatedOrder</em>), 并通过添加一些额外信息将其转换为 <em>PricedOrder</em>.</li>
-<li>获取定价步骤的输出(<em>PriceOrder</em>), 从中创建确认信并发送.</li>
-<li>创建一组表示发生了什么的事件并将其返回.</li>
-</ol>
-<p>首先, 我们将管道中的每个步骤作为独立函数实现, 确保它是无状态的, 并且没有副作用, 因此可以独立地测试和推理.</p>
-<p>接下来, 我们将这些较小的函数组合成一个较大的函数. 这听起来很简单, 但正如我们<a href="http://www.smallcpp.cn/liu-modeling-workflows-as-pipelines.html#composing-the-workflow-from-the-steps">前面</a>提到的, 当我们真正尝试它时, 我们会遇到一个问题. 设计的函数不能很好地组合在一起 – 一个的输出与下一个的输入不匹配. 为了克服这一点, 我们需要学习如何操作每个步骤的输入和输出, 以便可以组合它们.</p>
-<p>最终的那一部分代码看起来可能会是这样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> unvalidatedOrder =
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/liu-implementation-composing-a-pipeline.html"
+                  rel="bookmark"
+                  title="Permalink to 六. Implementation: Composing a Pipeline"
+                  >六. Implementation: Composing a Pipeline</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2020-02-06T13:00:00+08:00">
+                  Published <span class="is-info">Thu 06 February 2020</span> in
+                  <a href="http://www.smallcpp.com/category/han-shu-shi.html"
+                    >函数式</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                  <span class="tag is-small is-rounded">
+                    <a
+                      href="http://www.smallcpp.com/tag/han-shu-shi-ling-yu-jian-mo.html"
+                      >函数式领域建模</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/han-shu-shi.html"
+                      >函数式</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/ling-yu-qu-dong.html"
+                      >领域驱动</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/ddd.html">DDD</a>
+                  </span>
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li>
+                      <a href="#understanding-functions"
+                        >Understanding Functions</a
+                      >
+                      <ul>
+                        <li>
+                          <a
+                            href="#building-an-entire-application-from-functions"
+                            >Building an Entire Application from Functions</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#implementation-composing-a-pipeline"
+                        >Implementation: Composing a Pipeline</a
+                      >
+                      <ul>
+                        <li>
+                          <a href="#working-with-simple-types"
+                            >Working With Simple Types</a
+                          >
+                        </li>
+                        <li>
+                          <a
+                            href="#using-function-types-to-guide-the-implementation"
+                            >Using Function Types to Guide the Implementation</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#implementing-steps">Implementing Steps</a>
+                          <ul>
+                            <li>
+                              <a href="#validation-step">Validation Step</a>
+                              <ul>
+                                <li>
+                                  <a href="#create-customer-info"
+                                    >Create Customer Info</a
+                                  >
+                                </li>
+                                <li>
+                                  <a href="#creating-a-valid-checked-address"
+                                    >Creating a Valid, Checked, Address</a
+                                  >
+                                </li>
+                                <li>
+                                  <a href="#creating-the-order-lines"
+                                    >Creating the Order Lines</a
+                                  >
+                                </li>
+                                <li>
+                                  <a href="#creating-function-adapters"
+                                    >Creating Function Adapters</a
+                                  >
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                              <a href="#priceorder-step">PriceOrder Step</a>
+                            </li>
+                            <li>
+                              <a href="#acknowledgement-step"
+                                >Acknowledgement Step</a
+                              >
+                            </li>
+                            <li>
+                              <a href="#createevents-step">CreateEvents Step</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <a href="#composing-the-pipeline-steps-together"
+                            >Composing the Pipeline Steps Together</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#injecting-dependencies"
+                            >Injecting Dependencies</a
+                          >
+                          <ul>
+                            <li>
+                              <a href="#too-many-dependencies"
+                                >Too Many Dependencies?</a
+                              >
+                            </li>
+                            <li>
+                              <a href="#testing-dependencies"
+                                >Testing Dependencies</a
+                              >
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <a href="#the-assembled-pipeline"
+                            >The Assembled Pipeline</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="understanding-functions">Understanding Functions</h1>
+                <p>
+                  在很多现代语言中, 函数也是一等对象,
+                  但只是使用函数并不意味着在进行函数式编程.
+                </p>
+                <p>
+                  函数式编程范例的关键在于, 函数无处不在, 应有尽有,
+                  程序中的任何问题都有函数式的解决方案.
+                </p>
+                <p>例如, 假设我们有一个大型程序, 它是由较小的块组成的.</p>
+                <ul>
+                  <li>在面向对象的方法中, 这些部分将是类和对象.</li>
+                  <li>在功能式的方法中, 这些部分将是函数.</li>
+                </ul>
+                <p>
+                  再比如我们需要参数化程序的某些方面, 或者想减少组件之间的耦合.
+                </p>
+                <ul>
+                  <li>在面向对象的方法中, 我们将使用接口和依赖注入.</li>
+                  <li>在函数式的方法中, 我们将使用函数进行参数化.</li>
+                </ul>
+                <p>
+                  又比如我们要遵循 “不要重复自己” 的原则,
+                  并在许多组件之间重用代码.
+                </p>
+                <ul>
+                  <li>
+                    在面向对象的方法中,
+                    我们可能会使用继承或类似装饰者模式的技术.
+                  </li>
+                  <li>
+                    在函数式的方法中, 我们将所有可重复使用的代码放入函数中,
+                    并使用组合将它们组合在一起.
+                  </li>
+                </ul>
+                <p>
+                  实际上,
+                  函数式编程是一种完全不同的<strong>编程思维方式</strong>.
+                  比如我们日常编程中经常会思考的「如何遍历集合」以及「如何实现策略模式」这两个问题,
+                  现在换个角度, 我们原本真的是想要解决这些问题吗?
+                </p>
+                <p>
+                  不是!
+                  这些问题仅仅是「如何对集合的每个元素执行操作」以及「如何对行为进行参数化」的编程解决方案.
+                  换句话说,
+                  我们实际上要解决的是「如何对集合的每个元素执行操作」以及「如何对行为进行参数化」这些
+                  “潜在” 的问题.
+                </p>
+                <p>
+                  作为程序员, 我们面临的这些真正要解决的 “潜在” 问题是相同的,
+                  但函数式编程中使用的解决方案与面向对象编程中使用的解决方案却有很大不同,
+                  这是我们要学习并掌握的地方.
+                </p>
+                <h2 id="building-an-entire-application-from-functions">
+                  Building an Entire Application from Functions
+                </h2>
+                <p>
+                  在函数式编程中, 我们使用
+                  <em>composition</em> 的方式来构建程序.
+                </p>
+                <p>我们先从程序的最底层几个函数开始:</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/lowlevel.png"
+                  />
+                </p>
+                <p>然后将它们组合成一些服务函数:</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/service.png"
+                  />
+                </p>
+                <p>
+                  接下来, 我们可以使用这些服务函数并将它们粘合在一起,
+                  以创建一个处理完整工作流的函数:
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/workflowf.png"
+                  />
+                </p>
+                <p>
+                  最后, 我们可以通过并行组合这些工作流来构建应用程序, 并创建一个
+                  <em>controller/dispatcher</em>, 该
+                  <em>controller/dispatcher</em>
+                  根据输入来选择要调用的特定工作流.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/workflowc.png"
+                  />
+                </p>
+                <h1 id="implementation-composing-a-pipeline">
+                  Implementation: Composing a Pipeline
+                </h1>
+                <p>
+                  在上一章中, 我们已经花费了很多时间仅使用类型领域进行建模,
+                  现在是时候使用函数式来实现它了.
+                </p>
+                <p>回顾上一章中的设计, 可以将工作流视为一系列文档转换(管道):</p>
+                <ol>
+                  <li>
+                    从 <em>UnvalidatedOrder</em> 开始, 并将其转换为
+                    <em>ValidatedOrder</em>, 如果验证失败, 则返回错误.
+                  </li>
+                  <li>
+                    获取验证步骤的输出(<em>ValidatedOrder</em>),
+                    并通过添加一些额外信息将其转换为 <em>PricedOrder</em>.
+                  </li>
+                  <li>
+                    获取定价步骤的输出(<em>PriceOrder</em>),
+                    从中创建确认信并发送.
+                  </li>
+                  <li>创建一组表示发生了什么的事件并将其返回.</li>
+                </ol>
+                <p>
+                  首先, 我们将管道中的每个步骤作为独立函数实现,
+                  确保它是无状态的, 并且没有副作用, 因此可以独立地测试和推理.
+                </p>
+                <p>
+                  接下来, 我们将这些较小的函数组合成一个较大的函数.
+                  这听起来很简单, 但正如我们<a
+                    href="http://www.smallcpp.com/liu-modeling-workflows-as-pipelines.html#composing-the-workflow-from-the-steps"
+                    >前面</a
+                  >提到的, 当我们真正尝试它时, 我们会遇到一个问题.
+                  设计的函数不能很好地组合在一起 –
+                  一个的输出与下一个的输入不匹配. 为了克服这一点,
+                  我们需要学习如何操作每个步骤的输入和输出, 以便可以组合它们.
+                </p>
+                <p>最终的那一部分代码看起来可能会是这样:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> unvalidatedOrder =
     unvalidatedOrder
     |&gt; validateOrder
     |&gt; priceOrder
     |&gt; acknowledgeOrder
     |&gt; createEvents
-</pre></div>
-<p>阻碍我们组合函数的原因有两个:</p>
-<ul>
-<li>一些函数有额外的参数, 这些参数不是数据管道的一部分, 而是实现所需的参数, 我们称这些为依赖.</li>
-<li>显式指示副作用, 例如通过使用函数签名中的 <em>Result</em> 等包装类型进行错误处理. 这意味着在其输出中具有副作用的函数不能直接连接到仅将纯数据作为输入的函数.</li>
-</ul>
-<p>本节我们来解决第一个问题.</p>
-<h2 id="working-with-simple-types">Working With Simple Types</h2>
-<p>在实现函数之前, 首先需要实现 “简单类型”, 如 <em>OrderId</em>、<em>ProductCode</em> 等.</p>
-<p>由于待创建大多数类型都以某种方式受到限制, 所以我们将用<strong>智能构造器</strong>的方式来实现.</p>
-<p>对于每个简单类型, 我们至少需要两个函数</p>
-<ul>
-<li>构造函数, 该函数从基元(如字符串或 <em>int</em>)构造类型. 例如, <em>OrderId.create</em> 将从字符串创建 <em>OrderId</em>, 如果字符串的格式错误, 则引发错误.</li>
-<li>提取内部基元值的值函数.</li>
-</ul>
-<p>我们通常将这些帮助函数放在与简单类型相同的文件中, 并使用与它们类型名称相同的模块名. 例如, 下面是领域模块中 <em>OrderId</em> 的定义及其帮助函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">module</span> <span style="color: #008b45; text-decoration: underline">Domain</span> =
+</pre>
+                </div>
+                <p>阻碍我们组合函数的原因有两个:</p>
+                <ul>
+                  <li>
+                    一些函数有额外的参数, 这些参数不是数据管道的一部分,
+                    而是实现所需的参数, 我们称这些为依赖.
+                  </li>
+                  <li>
+                    显式指示副作用, 例如通过使用函数签名中的
+                    <em>Result</em> 等包装类型进行错误处理.
+                    这意味着在其输出中具有副作用的函数不能直接连接到仅将纯数据作为输入的函数.
+                  </li>
+                </ul>
+                <p>本节我们来解决第一个问题.</p>
+                <h2 id="working-with-simple-types">
+                  Working With Simple Types
+                </h2>
+                <p>
+                  在实现函数之前, 首先需要实现 “简单类型”, 如
+                  <em>OrderId</em>、<em>ProductCode</em> 等.
+                </p>
+                <p>
+                  由于待创建大多数类型都以某种方式受到限制,
+                  所以我们将用<strong>智能构造器</strong>的方式来实现.
+                </p>
+                <p>对于每个简单类型, 我们至少需要两个函数</p>
+                <ul>
+                  <li>
+                    构造函数, 该函数从基元(如字符串或 <em>int</em>)构造类型.
+                    例如, <em>OrderId.create</em> 将从字符串创建
+                    <em>OrderId</em>, 如果字符串的格式错误, 则引发错误.
+                  </li>
+                  <li>提取内部基元值的值函数.</li>
+                </ul>
+                <p>
+                  我们通常将这些帮助函数放在与简单类型相同的文件中,
+                  并使用与它们类型名称相同的模块名. 例如, 下面是领域模块中
+                  <em>OrderId</em> 的定义及其帮助函数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">module</span> <span style="color: #008b45; text-decoration: underline">Domain</span> =
     <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderId</span> = <span style="color: #8B008B; font-weight: bold">private</span> OrderId <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
 
 <span style="color: #8B008B; font-weight: bold">module</span> <span style="color: #008b45; text-decoration: underline">OrderId</span> =
@@ -227,11 +482,25 @@
     <span style="color: #228B22">// OrderId -&gt; string</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">value</span> (OrderId str) = <span style="color: #228B22">// unwrap in the parameter!</span>
         str <span style="color: #228B22">// return the inner value</span>
-</pre></div>
-<p><em>Create</em> 函数中, 由于我们现在正在避免副作用的问题, 因此暂时对错误使用异常, 而不是返回 <em>Result</em>.</p>
-<h2 id="using-function-types-to-guide-the-implementation">Using Function Types to Guide the Implementation</h2>
-<p>在<a href="http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html#modeling-each-step-in-the-workflow-with-types">上一章节</a>中, 我们定义了一些函数类型来表示工作流的每个步骤.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <p>
+                  <em>Create</em> 函数中, 由于我们现在正在避免副作用的问题,
+                  因此暂时对错误使用异常, 而不是返回 <em>Result</em>.
+                </p>
+                <h2 id="using-function-types-to-guide-the-implementation">
+                  Using Function Types to Guide the Implementation
+                </h2>
+                <p>
+                  在<a
+                    href="http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html#modeling-each-step-in-the-workflow-with-types"
+                    >上一章节</a
+                  >中, 我们定义了一些函数类型来表示工作流的每个步骤.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     CheckProductCodeExists <span style="color: #228B22">// dependency</span>
     -&gt; CheckAddressExists <span style="color: #228B22">// dependency</span>
     -&gt; UnvalidatedOrder <span style="color: #228B22">// input</span>
@@ -250,18 +519,31 @@
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateEvents</span> =
     PricedOrder -&gt; PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span>
-</pre></div>
-<p>现在是时候实现它们了. 为了清楚地说明我们正在实现某个特定的函数类型, 我们将函数记为一​​个值, 用函数类型作为其类型, 并将函数主体写为 <em>lambda</em>. 看起来像这样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
+</pre>
+                </div>
+                <p>
+                  现在是时候实现它们了.
+                  为了清楚地说明我们正在实现某个特定的函数类型,
+                  我们将函数记为一​​个值, 用函数类型作为其类型, 并将函数主体写为
+                  <em>lambda</em>. 看起来像这样:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> checkProductCodeExists  <span style="color: #228B22">// dependency</span>
         checkAddressExists  <span style="color: #228B22">// dependency</span>
         unvalidatedOrder -&gt;  <span style="color: #228B22">// dependency</span>
             <span style="color: #228B22">//...</span>
-</pre></div>
-<h2 id="implementing-steps">Implementing Steps</h2>
-<h3 id="validation-step">Validation Step</h3>
-<p>我们在上章节中将此步骤的函数类型建模为:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
+</pre>
+                </div>
+                <h2 id="implementing-steps">Implementing Steps</h2>
+                <h3 id="validation-step">Validation Step</h3>
+                <p>我们在上章节中将此步骤的函数类型建模为:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
     ProductCode -&gt; <span style="color: #00688B; font-weight: bold">bool</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckAddressExists</span> =
@@ -272,9 +554,16 @@
     -&gt; CheckAddressExists  <span style="color: #228B22">// AsyncResult dependency</span>
     -&gt; UnvalidatedOrder  <span style="color: #228B22">// input</span>
     -&gt; AsyncResult&lt;ValidatedOrder,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<p>正如刚才所说, 本章节只关注额外的参数, 因此我们可以删除 <em>AsyncResult</em> 部分, 留给我们这样模型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
+</pre>
+                </div>
+                <p>
+                  正如刚才所说, 本章节只关注额外的参数, 因此我们可以删除
+                  <em>AsyncResult</em> 部分, 留给我们这样模型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
     ProductCode -&gt; <span style="color: #00688B; font-weight: bold">bool</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckAddressExists</span> =
@@ -285,16 +574,38 @@
     -&gt; CheckAddressExists  <span style="color: #228B22">// AsyncResult dependency</span>
     -&gt; UnvalidatedOrder  <span style="color: #228B22">// input</span>
     -&gt; CheckedAddress <span style="color: #228B22">// output</span>
-</pre></div>
-<p>现在开始实现. 从 <em>UnvalidatedOrder</em> 创建出 <em>ValidatedOrder</em> 的步骤如下:</p>
-<ol>
-<li>从未验证订单中相应的 <em>OrderId</em> 字符串创建 <em>OrderId</em> 领域类型.</li>
-<li>从未验证订单中相应的 <em>UnvalidatedCustomerInfo</em> 字段中创建 <em>CustomerInfo</em> 领域类型.</li>
-<li>从未验证顺序中相应的 <em>ShippingAddress</em> 字段中创建 <em>UnvalidatedAddress</em> 领域类型.</li>
-<li>对 <em>BillingAddress</em> 和所有其它属性进行同样的操作.</li>
-<li>一旦我们 <em>ValidatedOrder</em> 的所有组件可用, 就可以使用通常的方式创建 <em>ValidatedOrder</em>.</li>
-</ol>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
+</pre>
+                </div>
+                <p>
+                  现在开始实现. 从 <em>UnvalidatedOrder</em> 创建出
+                  <em>ValidatedOrder</em> 的步骤如下:
+                </p>
+                <ol>
+                  <li>
+                    从未验证订单中相应的 <em>OrderId</em> 字符串创建
+                    <em>OrderId</em> 领域类型.
+                  </li>
+                  <li>
+                    从未验证订单中相应的
+                    <em>UnvalidatedCustomerInfo</em> 字段中创建
+                    <em>CustomerInfo</em> 领域类型.
+                  </li>
+                  <li>
+                    从未验证顺序中相应的 <em>ShippingAddress</em> 字段中创建
+                    <em>UnvalidatedAddress</em> 领域类型.
+                  </li>
+                  <li>
+                    对 <em>BillingAddress</em> 和所有其它属性进行同样的操作.
+                  </li>
+                  <li>
+                    一旦我们 <em>ValidatedOrder</em> 的所有组件可用,
+                    就可以使用通常的方式创建 <em>ValidatedOrder</em>.
+                  </li>
+                </ol>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> checkProductCodeExists checkAddressExists unvalidatedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">orderId</span> =
             unvalidatedOrder.OrderId
@@ -316,11 +627,25 @@
             BillingAddress = <span style="color: #228B22">// ...</span>
             Lines = <span style="color: #228B22">// ...</span>
         }
-</pre></div>
-<p>可以看到, 我们使用了一些尚未定义帮助函数, 例如 <em>toCustomerInfo</em> 和 <em>toAddress</em>. 这些函数负责从未验证的类型构造出领域类型. 例如, <em>toAddress</em> 将 <em>UnvalidatedAddress</em> 转换为相应的 <em>Address</em> 领域类型, 如果 <em>UnvalidatedAddress</em> 中的某些元素不符合约束(例如非空且长度小于 50 个字符), 则会引发错误. 一旦具备所有这些帮助函数, 将未验证订单(或任何非领域类型)转换为领域类型的逻辑就很简单了.</p>
-<h4 id="create-customer-info">Create Customer Info</h4>
-<p>下面是 <em>toCustomerInfo</em> 的代码示例:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toCustomerInfo</span> (customer:UnvalidatedCustomerInfo) : CustomerInfo =
+</pre>
+                </div>
+                <p>
+                  可以看到, 我们使用了一些尚未定义帮助函数, 例如
+                  <em>toCustomerInfo</em> 和 <em>toAddress</em>.
+                  这些函数负责从未验证的类型构造出领域类型. 例如,
+                  <em>toAddress</em> 将 <em>UnvalidatedAddress</em> 转换为相应的
+                  <em>Address</em> 领域类型, 如果
+                  <em>UnvalidatedAddress</em>
+                  中的某些元素不符合约束(例如非空且长度小于 50 个字符),
+                  则会引发错误. 一旦具备所有这些帮助函数,
+                  将未验证订单(或任何非领域类型)转换为领域类型的逻辑就很简单了.
+                </p>
+                <h4 id="create-customer-info">Create Customer Info</h4>
+                <p>下面是 <em>toCustomerInfo</em> 的代码示例:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toCustomerInfo</span> (customer:UnvalidatedCustomerInfo) : CustomerInfo =
     <span style="color: #228B22">// create the various CustomerInfo properties</span>
     <span style="color: #228B22">// and throw exceptions if invalid</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">firstName</span> = customer.FirstName |&gt; <span style="color: #008b45; text-decoration: underline">String50</span>.create
@@ -340,10 +665,21 @@
 
     <span style="color: #228B22">// ... and return it</span>
     customerInfo
-</pre></div>
-<h4 id="creating-a-valid-checked-address">Creating a Valid, Checked, Address</h4>
-<p><em>toAddress</em> 函数稍微复杂一些, 因为它不仅需要将原始数据转换为领域对象, 而且还必须检查地址是否存在(使用 <em>CheckAddressExists</em> 服务). 下面是完整的实现:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toAddress</span> (checkAddressExists:CheckAddressExists) unvalidatedAddress =
+</pre>
+                </div>
+                <h4 id="creating-a-valid-checked-address">
+                  Creating a Valid, Checked, Address
+                </h4>
+                <p>
+                  <em>toAddress</em> 函数稍微复杂一些,
+                  因为它不仅需要将原始数据转换为领域对象,
+                  而且还必须检查地址是否存在(使用
+                  <em>CheckAddressExists</em> 服务). 下面是完整的实现:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toAddress</span> (checkAddressExists:CheckAddressExists) unvalidatedAddress =
     <span style="color: #228B22">// call the remote service</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkedAddress</span> = checkAddressExists unvalidatedAddress
     <span style="color: #228B22">// extract the inner value using pattern matching</span>
@@ -372,10 +708,22 @@
     }
     <span style="color: #228B22">// return the address</span>
     address
-</pre></div>
-<p>请注意, 我们引用了 <em>String50</em> 模块中的另一个构造函数 <em>createOption</em>, 它允许输入为 <em>null</em> 或为空, 并为此情况返回 <em>None</em>.</p>
-<p><em>toAddress</em> 函数需要调用 <em>checkAddressExists</em>, 因此我们将其添加为参数, 必须从父函数 <em>validateOrder</em> 传递该函数给 <em>toAddress</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
+</pre>
+                </div>
+                <p>
+                  请注意, 我们引用了 <em>String50</em> 模块中的另一个构造函数
+                  <em>createOption</em>, 它允许输入为 <em>null</em> 或为空,
+                  并为此情况返回 <em>None</em>.
+                </p>
+                <p>
+                  <em>toAddress</em> 函数需要调用 <em>checkAddressExists</em>,
+                  因此我们将其添加为参数, 必须从父函数
+                  <em>validateOrder</em> 传递该函数给 <em>toAddress</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> checkProductCodeExists checkAddressExists unvalidatedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">orderId</span> =  <span style="color: #228B22">// ...</span>
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">customerInfo</span> =  <span style="color: #228B22">//...</span>
@@ -383,10 +731,18 @@
             unvalidatedOrder.ShippingAddress
             |&gt; toAddress checkAddressExists  <span style="color: #228B22">// new parameter, partial application</span>
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<h4 id="creating-the-order-lines">Creating the Order Lines</h4>
-<p>创建订单行列表会更加复杂. 首先, 我们需要一种将单个未验证订单行转换为已验证订单行的方法 <em>toValidatedOrderLine</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toValidatedOrderLine</span> checkProductCodeExists (unvalidatedOrderLine:UnvalidatedOrderLine) =
+</pre>
+                </div>
+                <h4 id="creating-the-order-lines">Creating the Order Lines</h4>
+                <p>
+                  创建订单行列表会更加复杂. 首先,
+                  我们需要一种将单个未验证订单行转换为已验证订单行的方法
+                  <em>toValidatedOrderLine</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toValidatedOrderLine</span> checkProductCodeExists (unvalidatedOrderLine:UnvalidatedOrderLine) =
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">orderLineId</span> =
         unvalidatedOrderLine.OrderLineId
         |&gt; <span style="color: #008b45; text-decoration: underline">OrderLineId</span>.create
@@ -402,10 +758,23 @@
         Quantity = quantity
         }
     validatedOrderLine
-</pre></div>
-<p>这与上面的 <em>toAddress</em> 函数类似. 有两个帮助函数, <em>toProductCode</em> 和 <em>toOrderQuantity</em>, 我们稍后将讨论.</p>
-<p>我们可以使用 <em>List.map</em> 来一次性转换整个列表中的所有元素, 从而提供一个可以在 <em>ValidatedOrder</em> 中使用的 <em>ValidatedOrderLines</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
+</pre>
+                </div>
+                <p>
+                  这与上面的 <em>toAddress</em> 函数类似. 有两个帮助函数,
+                  <em>toProductCode</em> 和 <em>toOrderQuantity</em>,
+                  我们稍后将讨论.
+                </p>
+                <p>
+                  我们可以使用
+                  <em>List.map</em> 来一次性转换整个列表中的所有元素,
+                  从而提供一个可以在 <em>ValidatedOrder</em> 中使用的
+                  <em>ValidatedOrderLines</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> checkProductCodeExists checkAddressExists unvalidatedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">orderId</span> =  <span style="color: #228B22">// ...</span>
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">customerInfo</span> =  <span style="color: #228B22">// ...</span>
@@ -415,9 +784,19 @@
             <span style="color: #228B22">// convert each line using `toValidatedOrderLine`</span>
             |&gt; <span style="color: #008b45; text-decoration: underline">List</span>.map (toValidatedOrderLine checkProductCodeExists)
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>接下来, 我们来看一下 <em>toOrderQuantity</em> 帮助函数. 这是一个很好的示例: 输入是从 <em>UnvalidatedOrderLine</em> 中获得的原始未验证小数, 但输出(<em>OrderQuantity</em>)是一个 OR 类型, 每个 case 有不同的验证过程. 代码如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toOrderQuantity</span> productCode quantity =
+</pre>
+                </div>
+                <p>
+                  接下来, 我们来看一下 <em>toOrderQuantity</em> 帮助函数.
+                  这是一个很好的示例: 输入是从
+                  <em>UnvalidatedOrderLine</em> 中获得的原始未验证小数,
+                  但输出(<em>OrderQuantity</em>)是一个 OR 类型, 每个 case
+                  有不同的验证过程. 代码如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toOrderQuantity</span> productCode quantity =
     <span style="color: #8B008B; font-weight: bold">match</span> productCode <span style="color: #8B008B; font-weight: bold">with</span>
     | Widget _ -&gt;
         quantity
@@ -428,54 +807,137 @@
         quantity
         |&gt; <span style="color: #008b45; text-decoration: underline">KilogramQuantity</span>.create <span style="color: #228B22">// to KilogramQuantity</span>
         |&gt; <span style="color: #008b45; text-decoration: underline">OrderQuantity</span>.Kilogram <span style="color: #228B22">// lift to OrderQuantity type</span>
-</pre></div>
-<p>我们使用 OR 类型 <em>ProductCode</em> 来指导构造函数. 例如, 如果 <em>ProductCode</em> 是一个小部件, 则我们将原始小数转换为 <em>int</em>, 然后创建出 <em>UnitQuantity</em>.</p>
-<p>但我们不能止步于此. 因为如果一个分支返回 <em>UnitQuantity</em>, 另一个返回 <em>KilogramQuantity</em>, 编译器就会报错, 因为它们是不同的类型. 但通过将两个分支都转换为 OR 类型 <em>OrderQuantity</em>, 就可以确保两个分支返回相同的类型.</p>
-<p>另一个帮助函数 <em>toProductCode</em> 的实现应该是很一目了然的. 我们希望尽可能使用<strong>管道</strong>编写函数, 因此代码应如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toProductCode</span> (checkProductCodeExists:CheckProductCodeExists) productCode =
+</pre>
+                </div>
+                <p>
+                  我们使用 OR 类型 <em>ProductCode</em> 来指导构造函数. 例如,
+                  如果 <em>ProductCode</em> 是一个小部件, 则我们将原始小数转换为
+                  <em>int</em>, 然后创建出 <em>UnitQuantity</em>.
+                </p>
+                <p>
+                  但我们不能止步于此. 因为如果一个分支返回
+                  <em>UnitQuantity</em>, 另一个返回 <em>KilogramQuantity</em>,
+                  编译器就会报错, 因为它们是不同的类型. 但通过将两个分支都转换为
+                  OR 类型 <em>OrderQuantity</em>,
+                  就可以确保两个分支返回相同的类型.
+                </p>
+                <p>
+                  另一个帮助函数
+                  <em>toProductCode</em> 的实现应该是很一目了然的.
+                  我们希望尽可能使用<strong>管道</strong>编写函数,
+                  因此代码应如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toProductCode</span> (checkProductCodeExists:CheckProductCodeExists) productCode =
     productCode
     |&gt; <span style="color: #008b45; text-decoration: underline">ProductCode</span>.create
     |&gt; checkProductCodeExists
     <span style="color: #228B22">// a problem, returns a bool :(</span>
-</pre></div>
-<p>但现在我们有一个问题. 我们希望 <em>toProductCode</em> 函数返回 <em>ProductCode</em>, 但 <em>checkProductCodeExists</em> 函数返回一个 <em>bool</em>, 这意味着整个管道返回一个 <em>bool</em>. 让我们看看怎样在不改变 <em>checkProductCodeExists</em> 实现的前提下让管道返回 <em>ProductCode</em>.</p>
-<h4 id="creating-function-adapters">Creating Function Adapters</h4>
-<p>我们有一个返回 <em>bool</em> 的函数, 但我们真的想要一个返回 <em>ProductCode</em> 的函数. 于其改变这个函数本身, 不如创建一个适配器函数, 这个函数以原始函数为输入, 并返回一个满足要求的新函数.</p>
-<p>下面是一个实现:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">convertToPassthru</span> checkProductCodeExists productCode =
+</pre>
+                </div>
+                <p>
+                  但现在我们有一个问题. 我们希望 <em>toProductCode</em> 函数返回
+                  <em>ProductCode</em>, 但
+                  <em>checkProductCodeExists</em> 函数返回一个 <em>bool</em>,
+                  这意味着整个管道返回一个 <em>bool</em>. 让我们看看怎样在不改变
+                  <em>checkProductCodeExists</em> 实现的前提下让管道返回
+                  <em>ProductCode</em>.
+                </p>
+                <h4 id="creating-function-adapters">
+                  Creating Function Adapters
+                </h4>
+                <p>
+                  我们有一个返回 <em>bool</em> 的函数, 但我们真的想要一个返回
+                  <em>ProductCode</em> 的函数. 于其改变这个函数本身,
+                  不如创建一个适配器函数, 这个函数以原始函数为输入,
+                  并返回一个满足要求的新函数.
+                </p>
+                <p>下面是一个实现:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">convertToPassthru</span> checkProductCodeExists productCode =
     <span style="color: #8B008B; font-weight: bold">if</span> checkProductCodeExists productCode <span style="color: #8B008B; font-weight: bold">then</span>
         productCode
     <span style="color: #8B008B; font-weight: bold">else</span>
         failwith <span style="color: #CD5555">"Invalid Product Code"</span>
-</pre></div>
-<p>有趣的是, 编译器已经确定这个函数是完全通用的 – 它不特定于我们的特定案例! 如果我们查看函数签名, 可以看到没有提及 <em>ProductCode</em> 类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">val</span> convertToPassthru :
+</pre>
+                </div>
+                <p>
+                  有趣的是, 编译器已经确定这个函数是完全通用的 –
+                  它不特定于我们的特定案例! 如果我们查看函数签名,
+                  可以看到没有提及 <em>ProductCode</em> 类型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">val</span> convertToPassthru :
     checkProductCodeExists:(<span style="color: #8B008B; font-weight: bold">'</span>a -&gt; <span style="color: #00688B; font-weight: bold">bool</span>) -&gt; productCode:<span style="color: #8B008B; font-weight: bold">'</span>a -&gt; <span style="color: #8B008B; font-weight: bold">'</span>a
-</pre></div>
-<p>事实上, 我们意外地创建了一个通用适配器, 该适配器将任何的判断函数转换为适合管道的 “传递” 函数.</p>
-<p>将参数称为 <em>checkProductCodeExists</em> 或 <em>productCode</em> 现在并不适用了, 因为现在这两个函数并不代表特定的案例. 这就是为什么许多标准库函数具有如此短的参数名称的原因, 例如函数参数的 <em>f</em> 和 <em>g</em>, 以及其他值的 <em>x</em> 和 <em>y</em>.</p>
-<p>让我们重写函数以使用更抽象的名称, 然后, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">predicateToPassthru</span> f x =
+</pre>
+                </div>
+                <p>
+                  事实上, 我们意外地创建了一个通用适配器,
+                  该适配器将任何的判断函数转换为适合管道的 “传递” 函数.
+                </p>
+                <p>
+                  将参数称为 <em>checkProductCodeExists</em> 或
+                  <em>productCode</em> 现在并不适用了,
+                  因为现在这两个函数并不代表特定的案例.
+                  这就是为什么许多标准库函数具有如此短的参数名称的原因,
+                  例如函数参数的 <em>f</em> 和 <em>g</em>, 以及其他值的
+                  <em>x</em> 和 <em>y</em>.
+                </p>
+                <p>让我们重写函数以使用更抽象的名称, 然后, 如下所示:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">predicateToPassthru</span> f x =
     <span style="color: #8B008B; font-weight: bold">if</span> f x <span style="color: #8B008B; font-weight: bold">then</span>
         x
     <span style="color: #8B008B; font-weight: bold">else</span>
         failwith <span style="color: #CD5555">"Invalid Product Code"</span>
-</pre></div>
-<p>现在硬编码的错误消息仍然有类似的问题, 所以让我们参数化. 下面是最终版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">predicateToPassthru</span> errorMsg f x =
+</pre>
+                </div>
+                <p>
+                  现在硬编码的错误消息仍然有类似的问题, 所以让我们参数化.
+                  下面是最终版本:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">predicateToPassthru</span> errorMsg f x =
     <span style="color: #8B008B; font-weight: bold">if</span> f x <span style="color: #8B008B; font-weight: bold">then</span>
         x
     <span style="color: #8B008B; font-weight: bold">else</span>
         failwith errorMsg
-</pre></div>
-<p>请注意, 我们先将错误消息放在参数的第一个位置, 以便我们可以使用部分应用固定它.</p>
-<p>现在, 该函数的签名是:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">val</span> predicateToPassthru :
+</pre>
+                </div>
+                <p>
+                  请注意, 我们先将错误消息放在参数的第一个位置,
+                  以便我们可以使用部分应用固定它.
+                </p>
+                <p>现在, 该函数的签名是:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">val</span> predicateToPassthru :
     errorMsg:<span style="color: #00688B; font-weight: bold">string</span> -&gt; f:(<span style="color: #8B008B; font-weight: bold">'</span>a -&gt; <span style="color: #00688B; font-weight: bold">bool</span>) -&gt; x:<span style="color: #8B008B; font-weight: bold">'</span>a -&gt; <span style="color: #8B008B; font-weight: bold">'</span>a
-</pre></div>
-<p>这种抽象技术在函数式编程中非常常见, 因此了解发生了什么并识别出模式是非常重要的. 即使是不起眼的 <em>List.map</em> 函数也可以被视为函数转换器, 它将 “正常” 函数 <em>‘a -&gt; ‘b</em> 转换为在列表上工作的函数 <em>‘a list -&gt; ‘b list</em>.</p>
-<p>好了, 现在让我们看下新版本的 <em>toProductCode</em> 函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toProductCode</span> (checkProductCodeExists:CheckProductCodeExists) productCode =
+</pre>
+                </div>
+                <p>
+                  这种抽象技术在函数式编程中非常常见,
+                  因此了解发生了什么并识别出模式是非常重要的. 即使是不起眼的
+                  <em>List.map</em> 函数也可以被视为函数转换器, 它将 “正常” 函数
+                  <em>‘a -&gt; ‘b</em> 转换为在列表上工作的函数
+                  <em>‘a list -&gt; ‘b list</em>.
+                </p>
+                <p>好了, 现在让我们看下新版本的 <em>toProductCode</em> 函数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toProductCode</span> (checkProductCodeExists:CheckProductCodeExists) productCode =
     <span style="color: #228B22">// create a local ProductCode -&gt; ProductCode function</span>
     <span style="color: #228B22">// suitable for using in a pipeline</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkProduct</span> productCode =
@@ -485,25 +947,49 @@
     productCode
     |&gt; <span style="color: #008b45; text-decoration: underline">ProductCode</span>.create
     |&gt; checkProduct
-</pre></div>
-<p>这就是它 - 现在我们有一个 <em>validateOrder</em> 实现的基本草图, 我们可以在此基础上构建. 请注意, 低级验证逻辑(如 <em>a product must start with a W or G</em>)并未在我们的验证函数中显式实现, 而是内置到受约束的简单类型的构造函数中, 类似 <em>OrderId</em> 和 <em>ProductCode</em>.</p>
-<h3 id="priceorder-step">PriceOrder Step</h3>
-<p>以下是 <em>PriceOrder</em> 的原始定义:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
+</pre>
+                </div>
+                <p>
+                  这就是它 - 现在我们有一个
+                  <em>validateOrder</em> 实现的基本草图, 我们可以在此基础上构建.
+                  请注意, 低级验证逻辑(如
+                  <em>a product must start with a W or G</em
+                  >)并未在我们的验证函数中显式实现,
+                  而是内置到受约束的简单类型的构造函数中, 类似
+                  <em>OrderId</em> 和 <em>ProductCode</em>.
+                </p>
+                <h3 id="priceorder-step">PriceOrder Step</h3>
+                <p>以下是 <em>PriceOrder</em> 的原始定义:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     GetProductPrice <span style="color: #228B22">// dependency</span>
     -&gt; ValidatedOrder <span style="color: #228B22">// input</span>
     -&gt; Result&lt;PricedOrder, PlaceOrderError&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<p>现在我们先消除副作用:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">GetProductPrice</span> = ProductCode -&gt; Price
+</pre>
+                </div>
+                <p>现在我们先消除副作用:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">GetProductPrice</span> = ProductCode -&gt; Price
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     GetProductPrice <span style="color: #228B22">// dependency</span>
     -&gt; ValidatedOrder <span style="color: #228B22">// input</span>
     -&gt; PricedOrder <span style="color: #228B22">// output</span>
-</pre></div>
-<p>下面是大概的实现. 它只需将每个订单行转换为 <em>PricedOrderLine</em>, 并使用它们构建新的 <em>PricedOrder</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">priceOrder</span> : PriceOrder =
+</pre>
+                </div>
+                <p>
+                  下面是大概的实现. 它只需将每个订单行转换为
+                  <em>PricedOrderLine</em>, 并使用它们构建新的
+                  <em>PricedOrder</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">priceOrder</span> : PriceOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> getProductPrice validatedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">lines</span> =
             validatedOrder.Lines
@@ -523,22 +1009,53 @@
             AmountToBill = amountToBill
             }
         pricedOrder
-</pre></div>
-<p>顺便一提, 如果你的管道中有许多步骤, 并且暂时还不想实现它们(或不知道如何实现), 则只需使用如下所示的 <em>not implemented</em> 消息来表示失败, 在绘制实现草图时, 使用 <em>not implemented</em> 异常会很方便. 它能确保我们的项目在任何时候都是完全可编译的.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">priceOrder</span> : PriceOrder =
+</pre>
+                </div>
+                <p>
+                  顺便一提, 如果你的管道中有许多步骤,
+                  并且暂时还不想实现它们(或不知道如何实现), 则只需使用如下所示的
+                  <em>not implemented</em> 消息来表示失败, 在绘制实现草图时,
+                  使用 <em>not implemented</em> 异常会很方便.
+                  它能确保我们的项目在任何时候都是完全可编译的.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">priceOrder</span> : PriceOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> getProductPrice validatedOrder -&gt;
         failwith <span style="color: #CD5555">"not implemented"</span>
-</pre></div>
-<p>在 <em>priceOrder</em> 的实现中, 我们引入了两个新的帮助函数: <em>toPricedOrderLine</em> 和 <em>BillingAmount.sumPrices</em>.</p>
-<p>我们将 <em>sumPrices</em> 函数添加到了共享的 <em>BillingAmount</em> 模块. 它只是将价格列表加起来并将其包装为 <em>BillingAmount</em>. 为什么我们首先定义 <em>BillingAmount</em> 类型？因为它与 <em>Price</em> 不同, 所以验证规则可能有所不同.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// Sum a list of prices to make a billing amount</span>
+</pre>
+                </div>
+                <p>
+                  在 <em>priceOrder</em> 的实现中, 我们引入了两个新的帮助函数:
+                  <em>toPricedOrderLine</em> 和
+                  <em>BillingAmount.sumPrices</em>.
+                </p>
+                <p>
+                  我们将 <em>sumPrices</em> 函数添加到了共享的
+                  <em>BillingAmount</em> 模块.
+                  它只是将价格列表加起来并将其包装为 <em>BillingAmount</em>.
+                  为什么我们首先定义 <em>BillingAmount</em> 类型？因为它与
+                  <em>Price</em> 不同, 所以验证规则可能有所不同.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// Sum a list of prices to make a billing amount</span>
 <span style="color: #228B22">// Raise exception if total is out of bounds</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">sumPrices</span> prices =
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">total</span> = prices |&gt; <span style="color: #008b45; text-decoration: underline">List</span>.map <span style="color: #008b45; text-decoration: underline">Price</span>.value |&gt; <span style="color: #008b45; text-decoration: underline">List</span>.sum
     create total
-</pre></div>
-<p>函数 <em>toPricedOrderLine</em> 与我们以前看到的函数类似. 它是仅转换一行的帮助函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// Transform a ValidatedOrderLine to a PricedOrderLine</span>
+</pre>
+                </div>
+                <p>
+                  函数 <em>toPricedOrderLine</em> 与我们以前看到的函数类似.
+                  它是仅转换一行的帮助函数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// Transform a ValidatedOrderLine to a PricedOrderLine</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toPricedOrderLine</span> getProductPrice (line:ValidatedOrderLine) : PricedOrderLine =
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">qty</span> = line.Quantity |&gt; <span style="color: #008b45; text-decoration: underline">OrderQuantity</span>.value
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">price</span> = line.ProductCode |&gt; getProductPrice
@@ -548,17 +1065,28 @@
         ProductCode = line.ProductCode
         Quantity = line.Quantity LinePrice = linePrice
     }
-</pre></div>
-<p>在此函数中, 我们引入了另一个帮助函数 <em>Price.multiply</em>, 将价格乘以数量.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// Multiply a Price by a decimal qty.</span>
+</pre>
+                </div>
+                <p>
+                  在此函数中, 我们引入了另一个帮助函数 <em>Price.multiply</em>,
+                  将价格乘以数量.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// Multiply a Price by a decimal qty.</span>
 <span style="color: #228B22">// Raise exception if new price is out of bounds.</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">multiply</span> qty (Price p) =
     create (qty * p)
-</pre></div>
-<p>定价步骤现已完成!</p>
-<h3 id="acknowledgement-step">Acknowledgement Step</h3>
-<p>这是移除了副作用后的 <em>Acknowledgement</em> 定义:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">HtmlString</span> = HtmlString <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
+</pre>
+                </div>
+                <p>定价步骤现已完成!</p>
+                <h3 id="acknowledgement-step">Acknowledgement Step</h3>
+                <p>这是移除了副作用后的 <em>Acknowledgement</em> 定义:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">HtmlString</span> = HtmlString <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateOrderAcknowledgmentLetter</span> =
     PricedOrder -&gt; HtmlString
 
@@ -575,9 +1103,13 @@
     -&gt; SendOrderAcknowledgment  <span style="color: #228B22">// dependency</span>
     -&gt; PricedOrder  <span style="color: #228B22">// input</span>
     -&gt; OrderAcknowledgmentSent option <span style="color: #228B22">// output</span>
-</pre></div>
-<p>下面是它的实现:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">acknowledgeOrder</span> : AcknowledgeOrder =
+</pre>
+                </div>
+                <p>下面是它的实现:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">acknowledgeOrder</span> : AcknowledgeOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> createAcknowledgmentLetter sendAcknowledgment pricedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">letter</span> = createAcknowledgmentLetter pricedOrder
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">acknowledgment</span> = {
@@ -596,12 +1128,25 @@
             Some <span style="color: #8B008B; font-weight: bold">event</span>
         | NotSent -&gt;
             None
-</pre></div>
-<p>实现非常简单, 不需要帮助器函数, 所以这很容易!</p>
-<p>但是, <em>sendAcknowledgment</em> 依赖项呢? 在某个时候, 我们将必须决定它的实现. 然而, 现在我们可以不去管它. 这是使用函数对依赖项进行参数化的巨大好处之一 – you can avoid making decisions until the last responsible moment, yet you can still build and assemble most of the code.</p>
-<h3 id="createevents-step">CreateEvents Step</h3>
-<p>最后的步骤是创建从工作流返回的事件. 假设只有在计费金额大于 0 时才应发送 <em>billing</em> 事件. 设计是:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// Event to send to shipping context</span>
+</pre>
+                </div>
+                <p>实现非常简单, 不需要帮助器函数, 所以这很容易!</p>
+                <p>
+                  但是, <em>sendAcknowledgment</em> 依赖项呢? 在某个时候,
+                  我们将必须决定它的实现. 然而, 现在我们可以不去管它.
+                  这是使用函数对依赖项进行参数化的巨大好处之一 – you can avoid
+                  making decisions until the last responsible moment, yet you
+                  can still build and assemble most of the code.
+                </p>
+                <h3 id="createevents-step">CreateEvents Step</h3>
+                <p>
+                  最后的步骤是创建从工作流返回的事件. 假设只有在计费金额大于 0
+                  时才应发送 <em>billing</em> 事件. 设计是:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// Event to send to shipping context</span>
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderPlaced</span> = PricedOrder
 
 <span style="color: #228B22">// Event to send to billing context</span>
@@ -621,10 +1166,24 @@
     PricedOrder  <span style="color: #228B22">// input</span>
     -&gt; OrderAcknowledgmentSent option  <span style="color: #228B22">// input (event from previous step)</span>
     -&gt; PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span>  <span style="color: #228B22">// output</span>
-</pre></div>
-<p>我们不需要创建 <em>OrderPlaced</em> 事件, 因为它和 <em>PricedOrder</em> 一样, 而 <em>OrderAcknowledgmentSent</em> 事件是在上一步中创建的, 因此我们也不需要创建它.</p>
-<p>但是 <em>BillableOrderPlaced</em> 事件需要我们手动创建, 所以要构建一个 <em>createBillingEvent</em> 函数. 而由于还需要区别非零计费金额, 所以这个函数必须返回 <em>optional</em> 类型.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// PricedOrder -&gt; BillableOrderPlaced option</span>
+</pre>
+                </div>
+                <p>
+                  我们不需要创建 <em>OrderPlaced</em> 事件, 因为它和
+                  <em>PricedOrder</em> 一样, 而
+                  <em>OrderAcknowledgmentSent</em> 事件是在上一步中创建的,
+                  因此我们也不需要创建它.
+                </p>
+                <p>
+                  但是 <em>BillableOrderPlaced</em> 事件需要我们手动创建,
+                  所以要构建一个 <em>createBillingEvent</em> 函数.
+                  而由于还需要区别非零计费金额, 所以这个函数必须返回
+                  <em>optional</em> 类型.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// PricedOrder -&gt; BillableOrderPlaced option</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">createBillingEvent</span> (placedOrder:PricedOrder) : BillableOrderPlaced option =
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">billingAmount</span> = placedOrder.AmountToBill |&gt; <span style="color: #008b45; text-decoration: underline">BillingAmount</span>.value
     <span style="color: #8B008B; font-weight: bold">if</span> billingAmount &gt; <span style="color: #B452CD">0M</span> <span style="color: #8B008B; font-weight: bold">then</span>
@@ -636,10 +1195,25 @@
         Some <span style="color: #8B008B; font-weight: bold">event</span>
     <span style="color: #8B008B; font-weight: bold">else</span>
         None
-</pre></div>
-<p>现在我们所有的事件都已经有了, 那么应该如何返回它们呢?</p>
-<p>我们<a href="http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html#creating-the-events-to-return">之前</a>决定为所有的事件类型创建一个 OR 类型, 然后返回这些类型的列表. 因此, 首先我们需要将每个事件转换为 OR 类型. 对于 <em>OrderPlaced</em> 事件, 我们只需直接使用 <em>PlaceOrderEvent.OrdePlaced</em> 构造函数, 但对于另外两个事件, 我们需要使用 <em>Option.map</em> 函数, 如果是 <em>None</em>, 就返回 <em>None</em>; 如果是 <em>Some(x)</em>, 返回 <em>Some(f x)</em>, f 是给定的函数.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">createEvents</span> : CreateEvents =
+</pre>
+                </div>
+                <p>现在我们所有的事件都已经有了, 那么应该如何返回它们呢?</p>
+                <p>
+                  我们<a
+                    href="http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html#creating-the-events-to-return"
+                    >之前</a
+                  >决定为所有的事件类型创建一个 OR 类型, 然后返回这些类型的列表.
+                  因此, 首先我们需要将每个事件转换为 OR 类型. 对于
+                  <em>OrderPlaced</em> 事件, 我们只需直接使用
+                  <em>PlaceOrderEvent.OrdePlaced</em> 构造函数,
+                  但对于另外两个事件, 我们需要使用 <em>Option.map</em> 函数,
+                  如果是 <em>None</em>, 就返回 <em>None</em>; 如果是
+                  <em>Some(x)</em>, 返回 <em>Some(f x)</em>, f 是给定的函数.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">createEvents</span> : CreateEvents =
     <span style="color: #8B008B; font-weight: bold">fun</span> pricedOrder acknowledgmentEventOpt -&gt;
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">event1</span> =
         pricedOrder
@@ -653,17 +1227,38 @@
         |&gt; <span style="color: #008b45; text-decoration: underline">Option</span>.map <span style="color: #008b45; text-decoration: underline">PlaceOrderEvent</span>.BillableOrderPlaced
     <span style="color: #228B22">// return all the events, how?</span>
     <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>现在它们都调用了各自的构造函数, 但有些是 <em>optional</em> 类型. 我们应该如何处理才能把它们放到一个列表里呢？好吧, 我们可以再次执行之前的一个技巧, 将它们全部转换为更通用的类型.</p>
-<p>对于 <em>OrderPlaced</em> 可以使用 <em>list.singleton</em> 将其转换为列表, 而对于 <em>option</em>, 则可以创建一个称为 <em>listOfOption</em> 的帮助函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// convert an Option into a List</span>
+</pre>
+                </div>
+                <p>
+                  现在它们都调用了各自的构造函数, 但有些是
+                  <em>optional</em> 类型.
+                  我们应该如何处理才能把它们放到一个列表里呢？好吧,
+                  我们可以再次执行之前的一个技巧, 将它们全部转换为更通用的类型.
+                </p>
+                <p>
+                  对于 <em>OrderPlaced</em> 可以使用
+                  <em>list.singleton</em> 将其转换为列表, 而对于
+                  <em>option</em>, 则可以创建一个称为
+                  <em>listOfOption</em> 的帮助函数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// convert an Option into a List</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">listOfOption</span> opt =
     <span style="color: #8B008B; font-weight: bold">match</span> opt <span style="color: #8B008B; font-weight: bold">with</span>
         | Some x -&gt; [x]
         | None -&gt; <span style="color: #658b00">[]</span>
-</pre></div>
-<p>这样, 所有的事件类型都相同了, 我们可以将它们放到另一个列表中返回:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">createEvents</span> : CreateEvents =
+</pre>
+                </div>
+                <p>
+                  这样, 所有的事件类型都相同了,
+                  我们可以将它们放到另一个列表中返回:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">createEvents</span> : CreateEvents =
     <span style="color: #8B008B; font-weight: bold">fun</span> pricedOrder acknowledgmentEventOpt -&gt;
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">event1</span> =
         pricedOrder
@@ -684,41 +1279,113 @@
         <span style="color: #8B008B; font-weight: bold">yield</span>! events2
         <span style="color: #8B008B; font-weight: bold">yield</span>! events3
     ]
-</pre></div>
-<p>这种将不兼容的东西转换或 “提升” 为共享类型的方法是处理组合问题的关键技术.</p>
-<h2 id="composing-the-pipeline-steps-together">Composing the Pipeline Steps Together</h2>
-<p>现在, 我们已准备好通过将各步骤的实现组合到管道中来完成工作流. 我们希望代码能像下面这样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
+</pre>
+                </div>
+                <p>
+                  这种将不兼容的东西转换或 “提升”
+                  为共享类型的方法是处理组合问题的关键技术.
+                </p>
+                <h2 id="composing-the-pipeline-steps-together">
+                  Composing the Pipeline Steps Together
+                </h2>
+                <p>
+                  现在, 我们已准备好通过将各步骤的实现组合到管道中来完成工作流.
+                  我们希望代码能像下面这样:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
     <span style="color: #8B008B; font-weight: bold">fun</span> unvalidatedOrder -&gt;
         unvalidatedOrder
         |&gt; validateOrder
         |&gt; priceOrder
         |&gt; acknowledgeOrder
         |&gt; createEvents
-</pre></div>
-<p>但是有一个问题, 那就是 <em>validateOrder</em> 除了 <em>UnvalidatedOrder</em> 之外还有两个额外的输入. 就目前情况而言, 没有办法直接将 <em>PlaceOrder</em> 工作流连接到 <em>validateOrder</em> 函数, 因为参数不匹配.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/parameterdonotmatch.png"/></p>
-<p>同样, <em>validateOrder</em> 函数也不能连接到 <em>priceOrder</em> 函数, 因为 <em>priceOrder</em> 函数有两个输入.</p>
-<p>如<a href="http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html#composing-the-workflow-from-the-steps">之前</a>所言, 像这样用不同的 “形状” 组合函数是函数编程中的主要挑战之一, 并且已经有了许多技术来解决这个问题.</p>
-<p>大多数解决方案都涉及可怕的 <strong><em>monad</em></strong>, 而在这里, 我们将使用一种非常简单的方法, 那就是<strong>部分应用</strong>. 我们将只应用 <em>validateOrder</em> 三个参数中的两个(两个依赖项), 这会给我们生成一个只有一个输入的新函数.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/parametermatch.png"/></p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrderWithDependenciesBakedIn</span> =
+</pre>
+                </div>
+                <p>
+                  但是有一个问题, 那就是 <em>validateOrder</em> 除了
+                  <em>UnvalidatedOrder</em> 之外还有两个额外的输入.
+                  就目前情况而言, 没有办法直接将
+                  <em>PlaceOrder</em> 工作流连接到 <em>validateOrder</em> 函数,
+                  因为参数不匹配.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/parameterdonotmatch.png"
+                  />
+                </p>
+                <p>
+                  同样, <em>validateOrder</em> 函数也不能连接到
+                  <em>priceOrder</em> 函数, 因为
+                  <em>priceOrder</em> 函数有两个输入.
+                </p>
+                <p>
+                  如<a
+                    href="http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html#composing-the-workflow-from-the-steps"
+                    >之前</a
+                  >所言, 像这样用不同的 “形状”
+                  组合函数是函数编程中的主要挑战之一,
+                  并且已经有了许多技术来解决这个问题.
+                </p>
+                <p>
+                  大多数解决方案都涉及可怕的 <strong><em>monad</em></strong
+                  >, 而在这里, 我们将使用一种非常简单的方法,
+                  那就是<strong>部分应用</strong>. 我们将只应用
+                  <em>validateOrder</em> 三个参数中的两个(两个依赖项),
+                  这会给我们生成一个只有一个输入的新函数.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/parametermatch.png"
+                  />
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrderWithDependenciesBakedIn</span> =
     validateOrder checkProductCodeExists checkAddressExists
 
 <span style="color: #228B22">// new function signature after partial application:</span>
 <span style="color: #228B22">// UnvalidatedOrder -&gt; ValidatedOrder</span>
-</pre></div>
-<p>当然, 这是一个可怕的名字! 幸运的是, 在 F# 中, 可以在本地对新函数使用与原函数相同的名称 – 这称为 “<em>shadowing</em>”:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> =
+</pre>
+                </div>
+                <p>
+                  当然, 这是一个可怕的名字! 幸运的是, 在 F# 中,
+                  可以在本地对新函数使用与原函数相同的名称 – 这称为
+                  “<em>shadowing</em>”:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> =
     validateOrder checkProductCodeExists checkAddressExists
-</pre></div>
-<p>或者, 可以在名称中使用刻度号来显示它是原始函数的变体, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span><span style="color: #8B008B; font-weight: bold">'</span> =
+</pre>
+                </div>
+                <p>
+                  或者, 可以在名称中使用刻度号来显示它是原始函数的变体,
+                  如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span><span style="color: #8B008B; font-weight: bold">'</span> =
     validateOrder checkProductCodeExists checkAddressExists
-</pre></div>
-<p>接下来, 我们可以用同样的方式处理掉 <em>priceOrder</em> 和 <em>acknowledgeOrder</em>, 然后我们会得到三个只有一个参数的新函数.</p>
-<p>最终, 工作流主函数 <em>placeOrder</em> 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
+</pre>
+                </div>
+                <p>
+                  接下来, 我们可以用同样的方式处理掉 <em>priceOrder</em> 和
+                  <em>acknowledgeOrder</em>,
+                  然后我们会得到三个只有一个参数的新函数.
+                </p>
+                <p>最终, 工作流主函数 <em>placeOrder</em> 如下所示:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
     <span style="color: #228B22">// set up local versions of the pipeline stages</span>
     <span style="color: #228B22">// using partial application to bake in the dependencies</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> =
@@ -736,10 +1403,23 @@
         |&gt; priceOrder
         |&gt; acknowledgeOrder
         |&gt; createEvents
-</pre></div>
-<p>除此之外, 还有一个问题. 在我们的例子中, <em>acknowledgeOrder</em> 的输出只有事件, 而没有 <em>PricedOrder</em>, 因此它与 <em>createEvents</em> 的输入不匹配.</p>
-<p>我们可以为此编写一个适配器, 或者可以简单地改用更命令化的代码样式, 为每个步骤的输出显式地分配一个值, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
+</pre>
+                </div>
+                <p>
+                  除此之外, 还有一个问题. 在我们的例子中,
+                  <em>acknowledgeOrder</em> 的输出只有事件, 而没有
+                  <em>PricedOrder</em>, 因此它与
+                  <em>createEvents</em> 的输入不匹配.
+                </p>
+                <p>
+                  我们可以为此编写一个适配器,
+                  或者可以简单地改用更命令化的代码样式,
+                  为每个步骤的输出显式地分配一个值, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
     <span style="color: #228B22">// return the workflow function</span>
     <span style="color: #8B008B; font-weight: bold">fun</span> unvalidatedOrder -&gt;
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validatedOrder</span> =
@@ -754,21 +1434,60 @@
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">events</span> =
             createEvents pricedOrder acknowledgementOption
         events
-</pre></div>
-<p>它不像管道那么优雅, 但仍然易于理解和维护.</p>
-<p>那么, 剩下的问题就是从哪里获取那两个依赖项? 我们不想把它们变成全局函数, 所以接下来让我们看看如何 “注入” 这些依赖项.</p>
-<h2 id="injecting-dependencies">Injecting Dependencies</h2>
-<p>(这段话总翻译不好, 还是看原文吧.)<br/>
-We have a number of low-level helper functions such as toValidProductCode that take a function parameter representing a service. These are quite deep in the design, so how do we get dependencies from the top level down to the functions that need them?</p>
-<p>在面向对象设计中, 我们将使用依赖注入(<em>dependency injection</em>) 和 <em>IoC</em> 容器. 但在函数式编程中, 我们不想那么做, 因为那会让依赖项变得隐式. 相反, 我们始终希望将依赖作为显式参数传递, 以确保依赖是显式的.</p>
-<p>在函数式编程中, 有很多技术可以做到这一点, 例如 “<em>Reader Monad</em>” 和 “<em>Free Monad</em>”. 但由于这是本入门书籍, 因此我们将使用最简单的方法, 那就是将所有的依赖项放到顶层函数, 然后将它们传递给内部函数, 内部函数又将它们向下传递到更内部的函数, 依此类推.</p>
-<p>例如, 假设我们已经实现了我们之前定义的辅助函数, 它们都有一个明确的参数显式的表明依赖性:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// low-level helper functions</span>
+</pre>
+                </div>
+                <p>它不像管道那么优雅, 但仍然易于理解和维护.</p>
+                <p>
+                  那么, 剩下的问题就是从哪里获取那两个依赖项?
+                  我们不想把它们变成全局函数, 所以接下来让我们看看如何 “注入”
+                  这些依赖项.
+                </p>
+                <h2 id="injecting-dependencies">Injecting Dependencies</h2>
+                <p>
+                  (这段话总翻译不好, 还是看原文吧.)<br />
+                  We have a number of low-level helper functions such as
+                  toValidProductCode that take a function parameter representing
+                  a service. These are quite deep in the design, so how do we
+                  get dependencies from the top level down to the functions that
+                  need them?
+                </p>
+                <p>
+                  在面向对象设计中, 我们将使用依赖注入(<em
+                    >dependency injection</em
+                  >) 和 <em>IoC</em> 容器. 但在函数式编程中, 我们不想那么做,
+                  因为那会让依赖项变得隐式. 相反,
+                  我们始终希望将依赖作为显式参数传递, 以确保依赖是显式的.
+                </p>
+                <p>
+                  在函数式编程中, 有很多技术可以做到这一点, 例如 “<em
+                    >Reader Monad</em
+                  >” 和 “<em>Free Monad</em>”. 但由于这是本入门书籍,
+                  因此我们将使用最简单的方法, 那就是将所有的依赖项放到顶层函数,
+                  然后将它们传递给内部函数,
+                  内部函数又将它们向下传递到更内部的函数, 依此类推.
+                </p>
+                <p>
+                  例如, 假设我们已经实现了我们之前定义的辅助函数,
+                  它们都有一个明确的参数显式的表明依赖性:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// low-level helper functions</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toAddress</span> checkAddressExists unvalidatedAddress =  <span style="color: #228B22">// ...</span>
 <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toProductCode</span> checkProductCodeExists productCode = <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>现在, 作为创建订单行的一部分, 我们需要创建产品代码, 那意味着 <em>toValidatedOrderLine</em> 需要使用 <em>toProductCode</em>, 也就意味着 <em>toValidatedOrderLine</em> 需要有 <em>checkProductCodeExists</em> 参数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toValidatedOrderLine</span>
+</pre>
+                </div>
+                <p>
+                  现在, 作为创建订单行的一部分, 我们需要创建产品代码, 那意味着
+                  <em>toValidatedOrderLine</em> 需要使用 <em>toProductCode</em>,
+                  也就意味着 <em>toValidatedOrderLine</em> 需要有
+                  <em>checkProductCodeExists</em> 参数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toValidatedOrderLine</span>
     checkProductExists  <span style="color: #228B22">// needed for toProductCode, below</span>
     unvalidatedOrderLine =
         <span style="color: #228B22">// create the components of the line</span>
@@ -777,9 +1496,19 @@ We have a number of low-level helper functions such as toValidProductCode that t
             unvalidatedOrderLine.ProductCode
             |&gt; toProductCode checkProductExists  <span style="color: #228B22">// use service</span>
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>再向上移动一个级别, 因为 <em>validateOrder</em> 函数需要同时使用 <em>toAddress</em> 和 <em>toValidatedOrderLine</em>, 所以它需要 <em>checkAddressExists</em> 和 <em>checkProductCodeExists</em> 作为额外的参数传入:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
+</pre>
+                </div>
+                <p>
+                  再向上移动一个级别, 因为
+                  <em>validateOrder</em> 函数需要同时使用 <em>toAddress</em> 和
+                  <em>toValidatedOrderLine</em>, 所以它需要
+                  <em>checkAddressExists</em> 和
+                  <em>checkProductCodeExists</em> 作为额外的参数传入:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span> : ValidateOrder =
     <span style="color: #8B008B; font-weight: bold">fun</span> checkProductExists <span style="color: #228B22">// dependency for toValidatedOrderLine</span>
         checkAddressExists <span style="color: #228B22">// dependency for toAddress</span>
         unvalidatedOrder -&gt;
@@ -793,11 +1522,23 @@ We have a number of low-level helper functions such as toValidProductCode that t
             unvalidatedOrder.Lines
             |&gt; <span style="color: #008b45; text-decoration: underline">List</span>.map (toValidatedOrderLine checkProductExists)
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>以此类推, 直到找到一个可以预构建好所有依赖项的顶级函数. 在面向对象设计中, 此顶级函数通常称为 “组合根”, 这里我们也使用相同的术语.</p>
-<p><em>placeOrder</em> 工作流函数是否可以充当组合根?</p>
-<p>不, 因为构建服务通常涉及访问配置文件(副作用). 最好也为 <em>placeOrder</em> 工作流本身提供它所需的依赖作为参数, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span>
+</pre>
+                </div>
+                <p>
+                  以此类推, 直到找到一个可以预构建好所有依赖项的顶级函数.
+                  在面向对象设计中, 此顶级函数通常称为 “组合根”,
+                  这里我们也使用相同的术语.
+                </p>
+                <p><em>placeOrder</em> 工作流函数是否可以充当组合根?</p>
+                <p>
+                  不, 因为构建服务通常涉及访问配置文件(副作用). 最好也为
+                  <em>placeOrder</em> 工作流本身提供它所需的依赖作为参数,
+                  如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span>
     checkProductExists  <span style="color: #228B22">// dependency</span>
     checkAddressExists  <span style="color: #228B22">// dependency</span>
     getProductPrice  <span style="color: #228B22">// dependency</span>
@@ -806,10 +1547,21 @@ We have a number of low-level helper functions such as toValidProductCode that t
     : PlaceOrderWorkflow =
         <span style="color: #8B008B; font-weight: bold">fun</span> unvalidatedOrder -&gt;
             <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>这样做还有一个额外的好处, 即整个工作流很容易测试, 因为所有依赖项都是可伪造的 (<em>fake-able</em>).</p>
-<p>实际上, 组合根函数应尽可能接近应用程序的入口点 – 控制台应用的 <em>main</em> 函数或长时间运行的应用(如 <em>Web</em> 服务)的 <em>OnStartup/Application_Start</em> 处理程序. 例如:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">app</span> : WebPart =
+</pre>
+                </div>
+                <p>
+                  这样做还有一个额外的好处, 即整个工作流很容易测试,
+                  因为所有依赖项都是可伪造的 (<em>fake-able</em>).
+                </p>
+                <p>
+                  实际上, 组合根函数应尽可能接近应用程序的入口点 – 控制台应用的
+                  <em>main</em> 函数或长时间运行的应用(如 <em>Web</em> 服务)的
+                  <em>OnStartup/Application_Start</em> 处理程序. 例如:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">app</span> : WebPart =
     <span style="color: #228B22">// setup the services used by the workflow</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkProductExists</span> =  <span style="color: #228B22">// ...</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkAddressExists</span> =  <span style="color: #228B22">// ...</span>
@@ -844,15 +1596,37 @@ We have a number of low-level helper functions such as toValidProductCode that t
                 &gt;=&gt;  <span style="color: #228B22">// ...</span>
             ]
         ]
-</pre></div>
-<h3 id="too-many-dependencies">Too Many Dependencies?</h3>
-<p><em>validateOrder</em> 只有两个依赖. 如果它需要四个, 五个, 甚至更多呢? 如果还有其它步骤也需要大量的依赖项, 则最终的依赖会是爆发式增长. 发生这种情况时, 应该怎么做?</p>
-<p>首先, 可能是函数做了太多的事情. 能把拆分它吗? 如果不行, 则可以将依赖分组到单个结构体中, 并将该结构体作为参数传递.</p>
-<p>常见的情况是子函数的依赖特别复杂. 例如, 假设 <em>checkAddressExists</em> 函数正在与需要 <em>URI endpoint</em> 和 <em>credentials</em> 的 Web 服务通信:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkAddressExists</span> endPoint credentials = ...
-</pre></div>
-<p>我们是否必须让这个函数的调用者(<em>toAddress</em>)也具备那两个参数? 像这样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toAddress</span>
+</pre>
+                </div>
+                <h3 id="too-many-dependencies">Too Many Dependencies?</h3>
+                <p>
+                  <em>validateOrder</em> 只有两个依赖. 如果它需要四个, 五个,
+                  甚至更多呢? 如果还有其它步骤也需要大量的依赖项,
+                  则最终的依赖会是爆发式增长. 发生这种情况时, 应该怎么做?
+                </p>
+                <p>
+                  首先, 可能是函数做了太多的事情. 能把拆分它吗? 如果不行,
+                  则可以将依赖分组到单个结构体中, 并将该结构体作为参数传递.
+                </p>
+                <p>
+                  常见的情况是子函数的依赖特别复杂. 例如, 假设
+                  <em>checkAddressExists</em> 函数正在与需要
+                  <em>URI endpoint</em> 和 <em>credentials</em> 的 Web 服务通信:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkAddressExists</span> endPoint credentials = ...
+</pre>
+                </div>
+                <p>
+                  我们是否必须让这个函数的调用者(<em>toAddress</em>)也具备那两个参数?
+                  像这样:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">toAddress</span>
     checkAddressExists
     endPoint  <span style="color: #228B22">// only needed for checkAddressExists</span>
     credentials   <span style="color: #228B22">// only needed for checkAddressExists</span>
@@ -860,23 +1634,47 @@ We have a number of low-level helper functions such as toValidProductCode that t
         <span style="color: #228B22">// call the remote service</span>
         <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkedAddress</span> = checkAddressExists endPoint credentials unvalidatedAddress
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>以此类推到更上层的函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span>
+</pre>
+                </div>
+                <p>以此类推到更上层的函数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">validateOrder</span>
     checkProductExists
     checkAddressExists
     endPoint <span style="color: #228B22">// only needed for checkAddressExists</span>
     credentials <span style="color: #228B22">// only needed for checkAddressExists</span>
     unvalidatedOrder =
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>不, 当然不需要这么设计. 这些中间函数不需要知道与 <em>checkAddressExists</em> 函数的依赖有关的任何信息.</p>
-<p>更好的方法是在 <em>validateOrder</em> 函数之外再预构建一个所有依赖项都已内置的帮助函数, 然后传递这个帮助函数即可.</p>
-<p>例如, 在下面的代码中, 我们在准备期间将 <em>uri</em> 和 <em>credentials</em> 内置到 <em>checkAddressExists</em> 函数中, 以便以后可以将其作为只有一个参数的函数使用:</p>
-<blockquote>
-<p>仅仅是例子, 实际上 <em>set up</em> 阶段应该在更上层(例如 <em>WebPart</em>), 而不是在 <em>placeOrder</em> 中.</p>
-</blockquote>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
+</pre>
+                </div>
+                <p>
+                  不, 当然不需要这么设计. 这些中间函数不需要知道与
+                  <em>checkAddressExists</em> 函数的依赖有关的任何信息.
+                </p>
+                <p>
+                  更好的方法是在
+                  <em>validateOrder</em>
+                  函数之外再预构建一个所有依赖项都已内置的帮助函数,
+                  然后传递这个帮助函数即可.
+                </p>
+                <p>
+                  例如, 在下面的代码中, 我们在准备期间将 <em>uri</em> 和
+                  <em>credentials</em> 内置到
+                  <em>checkAddressExists</em> 函数中,
+                  以便以后可以将其作为只有一个参数的函数使用:
+                </p>
+                <blockquote>
+                  <p>
+                    仅仅是例子, 实际上 <em>set up</em> 阶段应该在更上层(例如
+                    <em>WebPart</em>), 而不是在 <em>placeOrder</em> 中.
+                  </p>
+                </blockquote>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">placeOrder</span> : PlaceOrderWorkflow =
     <span style="color: #228B22">// initialize information (e.g from configuration)</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">endPoint</span> =  <span style="color: #228B22">//...</span>
     <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">credentials</span> =  <span style="color: #228B22">//...</span>
@@ -897,13 +1695,34 @@ We have a number of low-level helper functions such as toValidProductCode that t
     <span style="color: #8B008B; font-weight: bold">fun</span> unvalidatedOrder -&gt;
         <span style="color: #228B22">// compose the pipeline from the steps ...</span>
         <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>这种通过 “预构建” 来减少参数的方法是一种常见的技术, 有助于隐藏复杂性. 当一个函数传递到另一个函数时, “接口”(函数类型)应尽可能少, 并隐藏所有依赖项.</p>
-<h3 id="testing-dependencies">Testing Dependencies</h3>
-<p>像这样传递依赖关系的一大好处是, 它使核心函数非常易于测试, 因为它很容易 <em>fake</em> 出有效的依赖, 而无需任何特殊的模拟库 (<em>mocking library</em>).</p>
-<p>例如, 假设我们要测试 <em>validation</em> 的代码是否有效. 一个测试应该检查, 如果 <em>checkProductCodeExists</em> 成功, 则整个验证成功. 另一个测试应该检查, 如果 <em>checkProductCodeExists</em> 失败, 则整个验证都会失败. 让我们看看现在如何编写这些测试.</p>
-<p>这是一些 <em>success case</em> 的代码, 使用 <em>Arrange/Act/Assert</em> 模块进行测试:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">open</span> <span style="color: #008b45; text-decoration: underline">NUnit.Framework</span>
+</pre>
+                </div>
+                <p>
+                  这种通过 “预构建” 来减少参数的方法是一种常见的技术,
+                  有助于隐藏复杂性. 当一个函数传递到另一个函数时,
+                  “接口”(函数类型)应尽可能少, 并隐藏所有依赖项.
+                </p>
+                <h3 id="testing-dependencies">Testing Dependencies</h3>
+                <p>
+                  像这样传递依赖关系的一大好处是, 它使核心函数非常易于测试,
+                  因为它很容易 <em>fake</em> 出有效的依赖,
+                  而无需任何特殊的模拟库 (<em>mocking library</em>).
+                </p>
+                <p>
+                  例如, 假设我们要测试 <em>validation</em> 的代码是否有效.
+                  一个测试应该检查, 如果 <em>checkProductCodeExists</em> 成功,
+                  则整个验证成功. 另一个测试应该检查, 如果
+                  <em>checkProductCodeExists</em> 失败, 则整个验证都会失败.
+                  让我们看看现在如何编写这些测试.
+                </p>
+                <p>
+                  这是一些 <em>success case</em> 的代码, 使用
+                  <em>Arrange/Act/Assert</em> 模块进行测试:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">open</span> <span style="color: #008b45; text-decoration: underline">NUnit.Framework</span>
 
 [&lt;Test&gt;]
 <span style="color: #228B22">// F# allows you to create identifiers with spaces and punctuation in them</span>
@@ -922,23 +1741,49 @@ We have a number of low-level helper functions such as toValidProductCode that t
 
     <span style="color: #228B22">// assert: check that result is a ValidatedOrder, not an error</span>
     <span style="color: #228B22">// ...</span>
-</pre></div>
-<p>可以看到 <em>checkAddressExists</em> 和 <em>checkProductCodeExists</em> 函数的 <em>stub</em> 版本(代表服务)编写起来很简单, 可以在测试中直接进行定义.</p>
-<p>要为 <em>failure case</em> 编写代码, 我们需要做的就是将 <em>checkProductCodeExists</em> 函数更改为对于任何产品代码都失败:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkProductCodeExists</span> productCode =
+</pre>
+                </div>
+                <p>
+                  可以看到 <em>checkAddressExists</em> 和
+                  <em>checkProductCodeExists</em> 函数的
+                  <em>stub</em> 版本(代表服务)编写起来很简单,
+                  可以在测试中直接进行定义.
+                </p>
+                <p>
+                  要为 <em>failure case</em> 编写代码, 我们需要做的就是将
+                  <em>checkProductCodeExists</em>
+                  函数更改为对于任何产品代码都失败:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">checkProductCodeExists</span> productCode =
     <span style="color: #8B008B; font-weight: bold">false</span> <span style="color: #228B22">// fail</span>
-</pre></div>
-<p>这只是一个小例子. 测试是一个很大的主题, 我们这里没有空间可以进入.</p>
-<h2 id="the-assembled-pipeline">The Assembled Pipeline</h2>
-<p>在本章中, 我们已经看到了分散片段中的所有代码. 让我们将所有这些组合在一起, 并展示如何组装完整的管道.</p>
-<ul>
-<li>我们将实现特定工作流的所有代码放在同一模块中, 该模块以工作流命名(例如 <em>PlaceOrderWorkflow.fs</em>).</li>
-<li>在文件的顶部, 我们放置类型定义.</li>
-<li>之后, 我们放置每个步骤的实现.</li>
-<li>最底层, 我们将各步骤组装到主工作流函数中.</li>
-</ul>
-<p>当然, 我们这里只显示代码内容的大纲.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">module</span> <span style="color: #008b45; text-decoration: underline">PlaceOrderWorkflow</span> =
+</pre>
+                </div>
+                <p>
+                  这只是一个小例子. 测试是一个很大的主题,
+                  我们这里没有空间可以进入.
+                </p>
+                <h2 id="the-assembled-pipeline">The Assembled Pipeline</h2>
+                <p>
+                  在本章中, 我们已经看到了分散片段中的所有代码.
+                  让我们将所有这些组合在一起, 并展示如何组装完整的管道.
+                </p>
+                <ul>
+                  <li>
+                    我们将实现特定工作流的所有代码放在同一模块中,
+                    该模块以工作流命名(例如 <em>PlaceOrderWorkflow.fs</em>).
+                  </li>
+                  <li>在文件的顶部, 我们放置类型定义.</li>
+                  <li>之后, 我们放置每个步骤的实现.</li>
+                  <li>最底层, 我们将各步骤组装到主工作流函数中.</li>
+                </ul>
+                <p>当然, 我们这里只显示代码内容的大纲.</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">module</span> <span style="color: #008b45; text-decoration: underline">PlaceOrderWorkflow</span> =
     <span style="color: #228B22">// make the shared simple types (such as</span>
     <span style="color: #228B22">// String50 and ProductCode) available.</span>
     <span style="color: #8B008B; font-weight: bold">open</span> <span style="color: #008b45; text-decoration: underline">SimpleTypes</span>
@@ -1034,70 +1879,110 @@ We have a number of low-level helper functions such as toValidProductCode that t
             <span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">events</span> =
                 createEvents pricedOrder acknowledgementOption
             events
-</pre></div>
-    </div>
+</pre>
+                </div>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u51fd\u6570\u5f0f",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2020-02-06T13:00:00+08:00",
+              "headline": "\u516d. Implementation: Composing a Pipeline",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/liu-implementation-composing-a-pipeline.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "Understanding Functions \u5728\u5f88\u591a\u73b0\u4ee3\u8bed\u8a00\u4e2d, \u51fd\u6570\u4e5f\u662f\u4e00\u7b49\u5bf9\u8c61, \u4f46\u53ea\u662f\u4f7f\u7528\u51fd\u6570\u5e76\u4e0d\u610f\u5473\u7740\u5728\u8fdb\u884c\u51fd\u6570\u5f0f\u7f16\u7a0b. \u51fd\u6570\u5f0f\u7f16\u7a0b\u8303\u4f8b\u7684\u5173\u952e\u5728\u4e8e, \u51fd\u6570\u65e0\u5904\u4e0d\u5728, \u5e94\u6709\u5c3d\u6709, \u7a0b\u5e8f\u4e2d\u7684\u4efb\u4f55\u95ee\u9898\u90fd\u6709\u51fd\u6570\u5f0f\u7684\u89e3\u51b3\u65b9\u6848. \u4f8b\u5982, \u5047\u8bbe\u6211\u4eec\u6709\u4e00\u4e2a\u5927\u578b\u7a0b\u5e8f, \u5b83\u662f\u7531\u8f83\u5c0f\u7684\u5757\u7ec4\u6210\u7684. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u8fd9\u4e9b\u90e8\u5206\u5c06\u662f\u7c7b\u548c\u5bf9\u8c61. \u5728\u529f\u80fd\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u8fd9\u4e9b\u90e8\u5206\u5c06\u662f\u51fd\u6570. \u518d\u6bd4\u5982\u6211\u4eec\u9700\u8981\u53c2\u6570\u5316\u7a0b\u5e8f\u7684\u67d0\u4e9b\u65b9\u9762, \u6216\u8005\u60f3\u51cf\u5c11\u7ec4\u4ef6\u4e4b\u95f4\u7684\u8026\u5408. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u4f7f\u7528\u63a5\u53e3\u548c\u4f9d\u8d56\u6ce8\u5165. \u5728\u51fd\u6570\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u4f7f\u7528\u51fd\u6570\u8fdb\u884c\u53c2\u6570\u5316. \u53c8\u6bd4\u5982\u6211\u4eec\u8981\u9075\u5faa \u201c\u4e0d\u8981\u91cd\u590d\u81ea\u5df1\u201d \u7684\u539f\u5219, \u5e76\u5728\u8bb8\u591a\u7ec4\u4ef6\u4e4b\u95f4\u91cd\u7528\u4ee3\u7801. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u53ef\u80fd\u4f1a\u4f7f\u7528\u7ee7\u627f\u6216\u7c7b\u4f3c\u88c5\u9970\u8005\u6a21\u5f0f\u7684\u6280\u672f. \u5728\u51fd\u6570\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u6240\u6709\u53ef\u91cd\u590d\u4f7f\u7528\u7684\u4ee3\u7801\u653e\u5165\u51fd\u6570\u4e2d \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://www.smallcpp.com/images/\u51fd\u6570\u5f0f\u9886\u57df\u5efa\u6a21/lowlevel.png"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2020-02-06T13:00:00+08:00", "headline": "\u516d. Implementation: Composing a Pipeline", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/liu-implementation-composing-a-pipeline.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "Understanding Functions \u5728\u5f88\u591a\u73b0\u4ee3\u8bed\u8a00\u4e2d, \u51fd\u6570\u4e5f\u662f\u4e00\u7b49\u5bf9\u8c61, \u4f46\u53ea\u662f\u4f7f\u7528\u51fd\u6570\u5e76\u4e0d\u610f\u5473\u7740\u5728\u8fdb\u884c\u51fd\u6570\u5f0f\u7f16\u7a0b. \u51fd\u6570\u5f0f\u7f16\u7a0b\u8303\u4f8b\u7684\u5173\u952e\u5728\u4e8e, \u51fd\u6570\u65e0\u5904\u4e0d\u5728, \u5e94\u6709\u5c3d\u6709, \u7a0b\u5e8f\u4e2d\u7684\u4efb\u4f55\u95ee\u9898\u90fd\u6709\u51fd\u6570\u5f0f\u7684\u89e3\u51b3\u65b9\u6848. \u4f8b\u5982, \u5047\u8bbe\u6211\u4eec\u6709\u4e00\u4e2a\u5927\u578b\u7a0b\u5e8f, \u5b83\u662f\u7531\u8f83\u5c0f\u7684\u5757\u7ec4\u6210\u7684. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u8fd9\u4e9b\u90e8\u5206\u5c06\u662f\u7c7b\u548c\u5bf9\u8c61. \u5728\u529f\u80fd\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u8fd9\u4e9b\u90e8\u5206\u5c06\u662f\u51fd\u6570. \u518d\u6bd4\u5982\u6211\u4eec\u9700\u8981\u53c2\u6570\u5316\u7a0b\u5e8f\u7684\u67d0\u4e9b\u65b9\u9762, \u6216\u8005\u60f3\u51cf\u5c11\u7ec4\u4ef6\u4e4b\u95f4\u7684\u8026\u5408. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u4f7f\u7528\u63a5\u53e3\u548c\u4f9d\u8d56\u6ce8\u5165. \u5728\u51fd\u6570\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u4f7f\u7528\u51fd\u6570\u8fdb\u884c\u53c2\u6570\u5316. \u53c8\u6bd4\u5982\u6211\u4eec\u8981\u9075\u5faa \u201c\u4e0d\u8981\u91cd\u590d\u81ea\u5df1\u201d \u7684\u539f\u5219, \u5e76\u5728\u8bb8\u591a\u7ec4\u4ef6\u4e4b\u95f4\u91cd\u7528\u4ee3\u7801. \u5728\u9762\u5411\u5bf9\u8c61\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u53ef\u80fd\u4f1a\u4f7f\u7528\u7ee7\u627f\u6216\u7c7b\u4f3c\u88c5\u9970\u8005\u6a21\u5f0f\u7684\u6280\u672f. \u5728\u51fd\u6570\u5f0f\u7684\u65b9\u6cd5\u4e2d, \u6211\u4eec\u5c06\u6240\u6709\u53ef\u91cd\u590d\u4f7f\u7528\u7684\u4ee3\u7801\u653e\u5165\u51fd\u6570\u4e2d \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/\u51fd\u6570\u5f0f\u9886\u57df\u5efa\u6a21/lowlevel.png"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

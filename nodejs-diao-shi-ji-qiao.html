@@ -1,113 +1,179 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>NodeJs 调试技巧</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - NodeJs 调试技巧" />
+    <meta
+      property="og:description"
+      content="supervisor node.js 的 supervisor 插件可以帮我们监控文件的改动, 自动重启服务器, 这个 supervisor 是 node.js 的一个包 (而不是 python 的那个 supervisor, 别弄混了), 安装起来很简单, 使用 npm 的安装命令就可以, 因为我们需要在控制台运行, 所以需要安装在全局环境中. npm install -g..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/nodejs-diao-shi-ji-qiao.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/NodeJs调试技巧/nodedebug.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-10-24T18:37:00+08:00"
+    />
+    <meta property="article:section" content="工具折腾" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>NodeJs 调试技巧</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - NodeJs 调试技巧">
-  <meta property="og:description" content="supervisor node.js 的 supervisor 插件可以帮我们监控文件的改动, 自动重启服务器, 这个 supervisor 是 node.js 的一个包 (而不是 python 的那个 supervisor, 别弄混了), 安装起来很简单, 使用 npm 的安装命令就可以, 因为我们需要在控制台运行, 所以需要安装在全局环境中. npm install -g...">
-<meta property="og:url" content="http://www.smallcpp.cn/nodejs-diao-shi-ji-qiao.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/NodeJs调试技巧/nodedebug.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-10-24T18:37:00+08:00">
-  <meta property="article:section" content="工具折腾">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/nodejs-diao-shi-ji-qiao.html" rel="bookmark"
-        title="Permalink to NodeJs 调试技巧">NodeJs 调试技巧</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-10-24T18:37:00+08:00">
-    Published <span class="is-info">Mon 24 October 2016</span>
-    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#supervisor">supervisor</a></li>
-<li><a href="#node-debug">node debug</a></li>
-<li><a href="#node-inspector">node-inspector</a></li>
-<li><a href="#eclipse">使用 Eclipse 调试</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="supervisor">supervisor</h1>
-<p>node.js 的 supervisor 插件可以帮我们监控文件的改动, 自动重启服务器, 这个 supervisor 是 node.js 的一个包 (而不是 python 的那个 supervisor, 别弄混了), 安装起来很简单, 使用 npm 的安装命令就可以, 因为我们需要在控制台运行, 所以需要安装在全局环境中.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>npm install -g supervisor
-</pre></div>
-<p>然后就可以使用 supervisor 启动脚本了:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>supervisor sss.js
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/nodejs-diao-shi-ji-qiao.html"
+                  rel="bookmark"
+                  title="Permalink to NodeJs 调试技巧"
+                  >NodeJs 调试技巧</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-10-24T18:37:00+08:00">
+                  Published <span class="is-info">Mon 24 October 2016</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    >工具折腾</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li><a href="#supervisor">supervisor</a></li>
+                    <li><a href="#node-debug">node debug</a></li>
+                    <li><a href="#node-inspector">node-inspector</a></li>
+                    <li><a href="#eclipse">使用 Eclipse 调试</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="supervisor">supervisor</h1>
+                <p>
+                  node.js 的 supervisor 插件可以帮我们监控文件的改动,
+                  自动重启服务器, 这个 supervisor 是 node.js 的一个包 (而不是
+                  python 的那个 supervisor, 别弄混了), 安装起来很简单, 使用 npm
+                  的安装命令就可以, 因为我们需要在控制台运行,
+                  所以需要安装在全局环境中.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>npm install -g supervisor
+</pre>
+                </div>
+                <p>然后就可以使用 supervisor 启动脚本了:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>supervisor sss.js
 
 Running node-supervisor with
   program 'sss.js'
@@ -128,178 +194,288 @@ http://127.0.0.1:5586
 crashing child
 Starting child process with 'node sss.js'
 http://127.0.0.1:5586
-</pre></div>
-<h1 id="node-debug">node debug</h1>
-<p>node.js 提供了一个内建调试器来帮助开发者调试应用程序. 想要开启调试器我们需要在代码中加入 debugger 标签, 当 node.js 执行到 debugger 标签时会自动暂停 (debugger 标签相当于在代码中开启一个断点).</p>
-<p>执行命令：<code>node debug xxx.js</code> 就可以进入调试模式.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/NodeJs调试技巧/nodedebug.png"/></p>
-<p>以调试模式运行 js 时, 程序会直接断在入口处 (类似 OD 附加程序时), 你可以 cont 一下让程序继续跑起来, 就像 GDB 一样, 可以用 <code>help</code> 命令查看自己都可以使用哪些调试命令.</p>
-<p>当程序中断时, 可使使用 <code>repl</code> 进入程序上下文, 此状态下可以即时求值, 和 Chrome 的 Debug 的 Console 是一样的.</p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>run</td>
-<td>执行脚本, 在入口处会暂停</td>
-</tr>
-<tr>
-<td>restart</td>
-<td>重新执行脚本</td>
-</tr>
-<tr>
-<td>cont, c</td>
-<td>继续执行, 直到遇到下一个断点</td>
-</tr>
-<tr>
-<td>next, n</td>
-<td>单步执行</td>
-</tr>
-<tr>
-<td>step, s</td>
-<td>单步执行并步入函数</td>
-</tr>
-<tr>
-<td>out, o</td>
-<td>从函数中步出</td>
-</tr>
-<tr>
-<td>setBreakpoint(), sb()</td>
-<td>当前行设置断点</td>
-</tr>
-<tr>
-<td>setBreakpoint(‘f()’), sb(…)</td>
-<td>在函数f的第一行设置断点</td>
-</tr>
-<tr>
-<td>setBreakpoint(‘script.js’, 20), sb(…)</td>
-<td>在 script.js 的第 20 行设置断点</td>
-</tr>
-<tr>
-<td>clearBreakpoint, cb(…)</td>
-<td>清除所有断点</td>
-</tr>
-<tr>
-<td>backtrace, bt</td>
-<td>显示当前的调用栈</td>
-</tr>
-<tr>
-<td>list(5)</td>
-<td>显示当前执行到的前后5行代码</td>
-</tr>
-<tr>
-<td>watch(expr)</td>
-<td>把表达式 expr 加入监视列表</td>
-</tr>
-<tr>
-<td>unwatch(expr)</td>
-<td>把表达式 expr 从监视列表移除</td>
-</tr>
-<tr>
-<td>watchers</td>
-<td>显示监视列表中所有的表达式和值</td>
-</tr>
-<tr>
-<td>repl</td>
-<td>在当前上下文打开即时求值环境</td>
-</tr>
-<tr>
-<td>kill</td>
-<td>终止当前执行的脚本</td>
-</tr>
-<tr>
-<td>scripts</td>
-<td>显示当前已加载的所有脚本</td>
-</tr>
-<tr>
-<td>version</td>
-<td>显示 v8 版本</td>
-</tr>
-</tbody>
-</table>
-<h1 id="node-inspector">node-inspector</h1>
-<p>大部分 node.js 应用都是 web 应用, 所以一些基于 Chrome 的在线调试工具应运而生, 最出名的应该就是 node-inspector 了, 这是一个 node.js 的模块, 安装、使用相当的方便, 首先使用 npm 把其安装在全局环境中.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>npm install -g node-inspector
-</pre></div>
-<p>node-inspector 是通过 websocket 方式来转向 debug 输入输出的, 因此, 我们在调试前要先启动 node-inspector 来监听 node.js 的 debug 调试端口, 默认情况下 node-inspector 的端口是 8080, 可以通过参数 <code>--web-port=[port]</code> 来设置端口.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>node-inspector --web-port=8888
-</pre></div>
-<p>在启动 node-inpspector 之后, 我们可以通过 <code>--debug</code> 或 <code>--debug-brk</code> 来启动 node.js 程序.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>node --debug-brk xxx.js
-</pre></div>
-<p>控制台会返回 “debugger listening on port 5858”, 现在打开浏览嚣, 访问 <code>http://localhost:8888/debug?port=5858</code>, 这时候就会打开一个很像 Chrome 内置调试工具的界面, 并且代码断点在第一行, 下面就可以使用这个来调试了.</p>
-<p>如果你使用 <strong>Sublime</strong> 作为开发工具的话, 可以安装个 <a href="https://github.com/houfeng0923/NodejsDebug">NodeJsDebug</a> 插件;</p>
-<p>安装完以后，打开 <code>nodejs_debug.sublime-settings</code> 文件, 将 <code>chrome-path</code> 修改成自己电脑上的 Chrome 目录;</p>
-<p>然后 <code>click item 'Nodejs Debug' on contextmenu</code> 插件就会代替你依次执行启动 node-inspector、启动要调试的 js、用 Chrome 打开调试的 Web 页面三个步骤.</p>
-<h1 id="eclipse">使用 Eclipse 调试</h1>
-<p>Eclipse 提供了一个 node.js 的调试插件, 不过我基本不用 Eclipse, 所以这里仅记录下.</p>
-    </div>
+</pre>
+                </div>
+                <h1 id="node-debug">node debug</h1>
+                <p>
+                  node.js 提供了一个内建调试器来帮助开发者调试应用程序.
+                  想要开启调试器我们需要在代码中加入 debugger 标签, 当 node.js
+                  执行到 debugger 标签时会自动暂停 (debugger
+                  标签相当于在代码中开启一个断点).
+                </p>
+                <p>
+                  执行命令：<code>node debug xxx.js</code> 就可以进入调试模式.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/NodeJs调试技巧/nodedebug.png"
+                  />
+                </p>
+                <p>
+                  以调试模式运行 js 时, 程序会直接断在入口处 (类似 OD
+                  附加程序时), 你可以 cont 一下让程序继续跑起来, 就像 GDB 一样,
+                  可以用 <code>help</code> 命令查看自己都可以使用哪些调试命令.
+                </p>
+                <p>
+                  当程序中断时, 可使使用 <code>repl</code> 进入程序上下文,
+                  此状态下可以即时求值, 和 Chrome 的 Debug 的 Console 是一样的.
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>命令</th>
+                      <th>功能</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>run</td>
+                      <td>执行脚本, 在入口处会暂停</td>
+                    </tr>
+                    <tr>
+                      <td>restart</td>
+                      <td>重新执行脚本</td>
+                    </tr>
+                    <tr>
+                      <td>cont, c</td>
+                      <td>继续执行, 直到遇到下一个断点</td>
+                    </tr>
+                    <tr>
+                      <td>next, n</td>
+                      <td>单步执行</td>
+                    </tr>
+                    <tr>
+                      <td>step, s</td>
+                      <td>单步执行并步入函数</td>
+                    </tr>
+                    <tr>
+                      <td>out, o</td>
+                      <td>从函数中步出</td>
+                    </tr>
+                    <tr>
+                      <td>setBreakpoint(), sb()</td>
+                      <td>当前行设置断点</td>
+                    </tr>
+                    <tr>
+                      <td>setBreakpoint(‘f()’), sb(…)</td>
+                      <td>在函数f的第一行设置断点</td>
+                    </tr>
+                    <tr>
+                      <td>setBreakpoint(‘script.js’, 20), sb(…)</td>
+                      <td>在 script.js 的第 20 行设置断点</td>
+                    </tr>
+                    <tr>
+                      <td>clearBreakpoint, cb(…)</td>
+                      <td>清除所有断点</td>
+                    </tr>
+                    <tr>
+                      <td>backtrace, bt</td>
+                      <td>显示当前的调用栈</td>
+                    </tr>
+                    <tr>
+                      <td>list(5)</td>
+                      <td>显示当前执行到的前后5行代码</td>
+                    </tr>
+                    <tr>
+                      <td>watch(expr)</td>
+                      <td>把表达式 expr 加入监视列表</td>
+                    </tr>
+                    <tr>
+                      <td>unwatch(expr)</td>
+                      <td>把表达式 expr 从监视列表移除</td>
+                    </tr>
+                    <tr>
+                      <td>watchers</td>
+                      <td>显示监视列表中所有的表达式和值</td>
+                    </tr>
+                    <tr>
+                      <td>repl</td>
+                      <td>在当前上下文打开即时求值环境</td>
+                    </tr>
+                    <tr>
+                      <td>kill</td>
+                      <td>终止当前执行的脚本</td>
+                    </tr>
+                    <tr>
+                      <td>scripts</td>
+                      <td>显示当前已加载的所有脚本</td>
+                    </tr>
+                    <tr>
+                      <td>version</td>
+                      <td>显示 v8 版本</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h1 id="node-inspector">node-inspector</h1>
+                <p>
+                  大部分 node.js 应用都是 web 应用, 所以一些基于 Chrome
+                  的在线调试工具应运而生, 最出名的应该就是 node-inspector 了,
+                  这是一个 node.js 的模块, 安装、使用相当的方便, 首先使用 npm
+                  把其安装在全局环境中.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>npm install -g node-inspector
+</pre>
+                </div>
+                <p>
+                  node-inspector 是通过 websocket 方式来转向 debug 输入输出的,
+                  因此, 我们在调试前要先启动 node-inspector 来监听 node.js 的
+                  debug 调试端口, 默认情况下 node-inspector 的端口是 8080,
+                  可以通过参数 <code>--web-port=[port]</code> 来设置端口.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>node-inspector --web-port=8888
+</pre>
+                </div>
+                <p>
+                  在启动 node-inpspector 之后, 我们可以通过
+                  <code>--debug</code> 或 <code>--debug-brk</code> 来启动
+                  node.js 程序.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>node --debug-brk xxx.js
+</pre>
+                </div>
+                <p>
+                  控制台会返回 “debugger listening on port 5858”,
+                  现在打开浏览嚣, 访问
+                  <code>http://localhost:8888/debug?port=5858</code>,
+                  这时候就会打开一个很像 Chrome 内置调试工具的界面,
+                  并且代码断点在第一行, 下面就可以使用这个来调试了.
+                </p>
+                <p>
+                  如果你使用 <strong>Sublime</strong> 作为开发工具的话,
+                  可以安装个
+                  <a href="https://github.com/houfeng0923/NodejsDebug"
+                    >NodeJsDebug</a
+                  >
+                  插件;
+                </p>
+                <p>
+                  安装完以后，打开
+                  <code>nodejs_debug.sublime-settings</code> 文件, 将
+                  <code>chrome-path</code> 修改成自己电脑上的 Chrome 目录;
+                </p>
+                <p>
+                  然后
+                  <code>click item 'Nodejs Debug' on contextmenu</code>
+                  插件就会代替你依次执行启动 node-inspector、启动要调试的 js、用
+                  Chrome 打开调试的 Web 页面三个步骤.
+                </p>
+                <h1 id="eclipse">使用 Eclipse 调试</h1>
+                <p>
+                  Eclipse 提供了一个 node.js 的调试插件, 不过我基本不用 Eclipse,
+                  所以这里仅记录下.
+                </p>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u5de5\u5177\u6298\u817e",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-10-24T18:37:00+08:00",
+              "headline": "NodeJs \u8c03\u8bd5\u6280\u5de7",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/nodejs-diao-shi-ji-qiao.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "supervisor node.js \u7684 supervisor \u63d2\u4ef6\u53ef\u4ee5\u5e2e\u6211\u4eec\u76d1\u63a7\u6587\u4ef6\u7684\u6539\u52a8, \u81ea\u52a8\u91cd\u542f\u670d\u52a1\u5668, \u8fd9\u4e2a supervisor \u662f node.js \u7684\u4e00\u4e2a\u5305 (\u800c\u4e0d\u662f python \u7684\u90a3\u4e2a supervisor, \u522b\u5f04\u6df7\u4e86), \u5b89\u88c5\u8d77\u6765\u5f88\u7b80\u5355, \u4f7f\u7528 npm \u7684\u5b89\u88c5\u547d\u4ee4\u5c31\u53ef\u4ee5, \u56e0\u4e3a\u6211\u4eec\u9700\u8981\u5728\u63a7\u5236\u53f0\u8fd0\u884c, \u6240\u4ee5\u9700\u8981\u5b89\u88c5\u5728\u5168\u5c40\u73af\u5883\u4e2d. npm install -g supervisor \u7136\u540e\u5c31\u53ef\u4ee5\u4f7f\u7528 supervisor \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://www.smallcpp.com/images/NodeJs\u8c03\u8bd5\u6280\u5de7/nodedebug.png"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-24T18:37:00+08:00", "headline": "NodeJs \u8c03\u8bd5\u6280\u5de7", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/nodejs-diao-shi-ji-qiao.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "supervisor node.js \u7684 supervisor \u63d2\u4ef6\u53ef\u4ee5\u5e2e\u6211\u4eec\u76d1\u63a7\u6587\u4ef6\u7684\u6539\u52a8, \u81ea\u52a8\u91cd\u542f\u670d\u52a1\u5668, \u8fd9\u4e2a supervisor \u662f node.js \u7684\u4e00\u4e2a\u5305 (\u800c\u4e0d\u662f python \u7684\u90a3\u4e2a supervisor, \u522b\u5f04\u6df7\u4e86), \u5b89\u88c5\u8d77\u6765\u5f88\u7b80\u5355, \u4f7f\u7528 npm \u7684\u5b89\u88c5\u547d\u4ee4\u5c31\u53ef\u4ee5, \u56e0\u4e3a\u6211\u4eec\u9700\u8981\u5728\u63a7\u5236\u53f0\u8fd0\u884c, \u6240\u4ee5\u9700\u8981\u5b89\u88c5\u5728\u5168\u5c40\u73af\u5883\u4e2d. npm install -g supervisor \u7136\u540e\u5c31\u53ef\u4ee5\u4f7f\u7528 supervisor \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/NodeJs\u8c03\u8bd5\u6280\u5de7/nodedebug.png"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

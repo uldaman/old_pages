@@ -1,188 +1,324 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>计算机程序的构造与解释</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - 计算机程序的构造与解释" />
+    <meta
+      property="og:description"
+      content="函数式编程 函数式编程是一种编程典范, 比起指令式(过程式)编程的复杂执行过程, 函数式编程更加强调程序执行的结果, 倡导利用若干简单的执行单元让计算结果不断渐进, 仔细定义每个运算的输入, 以及每个运算返回的内容, 逐层推导复杂的运算, 并且避免使用程序状态以及易变对象. 以一个多项式求值 a * (b + c) 举例 (假设存在 add 和 mul 方法): 指令式(过程式)编程: x..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html"
+    />
+    <meta property="og:image" content="http://i67.tinypic.com/98woxu.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2018-08-01T12:36:00+08:00"
+    />
+    <meta property="article:section" content="函数式" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>计算机程序的构造与解释</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - 计算机程序的构造与解释">
-  <meta property="og:description" content="函数式编程 函数式编程是一种编程典范, 比起指令式(过程式)编程的复杂执行过程, 函数式编程更加强调程序执行的结果, 倡导利用若干简单的执行单元让计算结果不断渐进, 仔细定义每个运算的输入, 以及每个运算返回的内容, 逐层推导复杂的运算, 并且避免使用程序状态以及易变对象. 以一个多项式求值 a * (b + c) 举例 (假设存在 add 和 mul 方法): 指令式(过程式)编程: x...">
-<meta property="og:url" content="http://www.smallcpp.cn/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html">
-    <meta property="og:image" content="http://i67.tinypic.com/98woxu.jpg">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2018-08-01T12:36:00+08:00">
-  <meta property="article:section" content="函数式">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html" rel="bookmark"
-        title="Permalink to 计算机程序的构造与解释">计算机程序的构造与解释</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2018-08-01T12:36:00+08:00">
-    Published <span class="is-info">Wed 01 August 2018</span>
-    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#_1">函数式编程</a></li>
-<li><a href="#lisp">Lisp</a><ul>
-<li><a href="#_2">序对</a></li>
-<li><a href="#_3">表</a></li>
-<li><a href="#_4">变量</a><ul>
-<li><a href="#let">let (局部)</a></li>
-<li><a href="#define">define (全局)</a></li>
-<li><a href="#_5">数据的不变性</a></li>
-</ul>
-</li>
-<li><a href="#_6">函数</a></li>
-<li><a href="#_7">分支</a></li>
-</ul>
-</li>
-<li><a href="#_8">递归/尾递归</a></li>
-<li><a href="#_9">高阶抽象和公共模式</a></li>
-<li><a href="#_10">愿望思维法</a></li>
-<li><a href="#map">MAP</a></li>
-<li><a href="#for-each">For-Each</a></li>
-<li><a href="#_11">数据抽象</a></li>
-<li><a href="#_12">对象状态</a></li>
-<li><a href="#_13">面向对象</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="_1">函数式编程</h1>
-<p>函数式编程是一种编程典范, 比起指令式(过程式)编程的复杂执行过程, 函数式编程更加强调程序执行的结果, 倡导利用若干简单的执行单元让计算结果不断渐进, 仔细定义每个运算的输入, 以及每个运算返回的内容, 逐层推导复杂的运算, 并且避免使用程序状态以及易变对象.</p>
-<p>以一个多项式求值 <code>a * (b + c)</code> 举例 (假设存在 <code>add</code> 和 <code>mul</code> 方法):</p>
-<p>指令式(过程式)编程:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>x = add(b, c)
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html"
+                  rel="bookmark"
+                  title="Permalink to 计算机程序的构造与解释"
+                  >计算机程序的构造与解释</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2018-08-01T12:36:00+08:00">
+                  Published <span class="is-info">Wed 01 August 2018</span> in
+                  <a href="http://www.smallcpp.com/category/han-shu-shi.html"
+                    >函数式</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li><a href="#_1">函数式编程</a></li>
+                    <li>
+                      <a href="#lisp">Lisp</a>
+                      <ul>
+                        <li><a href="#_2">序对</a></li>
+                        <li><a href="#_3">表</a></li>
+                        <li>
+                          <a href="#_4">变量</a>
+                          <ul>
+                            <li><a href="#let">let (局部)</a></li>
+                            <li><a href="#define">define (全局)</a></li>
+                            <li><a href="#_5">数据的不变性</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#_6">函数</a></li>
+                        <li><a href="#_7">分支</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#_8">递归/尾递归</a></li>
+                    <li><a href="#_9">高阶抽象和公共模式</a></li>
+                    <li><a href="#_10">愿望思维法</a></li>
+                    <li><a href="#map">MAP</a></li>
+                    <li><a href="#for-each">For-Each</a></li>
+                    <li><a href="#_11">数据抽象</a></li>
+                    <li><a href="#_12">对象状态</a></li>
+                    <li><a href="#_13">面向对象</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="_1">函数式编程</h1>
+                <p>
+                  函数式编程是一种编程典范,
+                  比起指令式(过程式)编程的复杂执行过程,
+                  函数式编程更加强调程序执行的结果,
+                  倡导利用若干简单的执行单元让计算结果不断渐进,
+                  仔细定义每个运算的输入, 以及每个运算返回的内容,
+                  逐层推导复杂的运算, 并且避免使用程序状态以及易变对象.
+                </p>
+                <p>
+                  以一个多项式求值 <code>a * (b + c)</code> 举例 (假设存在
+                  <code>add</code> 和 <code>mul</code> 方法):
+                </p>
+                <p>指令式(过程式)编程:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>x = add(b, c)
 y = mul(a, x)
-</pre></div>
-<p>函数式编程:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>mul(a, add(b, c))
-</pre></div>
-<p>解释函数式代码的步骤是 <em>求值-应用</em> 这两大步骤的轮转: 为了对一个组合式求值, 例如: <code>mul(a, add(b, c))</code>, 必须先对组合式里的每个元素执行求值过程, 然后将求值的结果应用于组合式, 而每个元素的内部又可能包含新的求值过程, 例如 <code>mul(a, add(b, sub(c, d)))</code>, 所以, 在规则性质上 (即将 mul, add, sub 这些不同的函数均视为相同的抽象求值过程), 这一解释过程其实是递归的:</p>
-<p><img alt="" src="http://i67.tinypic.com/98woxu.jpg"/></p>
-<p>在函数式思想中, 只有纯的、没有副作用的函数, 才是合格的函数.</p>
-<blockquote>
-<ul>
-<li>副作用指当调用函数时, 除了返回函数值之外, 还对主调用函数产生附加的影响, 例如修改全局变量 (函数外的变量) 或修改参数.</li>
-<li>纯函数是指函数与外界交换数据只有一个唯一渠道——参数和返回值, 如果函数从外界获取数据, 或者向外部输出数据 (比如读取全局变量, 修改全局变量), 那么, 该函数就是非纯函数.</li>
-</ul>
-</blockquote>
-<h1 id="lisp">Lisp</h1>
-<h2 id="_2">序对</h2>
-<p><code>(cons x y)</code> 构造一个 <code>[x, y]</code> 序对</p>
-<p><code>(car p)</code> 选择序对 p 的首元素</p>
-<p><code>(cdr p)</code> 选择序对 p 的尾元素</p>
-<p>元素可以是任意数据, 包括另一个序对.</p>
-<h2 id="_3">表</h2>
-<p>如果我们想要表示 <code>[1, 2, 3, 4]</code> 这个数据, 使用序对, 会有很多种可能, 例如:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>((<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>), (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">4</span>))
+</pre>
+                </div>
+                <p>函数式编程:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>mul(a, add(b, c))
+</pre>
+                </div>
+                <p>
+                  解释函数式代码的步骤是 <em>求值-应用</em> 这两大步骤的轮转:
+                  为了对一个组合式求值, 例如: <code>mul(a, add(b, c))</code>,
+                  必须先对组合式里的每个元素执行求值过程,
+                  然后将求值的结果应用于组合式,
+                  而每个元素的内部又可能包含新的求值过程, 例如
+                  <code>mul(a, add(b, sub(c, d)))</code>, 所以, 在规则性质上
+                  (即将 mul, add, sub 这些不同的函数均视为相同的抽象求值过程),
+                  这一解释过程其实是递归的:
+                </p>
+                <p><img alt="" src="http://i67.tinypic.com/98woxu.jpg" /></p>
+                <p>
+                  在函数式思想中, 只有纯的、没有副作用的函数, 才是合格的函数.
+                </p>
+                <blockquote>
+                  <ul>
+                    <li>
+                      副作用指当调用函数时, 除了返回函数值之外,
+                      还对主调用函数产生附加的影响, 例如修改全局变量
+                      (函数外的变量) 或修改参数.
+                    </li>
+                    <li>
+                      纯函数是指函数与外界交换数据只有一个唯一渠道——参数和返回值,
+                      如果函数从外界获取数据, 或者向外部输出数据
+                      (比如读取全局变量, 修改全局变量), 那么,
+                      该函数就是非纯函数.
+                    </li>
+                  </ul>
+                </blockquote>
+                <h1 id="lisp">Lisp</h1>
+                <h2 id="_2">序对</h2>
+                <p><code>(cons x y)</code> 构造一个 <code>[x, y]</code> 序对</p>
+                <p><code>(car p)</code> 选择序对 p 的首元素</p>
+                <p><code>(cdr p)</code> 选择序对 p 的尾元素</p>
+                <p>元素可以是任意数据, 包括另一个序对.</p>
+                <h2 id="_3">表</h2>
+                <p>
+                  如果我们想要表示 <code>[1, 2, 3, 4]</code> 这个数据, 使用序对,
+                  会有很多种可能, 例如:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>((<span style="color: #B452CD">1</span>, <span style="color: #B452CD">2</span>), (<span style="color: #B452CD">3</span>, <span style="color: #B452CD">4</span>))
 
 (<span style="color: #B452CD">1</span>, (<span style="color: #B452CD">2</span>, <span style="color: #B452CD">3</span>), <span style="color: #B452CD">4</span>))
-</pre></div>
-<p>因此就需要一种约定来进行规范, 这就是表, 即序对的序列, 它使用下面这种试来构建多元素数据:</p>
-<p><img alt="" src="http://i64.tinypic.com/532y5c.jpg"/></p>
-<p>即:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #658b00">cons </span><span style="color: #B452CD">1</span>
+</pre>
+                </div>
+                <p>
+                  因此就需要一种约定来进行规范, 这就是表, 即序对的序列,
+                  它使用下面这种试来构建多元素数据:
+                </p>
+                <p><img alt="" src="http://i64.tinypic.com/532y5c.jpg" /></p>
+                <p>即:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #658b00">cons </span><span style="color: #B452CD">1</span>
     (<span style="color: #658b00">cons </span><span style="color: #B452CD">2</span>
         (<span style="color: #658b00">cons </span><span style="color: #B452CD">3</span>
             (<span style="color: #658b00">cons </span><span style="color: #B452CD">4</span> ()))))  <span style="color: #228B22">; null? 可以判断序对是否为空 ()</span>
-</pre></div>
-<p>但是如果每次构造表都要写一堆 <code>cons</code> 是个很麻烦的事, 所以 lisp 提供了 <code>list</code> 函数: <code>(list 1 2 3 4)</code>.</p>
-<p>虽然 <code>list</code> 很方便, 但本质上, 它只是一个语法糖, 用来简便地书写嵌套的 <code>cons</code>.</p>
-<h2 id="_4">变量</h2>
-<h3 id="let">let (局部)</h3>
-<p>let 可以一次对多个变量赋值, 但变量只能在 let 的子域中使用.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">let </span>((<span style="color: #008b45">var1</span> <span style="color: #00688B">exp1</span>) (<span style="color: #008b45">var2</span> <span style="color: #00688B">exp2</span>) ... (<span style="color: #008b45">varn</span> <span style="color: #00688B">expn</span>))
+</pre>
+                </div>
+                <p>
+                  但是如果每次构造表都要写一堆 <code>cons</code> 是个很麻烦的事,
+                  所以 lisp 提供了 <code>list</code> 函数:
+                  <code>(list 1 2 3 4)</code>.
+                </p>
+                <p>
+                  虽然 <code>list</code> 很方便, 但本质上, 它只是一个语法糖,
+                  用来简便地书写嵌套的 <code>cons</code>.
+                </p>
+                <h2 id="_4">变量</h2>
+                <h3 id="let">let (局部)</h3>
+                <p>
+                  let 可以一次对多个变量赋值, 但变量只能在 let 的子域中使用.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">let </span>((<span style="color: #008b45">var1</span> <span style="color: #00688B">exp1</span>) (<span style="color: #008b45">var2</span> <span style="color: #00688B">exp2</span>) ... (<span style="color: #008b45">varn</span> <span style="color: #00688B">expn</span>))
     <span style="color: #00688B">exps</span>)
-</pre></div>
-<p>例如:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">let </span>((<span style="color: #008b45">a</span> <span style="color: #B452CD">1</span>) (<span style="color: #008b45">b</span> <span style="color: #B452CD">2</span>) (<span style="color: #008b45">c</span> (<span style="color: #658b00">+ </span><span style="color: #B452CD">5</span> <span style="color: #B452CD">3</span>)))
+</pre>
+                </div>
+                <p>例如:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">let </span>((<span style="color: #008b45">a</span> <span style="color: #B452CD">1</span>) (<span style="color: #008b45">b</span> <span style="color: #B452CD">2</span>) (<span style="color: #008b45">c</span> (<span style="color: #658b00">+ </span><span style="color: #B452CD">5</span> <span style="color: #B452CD">3</span>)))
     (<span style="color: #658b00">+ </span><span style="color: #00688B">a</span> (<span style="color: #658b00">* </span><span style="color: #00688B">b</span> <span style="color: #00688B">c</span>)))
-</pre></div>
-<h3 id="define">define (全局)</h3>
-<p>define 一次只能对一个变量赋值, 变量可在与 define 同一级的域中使用.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">num</span> <span style="color: #B452CD">10</span>)
+</pre>
+                </div>
+                <h3 id="define">define (全局)</h3>
+                <p>
+                  define 一次只能对一个变量赋值, 变量可在与 define
+                  同一级的域中使用.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">num</span> <span style="color: #B452CD">10</span>)
 <span style="color: #00688B">num</span> <span style="color: #228B22">; =&gt; 10</span>
 
 (<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">sum</span> (<span style="color: #658b00">+ </span><span style="color: #B452CD">10</span> <span style="color: #B452CD">20</span>))
 <span style="color: #00688B">sum</span> <span style="color: #228B22">; =&gt; 30</span>
-</pre></div>
-<h3 id="_5">数据的不变性</h3>
-<p>高级语言中, 变量是一块内存区域的标识, 可以通过修改这个内存区域的存储内容来修改变量的值;</p>
-<p>而在 Lisp 家族中, 变量用于绑定常量与函数. 虽然也可以重定义一个变量, 但这只是让变量换了一个绑定而已.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">a</span> <span style="color: #B452CD">1</span>)
+</pre>
+                </div>
+                <h3 id="_5">数据的不变性</h3>
+                <p>
+                  高级语言中, 变量是一块内存区域的标识,
+                  可以通过修改这个内存区域的存储内容来修改变量的值;
+                </p>
+                <p>
+                  而在 Lisp 家族中, 变量用于绑定常量与函数.
+                  虽然也可以重定义一个变量, 但这只是让变量换了一个绑定而已.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">a</span> <span style="color: #B452CD">1</span>)
 <span style="color: #00688B">a</span> <span style="color: #228B22">; =&gt; 1</span>
 
 (<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">l</span> (<span style="color: #658b00">cons </span><span style="color: #00688B">a</span> <span style="color: #B452CD">2</span>))
@@ -192,18 +328,26 @@ y = mul(a, x)
 <span style="color: #00688B">a</span> <span style="color: #228B22">; =&gt; 3</span>
 
 <span style="color: #00688B">l</span> <span style="color: #228B22">; =&gt; (1 . 2)</span>
-</pre></div>
-<h2 id="_6">函数</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">square</span> (<span style="color: #8B008B; font-weight: bold">lambda </span>(<span style="color: #008b45">x</span>) (<span style="color: #658b00">* </span><span style="color: #00688B">x</span> <span style="color: #00688B">x</span>)))
+</pre>
+                </div>
+                <h2 id="_6">函数</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">square</span> (<span style="color: #8B008B; font-weight: bold">lambda </span>(<span style="color: #008b45">x</span>) (<span style="color: #658b00">* </span><span style="color: #00688B">x</span> <span style="color: #00688B">x</span>)))
 
 <span style="color: #228B22">; 这是通常的写法, 但本质还是上面那种, 只是个语法糖</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">square</span> <span style="color: #00688B">x</span>) (<span style="color: #658b00">* </span><span style="color: #00688B">x</span> <span style="color: #00688B">x</span>))
-</pre></div>
-<p>(square 10) -&gt; 100</p>
-<p><img alt="" src="http://i65.tinypic.com/2niae5v.jpg"/></p>
-<p><code>(define (sum) (+ 10 20))</code>  无参函数</p>
-<h2 id="_7">分支</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">abs </span><span style="color: #00688B">x</span>)
+</pre>
+                </div>
+                <p>(square 10) -&gt; 100</p>
+                <p><img alt="" src="http://i65.tinypic.com/2niae5v.jpg" /></p>
+                <p><code>(define (sum) (+ 10 20))</code> 无参函数</p>
+                <h2 id="_7">分支</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">abs </span><span style="color: #00688B">x</span>)
     (<span style="color: #8B008B; font-weight: bold">if </span>(<span style="color: #658b00">&lt; </span><span style="color: #00688B">x</span> <span style="color: #B452CD">0</span>)
         (<span style="color: #658b00">- </span><span style="color: #00688B">x</span>)
         <span style="color: #00688B">x</span>))
@@ -219,13 +363,24 @@ y = mul(a, x)
         ((<span style="color: #658b00">&lt; </span><span style="color: #00688B">x</span> <span style="color: #B452CD">0</span>) (<span style="color: #658b00">- </span><span style="color: #00688B">x</span>))
         ((<span style="color: #658b00">= </span><span style="color: #00688B">x</span> <span style="color: #B452CD">0</span>) <span style="color: #B452CD">0</span>)
         (<span style="color: #8B008B; font-weight: bold">else </span><span style="color: #00688B">x</span>)))
-</pre></div>
-<p>cond 有点类似 switch</p>
-<h1 id="_8">递归/尾递归</h1>
-<p>递归其实是延迟运算, 先分解问题到最小粒度, 计算小问题再将结果向上传递, 最终归并解决原始问题.</p>
-<p>而尾递归是迭代性质的, 即分解问题的过程中直接计算出结果, 并将结果直接应用于下一次计算, 问题分解完了结果也就出来了. (感觉高级语言中的循环迭代, 就像是尾递归的语法糖).</p>
-<p>加法 (<code>1+</code> <code>-1+</code> 是内建操作)</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 递归</span>
+</pre>
+                </div>
+                <p>cond 有点类似 switch</p>
+                <h1 id="_8">递归/尾递归</h1>
+                <p>
+                  递归其实是延迟运算, 先分解问题到最小粒度,
+                  计算小问题再将结果向上传递, 最终归并解决原始问题.
+                </p>
+                <p>
+                  而尾递归是迭代性质的, 即分解问题的过程中直接计算出结果,
+                  并将结果直接应用于下一次计算, 问题分解完了结果也就出来了.
+                  (感觉高级语言中的循环迭代, 就像是尾递归的语法糖).
+                </p>
+                <p>加法 (<code>1+</code> <code>-1+</code> 是内建操作)</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 递归</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">+ </span><span style="color: #00688B">x</span> <span style="color: #00688B">y</span>)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">= </span><span style="color: #00688B">x</span> <span style="color: #B452CD">0</span>) <span style="color: #00688B">y</span>)
@@ -236,9 +391,13 @@ y = mul(a, x)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">= </span><span style="color: #00688B">x</span> <span style="color: #B452CD">0</span>) <span style="color: #00688B">y</span>)
         (<span style="color: #8B008B; font-weight: bold">else </span>(<span style="color: #658b00">+ </span>(<span style="color: #B452CD">-1</span><span style="color: #00688B">+</span> <span style="color: #00688B">x</span>) (<span style="color: #B452CD">1</span><span style="color: #00688B">+</span> <span style="color: #00688B">y</span>)))))
-</pre></div>
-<p>斐波那契数列</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 递归</span>
+</pre>
+                </div>
+                <p>斐波那契数列</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 递归</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">fib</span> <span style="color: #00688B">n</span>)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">&lt; </span><span style="color: #00688B">n</span> <span style="color: #B452CD">2</span>) <span style="color: #00688B">n</span>)
@@ -252,18 +411,26 @@ y = mul(a, x)
             <span style="color: #00688B">b</span>
             (<span style="color: #008b45">fib-iter</span> (<span style="color: #658b00">+ </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>) <span style="color: #00688B">a</span> (<span style="color: #658b00">- </span><span style="color: #00688B">count</span> <span style="color: #B452CD">1</span>))))
     (<span style="color: #008b45">fib-iter</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">0</span> <span style="color: #00688B">n</span>))
-</pre></div>
-<h1 id="_9">高阶抽象和公共模式</h1>
-<blockquote>
-<p>以下内容中的模块均指函数.</p>
-</blockquote>
-<p>高阶抽象, 是至少满足下列一个条件的函数:</p>
-<ul>
-<li>接受一个或多个函数作为输入</li>
-<li>输出一个函数</li>
-</ul>
-<p>公共模式: 提取不同功能中各模块的组合方式, 注意, 这和模块的具体含义无关, 提取的是模块间的 <em>组合方式</em>. 一般实现公共模式时, 需要用到高阶抽象.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 从 a 加到 b</span>
+</pre>
+                </div>
+                <h1 id="_9">高阶抽象和公共模式</h1>
+                <blockquote>
+                  <p>以下内容中的模块均指函数.</p>
+                </blockquote>
+                <p>高阶抽象, 是至少满足下列一个条件的函数:</p>
+                <ul>
+                  <li>接受一个或多个函数作为输入</li>
+                  <li>输出一个函数</li>
+                </ul>
+                <p>
+                  公共模式: 提取不同功能中各模块的组合方式, 注意,
+                  这和模块的具体含义无关, 提取的是模块间的 <em>组合方式</em>.
+                  一般实现公共模式时, 需要用到高阶抽象.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 从 a 加到 b</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">sum-int</span> <span style="color: #00688B">a</span> <span style="color: #00688B">b</span>)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">&gt; </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>) <span style="color: #B452CD">0</span>)
@@ -280,16 +447,24 @@ y = mul(a, x)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">&gt; </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>) <span style="color: #B452CD">0</span>)
         (<span style="color: #8B008B; font-weight: bold">else </span>(<span style="color: #658b00">+ </span><span style="color: #00688B">a</span> (<span style="color: #008b45">sum-interval</span> (<span style="color: #658b00">+ </span><span style="color: #00688B">a</span> <span style="color: #B452CD">2</span>) <span style="color: #00688B">b</span>)))))
-</pre></div>
-<p>从以上过程提取公共模式如下:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">&lt;name&gt;</span> <span style="color: #00688B">a</span> <span style="color: #00688B">b</span>)
+</pre>
+                </div>
+                <p>从以上过程提取公共模式如下:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">&lt;name&gt;</span> <span style="color: #00688B">a</span> <span style="color: #00688B">b</span>)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">&gt; </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>) <span style="color: #B452CD">0</span>)
         (<span style="color: #8B008B; font-weight: bold">else </span>(<span style="color: #658b00">+ </span>(<span style="color: #008b45">&lt;term&gt;</span> <span style="color: #00688B">a</span>)
                  (<span style="color: #008b45">&lt;name&gt;</span> (<span style="color: #008b45">&lt;next&gt;</span> <span style="color: #00688B">a</span>) <span style="color: #00688B">b</span>)))))
-</pre></div>
-<p>开始重构:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 高阶抽象, 即公共模式的过程</span>
+</pre>
+                </div>
+                <p>开始重构:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 高阶抽象, 即公共模式的过程</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">sum</span> <span style="color: #00688B">term</span> <span style="color: #00688B">a</span> <span style="color: #00688B">next</span> <span style="color: #00688B">b</span>)
     (<span style="color: #008b45">cond</span>
         ((<span style="color: #658b00">&gt; </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>) <span style="color: #B452CD">0</span>)
@@ -305,31 +480,58 @@ y = mul(a, x)
     (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">term</span> <span style="color: #00688B">x</span>) (<span style="color: #008b45">sq</span> <span style="color: #00688B">a</span>))
     (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">next</span> <span style="color: #00688B">x</span>) (<span style="color: #B452CD">1</span><span style="color: #00688B">+</span> <span style="color: #00688B">x</span>))
     (<span style="color: #008b45">sum</span> <span style="color: #00688B">term</span> <span style="color: #00688B">a</span> <span style="color: #00688B">next</span> <span style="color: #00688B">b</span>))
-</pre></div>
-<blockquote>
-<p>高阶抽象有点类似 OOP 的多态/接口, 公共模式则有点像模板方法模式.</p>
-</blockquote>
-<p>所以将问题拆分成尽可能多的模块很重要, 并且每一个模块要能够被独立地解释 (如果能够为一段代码块所做的事取一个很好的名字, 那这段代码块就可以抽象出一个新模块, 所以 <strong>关键</strong> 就在于取名), 这有利于发现公共模式.</p>
-<h1 id="_10">愿望思维法</h1>
-<p><strong>愿望思维法</strong> 是一种有效”发现”新模块的实践 (有利于发现 <strong>公共模式</strong>):</p>
-<p>先用自然语言描述过程, 然后从描述中提取可能的模块, 并假设模块是已经实现好的 (即有完整的函数签名), 然后组合这些模块, 最后再去实现那些愿望.</p>
-<p>例如, 需要实现从一个坐标点走到另一个坐标点的功能, 那么我们可以先假定 <em>坐标点</em> 的构造函数与选择函数:</p>
-<ul>
-<li><code>make-point</code></li>
-<li><code>x-point</code></li>
-<li><code>y-point</code></li>
-</ul>
-<p>然后就可以实现目标功能 <code>move-point</code>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">move-point</span> <span style="color: #00688B">p1</span> <span style="color: #00688B">p2</span>)
+</pre>
+                </div>
+                <blockquote>
+                  <p>
+                    高阶抽象有点类似 OOP 的多态/接口,
+                    公共模式则有点像模板方法模式.
+                  </p>
+                </blockquote>
+                <p>
+                  所以将问题拆分成尽可能多的模块很重要,
+                  并且每一个模块要能够被独立地解释
+                  (如果能够为一段代码块所做的事取一个很好的名字,
+                  那这段代码块就可以抽象出一个新模块, 所以
+                  <strong>关键</strong> 就在于取名), 这有利于发现公共模式.
+                </p>
+                <h1 id="_10">愿望思维法</h1>
+                <p>
+                  <strong>愿望思维法</strong> 是一种有效”发现”新模块的实践
+                  (有利于发现 <strong>公共模式</strong>):
+                </p>
+                <p>
+                  先用自然语言描述过程, 然后从描述中提取可能的模块,
+                  并假设模块是已经实现好的 (即有完整的函数签名),
+                  然后组合这些模块, 最后再去实现那些愿望.
+                </p>
+                <p>
+                  例如, 需要实现从一个坐标点走到另一个坐标点的功能,
+                  那么我们可以先假定 <em>坐标点</em> 的构造函数与选择函数:
+                </p>
+                <ul>
+                  <li><code>make-point</code></li>
+                  <li><code>x-point</code></li>
+                  <li><code>y-point</code></li>
+                </ul>
+                <p>然后就可以实现目标功能 <code>move-point</code>:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">move-point</span> <span style="color: #00688B">p1</span> <span style="color: #00688B">p2</span>)
     (<span style="color: #008b45">make-point</span> (<span style="color: #658b00">+ </span>(<span style="color: #008b45">x-point</span> <span style="color: #00688B">p1</span>) (<span style="color: #008b45">x-point</span> <span style="color: #00688B">p2</span>))
                 (<span style="color: #658b00">+ </span>(<span style="color: #008b45">y-point</span> <span style="color: #00688B">p1</span>) (<span style="color: #008b45">y-point</span> <span style="color: #00688B">p2</span>))))
 
 (<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">p1</span> (<span style="color: #008b45">make-point</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">2</span>))
 (<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">p2</span> (<span style="color: #008b45">make-point</span> <span style="color: #B452CD">3</span> <span style="color: #B452CD">4</span>))
 (<span style="color: #008b45">move-point</span> <span style="color: #00688B">p1</span> <span style="color: #00688B">p2</span>) <span style="color: #228B22">; =&gt; 4, 6</span>
-</pre></div>
-<p>最后, 我们去实现 <em>坐标点</em> 的函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">make-point</span> <span style="color: #00688B">x</span> <span style="color: #00688B">y</span>)
+</pre>
+                </div>
+                <p>最后, 我们去实现 <em>坐标点</em> 的函数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">make-point</span> <span style="color: #00688B">x</span> <span style="color: #00688B">y</span>)
     (<span style="color: #658b00">cons </span><span style="color: #00688B">x</span> <span style="color: #00688B">y</span>))
 
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">x-point</span> <span style="color: #00688B">p</span>)
@@ -337,11 +539,23 @@ y = mul(a, x)
 
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">y-point</span> <span style="color: #00688B">p</span>)
     (<span style="color: #658b00">cdr </span><span style="color: #00688B">p</span>))
-</pre></div>
-<h1 id="map">MAP</h1>
-<p>一些语言中会提供 <code>map</code> 操作, 例如 Python, <code>map</code> 接收一个函数 f 和一个 list, 并通过把函数 f 依次作用在 list 的每个元素上, 得到一个新的 list 并返回.</p>
-<p><code>map</code> 其实只是一个 <strong>公共模式</strong>. 例如现要把一个 1 到 10 的 list 放大 10 倍和缩小 5 倍, 那么在没有 <code>map</code> 之前, 就会写出两个函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #B452CD">1</span><span style="color: #00688B">-to-10</span> (<span style="color: #658b00">list </span><span style="color: #B452CD">0</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">2</span> <span style="color: #B452CD">3</span> <span style="color: #B452CD">4</span> <span style="color: #B452CD">5</span> <span style="color: #B452CD">6</span> <span style="color: #B452CD">7</span> <span style="color: #B452CD">8</span> <span style="color: #B452CD">9</span>))
+</pre>
+                </div>
+                <h1 id="map">MAP</h1>
+                <p>
+                  一些语言中会提供 <code>map</code> 操作, 例如 Python,
+                  <code>map</code> 接收一个函数 f 和一个 list, 并通过把函数 f
+                  依次作用在 list 的每个元素上, 得到一个新的 list 并返回.
+                </p>
+                <p>
+                  <code>map</code> 其实只是一个 <strong>公共模式</strong>.
+                  例如现要把一个 1 到 10 的 list 放大 10 倍和缩小 5 倍,
+                  那么在没有 <code>map</code> 之前, 就会写出两个函数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #B452CD">1</span><span style="color: #00688B">-to-10</span> (<span style="color: #658b00">list </span><span style="color: #B452CD">0</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">2</span> <span style="color: #B452CD">3</span> <span style="color: #B452CD">4</span> <span style="color: #B452CD">5</span> <span style="color: #B452CD">6</span> <span style="color: #B452CD">7</span> <span style="color: #B452CD">8</span> <span style="color: #B452CD">9</span>))
 
 <span style="color: #228B22">; 放大</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">magnify</span> <span style="color: #00688B">l</span>)
@@ -356,16 +570,24 @@ y = mul(a, x)
         ()
         (<span style="color: #658b00">cons </span>(<span style="color: #658b00">/ </span>(<span style="color: #658b00">car </span><span style="color: #00688B">l</span>) <span style="color: #B452CD">5</span>)
               (<span style="color: #008b45">shrink</span> (<span style="color: #658b00">cdr </span><span style="color: #00688B">l</span>)))))
-</pre></div>
-<p>很快就可以提取出公共模式:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">&lt;name&gt;</span> <span style="color: #00688B">l</span>)
+</pre>
+                </div>
+                <p>很快就可以提取出公共模式:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">&lt;name&gt;</span> <span style="color: #00688B">l</span>)
     (<span style="color: #8B008B; font-weight: bold">if </span>(<span style="color: #658b00">null? </span><span style="color: #00688B">l</span>)
         ()
         (<span style="color: #658b00">cons </span>(<span style="color: #008b45">&lt;operator&gt;</span> (<span style="color: #658b00">car </span><span style="color: #00688B">l</span>))
               (<span style="color: #008b45">&lt;name&gt;</span> (<span style="color: #658b00">cdr </span><span style="color: #00688B">l</span>)))))
-</pre></div>
-<p>然后重构出来的高阶抽象就是 <code>map</code>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 递归版本</span>
+</pre>
+                </div>
+                <p>然后重构出来的高阶抽象就是 <code>map</code>:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 递归版本</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">map </span><span style="color: #00688B">p</span> <span style="color: #00688B">l</span>)
     (<span style="color: #8B008B; font-weight: bold">if </span>(<span style="color: #658b00">null? </span><span style="color: #00688B">l</span>)
         ()
@@ -385,18 +607,42 @@ y = mul(a, x)
 <span style="color: #228B22">; 使用 map 重构</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">magnify</span> <span style="color: #00688B">l</span>)
     (<span style="color: #658b00">map </span>(<span style="color: #8B008B; font-weight: bold">lambda </span>(<span style="color: #008b45">x</span>) (<span style="color: #658b00">* </span><span style="color: #00688B">x</span> <span style="color: #B452CD">10</span>)) <span style="color: #00688B">l</span>))
-</pre></div>
-<p>迭代(尾递归)版本的 <code>map</code> 实现有个问题, 返回的新列表是倒置的, 所以需要再反转一下. 原因是因为 <code>cons</code> 连接元素时, 子 <code>cons</code> 必须位于第二个参数, 这样才会优化成 <code>list</code>, 否则就会成为 <code>(((((0 . 10) . 20) . 30) . 40) . 50)</code> 这样的结构.</p>
-<h1 id="for-each">For-Each</h1>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">for-each </span><span style="color: #00688B">p</span> <span style="color: #00688B">list</span>)
+</pre>
+                </div>
+                <p>
+                  迭代(尾递归)版本的 <code>map</code> 实现有个问题,
+                  返回的新列表是倒置的, 所以需要再反转一下. 原因是因为
+                  <code>cons</code> 连接元素时, 子
+                  <code>cons</code> 必须位于第二个参数, 这样才会优化成
+                  <code>list</code>, 否则就会成为
+                  <code>(((((0 . 10) . 20) . 30) . 40) . 50)</code> 这样的结构.
+                </p>
+                <h1 id="for-each">For-Each</h1>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">for-each </span><span style="color: #00688B">p</span> <span style="color: #00688B">list</span>)
     (<span style="color: #8B008B; font-weight: bold">cond </span>((<span style="color: #658b00">null? </span><span style="color: #00688B">list</span>) <span style="color: #00688B">*done*</span>)
           (<span style="color: #8B008B; font-weight: bold">else </span>(<span style="color: #008b45">p</span> (<span style="color: #658b00">car </span><span style="color: #00688B">list</span>)
                 (<span style="color: #658b00">for-each </span><span style="color: #00688B">p</span> (<span style="color: #658b00">cdr </span><span style="color: #00688B">list</span>))))))
-</pre></div>
-<p>在网络上, 一些说法将 map, reduce, filter, for-each 等高阶函数做为函数式语言的标准之一, 本人并不认同, 因为只要语言支持高阶抽象 (函数是第一等公民) 就能自己实现出那些高阶函数.</p>
-<h1 id="_11">数据抽象</h1>
-<p>在函数式思想中, 没有类的概念, 建立数据抽象是利用 <strong>高阶抽象</strong> 以及 <strong>闭包</strong>. 例如我们可以自己实现 <code>序对</code>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">; 序对的构造函数</span>
+</pre>
+                </div>
+                <p>
+                  在网络上, 一些说法将 map, reduce, filter, for-each
+                  等高阶函数做为函数式语言的标准之一, 本人并不认同,
+                  因为只要语言支持高阶抽象 (函数是第一等公民)
+                  就能自己实现出那些高阶函数.
+                </p>
+                <h1 id="_11">数据抽象</h1>
+                <p>
+                  在函数式思想中, 没有类的概念, 建立数据抽象是利用
+                  <strong>高阶抽象</strong> 以及 <strong>闭包</strong>.
+                  例如我们可以自己实现 <code>序对</code>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">; 序对的构造函数</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">cons </span><span style="color: #00688B">a</span> <span style="color: #00688B">b</span>)
     (<span style="color: #8B008B; font-weight: bold">lambda </span>(<span style="color: #008b45">pick</span>)
         (<span style="color: #8B008B; font-weight: bold">cond </span>((<span style="color: #658b00">= </span><span style="color: #00688B">pick</span> <span style="color: #B452CD">1</span>) <span style="color: #00688B">a</span>)
@@ -407,11 +653,32 @@ y = mul(a, x)
 
 <span style="color: #228B22">; 序对的选择函数</span>
 (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #658b00">cdr </span><span style="color: #00688B">x</span>) (<span style="color: #008b45">x</span> <span style="color: #B452CD">2</span>))
-</pre></div>
-<p>这也是一种将数据的使用 (例如构造函数与选择函数) 与表示分隔开的 <strong>编程方法学</strong>: 当我们使用 <code>序对</code> 时, 其实只是在使用一些函数, 但在”外部”表现上, 它是一种叫 <code>序对</code> 的数据结构. 即当我们使用 <code>序对</code> 时, 并不知道它的底层表示, 我们只是定义了 <code>序对</code> 的 <em>数据公理</em> (即 cons car cdr), 然后使用这些公理. 这种数据抽象的能力让函数与数据的边界变得越来越模糊.</p>
-<h1 id="_12">对象状态</h1>
-<p>在构建大型系统时, 将其看成是由一批相互作用的对象组成是一种有用的策略 (另一种策略是流, 即把系统看作一种信号处理系统). 我们已经有了 <strong>数据抽象</strong> 去进行映射, 但真实系统中的对象会随着时间的流逝不断变化, 而映射它们的软件对象也要适应相应地变化, 因此就需要某种方式来维护对象的状态, 这是一种新的计算模型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">MAKE-COUNTER</span> <span style="color: #00688B">x</span>)
+</pre>
+                </div>
+                <p>
+                  这也是一种将数据的使用 (例如构造函数与选择函数) 与表示分隔开的
+                  <strong>编程方法学</strong>: 当我们使用 <code>序对</code> 时,
+                  其实只是在使用一些函数, 但在”外部”表现上, 它是一种叫
+                  <code>序对</code> 的数据结构. 即当我们使用
+                  <code>序对</code> 时, 并不知道它的底层表示, 我们只是定义了
+                  <code>序对</code> 的 <em>数据公理</em> (即 cons car cdr),
+                  然后使用这些公理.
+                  这种数据抽象的能力让函数与数据的边界变得越来越模糊.
+                </p>
+                <h1 id="_12">对象状态</h1>
+                <p>
+                  在构建大型系统时,
+                  将其看成是由一批相互作用的对象组成是一种有用的策略
+                  (另一种策略是流, 即把系统看作一种信号处理系统). 我们已经有了
+                  <strong>数据抽象</strong> 去进行映射,
+                  但真实系统中的对象会随着时间的流逝不断变化,
+                  而映射它们的软件对象也要适应相应地变化,
+                  因此就需要某种方式来维护对象的状态, 这是一种新的计算模型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">MAKE-COUNTER</span> <span style="color: #00688B">x</span>)
     (<span style="color: #8B008B; font-weight: bold">lambda </span>()
         <span style="color: #00688B">x</span>
         (<span style="color: #8B008B; font-weight: bold">set! </span><span style="color: #00688B">x</span> (<span style="color: #B452CD">1</span><span style="color: #00688B">+</span> <span style="color: #00688B">x</span>))))
@@ -421,13 +688,23 @@ y = mul(a, x)
 (<span style="color: #008b45">c</span>) <span style="color: #228B22">; =&gt; 1</span>
 (<span style="color: #008b45">c</span>) <span style="color: #228B22">; =&gt; 2</span>
 (<span style="color: #008b45">c</span>) <span style="color: #228B22">; =&gt; 3</span>
-</pre></div>
-<p>函数 <code>MAKE-COUNTER</code> 返回了另一个函数, 构建出了一个 <strong>闭包</strong> 环境, 即返回的函数可以访问 <code>MAKE-COUNTER</code> 的作用域.</p>
-<blockquote>
-<p>引入状态的对象具有副作用, 特别是在并发程序中问题会更严重.</p>
-</blockquote>
-<h1 id="_13">面向对象</h1>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">make-account</span> <span style="color: #00688B">balance</span>)
+</pre>
+                </div>
+                <p>
+                  函数 <code>MAKE-COUNTER</code> 返回了另一个函数, 构建出了一个
+                  <strong>闭包</strong> 环境, 即返回的函数可以访问
+                  <code>MAKE-COUNTER</code> 的作用域.
+                </p>
+                <blockquote>
+                  <p>
+                    引入状态的对象具有副作用, 特别是在并发程序中问题会更严重.
+                  </p>
+                </blockquote>
+                <h1 id="_13">面向对象</h1>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>(<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">make-account</span> <span style="color: #00688B">balance</span>)
 
     (<span style="color: #8B008B; font-weight: bold">define </span>(<span style="color: #008b45">withdraw</span> <span style="color: #00688B">amount</span>)
         (<span style="color: #8B008B; font-weight: bold">if </span>(<span style="color: #658b00">&gt;= </span><span style="color: #00688B">balance</span> <span style="color: #00688B">amount</span>)
@@ -450,70 +727,110 @@ y = mul(a, x)
 (<span style="color: #8B008B; font-weight: bold">define </span><span style="color: #00688B">A1</span> (<span style="color: #008b45">make-account</span> <span style="color: #B452CD">100</span>)) <span style="color: #228B22">; 生成一个初始有 10 0元、名为 A1 的银行账户</span>
 
 ((<span style="color: #008b45">A1</span> <span style="color: #CD5555">'withdraw</span>) <span style="color: #B452CD">20</span>) <span style="color: #228B22">; =&gt; 80</span>
-</pre></div>
-    </div>
+</pre>
+                </div>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u51fd\u6570\u5f0f",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2018-08-01T12:36:00+08:00",
+              "headline": "\u8ba1\u7b97\u673a\u7a0b\u5e8f\u7684\u6784\u9020\u4e0e\u89e3\u91ca",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "\u51fd\u6570\u5f0f\u7f16\u7a0b \u51fd\u6570\u5f0f\u7f16\u7a0b\u662f\u4e00\u79cd\u7f16\u7a0b\u5178\u8303, \u6bd4\u8d77\u6307\u4ee4\u5f0f(\u8fc7\u7a0b\u5f0f)\u7f16\u7a0b\u7684\u590d\u6742\u6267\u884c\u8fc7\u7a0b, \u51fd\u6570\u5f0f\u7f16\u7a0b\u66f4\u52a0\u5f3a\u8c03\u7a0b\u5e8f\u6267\u884c\u7684\u7ed3\u679c, \u5021\u5bfc\u5229\u7528\u82e5\u5e72\u7b80\u5355\u7684\u6267\u884c\u5355\u5143\u8ba9\u8ba1\u7b97\u7ed3\u679c\u4e0d\u65ad\u6e10\u8fdb, \u4ed4\u7ec6\u5b9a\u4e49\u6bcf\u4e2a\u8fd0\u7b97\u7684\u8f93\u5165, \u4ee5\u53ca\u6bcf\u4e2a\u8fd0\u7b97\u8fd4\u56de\u7684\u5185\u5bb9, \u9010\u5c42\u63a8\u5bfc\u590d\u6742\u7684\u8fd0\u7b97, \u5e76\u4e14\u907f\u514d\u4f7f\u7528\u7a0b\u5e8f\u72b6\u6001\u4ee5\u53ca\u6613\u53d8\u5bf9\u8c61. \u4ee5\u4e00\u4e2a\u591a\u9879\u5f0f\u6c42\u503c a * (b + c) \u4e3e\u4f8b (\u5047\u8bbe\u5b58\u5728 add \u548c mul \u65b9\u6cd5): \u6307\u4ee4\u5f0f(\u8fc7\u7a0b\u5f0f)\u7f16\u7a0b: x = add(b, c) y = mul \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://i67.tinypic.com/98woxu.jpg"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2018-08-01T12:36:00+08:00", "headline": "\u8ba1\u7b97\u673a\u7a0b\u5e8f\u7684\u6784\u9020\u4e0e\u89e3\u91ca", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/ji-suan-ji-cheng-xu-de-gou-zao-yu-jie-shi.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u51fd\u6570\u5f0f\u7f16\u7a0b \u51fd\u6570\u5f0f\u7f16\u7a0b\u662f\u4e00\u79cd\u7f16\u7a0b\u5178\u8303, \u6bd4\u8d77\u6307\u4ee4\u5f0f(\u8fc7\u7a0b\u5f0f)\u7f16\u7a0b\u7684\u590d\u6742\u6267\u884c\u8fc7\u7a0b, \u51fd\u6570\u5f0f\u7f16\u7a0b\u66f4\u52a0\u5f3a\u8c03\u7a0b\u5e8f\u6267\u884c\u7684\u7ed3\u679c, \u5021\u5bfc\u5229\u7528\u82e5\u5e72\u7b80\u5355\u7684\u6267\u884c\u5355\u5143\u8ba9\u8ba1\u7b97\u7ed3\u679c\u4e0d\u65ad\u6e10\u8fdb, \u4ed4\u7ec6\u5b9a\u4e49\u6bcf\u4e2a\u8fd0\u7b97\u7684\u8f93\u5165, \u4ee5\u53ca\u6bcf\u4e2a\u8fd0\u7b97\u8fd4\u56de\u7684\u5185\u5bb9, \u9010\u5c42\u63a8\u5bfc\u590d\u6742\u7684\u8fd0\u7b97, \u5e76\u4e14\u907f\u514d\u4f7f\u7528\u7a0b\u5e8f\u72b6\u6001\u4ee5\u53ca\u6613\u53d8\u5bf9\u8c61. \u4ee5\u4e00\u4e2a\u591a\u9879\u5f0f\u6c42\u503c a * (b + c) \u4e3e\u4f8b (\u5047\u8bbe\u5b58\u5728 add \u548c mul \u65b9\u6cd5): \u6307\u4ee4\u5f0f(\u8fc7\u7a0b\u5f0f)\u7f16\u7a0b: x = add(b, c) y = mul \u2026", "image": {"@type": "ImageObject", "url": "http://i67.tinypic.com/98woxu.jpg"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

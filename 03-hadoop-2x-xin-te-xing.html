@@ -1,234 +1,468 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>03. Hadoop 2.x 新特性</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - 03. Hadoop 2.x 新特性" />
+    <meta property="og:description" content="Hadoop 2.x 新特性" />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/03-hadoop-2x-xin-te-xing.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/Hadoop新特性/快照1.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-10-23T19:21:00+08:00"
+    />
+    <meta property="article:section" content="大数据" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>03. Hadoop 2.x 新特性</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - 03. Hadoop 2.x 新特性">
-  <meta property="og:description" content="Hadoop 2.x 新特性">
-<meta property="og:url" content="http://www.smallcpp.cn/03-hadoop-2x-xin-te-xing.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/Hadoop新特性/快照1.jpg">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-10-23T19:21:00+08:00">
-  <meta property="article:section" content="大数据">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <nav class="navbar has-shadow is-hidden-print">
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/03-hadoop-2x-xin-te-xing.html"
+                  rel="bookmark"
+                  title="Permalink to 03. Hadoop 2.x 新特性"
+                  >03. Hadoop 2.x 新特性</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-10-23T19:21:00+08:00">
+                  Published <span class="is-info">Sun 23 October 2016</span> in
+                  <a href="http://www.smallcpp.com/category/da-shu-ju.html"
+                    >大数据</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li><a href="#hadoop-1x">Hadoop 1.x 问题</a></li>
+                    <li><a href="#hadoop-2x">Hadoop 2.x 解决方案</a></li>
+                    <li>
+                      <a href="#hdfs">HDFS 快照</a>
+                      <ul>
+                        <li><a href="#_1">快照的作用是什么?</a></li>
+                        <li><a href="#_2">实现原理</a></li>
+                        <li><a href="#_3">例子分析</a></li>
+                        <li><a href="#_4">快照命令</a></li>
+                        <li><a href="#refrences">Refrences</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="hadoop-1x">Hadoop 1.x 问题</h1>
+                <p>主要就是 NameNode 单点问题.</p>
+                <p>
+                  Hadoop 1.x 中, 一个集群就只有一个 NameNode,
+                  这种架构虽然实现简单,
+                  但会产生<strong>单点</strong>、<strong>内存</strong>瓶颈、<strong
+                    >性能</strong
+                  >
+                  瓶颈等限制.
+                </p>
+                <p>
+                  <strong>首先</strong>, 整个 Hadoop 集群的命名空间都归一个
+                  NameNode 管理, 这样 HDFS 所能存储的文件数量会受到 NameNode
+                  容量的限制;
+                </p>
+                <p>
+                  <strong>其次</strong>, 当集群进行复杂运算时, 也只有一个
+                  NameNode 在运作, 集群的运算性能也会受到 NameNode 的限制.
+                </p>
+                <p>
+                  <strong>最后</strong>, 虽然集群有 Second NameNode
+                  作为辅助节点, 但并不会完成自动切换, 当 NameNode 宕掉时,
+                  还是需要人工去处理.
+                </p>
+                <p>
+                  虽然仅仅在像 Yahoo 和 Facebook
+                  返种规模的大公司才会面对这样的限制问题, 但在 Hadoop 2.x 中,
+                  官方还是给出了解决方案.
+                </p>
+                <h1 id="hadoop-2x">Hadoop 2.x 解决方案</h1>
+                <p>Hadoop 2.x 提出了两个新特性用以解决以上问题:</p>
+                <ul>
+                  <li>HDFS 联邦</li>
+                  <li>HDFS HA</li>
+                </ul>
+                <p>
+                  Reference:
+                  <a
+                    href="http://www.smallcpp.com/10-2x-gao-ke-kao-ha-ji-federation-lian-meng.html"
+                    >2.X 高可靠 HA 及 Federation (联盟)</a
+                  >
+                </p>
+                <h1 id="hdfs">HDFS 快照</h1>
+                <p>在 2.x 终于实现了快照.</p>
+                <h2 id="_1">快照的作用是什么?</h2>
+                <p>
+                  HDFS 2.x 中现在可以对目录创建 Snapshot,
+                  创建之后不管后续目录发生什么变化, 都可以通过 snapshot
+                  找回原来的文件和目录结构.
+                </p>
+                <p>
+                  为了启用这种功能, 首先需要启用目标目录的 snapshot 功能,
+                  可以通过 <code>hdfs dfsadmin -allowSnapshot</code> 命令来启用
+                  snapshot 功能, 启用后, 并不会自动进行 snapshot 保存,
+                  还需要先对现场手动创建一次 snapshot, 通过下面的命令来执行:
+                  <code>hdfs dfs -createSnapshot []</code>.
+                </p>
+                <p>
+                  可以为相同的目录创建多个 snapshot, 不同的 snapshot
+                  通过名字来区分, 默认是 <code>syyyyMMdd-HHmmss.SSS</code>, 例如
+                  <code>/storage/WALs/.snapshot/s20140515-084657.639</code>.
+                </p>
+                <h2 id="_2">实现原理</h2>
+                <p>
+                  实现上是通过在每个目标节点下面创建 snapshot 节点,
+                  后续任何子节点的变化都会同步记录到 snapshot 上.
+                  例如删除子节点下面的文件, 并不是直接文件元信息以及数据删除,
+                  而是将他们移动到 snapshot 下面. 这样后续还能够恢复回来.
+                </p>
+                <p>
+                  另外 snapshot 保存是一个完全的现场, 不仅是删除的文件还能找到,
+                  新创建的文件也无法看到. 后一种效果的实现是通过在 snapshot
+                  中记录哪些文件是新创建的, 查看列表的时候将这些文件排除在外.
+                </p>
+                <p>
+                  在 HDFS 中 INode 表示一个节点, 其中 INodeFile 表示文件,
+                  INodeDirectory 表示目录. INodeFileWithSnapshot
+                  表示带有快照的文件, INodeDirectoryWithSnapshot
+                  表示带有快照的目录, (INodeDirectorySnapshottable
+                  表示可以创建快照的目录, INodeDirectoryWithSnapshot
+                  不能创建新的快照, 只能将目录的变化记录到现有的快照里面)
+                  相关的类结构如下:
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/Hadoop新特性/快照1.jpg"
+                  />
+                </p>
+                <p>
+                  图中红线表示的是关键类的引用关系, 其中最重要的是
+                  DirectoryDiffList, 里面保存了一些快照和当前目录的差别. 每一个
+                  DirectoryDiff 中包含快照以及儿子变化, 是实现快照功能的核心.
+                  ChilderenDiff 中 created list
+                  保存的是从快照时间之后新创建的节点, deteled list
+                  保存的新删除的节点. snapshot 中的 root 节点保存了 snapshot 的
+                  name, 可以通过这个找到对应的快照.
+                </p>
+                <h2 id="_3">例子分析</h2>
+                <p>我们通过一个例子来分析整个 snapshot 的实现细节:</p>
+                <p>
+                  1. 文件目录树如下图所示, 并且我们已经通过命令启动了 a 的
+                  snapshot 功能, 结构如下图所示:
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/Hadoop新特性/快照2.jpg"
+                  />
+                </p>
+                <p>
+                  图中 .snapshot 是虚拟节点, 保存了所有的 snapshot 列表, 其中
+                  diff 中还保存当前节点下面的变化, 一个 snapshot 对应于一个
+                  diff. 要注意的是 snapshot 中可以被多个目录的 diff 引用,
+                  后续会进行说明.
+                </p>
+                <p>2. 当我们执行 createSnapshot 命令时, 结果如下:</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/Hadoop新特性/快照3.jpg"
+                  />
+                </p>
+                <p>
+                  3. 当删除文件 e 的时候, 不论是删除一个文件还是一个目录,
+                  只要是直接子节点, 都会将节点转换为快照版本. 例如 e 会变成
+                  INodeFileWithSnapshot, 在 a 的 DirectoryDiff 中 ChildDiff 中
+                  deleted 列表中将会包含 e, 而在 a 的正常节点下会被删除.
+                  目录节点的处理同样.
+                </p>
+                <p>4. 删除孙子节点是的情况</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/Hadoop新特性/快照4.jpg"
+                  />
+                </p>
+                <p>
+                  处理这种节点的原则是: 先将孙子节点转变为 Snapshot 版本,
+                  然后将父节点变为 snapshot 版本,
+                  同时将孙子节点版本加入到直接父节点的 diff 列表中.
+                  为了能够通过同一个 snapshot 找到当时的文件, 需要将新的 diff
+                  指向到老的 snapshot 版本上. 图中 d 节点是
+                  INodeDirectoryWithSnapshot (不是 INodeDiretorySnapshottable,
+                  本身不允许在 d 上创建 snapshot).
+                </p>
+                <h2 id="_4">快照命令</h2>
+                <ul>
+                  <li>
+                    设置一个目录为可快照: +
+                    <code>hdfs dfsadmin -allowSnapshot &lt;path&gt;</code>
+                  </li>
+                  <li>
+                    取消目录可快照: +
+                    <code>hdfs dfsadmin -disallowSnapshot &lt;path&gt;</code>
+                  </li>
+                  <li>
+                    生成快照: +
+                    <code
+                      >hdfs dfs -createSnapshot &lt;path&gt;
+                      [&lt;snapshotName&gt;]</code
+                    >
+                  </li>
+                  <li>
+                    删除快照: +
+                    <code
+                      >hdfs dfs -deleteSnapshot &lt;path&gt;
+                      &lt;snapshotName&gt;</code
+                    >
+                  </li>
+                  <li>
+                    列出所有可快照目录: + <code>hdfs lsSnapshottableDir</code>
+                  </li>
+                  <li>
+                    比较快照之间的差异: +
+                    <code
+                      >hdfs snapshotDiff &lt;path&gt; &lt;fromSnapshot&gt;
+                      &lt;toSnapshot&gt;</code
+                    >
+                  </li>
+                </ul>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/Hadoop新特性/快照.png"
+                  />
+                </p>
+                <h2 id="refrences">Refrences</h2>
+                <p>
+                  <a href="http://www.aboutyun.com/thread-14480-1-1.html"
+                    >HDFS snapshot 占用空间吗</a
+                  ><br />
+                  <a href="http://www.aboutyun.com/thread-14495-1-1.html"
+                    >HDFS Snapshot 原理</a
+                  ><br />
+                  <a
+                    href="http://blog.csdn.net/androidlushangderen/article/details/51282612"
+                    >HDFS 快照管理</a
+                  >
+                </p>
+              </div>
+            </article>
+          </section>
+
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u5927\u6570\u636e",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-10-23T19:21:00+08:00",
+              "headline": "03. Hadoop 2.x \u65b0\u7279\u6027",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/03-hadoop-2x-xin-te-xing.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "Hadoop 2.x \u65b0\u7279\u6027",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://www.smallcpp.com/images/Hadoop\u65b0\u7279\u6027/\u5feb\u71671.jpg"
+              }
+            }
+          </script>
+        </div>
+
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
         </div>
       </div>
     </div>
-  </nav>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/03-hadoop-2x-xin-te-xing.html" rel="bookmark"
-        title="Permalink to 03. Hadoop 2.x 新特性">03. Hadoop 2.x 新特性</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-10-23T19:21:00+08:00">
-    Published <span class="is-info">Sun 23 October 2016</span>
-    in <a href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
-  </abbr>
-
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#hadoop-1x">Hadoop 1.x 问题</a></li>
-<li><a href="#hadoop-2x">Hadoop 2.x 解决方案</a></li>
-<li><a href="#hdfs">HDFS 快照</a><ul>
-<li><a href="#_1">快照的作用是什么?</a></li>
-<li><a href="#_2">实现原理</a></li>
-<li><a href="#_3">例子分析</a></li>
-<li><a href="#_4">快照命令</a></li>
-<li><a href="#refrences">Refrences</a></li>
-</ul>
-</li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="hadoop-1x">Hadoop 1.x 问题</h1>
-<p>主要就是 NameNode 单点问题.</p>
-<p>Hadoop 1.x 中, 一个集群就只有一个 NameNode, 这种架构虽然实现简单, 但会产生<strong>单点</strong>、<strong>内存</strong>瓶颈、<strong>性能</strong>
-瓶颈等限制.</p>
-<p><strong>首先</strong>, 整个 Hadoop 集群的命名空间都归一个 NameNode 管理, 这样 HDFS 所能存储的文件数量会受到 NameNode 容量的限制;</p>
-<p><strong>其次</strong>, 当集群进行复杂运算时, 也只有一个 NameNode 在运作, 集群的运算性能也会受到 NameNode 的限制.</p>
-<p><strong>最后</strong>, 虽然集群有 Second NameNode 作为辅助节点, 但并不会完成自动切换, 当 NameNode 宕掉时, 还是需要人工去处理.</p>
-<p>虽然仅仅在像 Yahoo 和 Facebook 返种规模的大公司才会面对这样的限制问题, 但在 Hadoop 2.x 中, 官方还是给出了解决方案.</p>
-<h1 id="hadoop-2x">Hadoop 2.x 解决方案</h1>
-<p>Hadoop 2.x 提出了两个新特性用以解决以上问题:</p>
-<ul>
-<li>HDFS 联邦</li>
-<li>HDFS HA</li>
-</ul>
-<p>Reference: <a href="http://www.smallcpp.cn/10-2x-gao-ke-kao-ha-ji-federation-lian-meng.html">2.X 高可靠 HA 及 Federation (联盟)</a></p>
-<h1 id="hdfs">HDFS 快照</h1>
-<p>在 2.x 终于实现了快照.</p>
-<h2 id="_1">快照的作用是什么?</h2>
-<p>HDFS 2.x 中现在可以对目录创建 Snapshot, 创建之后不管后续目录发生什么变化, 都可以通过 snapshot 找回原来的文件和目录结构.</p>
-<p>为了启用这种功能, 首先需要启用目标目录的 snapshot 功能, 可以通过 <code>hdfs dfsadmin -allowSnapshot</code> 命令来启用 snapshot 功能, 启用后, 并不会自动进行 snapshot 保存, 还需要先对现场手动创建一次 snapshot, 通过下面的命令来执行: <code>hdfs dfs -createSnapshot []</code>.</p>
-<p>可以为相同的目录创建多个 snapshot, 不同的 snapshot 通过名字来区分, 默认是 <code>syyyyMMdd-HHmmss.SSS</code>, 例如 <code>/storage/WALs/.snapshot/s20140515-084657.639</code>.</p>
-<h2 id="_2">实现原理</h2>
-<p>实现上是通过在每个目标节点下面创建 snapshot 节点, 后续任何子节点的变化都会同步记录到 snapshot 上. 例如删除子节点下面的文件, 并不是直接文件元信息以及数据删除, 而是将他们移动到 snapshot 下面. 这样后续还能够恢复回来.</p>
-<p>另外 snapshot 保存是一个完全的现场, 不仅是删除的文件还能找到, 新创建的文件也无法看到. 后一种效果的实现是通过在 snapshot 中记录哪些文件是新创建的, 查看列表的时候将这些文件排除在外.</p>
-<p>在 HDFS 中 INode 表示一个节点, 其中 INodeFile 表示文件, INodeDirectory 表示目录. INodeFileWithSnapshot 表示带有快照的文件, INodeDirectoryWithSnapshot 表示带有快照的目录, (INodeDirectorySnapshottable 表示可以创建快照的目录, INodeDirectoryWithSnapshot 不能创建新的快照, 只能将目录的变化记录到现有的快照里面) 相关的类结构如下:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/Hadoop新特性/快照1.jpg"/></p>
-<p>图中红线表示的是关键类的引用关系, 其中最重要的是 DirectoryDiffList, 里面保存了一些快照和当前目录的差别. 每一个 DirectoryDiff 中包含快照以及儿子变化, 是实现快照功能的核心. ChilderenDiff 中 created list 保存的是从快照时间之后新创建的节点, deteled list 保存的新删除的节点. snapshot 中的 root 节点保存了 snapshot 的 name, 可以通过这个找到对应的快照.</p>
-<h2 id="_3">例子分析</h2>
-<p>我们通过一个例子来分析整个 snapshot 的实现细节:</p>
-<p>1. 文件目录树如下图所示, 并且我们已经通过命令启动了 a 的 snapshot 功能, 结构如下图所示:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/Hadoop新特性/快照2.jpg"/></p>
-<p>图中 .snapshot 是虚拟节点, 保存了所有的 snapshot 列表, 其中 diff 中还保存当前节点下面的变化, 一个 snapshot 对应于一个 diff. 要注意的是 snapshot 中可以被多个目录的 diff 引用, 后续会进行说明.</p>
-<p>2. 当我们执行 createSnapshot 命令时, 结果如下:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/Hadoop新特性/快照3.jpg"/></p>
-<p>3. 当删除文件 e 的时候, 不论是删除一个文件还是一个目录, 只要是直接子节点, 都会将节点转换为快照版本. 例如 e 会变成 INodeFileWithSnapshot, 在 a 的 DirectoryDiff 中 ChildDiff 中 deleted 列表中将会包含 e, 而在 a 的正常节点下会被删除. 目录节点的处理同样.</p>
-<p>4. 删除孙子节点是的情况</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/Hadoop新特性/快照4.jpg"/></p>
-<p>处理这种节点的原则是: 先将孙子节点转变为 Snapshot 版本, 然后将父节点变为 snapshot 版本, 同时将孙子节点版本加入到直接父节点的 diff 列表中. 为了能够通过同一个 snapshot 找到当时的文件, 需要将新的 diff 指向到老的 snapshot 版本上. 图中 d 节点是 INodeDirectoryWithSnapshot (不是 INodeDiretorySnapshottable, 本身不允许在 d 上创建 snapshot).</p>
-<h2 id="_4">快照命令</h2>
-<ul>
-<li>设置一个目录为可快照:
-    + <code>hdfs dfsadmin -allowSnapshot &lt;path&gt;</code></li>
-<li>取消目录可快照:
-    + <code>hdfs dfsadmin -disallowSnapshot &lt;path&gt;</code></li>
-<li>生成快照:
-    + <code>hdfs dfs -createSnapshot &lt;path&gt; [&lt;snapshotName&gt;]</code></li>
-<li>删除快照:
-    + <code>hdfs dfs -deleteSnapshot &lt;path&gt; &lt;snapshotName&gt;</code></li>
-<li>列出所有可快照目录:
-    + <code>hdfs lsSnapshottableDir</code></li>
-<li>比较快照之间的差异:
-    + <code>hdfs snapshotDiff &lt;path&gt; &lt;fromSnapshot&gt; &lt;toSnapshot&gt;</code></li>
-</ul>
-<p><img alt="" src="http://www.smallcpp.cn/images/Hadoop新特性/快照.png"/></p>
-<h2 id="refrences">Refrences</h2>
-<p><a href="http://www.aboutyun.com/thread-14480-1-1.html">HDFS snapshot 占用空间吗</a><br/>
-<a href="http://www.aboutyun.com/thread-14495-1-1.html">HDFS Snapshot 原理</a><br/>
-<a href="http://blog.csdn.net/androidlushangderen/article/details/51282612">HDFS 快照管理</a></p>
-    </div>
-
-  </article>
-</section>
-
-<script type="application/ld+json">
-  {"articleSection": "\u5927\u6570\u636e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-23T19:21:00+08:00", "headline": "03. Hadoop 2.x \u65b0\u7279\u6027", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/03-hadoop-2x-xin-te-xing.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "Hadoop 2.x \u65b0\u7279\u6027", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/Hadoop\u65b0\u7279\u6027/\u5feb\u71671.jpg"}}
-</script>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  </div>
+    </footer>
 
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
-      </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
-
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

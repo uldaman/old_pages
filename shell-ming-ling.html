@@ -1,218 +1,303 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Shell 命令</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - Shell 命令" />
+    <meta
+      property="og:description"
+      content="基础使用 执行方式 方式一: + 需在脚本开头指定解释器: #!/bin/bash + 给脚本 +x 权限, + 输入脚本绝对路径或相对路径: * /root/test.sh * ./test.sh + 或者在路径前再加个点 * . ./test.sh + 区别在于前面的会新开一个 bash (不可见), 也就是在当前 bash 变量不共享, 加个 . 表示在当前脚本执行脚本 方式二:..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/shell-ming-ling.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/extra/avatar.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-10-26T11:19:00+08:00"
+    />
+    <meta property="article:section" content="软件工程" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>Shell 命令</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - Shell 命令">
-  <meta property="og:description" content="基础使用 执行方式 方式一: + 需在脚本开头指定解释器: #!/bin/bash + 给脚本 +x 权限, + 输入脚本绝对路径或相对路径: * /root/test.sh * ./test.sh + 或者在路径前再加个点 * . ./test.sh + 区别在于前面的会新开一个 bash (不可见), 也就是在当前 bash 变量不共享, 加个 . 表示在当前脚本执行脚本 方式二:...">
-<meta property="og:url" content="http://www.smallcpp.cn/shell-ming-ling.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-10-26T11:19:00+08:00">
-  <meta property="article:section" content="软件工程">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/shell-ming-ling.html" rel="bookmark"
-        title="Permalink to Shell 命令">Shell 命令</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-10-26T11:19:00+08:00">
-    Published <span class="is-info">Wed 26 October 2016</span>
-    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#_1">基础使用</a><ul>
-<li><a href="#_2">执行方式</a></li>
-<li><a href="#_3">接收控制台输入</a></li>
-<li><a href="#_4">接收命令返回值</a></li>
-<li><a href="#_5">定义变量</a></li>
-<li><a href="#_6">单引号与双引号区别</a></li>
-<li><a href="#_7">特殊变量</a></li>
-<li><a href="#_8">整数运算</a></li>
-<li><a href="#for">for 循环</a></li>
-<li><a href="#while">while 循环</a></li>
-<li><a href="#case">case 选择</a></li>
-<li><a href="#if">if 选择</a></li>
-<li><a href="#_9">布尔表达式</a></li>
-<li><a href="#_10">逻辑运算符</a></li>
-<li><a href="#_11">文件判断</a></li>
-<li><a href="#_12">函数</a></li>
-<li><a href="#_13">脚本调试</a></li>
-</ul>
-</li>
-<li><a href="#sort">sort</a></li>
-<li><a href="#uniq">uniq</a></li>
-<li><a href="#cut">cut</a></li>
-<li><a href="#wc">wc</a></li>
-<li><a href="#sed">sed</a></li>
-<li><a href="#awk">awk</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="_1">基础使用</h1>
-<h2 id="_2">执行方式</h2>
-<ul>
-<li>方式一:
-    + 需在脚本开头指定解释器: #!/bin/bash
-    + 给脚本 +x 权限,
-    + 输入脚本绝对路径或相对路径:
-        * <code>/root/test.sh</code>
-        * <code>./test.sh</code>
-    + 或者在路径前再加个点
-        * <code>. ./test.sh</code>
-    + 区别在于前面的会新开一个 bash (不可见), 也就是在当前 bash 变量不共享, 加个 <code>.</code> 表示在当前脚本执行脚本</li>
-<li>方式二:
-    用指定解释器执行 sh test.sh</li>
-</ul>
-<h2 id="_3">接收控制台输入</h2>
-<p><code>read -p(提示语句) -n(字符个数) -t(等待时间) variable</code></p>
-<h2 id="_4">接收命令返回值</h2>
-<p>A=`ls -l` — 反引号 (飘号)</p>
-<p>或者</p>
-<p>A=$(ls -l)</p>
-<h2 id="_5">定义变量</h2>
-<p>不能有空格, 如果字符串中有空格, 要用引号包围.</p>
-<ul>
-<li><code>STR="hello wored"</code></li>
-<li><code>unset STR</code> 撤销变量</li>
-<li><code>readonly B=2</code> 只读变量, 不能 unset</li>
-<li><code>export</code> 导出变量为全局环境变量</li>
-</ul>
-<h2 id="_6">单引号与双引号区别</h2>
-<ul>
-<li>双引号仅转义空格</li>
-<li>单引号会转义所有特殊字符</li>
-</ul>
-<h2 id="_7">特殊变量</h2>
-<ul>
-<li><code>$?</code> 上一个命令的退出状态</li>
-<li><code>$$</code> 当前进程编号</li>
-<li><code>$0</code> 当前脚本名称</li>
-<li><code>$n</code> 指定位置参数</li>
-<li><code>$#</code> 参数个数</li>
-<li><code>$*</code> / <code>$@</code> 参数列表
-    + 区别: 当被双引号包围时, <code>$*</code> 将参数列表当成一整体, <code>$@</code> 会将参数分开</li>
-</ul>
-<h2 id="_8">整数运算</h2>
-<p><code>expr m + n</code> (这个命令要有空格)</p>
-<p>或者</p>
-<p><code>$((m+n))</code></p>
-<p>如计算 (2 + 3) * 4</p>
-<ul>
-<li>分两步的写法
-    + S=`expr 2 + 3`
-    + <code>expr $S\*4</code> (注意 * 要转义)</li>
-<li>一步的写法
-    + echo `expr `expr 2 + 3`*4`
-    + 或者 <code>$(((2+3)*4))</code></li>
-</ul>
-<h2 id="for">for 循环</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">for</span> N <span style="color: #8B008B; font-weight: bold">in</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">2</span> <span style="color: #B452CD">3</span>
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/shell-ming-ling.html"
+                  rel="bookmark"
+                  title="Permalink to Shell 命令"
+                  >Shell 命令</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-10-26T11:19:00+08:00">
+                  Published <span class="is-info">Wed 26 October 2016</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+                    >软件工程</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li>
+                      <a href="#_1">基础使用</a>
+                      <ul>
+                        <li><a href="#_2">执行方式</a></li>
+                        <li><a href="#_3">接收控制台输入</a></li>
+                        <li><a href="#_4">接收命令返回值</a></li>
+                        <li><a href="#_5">定义变量</a></li>
+                        <li><a href="#_6">单引号与双引号区别</a></li>
+                        <li><a href="#_7">特殊变量</a></li>
+                        <li><a href="#_8">整数运算</a></li>
+                        <li><a href="#for">for 循环</a></li>
+                        <li><a href="#while">while 循环</a></li>
+                        <li><a href="#case">case 选择</a></li>
+                        <li><a href="#if">if 选择</a></li>
+                        <li><a href="#_9">布尔表达式</a></li>
+                        <li><a href="#_10">逻辑运算符</a></li>
+                        <li><a href="#_11">文件判断</a></li>
+                        <li><a href="#_12">函数</a></li>
+                        <li><a href="#_13">脚本调试</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#sort">sort</a></li>
+                    <li><a href="#uniq">uniq</a></li>
+                    <li><a href="#cut">cut</a></li>
+                    <li><a href="#wc">wc</a></li>
+                    <li><a href="#sed">sed</a></li>
+                    <li><a href="#awk">awk</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="_1">基础使用</h1>
+                <h2 id="_2">执行方式</h2>
+                <ul>
+                  <li>
+                    方式一: + 需在脚本开头指定解释器: #!/bin/bash + 给脚本 +x
+                    权限, + 输入脚本绝对路径或相对路径: *
+                    <code>/root/test.sh</code> * <code>./test.sh</code> +
+                    或者在路径前再加个点 * <code>. ./test.sh</code> +
+                    区别在于前面的会新开一个 bash (不可见), 也就是在当前 bash
+                    变量不共享, 加个 <code>.</code> 表示在当前脚本执行脚本
+                  </li>
+                  <li>方式二: 用指定解释器执行 sh test.sh</li>
+                </ul>
+                <h2 id="_3">接收控制台输入</h2>
+                <p>
+                  <code
+                    >read -p(提示语句) -n(字符个数) -t(等待时间) variable</code
+                  >
+                </p>
+                <h2 id="_4">接收命令返回值</h2>
+                <p>A=`ls -l` — 反引号 (飘号)</p>
+                <p>或者</p>
+                <p>A=$(ls -l)</p>
+                <h2 id="_5">定义变量</h2>
+                <p>不能有空格, 如果字符串中有空格, 要用引号包围.</p>
+                <ul>
+                  <li><code>STR="hello wored"</code></li>
+                  <li><code>unset STR</code> 撤销变量</li>
+                  <li><code>readonly B=2</code> 只读变量, 不能 unset</li>
+                  <li><code>export</code> 导出变量为全局环境变量</li>
+                </ul>
+                <h2 id="_6">单引号与双引号区别</h2>
+                <ul>
+                  <li>双引号仅转义空格</li>
+                  <li>单引号会转义所有特殊字符</li>
+                </ul>
+                <h2 id="_7">特殊变量</h2>
+                <ul>
+                  <li><code>$?</code> 上一个命令的退出状态</li>
+                  <li><code>$$</code> 当前进程编号</li>
+                  <li><code>$0</code> 当前脚本名称</li>
+                  <li><code>$n</code> 指定位置参数</li>
+                  <li><code>$#</code> 参数个数</li>
+                  <li>
+                    <code>$*</code> / <code>$@</code> 参数列表 + 区别:
+                    当被双引号包围时, <code>$*</code> 将参数列表当成一整体,
+                    <code>$@</code> 会将参数分开
+                  </li>
+                </ul>
+                <h2 id="_8">整数运算</h2>
+                <p><code>expr m + n</code> (这个命令要有空格)</p>
+                <p>或者</p>
+                <p><code>$((m+n))</code></p>
+                <p>如计算 (2 + 3) * 4</p>
+                <ul>
+                  <li>
+                    分两步的写法 + S=`expr 2 + 3` +
+                    <code>expr $S\*4</code> (注意 * 要转义)
+                  </li>
+                  <li>
+                    一步的写法 + echo `expr `expr 2 + 3`*4` + 或者
+                    <code>$(((2+3)*4))</code>
+                  </li>
+                </ul>
+                <h2 id="for">for 循环</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">for</span> N <span style="color: #8B008B; font-weight: bold">in</span> <span style="color: #B452CD">1</span> <span style="color: #B452CD">2</span> <span style="color: #B452CD">3</span>
 <span style="color: #8B008B; font-weight: bold">do</span>
     <span style="color: #658b00">echo</span> <span style="color: #00688B">$N</span>
 <span style="color: #8B008B; font-weight: bold">done</span>
-</pre></div>
-<p>或者</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">for</span> N <span style="color: #8B008B; font-weight: bold">in</span> {<span style="color: #B452CD">1</span>..3}   <span style="color: #228B22"># 表示 1 到 3</span>
+</pre>
+                </div>
+                <p>或者</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">for</span> N <span style="color: #8B008B; font-weight: bold">in</span> {<span style="color: #B452CD">1</span>..3}   <span style="color: #228B22"># 表示 1 到 3</span>
 <span style="color: #8B008B; font-weight: bold">do</span>
     <span style="color: #658b00">echo</span> <span style="color: #00688B">$N</span>
 <span style="color: #8B008B; font-weight: bold">done</span>
-</pre></div>
-<p>或者</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">for</span> ((<span style="color: #00688B">i</span> = <span style="color: #B452CD">0</span>; i &lt;= <span style="color: #B452CD">5</span>; i++))
+</pre>
+                </div>
+                <p>或者</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">for</span> ((<span style="color: #00688B">i</span> = <span style="color: #B452CD">0</span>; i &lt;= <span style="color: #B452CD">5</span>; i++))
 <span style="color: #8B008B; font-weight: bold">do</span>
     <span style="color: #658b00">echo</span> <span style="color: #00688B">$i</span>
 <span style="color: #8B008B; font-weight: bold">done</span>
-</pre></div>
-<h2 id="while">while 循环</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">while</span> expre
+</pre>
+                </div>
+                <h2 id="while">while 循环</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">while</span> expre
 <span style="color: #8B008B; font-weight: bold">do</span>
     <span style="color: #658b00">echo</span> <span style="color: #CD5555">'do something'</span>
 end
-</pre></div>
-<p>或者</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #00688B">i</span>=<span style="color: #B452CD">1</span>
+</pre>
+                </div>
+                <p>或者</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #00688B">i</span>=<span style="color: #B452CD">1</span>
 <span style="color: #8B008B; font-weight: bold">while</span> ((i&lt;<span style="color: #B452CD">5</span>))
 <span style="color: #8B008B; font-weight: bold">do</span>
     <span style="color: #658b00">echo</span> <span style="color: #CD5555">'do something'</span>
 <span style="color: #8B008B; font-weight: bold">done</span>
-</pre></div>
-<h2 id="case">case 选择</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>case $1 in
+</pre>
+                </div>
+                <h2 id="case">case 选择</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>case $1 in
 one)
     ...
     ;;
@@ -221,9 +306,13 @@ two)
     ;;
 *)
 esac
-</pre></div>
-<h2 id="if">if 选择</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">if</span> xx
+</pre>
+                </div>
+                <h2 id="if">if 选择</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">if</span> xx
 <span style="color: #8B008B; font-weight: bold">then</span>
     xx
 <span style="color: #8B008B; font-weight: bold">elif</span> xx
@@ -232,61 +321,89 @@ esac
 <span style="color: #8B008B; font-weight: bold">else</span>
     xx
 <span style="color: #8B008B; font-weight: bold">fi</span>
-</pre></div>
-<h2 id="_9">布尔表达式</h2>
-<p><code>[ xx ]</code>, 注意 <code>[  ]</code> 两边有空格 (非空返回 true)</p>
-<p>表达式可使用 <code>$?</code> 验证 (0 为 true, &gt;0 为 flase)</p>
-<p><code>[ xx ] &amp;&amp; echo OK</code>, 条件成立, 执行后面的语句</p>
-<p><code>[ xx ] &amp;&amp; echo OK || echo NO</code>, 类似三目表达式, 条件成立, echo OK, 不满足执行 echo NO</p>
-<h2 id="_10">逻辑运算符</h2>
-<ul>
-<li>字符串判断
-    + <code>=</code> 等于比较
-    + <code>!=</code> 不等于比较
-    + <code>-z</code>  空字符串
-    + <code>-n</code>  非空字符串</li>
-<li>数值判断
-    + <code>-lt</code> 小于
-    + <code>-le</code> 小于等于
-    + <code>-eq</code> 等于
-    + <code>-gt</code> 大于
-    + <code>-ge</code> 大于等于
-    + <code>-ne</code> 不等于</li>
-</ul>
-<h2 id="_11">文件判断</h2>
-<ul>
-<li><code>-r</code>有读权限</li>
-<li><code>-w</code>有写权限</li>
-<li><code>-x</code>有执行权限</li>
-<li><code>-f</code>文件存在并且是一个常规文件</li>
-<li><code>-s</code>文件存在且不为空</li>
-<li><code>-d</code>文件存在且是一个目录</li>
-<li><code>-b</code>文件存在且是一个块设备</li>
-<li><code>-L</code>文件存在且是一个链接</li>
-</ul>
-<h2 id="_12">函数</h2>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">function</span> xxx() / <span style="color: #8B008B; font-weight: bold">function</span> start / start()
+</pre>
+                </div>
+                <h2 id="_9">布尔表达式</h2>
+                <p>
+                  <code>[ xx ]</code>, 注意 <code>[ ]</code> 两边有空格
+                  (非空返回 true)
+                </p>
+                <p>
+                  表达式可使用 <code>$?</code> 验证 (0 为 true, &gt;0 为 flase)
+                </p>
+                <p>
+                  <code>[ xx ] &amp;&amp; echo OK</code>, 条件成立,
+                  执行后面的语句
+                </p>
+                <p>
+                  <code>[ xx ] &amp;&amp; echo OK || echo NO</code>,
+                  类似三目表达式, 条件成立, echo OK, 不满足执行 echo NO
+                </p>
+                <h2 id="_10">逻辑运算符</h2>
+                <ul>
+                  <li>
+                    字符串判断 + <code>=</code> 等于比较 +
+                    <code>!=</code> 不等于比较 + <code>-z</code> 空字符串 +
+                    <code>-n</code> 非空字符串
+                  </li>
+                  <li>
+                    数值判断 + <code>-lt</code> 小于 + <code>-le</code> 小于等于
+                    + <code>-eq</code> 等于 + <code>-gt</code> 大于 +
+                    <code>-ge</code> 大于等于 + <code>-ne</code> 不等于
+                  </li>
+                </ul>
+                <h2 id="_11">文件判断</h2>
+                <ul>
+                  <li><code>-r</code>有读权限</li>
+                  <li><code>-w</code>有写权限</li>
+                  <li><code>-x</code>有执行权限</li>
+                  <li><code>-f</code>文件存在并且是一个常规文件</li>
+                  <li><code>-s</code>文件存在且不为空</li>
+                  <li><code>-d</code>文件存在且是一个目录</li>
+                  <li><code>-b</code>文件存在且是一个块设备</li>
+                  <li><code>-L</code>文件存在且是一个链接</li>
+                </ul>
+                <h2 id="_12">函数</h2>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">function</span> xxx() / <span style="color: #8B008B; font-weight: bold">function</span> start / start()
 {
     ...;
     <span style="color: #8B008B; font-weight: bold">return</span> int; <span style="color: #228B22"># 只能返回 int 型 1~255</span>
 }
-</pre></div>
-<p>函数没有形参, 通过调用时指定, 在函数体内, 通过 <code>$1~n</code> 来取.</p>
-<p>返回值通过 <code>$?</code> 来获取.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">function</span> fSum()
+</pre>
+                </div>
+                <p>
+                  函数没有形参, 通过调用时指定, 在函数体内, 通过
+                  <code>$1~n</code> 来取.
+                </p>
+                <p>返回值通过 <code>$?</code> 来获取.</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">function</span> fSum()
 {
     <span style="color: #658b00">echo</span> <span style="color: #00688B">$1</span>, <span style="color: #00688B">$2</span>;
     reutrn <span style="color: #8B008B; font-weight: bold">$((</span><span style="color: #00688B">$1</span>+<span style="color: #00688B">$2</span><span style="color: #8B008B; font-weight: bold">))</span>;
 }
 fSum <span style="color: #B452CD">3</span> <span style="color: #B452CD">2</span>;
-</pre></div>
-<h2 id="_13">脚本调试</h2>
-<p><code>sh -vx xxx.sh</code></p>
-<p>或者</p>
-<p>在脚本中增加 <code>set -x</code></p>
-<h1 id="sort">sort</h1>
-<p>sort 命令对 File 参数指定的文件中的<strong>行</strong>排序, 并将结果写到标准输出. 如果 File 参数指定多个文件, 那么 sort 命令将这些文件连接起来, 并当作一个文件进行排序.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sort [-fbMnrtuk] [file or stdin]
+</pre>
+                </div>
+                <h2 id="_13">脚本调试</h2>
+                <p><code>sh -vx xxx.sh</code></p>
+                <p>或者</p>
+                <p>在脚本中增加 <code>set -x</code></p>
+                <h1 id="sort">sort</h1>
+                <p>
+                  sort 命令对 File 参数指定的文件中的<strong>行</strong>排序,
+                  并将结果写到标准输出. 如果 File 参数指定多个文件, 那么 sort
+                  命令将这些文件连接起来, 并当作一个文件进行排序.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sort [-fbMnrtuk] [file or stdin]
 选项与参数:
 -f  : 忽略大小写的差异, 例如 A 与 a 视为编码相同;
 -b  : 忽略最前面的空格符部分;
@@ -296,150 +413,259 @@ fSum <span style="color: #B452CD">3</span> <span style="color: #B452CD">2</span>
 -u  : 就是 uniq, 相同的数据中, 仅出现一行代表;
 -t  : 分隔符, 默认是用 [tab] 键来分隔;
 -k  : 以那个区间 (field) 来进行排序的意思
-</pre></div>
-<p>对 <code>/etc/passwd</code> 的账号进行排序</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort
+</pre>
+                </div>
+                <p>对 <code>/etc/passwd</code> 的账号进行排序</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort
 adm:x:3:4:adm:/var/adm:/sbin/nologin
 apache:x:48:48:Apache:/var/www:/sbin/nologin
 bin:x:1:1:bin:/bin:/sbin/nologin
 daemon:x:2:2:daemon:/sbin:/sbin/nologin
-</pre></div>
-<p>sort 是默认以首字母来排序, 而且默认是以<strong>字符</strong>形式来排序, 所以由字母 a 开始升序排序.</p>
-<p><code>/etc/passwd</code> 内容是以 <code>:</code> 来分隔的, 我想以第三栏来排序, 该如何? 可以使用 <code>-t</code>和 <code>-k</code> 参数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort -t ':' -k 3
+</pre>
+                </div>
+                <p>
+                  sort 是默认以首字母来排序,
+                  而且默认是以<strong>字符</strong>形式来排序, 所以由字母 a
+                  开始升序排序.
+                </p>
+                <p>
+                  <code>/etc/passwd</code> 内容是以 <code>:</code> 来分隔的,
+                  我想以第三栏来排序, 该如何? 可以使用 <code>-t</code>和
+                  <code>-k</code> 参数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort -t ':' -k 3
 root:x:0:0:root:/root:/bin/bash
 uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin
 operator:x:11:0:operator:/root:/sbin/nologin
 bin:x:1:1:bin:/bin:/sbin/nologin
 games:x:12:100:games:/usr/games:/sbin/nologin
-</pre></div>
-<p>刚提到 sort 默认是以字符来排序的, 如果想要使用数字排序 (注意后面的 n):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort -t ':' -k 3n
+</pre>
+                </div>
+                <p>
+                  刚提到 sort 默认是以字符来排序的, 如果想要使用数字排序
+                  (注意后面的 n):
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort -t ':' -k 3n
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 bin:x:2:2:bin:/bin:/bin/sh
-</pre></div>
-<p>默认是升序排序, 如果要倒序排序, 如下 (注意后面的 r):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort -t ':' -k 3nr
+</pre>
+                </div>
+                <p>默认是升序排序, 如果要倒序排序, 如下 (注意后面的 r):</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort -t ':' -k 3nr
 nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
 ntp:x:106:113::/home/ntp:/bin/false
 messagebus:x:105:109::/var/run/dbus:/bin/false
 sshd:x:104:65534::/var/run/sshd:/usr/sbin/nologin
-</pre></div>
-<p>如果要对 <code>/etc/passwd</code>, 先以第六个域的第 2 个字符到第 4 个字符进行正向排序, 再基于第一个域进行反向排序:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort -t ':' -k 6.2,6.4 -k 1r
+</pre>
+                </div>
+                <p>
+                  如果要对 <code>/etc/passwd</code>, 先以第六个域的第 2
+                  个字符到第 4 个字符进行正向排序, 再基于第一个域进行反向排序:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort -t ':' -k 6.2,6.4 -k 1r
 sync:x:4:65534:sync:/bin:/bin/sync
 proxy:x:13:13:proxy:/bin:/bin/sh
 bin:x:2:2:bin:/bin:/bin/sh
 sys:x:3:3:sys:/dev:/bin/sh
-</pre></div>
-<p>对 <code>/etc/passwd</code> 的第七个域进行排序, 然后去重:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd | sort -t ':' -k 7 -u
+</pre>
+                </div>
+                <p>对 <code>/etc/passwd</code> 的第七个域进行排序, 然后去重:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd | sort -t ':' -k 7 -u
 root:x:0:0:root:/root:/bin/bash
 syslog:x:101:102::/home/syslog:/bin/false
 daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 sync:x:4:65534:sync:/bin:/bin/sync
 sshd:x:104:65534::/var/run/sshd:/usr/sbin/nologin
-</pre></div>
-<h1 id="uniq">uniq</h1>
-<p>uniq 命令可以去除<strong>排序过</strong>的文件中的重复行, 因此 uniq 经常和 sort 合用.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>uniq [-icu]
+</pre>
+                </div>
+                <h1 id="uniq">uniq</h1>
+                <p>
+                  uniq 命令可以去除<strong>排序过</strong>的文件中的重复行, 因此
+                  uniq 经常和 sort 合用.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>uniq [-icu]
 选项与参数:
 -i   : 忽略大小写字符的不同;
 -c  : 进行计数
 -u  : 只显示唯一的行
-</pre></div>
-<p>如存在一个 testfile 文件, 内容如下:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>hello
+</pre>
+                </div>
+                <p>如存在一个 testfile 文件, 内容如下:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>hello
 world
 friend
 hello
 world
 hello
-</pre></div>
-<p>直接删除未经排序的文件, 将会发现没有任何行被删除</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>uniq testfile
+</pre>
+                </div>
+                <p>直接删除未经排序的文件, 将会发现没有任何行被删除</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>uniq testfile
 hello
 world
 friend
 hello
 world
 hello
-</pre></div>
-<p>排序文件后再去重</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat words | sort |uniq
+</pre>
+                </div>
+                <p>排序文件后再去重</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat words | sort |uniq
 friend
 hello
 world
-</pre></div>
-<p>排序之后删除了重复行, 同时在行首位置输出该行重复的次数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sort testfile | uniq -c
+</pre>
+                </div>
+                <p>排序之后删除了重复行, 同时在行首位置输出该行重复的次数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sort testfile | uniq -c
 1 friend
 3 hello
 2 world
-</pre></div>
-<p>仅显示存在重复的行, 并在行首显示该行重复的次数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sort testfile | uniq -dc
+</pre>
+                </div>
+                <p>仅显示存在重复的行, 并在行首显示该行重复的次数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sort testfile | uniq -dc
 3 hello
 2 world
-</pre></div>
-<p>仅显示不重复的行:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sort testfile | uniq -u
+</pre>
+                </div>
+                <p>仅显示不重复的行:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sort testfile | uniq -u
 friend
-</pre></div>
-<h1 id="cut">cut</h1>
-<p>cut 命令可以从一个文本文件或者文本流中提取文本列.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>选项与参数:
+</pre>
+                </div>
+                <h1 id="cut">cut</h1>
+                <p>cut 命令可以从一个文本文件或者文本流中提取文本列.</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>选项与参数:
 -d  : 后面接分隔字符. 与 -f 一起使用;
 -f  : 依据 -d 的分隔字符将一段信息分割成为数段, 用 -f 取出第几段的意思 (即下标);
 -c  : 以字符 (characters) 的单位取出固定字符区间;
-</pre></div>
-<p>如 PATH 变量如下 (以 : 分割):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH
+</pre>
+                </div>
+                <p>如 PATH 变量如下 (以 : 分割):</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>echo $PATH
 /bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/X11R6/bin:/usr/games
 # 1 | 2       | 3   | 4       | 5            | 6            | 7
-</pre></div>
-<p>将 PATH 变量取出, 我要找出第五个路径:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH | cut -d ':' -f 5
+</pre>
+                </div>
+                <p>将 PATH 变量取出, 我要找出第五个路径:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>echo $PATH | cut -d ':' -f 5
 /usr/local/bin
-</pre></div>
-<p>将 PATH 变量取出, 我要找出第三和第五个路径:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH | cut -d ':' -f 3,5
+</pre>
+                </div>
+                <p>将 PATH 变量取出, 我要找出第三和第五个路径:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>echo $PATH | cut -d ':' -f 3,5
 /sbin:/usr/local/bin
-</pre></div>
-<p>将 PATH 变量取出, 我要找出第三到最后一个路径:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH | cut -d ':' -f 3-
+</pre>
+                </div>
+                <p>将 PATH 变量取出, 我要找出第三到最后一个路径:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>echo $PATH | cut -d ':' -f 3-
 /sbin:/usr/sbin:/usr/local/bin:/usr/X11R6/bin:/usr/games
-</pre></div>
-<p>将 PATH 变量取出, 我要找出第一到第三个路径:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH | cut -d ':' -f 1-3
+</pre>
+                </div>
+                <p>将 PATH 变量取出, 我要找出第一到第三个路径:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>echo $PATH | cut -d ':' -f 1-3
 /bin:/usr/bin:/sbin:
-</pre></div>
-<p>将 PATH 变量取出, 我要找出第一到第三, 还有第五个路径:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>echo $PATH | cut -d ':' -f 1-3,5
+</pre>
+                </div>
+                <p>将 PATH 变量取出, 我要找出第一到第三, 还有第五个路径:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>echo $PATH | cut -d ':' -f 1-3,5
 /bin:/usr/bin:/sbin:/usr/local/bin
-</pre></div>
-<h1 id="wc">wc</h1>
-<p>统计文件里面有多少单词, 多少行, 多少字符.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>wc [-lLwmc]
+</pre>
+                </div>
+                <h1 id="wc">wc</h1>
+                <p>统计文件里面有多少单词, 多少行, 多少字符.</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>wc [-lLwmc]
 选项与参数:
 -l  : 仅列出行;
 -L  : 最长行数;
 -w  : 仅列出多少字 (英文单字);
 -m  : 多少字符;
 -c  : 统计文件字节;
-</pre></div>
-<p>默认使用 wc 统计 <code>/etc/passwd</code></p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>wc /etc/passwd
+</pre>
+                </div>
+                <p>默认使用 wc 统计 <code>/etc/passwd</code></p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>wc /etc/passwd
 40   45 1719 /etc/passwd
-</pre></div>
-<p>40 是行数, 45 是单词数, 1719 是字节数.</p>
-<h1 id="sed">sed</h1>
-<p>sed 是一种在线编辑器, 它一次处理<strong>一行</strong>内容 (即以行为处理单位).</p>
-<p>sed 主要用来自动编辑一个或多个文件; 简化对文件的反复操作; 编写转换程序等.</p>
-<p>处理时, 把当前处理的行存储在临时缓冲区中, 称为 “模式空间” (pattern space), 接着用 sed 命令处理缓冲区中的内容, 处理完成后, 把缓冲区的内容送往屏幕, 接着处理下一行, 这样不断重复, 直到文件末尾.</p>
-<p>seb 默认不会改变源文件内容, 除非你使用重定向存储输出或者 <code>-i</code> 参数.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sed [-nefr] '[function]'
+</pre>
+                </div>
+                <p>40 是行数, 45 是单词数, 1719 是字节数.</p>
+                <h1 id="sed">sed</h1>
+                <p>
+                  sed 是一种在线编辑器, 它一次处理<strong>一行</strong>内容
+                  (即以行为处理单位).
+                </p>
+                <p>
+                  sed 主要用来自动编辑一个或多个文件; 简化对文件的反复操作;
+                  编写转换程序等.
+                </p>
+                <p>
+                  处理时, 把当前处理的行存储在临时缓冲区中, 称为 “模式空间”
+                  (pattern space), 接着用 sed 命令处理缓冲区中的内容,
+                  处理完成后, 把缓冲区的内容送往屏幕, 接着处理下一行,
+                  这样不断重复, 直到文件末尾.
+                </p>
+                <p>
+                  seb 默认不会改变源文件内容, 除非你使用重定向存储输出或者
+                  <code>-i</code> 参数.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sed [-nefr] '[function]'
 选项与参数:
 -n : 使用安静 (silent) 模式. 默认 seb 会打印所有内容, 安静模式下不打印默认输出 (经常与 p 指令一起用);
 -i : 直接修改读取的文件内容, 而不是输出到终端.
@@ -457,30 +683,52 @@ p : 指定只打印被修改后的行  (经常与 -n 参数一起用)
 q : 完成一个指令后就退出 seb 模式 (如只替换第一个找到的字符)
 g : 全局匹配
 , : 截取行
-</pre></div>
-<p>将 <code>/etc/passwd</code> 的内容列出并且打印行号, 同时, 请将第 2~5 行删除:</p>
-<blockquote>
-<p>nl 命令用来计算文件中行号</p>
-</blockquote>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed '2,5d'
+</pre>
+                </div>
+                <p>
+                  将 <code>/etc/passwd</code> 的内容列出并且打印行号, 同时,
+                  请将第 2~5 行删除:
+                </p>
+                <blockquote>
+                  <p>nl 命令用来计算文件中行号</p>
+                </blockquote>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed '2,5d'
 1 root:x:0:0:root:/root:/bin/bash
 6 sync:x:5:0:sync:/sbin:/bin/sync
 7 shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
 ......
-</pre></div>
-<p>要删除第 3 到最后一行:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed '3,$d'
-</pre></div>
-<p>在第二行后追加 “drink tea” 字样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed '2a drink tea'
+</pre>
+                </div>
+                <p>要删除第 3 到最后一行:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed '3,$d'
+</pre>
+                </div>
+                <p>在第二行后追加 “drink tea” 字样:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed '2a drink tea'
 1 root:x:0:0:root:/root:/bin/bash
 2 bin:x:1:1:bin:/bin:/sbin/nologin
 drink tea
 3 daemon:x:2:2:daemon:/sbin:/sbin/nologin
 .....
-</pre></div>
-<p>如果是要增加两行以上, 在第二行后面加入两行字, 例如 “Drink tea or ....” 与 “drink beer?”:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed '2a Drink tea or ......\
+</pre>
+                </div>
+                <p>
+                  如果是要增加两行以上, 在第二行后面加入两行字, 例如 “Drink tea
+                  or ....” 与 “drink beer?”:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed '2a Drink tea or ......\
 &gt; drink beer ?'
 1 root:x:0:0:root:/root:/bin/bash
 2 bin:x:1:1:bin:/bin:/sbin/nologin
@@ -488,61 +736,131 @@ Drink tea or ......
 drink beer?
 3 daemon:x:2:2:daemon:/sbin:/sbin/nologin
 .....
-</pre></div>
-<p>每一行之间都必须要以反斜杠 <code>\</code> 来进行新行的添加!</p>
-<p>将第 2-5 行的内容取代成为 “No 2-5 number”:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed '2,5c No 2-5 number'
+</pre>
+                </div>
+                <p>
+                  每一行之间都必须要以反斜杠 <code>\</code> 来进行新行的添加!
+                </p>
+                <p>将第 2-5 行的内容取代成为 “No 2-5 number”:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed '2,5c No 2-5 number'
 1 root:x:0:0:root:/root:/bin/bash
 No 2-5 number
 6 sync:x:5:0:sync:/sbin:/bin/sync
 .....
-</pre></div>
-<p>通过这个方法我们就能够将数据整行取代了!</p>
-<p>仅列出 /etc/passwd 文件内的第 5-7 行:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed -n '5,7p'
+</pre>
+                </div>
+                <p>通过这个方法我们就能够将数据整行取代了!</p>
+                <p>仅列出 /etc/passwd 文件内的第 5-7 行:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed -n '5,7p'
 5 lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
 6 sync:x:5:0:sync:/sbin:/bin/sync
 7 shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
-</pre></div>
-<p>搜索 <code>/etc/passwd</code> 有 root 关键字的行:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed -n '/root/p'
+</pre>
+                </div>
+                <p>搜索 <code>/etc/passwd</code> 有 root 关键字的行:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed -n '/root/p'
 1  root:x:0:0:root:/root:/bin/bash
 ....
-</pre></div>
-<p>删除 <code>/etc/passwd</code> 所有包含 root 的行, 其他行输出</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed  '/root/d'
+</pre>
+                </div>
+                <p>
+                  删除 <code>/etc/passwd</code> 所有包含 root 的行, 其他行输出
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed  '/root/d'
 2  daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 3  bin:x:2:2:bin:/bin:/bin/sh
 ....
 # 第一行的匹配 root 已经删除了
-</pre></div>
-<p>还可以对匹配的结果做进一步处理, 将动作用花括号包围就可以了, 多动作的话用分号分隔, 如搜索 <code>/etc/passwd</code>, 将有 root 的行中的 bash 替换为 blueshell:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed -n '/root/{s/bash/blueshell/;p}'
+</pre>
+                </div>
+                <p>
+                  还可以对匹配的结果做进一步处理, 将动作用花括号包围就可以了,
+                  多动作的话用分号分隔, 如搜索 <code>/etc/passwd</code>, 将有
+                  root 的行中的 bash 替换为 blueshell:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed -n '/root/{s/bash/blueshell/;p}'
 1  root:x:0:0:root:/root:/bin/blueshell
-</pre></div>
-<p>如果只替换第一个 bash 关键字为 blueshell, 就退出:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed -n '/bash/{s/bash/blueshell/;p;q}'
+</pre>
+                </div>
+                <p>如果只替换第一个 bash 关键字为 blueshell, 就退出:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed -n '/bash/{s/bash/blueshell/;p;q}'
 1  root:x:0:0:root:/root:/bin/blueshell
-</pre></div>
-<p>s 指令还可以对匹配到的字符串进行替换, s 紧跟的那个字符为分割符, 以下示例用 <code>/</code> 分割:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sed 's/aaa/bbb/g' 将所有的 aaa 替换成 bbb, 如果不加 g, 只替换每行找到的第一个 aaa
+</pre>
+                </div>
+                <p>
+                  s 指令还可以对匹配到的字符串进行替换, s
+                  紧跟的那个字符为分割符, 以下示例用 <code>/</code> 分割:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sed 's/aaa/bbb/g' 将所有的 aaa 替换成 bbb, 如果不加 g, 只替换每行找到的第一个 aaa
 sed 's/aaa/&amp;bbb/' &amp; 表示用找到的字符追加 bbb, 这里就变成了 aaabbb
 sed 's#\(love\)able#\1rs', 替换一部分, 括号里的 love 保留并标识为 1, 所以这里 loveable -&gt; 1rs -&gt; lovers
-</pre></div>
-<p>s 指令支持正则表达式.</p>
-<p>通过 <code>-e</code> 参数可以将多行 sed 命令连写, 如删除 <code>/etc/passwd</code> 第三行到末尾的数据, 然后把 bash 替换为 blueshell:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>nl /etc/passwd | sed -e '3,$d' -e 's/bash/blueshell/'
+</pre>
+                </div>
+                <p>s 指令支持正则表达式.</p>
+                <p>
+                  通过 <code>-e</code> 参数可以将多行 sed 命令连写, 如删除
+                  <code>/etc/passwd</code> 第三行到末尾的数据, 然后把 bash
+                  替换为 blueshell:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>nl /etc/passwd | sed -e '3,$d' -e 's/bash/blueshell/'
 1  root:x:0:0:root:/root:/bin/blueshell
 2  daemon:x:1:1:daemon:/usr/sbin:/bin/sh
-</pre></div>
-<h1 id="awk">awk</h1>
-<p>awk 是一个强大的文本分析工具, 相对于 grep 的查找, sed 的编辑, awk 在其对数据分析并生成报告时, 显得尤为强大.</p>
-<p>简单来说 awk 就是把文件<strong>逐行</strong>的读入, 以<strong>空格</strong>为默认分隔符将每行切片, 切开的部分再进行各种分析处理.</p>
-<p>awk 的强大以至于它甚至形成了自己的语言体系, 即 AWK 编程, 它允许您创建简短的程序, 这些程序读取输入文件、为数据排序、处理数据、对输入执行计算以及生成报表, 还有无数其他的功能. , 但对于我来说, 了解它的基础用法就足够了, 更高级的功能我更喜欢用 Python 来完成.</p>
-<p>awk 语言的最基本功能是在文件或者字符串中基于指定规则浏览和抽取信息, awk 抽取信息后, 才能进行其他文本操作.</p>
-<p>完整的 awk 脚本通常用来格式化文本文件中的信息, 通常, awk 是以文件的一行为处理单位的. awk 每接收文件的一行, 然后执行相应的命令, 来处理文本.</p>
-<p>调用 awk 的三种方式:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>1. 命令行方式
+</pre>
+                </div>
+                <h1 id="awk">awk</h1>
+                <p>
+                  awk 是一个强大的文本分析工具, 相对于 grep 的查找, sed 的编辑,
+                  awk 在其对数据分析并生成报告时, 显得尤为强大.
+                </p>
+                <p>
+                  简单来说 awk 就是把文件<strong>逐行</strong>的读入,
+                  以<strong>空格</strong>为默认分隔符将每行切片,
+                  切开的部分再进行各种分析处理.
+                </p>
+                <p>
+                  awk 的强大以至于它甚至形成了自己的语言体系, 即 AWK 编程,
+                  它允许您创建简短的程序,
+                  这些程序读取输入文件、为数据排序、处理数据、对输入执行计算以及生成报表,
+                  还有无数其他的功能. , 但对于我来说, 了解它的基础用法就足够了,
+                  更高级的功能我更喜欢用 Python 来完成.
+                </p>
+                <p>
+                  awk
+                  语言的最基本功能是在文件或者字符串中基于指定规则浏览和抽取信息,
+                  awk 抽取信息后, 才能进行其他文本操作.
+                </p>
+                <p>
+                  完整的 awk 脚本通常用来格式化文本文件中的信息, 通常, awk
+                  是以文件的一行为处理单位的. awk 每接收文件的一行,
+                  然后执行相应的命令, 来处理文本.
+                </p>
+                <p>调用 awk 的三种方式:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>1. 命令行方式
 awk [-F  field-separator]  'commands'  input-file(s)
 其中, commands 是真正 awk 命令, 通过包含两部分内容: 'pattern {action}'
 pattern : 要查找的内容 (支持正则, 不指定 pattern, 则对所有行进行 action)
@@ -558,35 +876,63 @@ action : 对匹配内容所执行的操作 (不指定 action 则默认输出每�
 3. 将所有的 awk 命令插入一个单独文件, 然后调用:
 awk -f awk-script-file input-file(s)
 其中, -f 选项加载 awk-script-file 中的 awk 脚本, input-file(s) 跟上面的是一样的.
-</pre></div>
-<p>这里着重介绍命令行方式.</p>
-<p>假设 <code>last -n 5</code> 的输出如下:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>last -n 5
+</pre>
+                </div>
+                <p>这里着重介绍命令行方式.</p>
+                <p>假设 <code>last -n 5</code> 的输出如下:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>last -n 5
 root     pts/1   192.168.1.100  Tue Feb 10 11:21   still logged in
 root     pts/1   192.168.1.100  Tue Feb 10 00:46 - 02:28  (01:41)
 root     pts/1   192.168.1.100  Mon Feb  9 11:41 - 18:30  (06:48)
 dmtsai   pts/1   192.168.1.100  Mon Feb  9 11:41 - 11:41  (00:00)
 root     tty1                   Fri Sep  5 14:09 - 14:10  (00:01)
-</pre></div>
-<p>如果只是显示最近登录的 5 个帐号的名称:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>last -n 5 | awk  '{print $1}'
+</pre>
+                </div>
+                <p>如果只是显示最近登录的 5 个帐号的名称:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>last -n 5 | awk  '{print $1}'
 root
 root
 root
 dmtsai
 root
-</pre></div>
-<p>awk 工作流程是这样的:</p>
-<p>读入有 ‘\n’ 换行符分割的一条记录, 然后将记录按指定的域分隔符划分域, 填充域, <code>$0</code> 则表示所有域, <code>$1</code> 表示第一个域, <code>$n</code> 表示第 n 个域. 默认域分隔符是 “空白键” 或 “[tab]键”, 所以 <code>$1</code> 表示登录用户, <code>$3</code> 表示登录用户ip, 以此类推.</p>
-<p>下面的操作只显示 <code>/etc/passwd</code> 的账户和账户对应的 shell, 而账户与 shell 之间以 tab 键分割:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd |awk  -F ':'  '{print $1"\t"$7}'
+</pre>
+                </div>
+                <p>awk 工作流程是这样的:</p>
+                <p>
+                  读入有 ‘\n’ 换行符分割的一条记录,
+                  然后将记录按指定的域分隔符划分域, 填充域,
+                  <code>$0</code> 则表示所有域, <code>$1</code> 表示第一个域,
+                  <code>$n</code> 表示第 n 个域. 默认域分隔符是 “空白键” 或
+                  “[tab]键”, 所以 <code>$1</code> 表示登录用户,
+                  <code>$3</code> 表示登录用户ip, 以此类推.
+                </p>
+                <p>
+                  下面的操作只显示 <code>/etc/passwd</code> 的账户和账户对应的
+                  shell, 而账户与 shell 之间以 tab 键分割:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd |awk  -F ':'  '{print $1"\t"$7}'
 root    /bin/bash
 daemon  /bin/sh
 bin     /bin/sh
 sys     /bin/sh
-</pre></div>
-<p>下面的操作显示 <code>/etc/passwd</code> 的账户和账户对应的 shell, 而账户与 shell 之间以逗号分割, 而且在所有行添加列名 “name, shell”, 在最后一行添加 “blue, /bin/nosh”.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>cat /etc/passwd |awk  -F ':'  'BEGIN {print "name,shell"}  {print $1","$7} END {print "blue,/bin/nosh"}'
+</pre>
+                </div>
+                <p>
+                  下面的操作显示 <code>/etc/passwd</code> 的账户和账户对应的
+                  shell, 而账户与 shell 之间以逗号分割, 而且在所有行添加列名
+                  “name, shell”, 在最后一行添加 “blue, /bin/nosh”.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>cat /etc/passwd |awk  -F ':'  'BEGIN {print "name,shell"}  {print $1","$7} END {print "blue,/bin/nosh"}'
 name,shell
 root,/bin/bash
 daemon,/bin/sh
@@ -594,117 +940,174 @@ bin,/bin/sh
 sys,/bin/sh
 ....
 blue,/bin/nosh
-</pre></div>
-<p>awk 工作流程是这样的: 先执行 BEGING, 然后处理文件, 最后执行 END 操作.</p>
-<p>搜索 <code>/etc/passwd</code> 有 root 关键字的所有行:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>awk -F ':' '/root/' /etc/passwd
+</pre>
+                </div>
+                <p>
+                  awk 工作流程是这样的: 先执行 BEGING, 然后处理文件, 最后执行
+                  END 操作.
+                </p>
+                <p>搜索 <code>/etc/passwd</code> 有 root 关键字的所有行:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>awk -F ':' '/root/' /etc/passwd
 root:x:0:0:root:/root:/bin/bash
-</pre></div>
-<p>搜索 <code>/etc/passwd</code> 有 root 关键字的所有行, 并显示对应的 shell:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>awk -F ':' '/root/{print $7}' /etc/passwd
+</pre>
+                </div>
+                <p>
+                  搜索 <code>/etc/passwd</code> 有 root 关键字的所有行,
+                  并显示对应的 shell:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>awk -F ':' '/root/{print $7}' /etc/passwd
 /bin/bash
-</pre></div>
-<p>awk 有许多内置变量用来设置环境信息, 这些变量可以被改变, 下面给出了最常用的一些变量.</p>
-<ul>
-<li><code>ARGC</code>
-    + 命令行参数个数</li>
-<li><code>ARGV</code>
-    + 命令行参数排列</li>
-<li><code>ENVIRON</code>
-    + 支持队列中系统环境变量的使用</li>
-<li><code>FILENAME</code>
-    + awk 浏览的文件名</li>
-<li><code>FNR</code>
-    + 浏览文件的记录数</li>
-<li><code>FS</code>
-    + 设置输入域分隔符, 等价于命令行 -F选项</li>
-<li><code>NF</code>
-    + 浏览记录的域的个数</li>
-<li><code>NR</code>
-    + 已读的记录数</li>
-<li><code>OFS</code>
-    + 输出域分隔符</li>
-<li><code>ORS</code>
-    + 输出记录分隔符</li>
-<li><code>RS</code>
-    + 控制记录分隔符</li>
-<li><code>$0~n</code>
-    + 域选择器</li>
-</ul>
-<p>统计 <code>/etc/passwd</code> 文件名, 每行的行号, 每行的列数, 对应的完整行内容:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>awk  -F ':'  '{print "filename:" FILENAME ", linenumber:" NR ", columns:" NF ", linecontent:"$0}' /etc/passwd
+</pre>
+                </div>
+                <p>
+                  awk 有许多内置变量用来设置环境信息, 这些变量可以被改变,
+                  下面给出了最常用的一些变量.
+                </p>
+                <ul>
+                  <li><code>ARGC</code> + 命令行参数个数</li>
+                  <li><code>ARGV</code> + 命令行参数排列</li>
+                  <li><code>ENVIRON</code> + 支持队列中系统环境变量的使用</li>
+                  <li><code>FILENAME</code> + awk 浏览的文件名</li>
+                  <li><code>FNR</code> + 浏览文件的记录数</li>
+                  <li>
+                    <code>FS</code> + 设置输入域分隔符, 等价于命令行 -F选项
+                  </li>
+                  <li><code>NF</code> + 浏览记录的域的个数</li>
+                  <li><code>NR</code> + 已读的记录数</li>
+                  <li><code>OFS</code> + 输出域分隔符</li>
+                  <li><code>ORS</code> + 输出记录分隔符</li>
+                  <li><code>RS</code> + 控制记录分隔符</li>
+                  <li><code>$0~n</code> + 域选择器</li>
+                </ul>
+                <p>
+                  统计 <code>/etc/passwd</code> 文件名, 每行的行号, 每行的列数,
+                  对应的完整行内容:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>awk  -F ':'  '{print "filename:" FILENAME ", linenumber:" NR ", columns:" NF ", linecontent:"$0}' /etc/passwd
 filename:/etc/passwd,linenumber:1,columns:7,linecontent:root:x:0:0:root:/root:/bin/bash
 filename:/etc/passwd,linenumber:2,columns:7,linecontent:daemon:x:1:1:daemon:/usr/sbin:/bin/sh
 filename:/etc/passwd,linenumber:3,columns:7,linecontent:bin:x:2:2:bin:/bin:/bin/sh
 filename:/etc/passwd,linenumber:4,columns:7,linecontent:sys:x:3:3:sys:/dev:/bin/sh
-</pre></div>
-<p>使用 printf 替代 print, 可以让代码更加简洁, 易读:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>awk  -F ':'  '{printf("filename:%10s, linenumber:%s, columns:%s, linecontent:%s\n",FILENAME, NR, NF, $0)}' /etc/passwd
-</pre></div>
-<p>printf 函数, 其用法和 c 语言中 printf 基本相似, 可以格式化字符串, 输出复杂时, printf 更加好用, 代码更易懂.</p>
-    </div>
+</pre>
+                </div>
+                <p>使用 printf 替代 print, 可以让代码更加简洁, 易读:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>awk  -F ':'  '{printf("filename:%10s, linenumber:%s, columns:%s, linecontent:%s\n",FILENAME, NR, NF, $0)}' /etc/passwd
+</pre>
+                </div>
+                <p>
+                  printf 函数, 其用法和 c 语言中 printf 基本相似,
+                  可以格式化字符串, 输出复杂时, printf 更加好用, 代码更易懂.
+                </p>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u8f6f\u4ef6\u5de5\u7a0b",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-10-26T11:19:00+08:00",
+              "headline": "Shell \u547d\u4ee4",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/shell-ming-ling.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "\u57fa\u7840\u4f7f\u7528 \u6267\u884c\u65b9\u5f0f \u65b9\u5f0f\u4e00: + \u9700\u5728\u811a\u672c\u5f00\u5934\u6307\u5b9a\u89e3\u91ca\u5668: #!/bin/bash + \u7ed9\u811a\u672c +x \u6743\u9650, + \u8f93\u5165\u811a\u672c\u7edd\u5bf9\u8def\u5f84\u6216\u76f8\u5bf9\u8def\u5f84: * /root/test.sh * ./test.sh + \u6216\u8005\u5728\u8def\u5f84\u524d\u518d\u52a0\u4e2a\u70b9 * . ./test.sh + \u533a\u522b\u5728\u4e8e\u524d\u9762\u7684\u4f1a\u65b0\u5f00\u4e00\u4e2a bash (\u4e0d\u53ef\u89c1), \u4e5f\u5c31\u662f\u5728\u5f53\u524d bash \u53d8\u91cf\u4e0d\u5171\u4eab, \u52a0\u4e2a . \u8868\u793a\u5728\u5f53\u524d\u811a\u672c\u6267\u884c\u811a\u672c \u65b9\u5f0f\u4e8c: \u7528\u6307\u5b9a\u89e3\u91ca\u5668\u6267\u884c sh test \u2026"
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-10-26T11:19:00+08:00", "headline": "Shell \u547d\u4ee4", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/shell-ming-ling.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u57fa\u7840\u4f7f\u7528 \u6267\u884c\u65b9\u5f0f \u65b9\u5f0f\u4e00: + \u9700\u5728\u811a\u672c\u5f00\u5934\u6307\u5b9a\u89e3\u91ca\u5668: #!/bin/bash + \u7ed9\u811a\u672c +x \u6743\u9650, + \u8f93\u5165\u811a\u672c\u7edd\u5bf9\u8def\u5f84\u6216\u76f8\u5bf9\u8def\u5f84: * /root/test.sh * ./test.sh + \u6216\u8005\u5728\u8def\u5f84\u524d\u518d\u52a0\u4e2a\u70b9 * . ./test.sh + \u533a\u522b\u5728\u4e8e\u524d\u9762\u7684\u4f1a\u65b0\u5f00\u4e00\u4e2a bash (\u4e0d\u53ef\u89c1), \u4e5f\u5c31\u662f\u5728\u5f53\u524d bash \u53d8\u91cf\u4e0d\u5171\u4eab, \u52a0\u4e2a . \u8868\u793a\u5728\u5f53\u524d\u811a\u672c\u6267\u884c\u811a\u672c \u65b9\u5f0f\u4e8c: \u7528\u6307\u5b9a\u89e3\u91ca\u5668\u6267\u884c sh test \u2026"}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

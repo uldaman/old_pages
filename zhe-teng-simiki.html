@@ -1,121 +1,203 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>折腾 Simiki</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - 折腾 Simiki" />
+    <meta
+      property="og:description"
+      content="DIY 主题 Simiki 自带的主题稍微有点 low, 可以使用官网推荐的另一款主题: yasimple, Clone 到本地后替换掉 ~/themes/simple 下的文件; 这些主题都没有网站图标, 所以要再 DIY 一下, 先准备好网站图标, 如 favicon.ico, 放到 ~/themes/simple/static/images 目录下 (没有 images..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/zhe-teng-simiki.html"
+    />
+    <meta property="og:image" content="http://i63.tinypic.com/fdd182.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-05-28T19:18:00+08:00"
+    />
+    <meta property="article:section" content="工具折腾" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>折腾 Simiki</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - 折腾 Simiki">
-  <meta property="og:description" content="DIY 主题 Simiki 自带的主题稍微有点 low, 可以使用官网推荐的另一款主题: yasimple, Clone 到本地后替换掉 ~/themes/simple 下的文件; 这些主题都没有网站图标, 所以要再 DIY 一下, 先准备好网站图标, 如 favicon.ico, 放到 ~/themes/simple/static/images 目录下 (没有 images...">
-<meta property="og:url" content="http://www.smallcpp.cn/zhe-teng-simiki.html">
-    <meta property="og:image" content="http://i63.tinypic.com/fdd182.jpg">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-05-28T19:18:00+08:00">
-  <meta property="article:section" content="工具折腾">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/zhe-teng-simiki.html" rel="bookmark"
-        title="Permalink to 折腾 Simiki">折腾 Simiki</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-05-28T19:18:00+08:00">
-    Published <span class="is-info">Sat 28 May 2016</span>
-    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#diy">DIY 主题</a></li>
-<li><a href="#diy_1">DIY 评论</a></li>
-<li><a href="#diy_2">DIY 部署</a></li>
-<li><a href="#_1">注意事项</a></li>
-<li><a href="#_2">补充</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="diy">DIY 主题</h1>
-<p>Simiki 自带的主题稍微有点 low, 可以使用官网推荐的另一款主题: <a href="https://github.com/tankywoo/yasimple/tree/ce4af036ab95ef1d5235266d8231f97dc14dd871">yasimple</a>, Clone 到本地后替换掉 <code>~/themes/simple</code> 下的文件;</p>
-<p>这些主题都没有网站图标, 所以要再 DIY 一下, 先准备好网站图标, 如 <code>favicon.ico</code>, 放到 <code>~/themes/simple/static/images</code> 目录下 (没有 <code>images</code> 目录就新建一个), 然后打开 <code>~/themes/simple/base.html</code>, 在 <strong>head</strong> 标签中添加如下内容:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>&lt;<span style="color: #8B008B; font-weight: bold">link</span> <span style="color: #658b00">rel</span>=<span style="color: #CD5555">"shortcut icon"</span> <span style="color: #658b00">href</span>=<span style="color: #CD5555">"{{ site.root }}/static/images/favicon.ico"</span> <span style="color: #658b00">type</span>=<span style="color: #CD5555">"image/x-icon"</span>&gt;
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/zhe-teng-simiki.html"
+                  rel="bookmark"
+                  title="Permalink to 折腾 Simiki"
+                  >折腾 Simiki</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-05-28T19:18:00+08:00">
+                  Published <span class="is-info">Sat 28 May 2016</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    >工具折腾</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li><a href="#diy">DIY 主题</a></li>
+                    <li><a href="#diy_1">DIY 评论</a></li>
+                    <li><a href="#diy_2">DIY 部署</a></li>
+                    <li><a href="#_1">注意事项</a></li>
+                    <li><a href="#_2">补充</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="diy">DIY 主题</h1>
+                <p>
+                  Simiki 自带的主题稍微有点 low, 可以使用官网推荐的另一款主题:
+                  <a
+                    href="https://github.com/tankywoo/yasimple/tree/ce4af036ab95ef1d5235266d8231f97dc14dd871"
+                    >yasimple</a
+                  >, Clone 到本地后替换掉 <code>~/themes/simple</code> 下的文件;
+                </p>
+                <p>
+                  这些主题都没有网站图标, 所以要再 DIY 一下, 先准备好网站图标,
+                  如 <code>favicon.ico</code>, 放到
+                  <code>~/themes/simple/static/images</code> 目录下 (没有
+                  <code>images</code> 目录就新建一个), 然后打开
+                  <code>~/themes/simple/base.html</code>, 在
+                  <strong>head</strong> 标签中添加如下内容:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>&lt;<span style="color: #8B008B; font-weight: bold">link</span> <span style="color: #658b00">rel</span>=<span style="color: #CD5555">"shortcut icon"</span> <span style="color: #658b00">href</span>=<span style="color: #CD5555">"{{ site.root }}/static/images/favicon.ico"</span> <span style="color: #658b00">type</span>=<span style="color: #CD5555">"image/x-icon"</span>&gt;
 &lt;<span style="color: #8B008B; font-weight: bold">link</span> <span style="color: #658b00">rel</span>=<span style="color: #CD5555">"icon"</span> <span style="color: #658b00">href</span>=<span style="color: #CD5555">"{{ site.root }}/static/images/favicon.ico"</span> <span style="color: #658b00">type</span>=<span style="color: #CD5555">"image/x-icon"</span>&gt;
-</pre></div>
-<h1 id="diy_1">DIY 评论</h1>
-<p>我用的是<a href="http://duoshuo.com/">多说评论系统</a> (来必力也是一个不错的评论系统, 可以去试试), 首先去<a href="http://duoshuo.com/">多说官网</a>注册一个账号, 然后为我们的 wiki 添加一个站点.</p>
-<p><img alt="" src="http://i63.tinypic.com/fdd182.jpg"/></p>
-<p>添加好后, 在管理页面会看到如下信息:</p>
-<p><img alt="" src="http://i67.tinypic.com/2cg2dxy.jpg"/></p>
-<p>打开 Simiki 主题目录下的 <code>page.html</code> 文件, 在 <code>{% endblock %}</code> 上面添加上图中的代码, 我这里改成了:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>{% extends "base.html" %}
+</pre>
+                </div>
+                <h1 id="diy_1">DIY 评论</h1>
+                <p>
+                  我用的是<a href="http://duoshuo.com/">多说评论系统</a>
+                  (来必力也是一个不错的评论系统, 可以去试试), 首先去<a
+                    href="http://duoshuo.com/"
+                    >多说官网</a
+                  >注册一个账号, 然后为我们的 wiki 添加一个站点.
+                </p>
+                <p><img alt="" src="http://i63.tinypic.com/fdd182.jpg" /></p>
+                <p>添加好后, 在管理页面会看到如下信息:</p>
+                <p><img alt="" src="http://i67.tinypic.com/2cg2dxy.jpg" /></p>
+                <p>
+                  打开 Simiki 主题目录下的 <code>page.html</code> 文件, 在
+                  <code>{% endblock %}</code> 上面添加上图中的代码,
+                  我这里改成了:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>{% extends "base.html" %}
 
 {% block title %}{{ page.title }} - {{ site.title }}{% endblock %}
 
@@ -150,24 +232,59 @@
     <span style="color: #228B22">&lt;!-- 多说公共JS代码 end --&gt;</span>
 
 {% endblock %}
-</pre></div>
-<h1 id="diy_2">DIY 部署</h1>
-<p>我使用的是 Github Project Page, 所以可以把 <strong>output</strong> 目录加入 <strong>.gitignore</strong> 来忽略每次生成时的变化.</p>
-<ul>
-<li><strong>master</strong> 分支托管源文件</li>
-<li><strong>gh-pages</strong> 分支放 <strong>output</strong> 的发布文件</li>
-</ul>
-<blockquote>
-<p>注意, 第一次使用时要先 <strong>push</strong> 一次 <strong>master</strong> 分支</p>
-</blockquote>
-<p>推送 <strong>gh-pages</strong> 分支这一步可以使用 <a href="https://github.com/davisp/ghp-import">ghp-import</a> 来简化操作, <strong>ghp-import</strong> 是一个 python 工具包, 能把一个文件夹里的内容推送到一个 branch 里, 不过 ghp-import 在 windows 下各种坑, 所以 windows 下就别想了…</p>
-<p>官方给出了自动化部署的 <code>fabfile.py</code> 文件 (依赖于 <strong>gh-pages</strong>, windows 下勿使用), 只需在 <code>_config.yml</code> 中添加如下内容:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>deploy:
+</pre>
+                </div>
+                <h1 id="diy_2">DIY 部署</h1>
+                <p>
+                  我使用的是 Github Project Page, 所以可以把
+                  <strong>output</strong> 目录加入
+                  <strong>.gitignore</strong> 来忽略每次生成时的变化.
+                </p>
+                <ul>
+                  <li><strong>master</strong> 分支托管源文件</li>
+                  <li>
+                    <strong>gh-pages</strong> 分支放
+                    <strong>output</strong> 的发布文件
+                  </li>
+                </ul>
+                <blockquote>
+                  <p>
+                    注意, 第一次使用时要先 <strong>push</strong> 一次
+                    <strong>master</strong> 分支
+                  </p>
+                </blockquote>
+                <p>
+                  推送 <strong>gh-pages</strong> 分支这一步可以使用
+                  <a href="https://github.com/davisp/ghp-import">ghp-import</a>
+                  来简化操作, <strong>ghp-import</strong> 是一个 python 工具包,
+                  能把一个文件夹里的内容推送到一个 branch 里, 不过 ghp-import 在
+                  windows 下各种坑, 所以 windows 下就别想了…
+                </p>
+                <p>
+                  官方给出了自动化部署的 <code>fabfile.py</code> 文件 (依赖于
+                  <strong>gh-pages</strong>, windows 下勿使用), 只需在
+                  <code>_config.yml</code> 中添加如下内容:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>deploy:
   - type: git
-</pre></div>
-<p>然后使用 <code>fab deploy</code> 就能自动把 <strong>output</strong> 目录推送到远程 <strong>gh-pages</strong> 分支.</p>
-<p>最后, 由于 Github Project Page 需要用到一个 <code>CNAME</code> 文件, 所以我修改了官方 <code>fabfile.py</code> 文件的 <code>deploy_git</code> 函数, 让部署时自动生成 <code>CNAME</code> 文件:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">deploy_git</span>(deploy_configs):
+</pre>
+                </div>
+                <p>
+                  然后使用 <code>fab deploy</code> 就能自动把
+                  <strong>output</strong> 目录推送到远程
+                  <strong>gh-pages</strong> 分支.
+                </p>
+                <p>
+                  最后, 由于 Github Project Page 需要用到一个
+                  <code>CNAME</code> 文件, 所以我修改了官方
+                  <code>fabfile.py</code> 文件的 <code>deploy_git</code> 函数,
+                  让部署时自动生成 <code>CNAME</code> 文件:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">def</span> <span style="color: #008b45">deploy_git</span>(deploy_configs):
     <span style="color: #CD5555">'''for pages service of such as github/gitcafe ...'''</span>
     <span style="color: #8B008B; font-weight: bold">with</span> settings(warn_only=<span style="color: #8B008B; font-weight: bold">True</span>):
         res = local(<span style="color: #CD5555">'which ghp-import &gt; /dev/null 2&gt;&amp;1; echo $?'</span>, capture=<span style="color: #8B008B; font-weight: bold">True</span>)
@@ -176,88 +293,142 @@
                     <span style="color: #CD5555">'run: `pip install ghp-import`'</span>)
     output_dir = configs[<span style="color: #CD5555">'destination'</span>]
     <span style="color: #8B008B; font-weight: bold">with</span> lcd(output_dir):  <span style="color: #228B22"># 添加 CNAME 文件</span>
-        local(<span style="color: #CD5555">'echo wiki.smallcpp.cn &gt; CNAME'</span>)
+        local(<span style="color: #CD5555">'echo wiki.smallcpp.com &gt; CNAME'</span>)
     remote = deploy_configs.get(<span style="color: #CD5555">'remote'</span>, <span style="color: #CD5555">'origin'</span>)
     branch = deploy_configs.get(<span style="color: #CD5555">'branch'</span>, <span style="color: #CD5555">'gh-pages'</span>)
     <span style="color: #228B22"># commit gh-pages branch and push to remote</span>
     _mesg = <span style="color: #CD5555">'Update output documentation'</span>
     local(<span style="color: #CD5555">'ghp-import -p -m "{0}" -r {1} -b {2} {3}'</span>
           .format(_mesg, remote, branch, output_dir))
-</pre></div>
-<h1 id="_1">注意事项</h1>
-<p>后期使用时发现一些问题要注意下:</p>
-<ul>
-<li>文件要以 <code>md</code> 后缀, 不能以 <code>markdown</code> 后缀</li>
-<li>文件头信息字段冒号后要空一格: <code>title: 标题</code></li>
-<li>文件头信息特殊字符不能放在起始位置:
-    + <code>title: [折腾] Simiki</code> =&gt; 错误
-    + <code>title: Simiki [折腾]</code> =&gt; 正确</li>
-</ul>
-<h1 id="_2">补充</h1>
-<p>推荐使用 <a href="http://www.smallcpp.cn/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E6%8A%98%E8%85%BE%20Travis%20CI.html">Travis-ci</a> 自动化部署 Simiki 项目.</p>
-    </div>
+</pre>
+                </div>
+                <h1 id="_1">注意事项</h1>
+                <p>后期使用时发现一些问题要注意下:</p>
+                <ul>
+                  <li>
+                    文件要以 <code>md</code> 后缀, 不能以
+                    <code>markdown</code> 后缀
+                  </li>
+                  <li>
+                    文件头信息字段冒号后要空一格: <code>title: 标题</code>
+                  </li>
+                  <li>
+                    文件头信息特殊字符不能放在起始位置: +
+                    <code>title: [折腾] Simiki</code> =&gt; 错误 +
+                    <code>title: Simiki [折腾]</code> =&gt; 正确
+                  </li>
+                </ul>
+                <h1 id="_2">补充</h1>
+                <p>
+                  推荐使用
+                  <a
+                    href="http://www.smallcpp.com/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E6%8A%98%E8%85%BE%20Travis%20CI.html"
+                    >Travis-ci</a
+                  >
+                  自动化部署 Simiki 项目.
+                </p>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u5de5\u5177\u6298\u817e",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-05-28T19:18:00+08:00",
+              "headline": "\u6298\u817e Simiki",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/zhe-teng-simiki.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "DIY \u4e3b\u9898 Simiki \u81ea\u5e26\u7684\u4e3b\u9898\u7a0d\u5fae\u6709\u70b9 low, \u53ef\u4ee5\u4f7f\u7528\u5b98\u7f51\u63a8\u8350\u7684\u53e6\u4e00\u6b3e\u4e3b\u9898: yasimple, Clone \u5230\u672c\u5730\u540e\u66ff\u6362\u6389 ~/themes/simple \u4e0b\u7684\u6587\u4ef6; \u8fd9\u4e9b\u4e3b\u9898\u90fd\u6ca1\u6709\u7f51\u7ad9\u56fe\u6807, \u6240\u4ee5\u8981\u518d DIY \u4e00\u4e0b, \u5148\u51c6\u5907\u597d\u7f51\u7ad9\u56fe\u6807, \u5982 favicon.ico, \u653e\u5230 ~/themes/simple/static/images \u76ee\u5f55\u4e0b (\u6ca1\u6709 images \u76ee\u5f55\u5c31\u65b0\u5efa\u4e00\u4e2a), \u7136\u540e\u6253\u5f00 \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://i63.tinypic.com/fdd182.jpg"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-05-28T19:18:00+08:00", "headline": "\u6298\u817e Simiki", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/zhe-teng-simiki.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "DIY \u4e3b\u9898 Simiki \u81ea\u5e26\u7684\u4e3b\u9898\u7a0d\u5fae\u6709\u70b9 low, \u53ef\u4ee5\u4f7f\u7528\u5b98\u7f51\u63a8\u8350\u7684\u53e6\u4e00\u6b3e\u4e3b\u9898: yasimple, Clone \u5230\u672c\u5730\u540e\u66ff\u6362\u6389 ~/themes/simple \u4e0b\u7684\u6587\u4ef6; \u8fd9\u4e9b\u4e3b\u9898\u90fd\u6ca1\u6709\u7f51\u7ad9\u56fe\u6807, \u6240\u4ee5\u8981\u518d DIY \u4e00\u4e0b, \u5148\u51c6\u5907\u597d\u7f51\u7ad9\u56fe\u6807, \u5982 favicon.ico, \u653e\u5230 ~/themes/simple/static/images \u76ee\u5f55\u4e0b (\u6ca1\u6709 images \u76ee\u5f55\u5c31\u65b0\u5efa\u4e00\u4e2a), \u7136\u540e\u6253\u5f00 \u2026", "image": {"@type": "ImageObject", "url": "http://i63.tinypic.com/fdd182.jpg"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

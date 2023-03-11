@@ -1,191 +1,331 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>JDBC 为什么用 Class.forName 加载驱动</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta
+      property="og:title"
+      content="Small Cpp - JDBC 为什么用 Class.forName 加载驱动"
+    />
+    <meta property="og:description" content="JDBC 中注册驱动为什么使用
+    Class.forName("com.mysql.jdbc.Driver") 而不使用 new com.mysql.jdbc.Driver()?
+    其原因有二. 原因一 new 一个类需要 import 它的包,
+    而各大数据库提供的驱动不一样, 使用 new 的方式就十分依赖 import 驱动的 jar
+    包, 这样一旦换了数据库驱动, 还要修改 …">
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html"
+    />
+    <meta property="og:image" content="http://i67.tinypic.com/10fw3no.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-08-02T16:55:00+08:00"
+    />
+    <meta property="article:section" content="软件工程" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>JDBC 为什么用 Class.forName 加载驱动</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - JDBC 为什么用 Class.forName 加载驱动">
-  <meta property="og:description" content="JDBC 中注册驱动为什么使用 Class.forName("com.mysql.jdbc.Driver") 而不使用 new com.mysql.jdbc.Driver()? 其原因有二. 原因一 new 一个类需要 import 它的包, 而各大数据库提供的驱动不一样, 使用 new 的方式就十分依赖 import 驱动的 jar 包, 这样一旦换了数据库驱动, 还要修改 …">
-<meta property="og:url" content="http://www.smallcpp.cn/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html">
-    <meta property="og:image" content="http://i67.tinypic.com/10fw3no.jpg">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-08-02T16:55:00+08:00">
-  <meta property="article:section" content="软件工程">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <nav class="navbar has-shadow is-hidden-print">
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html"
+                  rel="bookmark"
+                  title="Permalink to JDBC 为什么用 Class.forName 加载驱动"
+                  >JDBC 为什么用 Class.forName 加载驱动</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-08-02T16:55:00+08:00">
+                  Published <span class="is-info">Tue 02 August 2016</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+                    >软件工程</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li><a href="#_1">原因一</a></li>
+                    <li><a href="#_2">原因二</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <p>
+                  JDBC 中注册驱动为什么使用
+                  <code>Class.forName("com.mysql.jdbc.Driver")</code> 而不使用
+                  <code>new com.mysql.jdbc.Driver()</code>?
+                </p>
+                <p>其原因有二.</p>
+                <h3 id="_1">原因一</h3>
+                <p>
+                  <code>new</code> 一个类需要 <code>import</code> 它的包,
+                  而各大数据库提供的驱动不一样, 使用
+                  <code>new</code> 的方式就十分依赖 <code>import</code> 驱动的
+                  jar 包, 这样一旦换了数据库驱动, 还要修改
+                  <code>import</code> 语句, 而使用
+                  <code>Class.forName("com.mysql.jdbc.Driver")</code> 的话,
+                  可以把 “com.mysql.jdbc.Driver” 写入配置文件,
+                  这样换数据库驱动的话, 只要修改配置文件就行了.
+                </p>
+                <h3 id="_2">原因二</h3>
+                <p>
+                  首先, JDBC
+                  规范要求各厂商必须在<strong>静态代码块</strong>中将自己
+                  (Driver) 使用
+                  <code>DriverManager.registerDriver</code> 方法注册到
+                  <code>DriverManager</code> 中去, 最终使用
+                  <code>DriverManager</code> 来操作数据库, 如下图.
+                </p>
+                <p><img alt="" src="http://i67.tinypic.com/10fw3no.jpg" /></p>
+                <p>
+                  根据 Java 类加载规则, 一个 java
+                  文件从被加载到被卸载这个生命过程, 总共要经历5个阶段:
+                </p>
+                <ul>
+                  <li><strong>装载</strong></li>
+                  <li><strong>链接</strong> + 验证 + 准备 + 解析</li>
+                  <li>
+                    <strong>初始化</strong> (对类的静态变量,
+                    静态代码块执行初始化操作)
+                  </li>
+                  <li><strong>使用</strong> (即实例化)</li>
+                  <li><strong>卸载</strong></li>
+                </ul>
+                <blockquote>
+                  <p>
+                    关于类的加载参考 blog:
+                    <a
+                      href="http://blog.smallcpp.com/018-dai-ma-kuai-he-lei-jia-zai.html"
+                      >018、代码块和类加载</a
+                    >
+                  </p>
+                </blockquote>
+                <p>
+                  类的加载指的是 <strong>装载</strong> -&gt;
+                  <strong>链接</strong> -&gt;
+                  <strong>初始化</strong> 这<strong>三</strong>个阶段, 而使用
+                  <code>Class.forName()</code> 方法就是完成类的加载、执行 Driver
+                  中的静态代码块.
+                </p>
+                <p>
+                  <code>new</code> 语法实际是和
+                  <code>Class.forName().newInstances()</code> 差不多的, 是
+                  <strong>装载</strong> -&gt; <strong>链接</strong> -&gt;
+                  <strong>初始化</strong> -&gt;
+                  <strong>使用</strong> 这<strong>四</strong>个阶段,
+                  也就是获取一个实例对象,
+                  但我们只需要加载类、注册好驱动就可以了, 并不需要实例化它
+                  (因为并不使用 <code>Driver</code> 的实例对象操作数据库,
+                  而是使用 <code>DriverManager</code>).
+                </p>
+              </div>
+            </article>
+          </section>
+
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u8f6f\u4ef6\u5de5\u7a0b",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-08-02T16:55:00+08:00",
+              "headline": "JDBC \u4e3a\u4ec0\u4e48\u7528 Class.forName \u52a0\u8f7d\u9a71\u52a8",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "JDBC \u4e2d\u6ce8\u518c\u9a71\u52a8\u4e3a\u4ec0\u4e48\u4f7f\u7528 Class.forName(\"com.mysql.jdbc.Driver\") \u800c\u4e0d\u4f7f\u7528 new com.mysql.jdbc.Driver()? \u5176\u539f\u56e0\u6709\u4e8c. \u539f\u56e0\u4e00 new \u4e00\u4e2a\u7c7b\u9700\u8981 import \u5b83\u7684\u5305, \u800c\u5404\u5927\u6570\u636e\u5e93\u63d0\u4f9b\u7684\u9a71\u52a8\u4e0d\u4e00\u6837, \u4f7f\u7528 new \u7684\u65b9\u5f0f\u5c31\u5341\u5206\u4f9d\u8d56 import \u9a71\u52a8\u7684 jar \u5305, \u8fd9\u6837\u4e00\u65e6\u6362\u4e86\u6570\u636e\u5e93\u9a71\u52a8, \u8fd8\u8981\u4fee\u6539 \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://i67.tinypic.com/10fw3no.jpg"
+              }
+            }
+          </script>
+        </div>
+
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
         </div>
       </div>
     </div>
-  </nav>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html" rel="bookmark"
-        title="Permalink to JDBC 为什么用 Class.forName 加载驱动">JDBC 为什么用 Class.forName 加载驱动</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-08-02T16:55:00+08:00">
-    Published <span class="is-info">Tue 02 August 2016</span>
-    in <a href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-  </abbr>
-
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#_1">原因一</a></li>
-<li><a href="#_2">原因二</a></li>
-</ul>
-</div>
-      <hr />
-      
-<p>JDBC 中注册驱动为什么使用 <code>Class.forName("com.mysql.jdbc.Driver")</code> 而不使用 <code>new com.mysql.jdbc.Driver()</code>?</p>
-<p>其原因有二.</p>
-<h3 id="_1">原因一</h3>
-<p><code>new</code> 一个类需要 <code>import</code> 它的包, 而各大数据库提供的驱动不一样, 使用 <code>new</code> 的方式就十分依赖 <code>import</code> 驱动的 jar 包, 这样一旦换了数据库驱动, 还要修改 <code>import</code> 语句, 而使用 <code>Class.forName("com.mysql.jdbc.Driver")</code> 的话, 可以把 “com.mysql.jdbc.Driver” 写入配置文件, 这样换数据库驱动的话, 只要修改配置文件就行了.</p>
-<h3 id="_2">原因二</h3>
-<p>首先, JDBC 规范要求各厂商必须在<strong>静态代码块</strong>中将自己 (Driver) 使用 <code>DriverManager.registerDriver</code> 方法注册到 <code>DriverManager</code> 中去, 最终使用 <code>DriverManager</code> 来操作数据库, 如下图.</p>
-<p><img alt="" src="http://i67.tinypic.com/10fw3no.jpg"/></p>
-<p>根据 Java 类加载规则, 一个 java 文件从被加载到被卸载这个生命过程, 总共要经历5个阶段:</p>
-<ul>
-<li><strong>装载</strong></li>
-<li><strong>链接</strong>
-    + 验证
-    + 准备
-    + 解析</li>
-<li><strong>初始化</strong> (对类的静态变量, 静态代码块执行初始化操作)</li>
-<li><strong>使用</strong> (即实例化)</li>
-<li><strong>卸载</strong></li>
-</ul>
-<blockquote>
-<p>关于类的加载参考 blog: <a href="http://blog.smallcpp.cn/018-dai-ma-kuai-he-lei-jia-zai.html">018、代码块和类加载</a></p>
-</blockquote>
-<p>类的加载指的是 <strong>装载</strong> -&gt; <strong>链接</strong> -&gt; <strong>初始化</strong> 这<strong>三</strong>个阶段, 而使用 <code>Class.forName()</code> 方法就是完成类的加载、执行 Driver 中的静态代码块.</p>
-<p><code>new</code> 语法实际是和 <code>Class.forName().newInstances()</code> 差不多的, 是 <strong>装载</strong> -&gt; <strong>链接</strong> -&gt; <strong>初始化</strong> -&gt; <strong>使用</strong> 这<strong>四</strong>个阶段, 也就是获取一个实例对象, 但我们只需要加载类、注册好驱动就可以了, 并不需要实例化它 (因为并不使用 <code>Driver</code> 的实例对象操作数据库, 而是使用 <code>DriverManager</code>).</p>
-    </div>
-
-  </article>
-</section>
-
-<script type="application/ld+json">
-  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-08-02T16:55:00+08:00", "headline": "JDBC \u4e3a\u4ec0\u4e48\u7528 Class.forName \u52a0\u8f7d\u9a71\u52a8", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/jdbc-wei-shi-yao-yong-classforname-jia-zai-qu-dong.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "JDBC \u4e2d\u6ce8\u518c\u9a71\u52a8\u4e3a\u4ec0\u4e48\u4f7f\u7528 Class.forName(\"com.mysql.jdbc.Driver\") \u800c\u4e0d\u4f7f\u7528 new com.mysql.jdbc.Driver()? \u5176\u539f\u56e0\u6709\u4e8c. \u539f\u56e0\u4e00 new \u4e00\u4e2a\u7c7b\u9700\u8981 import \u5b83\u7684\u5305, \u800c\u5404\u5927\u6570\u636e\u5e93\u63d0\u4f9b\u7684\u9a71\u52a8\u4e0d\u4e00\u6837, \u4f7f\u7528 new \u7684\u65b9\u5f0f\u5c31\u5341\u5206\u4f9d\u8d56 import \u9a71\u52a8\u7684 jar \u5305, \u8fd9\u6837\u4e00\u65e6\u6362\u4e86\u6570\u636e\u5e93\u9a71\u52a8, \u8fd8\u8981\u4fee\u6539 \u2026", "image": {"@type": "ImageObject", "url": "http://i67.tinypic.com/10fw3no.jpg"}}
-</script>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  </div>
+    </footer>
 
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
-      </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
-
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

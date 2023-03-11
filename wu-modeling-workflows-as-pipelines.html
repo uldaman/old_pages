@@ -1,156 +1,303 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>五. Modeling Workflows as Pipelines</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta
+      property="og:title"
+      content="Small Cpp - 五. Modeling Workflows as Pipelines"
+    />
+    <meta property="og:description" content="现在开始对 Place Order 工作流建模,
+    下面是我们需要建模的摘要: workflow "Place Order" = input: UnvalidatedOrder
+    output (on success): OrderAcknowledgmentSent AND OrderPlaced (to send to
+    shipping) AND BillableOrderPlaced...">
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/函数式领域建模/pipeline.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2019-12-16T23:00:00+08:00"
+    />
+    <meta property="article:tag" content="函数式领域建模" />
+    <meta property="article:tag" content="函数式" />
+    <meta property="article:tag" content="领域驱动" />
+    <meta property="article:tag" content="DDD" />
+    <meta property="article:section" content="函数式" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>五. Modeling Workflows as Pipelines</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - 五. Modeling Workflows as Pipelines">
-  <meta property="og:description" content="现在开始对 Place Order 工作流建模, 下面是我们需要建模的摘要: workflow "Place Order" = input: UnvalidatedOrder output (on success): OrderAcknowledgmentSent AND OrderPlaced (to send to shipping) AND BillableOrderPlaced...">
-<meta property="og:url" content="http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/函数式领域建模/pipeline.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2019-12-16T23:00:00+08:00">
-    <meta property="article:tag" content="函数式领域建模">
-    <meta property="article:tag" content="函数式">
-    <meta property="article:tag" content="领域驱动">
-    <meta property="article:tag" content="DDD">
-  <meta property="article:section" content="函数式">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html" rel="bookmark"
-        title="Permalink to 五. Modeling Workflows as Pipelines">五. Modeling Workflows as Pipelines</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2019-12-16T23:00:00+08:00">
-    Published <span class="is-info">Mon 16 December 2019</span>
-    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/han-shu-shi-ling-yu-jian-mo.html">函数式领域建模</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/han-shu-shi.html">函数式</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/ling-yu-qu-dong.html">领域驱动</a>
-      </span>
-      <span class="tag is-small is-rounded">
-        <a href="http://www.smallcpp.cn/tag/ddd.html">DDD</a>
-      </span>
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#the-workflow-input">The Workflow Input</a><ul>
-<li><a href="#commands-as-input">Commands as input</a></li>
-<li><a href="#sharing-common-structures-using-generics">Sharing Common Structures Using Generics</a></li>
-<li><a href="#combining-multiple-commands-in-one-type">Combining Multiple Commands in One Type</a></li>
-</ul>
-</li>
-<li><a href="#modeling-an-order-as-a-set-of-states">Modeling an Order as a Set of States</a><ul>
-<li><a href="#adding-new-state-types-as-requirements-change">Adding New State Types as Requirements Change</a></li>
-</ul>
-</li>
-<li><a href="#state-machines">State Machines</a><ul>
-<li><a href="#why-use-state-machines">Why Use State Machines?</a></li>
-<li><a href="#how-to-implement-simple-state-machines-in-f">How to Implement Simple State Machines in F</a></li>
-</ul>
-</li>
-<li><a href="#modeling-each-step-in-the-workflow-with-types">Modeling Each Step in the Workflow With Types</a><ul>
-<li><a href="#the-validation-step">The Validation Step</a></li>
-<li><a href="#the-pricing-step">The Pricing Step</a></li>
-<li><a href="#the-acknowledge-order-step">The Acknowledge Order Step</a></li>
-<li><a href="#creating-the-events-to-return">Creating the Events To Return</a></li>
-</ul>
-</li>
-<li><a href="#documenting-effects">Documenting Effects</a><ul>
-<li><a href="#effects-in-the-validation-step">Effects in the Validation Step</a></li>
-<li><a href="#effects-in-the-pricing-step">Effects in the Pricing Step</a></li>
-<li><a href="#effects-in-the-acknowledge-step">Effects in the Acknowledge Step</a></li>
-</ul>
-</li>
-<li><a href="#composing-the-workflow-from-the-steps">Composing the Workflow From the Steps</a></li>
-<li><a href="#are-dependencies-part-of-the-design">Are Dependencies Part of the Design?</a></li>
-<li><a href="#the-complete-pipeline">The Complete Pipeline</a><ul>
-<li><a href="#the-internal-steps">The internal steps</a></li>
-</ul>
-</li>
-<li><a href="#long-running-workflows">Long Running Workflows</a></li>
-</ul>
-</div>
-      <hr />
-      
-<p>现在开始对 <em>Place Order</em> 工作流建模, 下面是我们需要建模的摘要:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>workflow "Place Order" =
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html"
+                  rel="bookmark"
+                  title="Permalink to 五. Modeling Workflows as Pipelines"
+                  >五. Modeling Workflows as Pipelines</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2019-12-16T23:00:00+08:00">
+                  Published <span class="is-info">Mon 16 December 2019</span> in
+                  <a href="http://www.smallcpp.com/category/han-shu-shi.html"
+                    >函数式</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                  <span class="tag is-small is-rounded">
+                    <a
+                      href="http://www.smallcpp.com/tag/han-shu-shi-ling-yu-jian-mo.html"
+                      >函数式领域建模</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/han-shu-shi.html"
+                      >函数式</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/ling-yu-qu-dong.html"
+                      >领域驱动</a
+                    >
+                  </span>
+                  <span class="tag is-small is-rounded">
+                    <a href="http://www.smallcpp.com/tag/ddd.html">DDD</a>
+                  </span>
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li>
+                      <a href="#the-workflow-input">The Workflow Input</a>
+                      <ul>
+                        <li>
+                          <a href="#commands-as-input">Commands as input</a>
+                        </li>
+                        <li>
+                          <a href="#sharing-common-structures-using-generics"
+                            >Sharing Common Structures Using Generics</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#combining-multiple-commands-in-one-type"
+                            >Combining Multiple Commands in One Type</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#modeling-an-order-as-a-set-of-states"
+                        >Modeling an Order as a Set of States</a
+                      >
+                      <ul>
+                        <li>
+                          <a
+                            href="#adding-new-state-types-as-requirements-change"
+                            >Adding New State Types as Requirements Change</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#state-machines">State Machines</a>
+                      <ul>
+                        <li>
+                          <a href="#why-use-state-machines"
+                            >Why Use State Machines?</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#how-to-implement-simple-state-machines-in-f"
+                            >How to Implement Simple State Machines in F</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#modeling-each-step-in-the-workflow-with-types"
+                        >Modeling Each Step in the Workflow With Types</a
+                      >
+                      <ul>
+                        <li>
+                          <a href="#the-validation-step">The Validation Step</a>
+                        </li>
+                        <li>
+                          <a href="#the-pricing-step">The Pricing Step</a>
+                        </li>
+                        <li>
+                          <a href="#the-acknowledge-order-step"
+                            >The Acknowledge Order Step</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#creating-the-events-to-return"
+                            >Creating the Events To Return</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#documenting-effects">Documenting Effects</a>
+                      <ul>
+                        <li>
+                          <a href="#effects-in-the-validation-step"
+                            >Effects in the Validation Step</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#effects-in-the-pricing-step"
+                            >Effects in the Pricing Step</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#effects-in-the-acknowledge-step"
+                            >Effects in the Acknowledge Step</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#composing-the-workflow-from-the-steps"
+                        >Composing the Workflow From the Steps</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#are-dependencies-part-of-the-design"
+                        >Are Dependencies Part of the Design?</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#the-complete-pipeline">The Complete Pipeline</a>
+                      <ul>
+                        <li>
+                          <a href="#the-internal-steps">The internal steps</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <a href="#long-running-workflows"
+                        >Long Running Workflows</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+                <hr />
+
+                <p>
+                  现在开始对 <em>Place Order</em> 工作流建模,
+                  下面是我们需要建模的摘要:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>workflow "Place Order" =
     input: UnvalidatedOrder
     output (on success):
         OrderAcknowledgmentSent
@@ -172,93 +319,252 @@
 
     // step 4
     create and return the events
-</pre></div>
-<p>显然, 工作流由一系列子步骤组成: <em>ValidateOrder</em>、<em>PriceOrder</em> 等. 这是非常常见的情况. 许多业务流程都可以被视为一系列文档的转换, 我们可以以同样的方式对工作流进行建模.</p>
-<p>我们将创建一个 <em>pipeline</em> 来表示业务流程, 而这个 <em>pipeline</em> 又由一系列较小的 <em>pipeline</em> 构建而成. 每个较小的 <em>pipeline</em> 将执行一个转换操作, 最后, 我们将这些较小的管道粘合在一起. 这种编程风格有时被称为 “面向转换编程” (<em>transformation-oriented programming</em>).</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/pipeline.png"/></p>
-<p>遵循函数式编程原则, 我们将确保管道中的每个步骤都设计为无状态且无副作用, 这也意味着每个步骤都可以独立理解和测试. 一旦我们设计好了管道的部件, 我们就只需要实现和组合它们.</p>
-<h1 id="the-workflow-input">The Workflow Input</h1>
-<p>让我们先看一下工作流的输入.</p>
-<p>工作流的输入应始终是领域对象(我们假定输入已经从 <a href="http://www.smallcpp.cn/er-a-functional-architecture.html#transferring-data-between-bounded-contexts">DTO</a> 中反序列化), 在我们的案例中, 它是 <em>UnvalidatedOrder</em>, 我们之前对此进行了建模:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnvalidatedOrder</span> = {
+</pre>
+                </div>
+                <p>
+                  显然, 工作流由一系列子步骤组成: <em>ValidateOrder</em>、<em
+                    >PriceOrder</em
+                  >
+                  等. 这是非常常见的情况.
+                  许多业务流程都可以被视为一系列文档的转换,
+                  我们可以以同样的方式对工作流进行建模.
+                </p>
+                <p>
+                  我们将创建一个 <em>pipeline</em> 来表示业务流程, 而这个
+                  <em>pipeline</em> 又由一系列较小的 <em>pipeline</em> 构建而成.
+                  每个较小的 <em>pipeline</em> 将执行一个转换操作, 最后,
+                  我们将这些较小的管道粘合在一起. 这种编程风格有时被称为
+                  “面向转换编程” (<em>transformation-oriented programming</em>).
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/pipeline.png"
+                  />
+                </p>
+                <p>
+                  遵循函数式编程原则,
+                  我们将确保管道中的每个步骤都设计为无状态且无副作用,
+                  这也意味着每个步骤都可以独立理解和测试.
+                  一旦我们设计好了管道的部件, 我们就只需要实现和组合它们.
+                </p>
+                <h1 id="the-workflow-input">The Workflow Input</h1>
+                <p>让我们先看一下工作流的输入.</p>
+                <p>
+                  工作流的输入应始终是领域对象(我们假定输入已经从
+                  <a
+                    href="http://www.smallcpp.com/er-a-functional-architecture.html#transferring-data-between-bounded-contexts"
+                    >DTO</a
+                  >
+                  中反序列化), 在我们的案例中, 它是 <em>UnvalidatedOrder</em>,
+                  我们之前对此进行了建模:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnvalidatedOrder</span> = {
     OrderId : <span style="color: #00688B; font-weight: bold">string</span>
     CustomerInfo : UnvalidatedCustomerInfo
     ShippingAddress : UnvalidatedAddress
     <span style="color: #228B22">// ...</span>
 }
-</pre></div>
-<h2 id="commands-as-input">Commands as input</h2>
-<p>工作流与启动它的命令<a href="http://www.smallcpp.cn/er-a-functional-architecture.html#workflow-inputs-and-outputs">相关联</a>. 从某种意义上说, <em>Place Order</em> 工作流的实际输入实际上不是订单, 而是命令.</p>
-<p>对于 <em>Place Order</em> 工作流, 我们将此命令称为 <em>PlaceOrder</em>. 该命令应包含工作流处理该请求所需的所有内容, 在本例中为上面的 <em>UnvalidatedOrder</em>. 我们可能还希望跟踪谁创建了命令, 时间戳以及其它的一些元数据, 因此命令类型可能最终看起来像这样:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> = {
+</pre>
+                </div>
+                <h2 id="commands-as-input">Commands as input</h2>
+                <p>
+                  工作流与启动它的命令<a
+                    href="http://www.smallcpp.com/er-a-functional-architecture.html#workflow-inputs-and-outputs"
+                    >相关联</a
+                  >. 从某种意义上说,
+                  <em>Place Order</em> 工作流的实际输入实际上不是订单, 而是命令.
+                </p>
+                <p>
+                  对于 <em>Place Order</em> 工作流, 我们将此命令称为
+                  <em>PlaceOrder</em>.
+                  该命令应包含工作流处理该请求所需的所有内容, 在本例中为上面的
+                  <em>UnvalidatedOrder</em>. 我们可能还希望跟踪谁创建了命令,
+                  时间戳以及其它的一些元数据, 因此命令类型可能最终看起来像这样:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> = {
     OrderForm : UnvalidatedOrder
     Timestamp: DateTime
     UserId: <span style="color: #00688B; font-weight: bold">string</span>
     <span style="color: #228B22">// etc</span>
 }
-</pre></div>
-<h2 id="sharing-common-structures-using-generics">Sharing Common Structures Using Generics</h2>
-<p>当然, 我们不止这一个命令需要建模, 而每一个命令都会拥有相对关联工作流所需的数据, 但也会有一些所有命令都通用的数据, 例如 <em>Timestamp</em> 和 <em>UserId</em>. 我们真的需要一遍又一遍地实现相同的字段吗? 没有共享它们的方法吗?</p>
-<p>如果我们在进行面向对象的设计, 则显而易见的解决方案是使用包含公共字段的基类, 然后让每个特定的命令都从它继承.</p>
-<p>在函数式的世界中, 我们可以通过使用<strong>泛型</strong>来实现相同的目标. 我们首先定义一个 <em>Command</em> 类型, 其中包含通用字段和特定于命令的数据的插槽, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Command</span>&lt;<span style="color: #8B008B; font-weight: bold">'</span>data&gt; = {
+</pre>
+                </div>
+                <h2 id="sharing-common-structures-using-generics">
+                  Sharing Common Structures Using Generics
+                </h2>
+                <p>
+                  当然, 我们不止这一个命令需要建模,
+                  而每一个命令都会拥有相对关联工作流所需的数据,
+                  但也会有一些所有命令都通用的数据, 例如 <em>Timestamp</em> 和
+                  <em>UserId</em>. 我们真的需要一遍又一遍地实现相同的字段吗?
+                  没有共享它们的方法吗?
+                </p>
+                <p>
+                  如果我们在进行面向对象的设计,
+                  则显而易见的解决方案是使用包含公共字段的基类,
+                  然后让每个特定的命令都从它继承.
+                </p>
+                <p>
+                  在函数式的世界中,
+                  我们可以通过使用<strong>泛型</strong>来实现相同的目标.
+                  我们首先定义一个 <em>Command</em> 类型,
+                  其中包含通用字段和特定于命令的数据的插槽, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Command</span>&lt;<span style="color: #8B008B; font-weight: bold">'</span>data&gt; = {
     Data : <span style="color: #8B008B; font-weight: bold">'</span>data
     Timestamp: DateTime
     UserId: <span style="color: #00688B; font-weight: bold">string</span>
     <span style="color: #228B22">// etc</span>
 }
-</pre></div>
-<p>然后, 我们只需指定数据插槽中的类型即可创建特定于工作流的命令:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> = Command&lt;UnvalidatedOrder&gt;
-</pre></div>
-<h2 id="combining-multiple-commands-in-one-type">Combining Multiple Commands in One Type</h2>
-<p>在一些情况下, 一个界限上下文的所有命令都在同一输入通道(例如消息队列)上发送, 因此我们可以用某种方式将它们组成为一个可以序列化的数据结构.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/commands.png"/></p>
-<p>解决方案很明显: 只需创建一个包含所有命令的 OR 类型. 例如, 如果需要从 <em>PlaceOrder</em>, <em>ChangeOrder</em> 和 <em>CancelOrder</em> 中进行选择, 则可以创建如下类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderTakingCommand</span> =
+</pre>
+                </div>
+                <p>
+                  然后, 我们只需指定数据插槽中的类型即可创建特定于工作流的命令:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrder</span> = Command&lt;UnvalidatedOrder&gt;
+</pre>
+                </div>
+                <h2 id="combining-multiple-commands-in-one-type">
+                  Combining Multiple Commands in One Type
+                </h2>
+                <p>
+                  在一些情况下,
+                  一个界限上下文的所有命令都在同一输入通道(例如消息队列)上发送,
+                  因此我们可以用某种方式将它们组成为一个可以序列化的数据结构.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/commands.png"
+                  />
+                </p>
+                <p>
+                  解决方案很明显: 只需创建一个包含所有命令的 OR 类型. 例如,
+                  如果需要从 <em>PlaceOrder</em>, <em>ChangeOrder</em> 和
+                  <em>CancelOrder</em> 中进行选择, 则可以创建如下类型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderTakingCommand</span> =
     | Place <span style="color: #8B008B; font-weight: bold">of</span> PlaceOrder
     | Change <span style="color: #8B008B; font-weight: bold">of</span> ChangeOrder
     | Cancel <span style="color: #8B008B; font-weight: bold">of</span> CancelOrder
-</pre></div>
-<p>该 OR 类型将映射到 <em>DTO</em> 并在输入通道上进行序列化和反序列化. 我们只需要在界限上下文的边缘添加一个新的路由或调度阶段(洋葱架构的基础结构层).</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/command-refactor.png"/></p>
-<h1 id="modeling-an-order-as-a-set-of-states">Modeling an Order as a Set of States</h1>
-<p>从我们对工作流的先前理解中可以清楚地看到, <em>Order</em> 并不是一个静态文档, 而实际上是通过一系列不同的状态转换的:</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state.png"/></p>
-<p>我们应该如何为这些状态建模? 一个简单的方法是创建一个单一的 AND 类型, 该类型使用标志捕获所有不同的状态, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
+</pre>
+                </div>
+                <p>
+                  该 OR 类型将映射到
+                  <em>DTO</em> 并在输入通道上进行序列化和反序列化.
+                  我们只需要在界限上下文的边缘添加一个新的路由或调度阶段(洋葱架构的基础结构层).
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/command-refactor.png"
+                  />
+                </p>
+                <h1 id="modeling-an-order-as-a-set-of-states">
+                  Modeling an Order as a Set of States
+                </h1>
+                <p>
+                  从我们对工作流的先前理解中可以清楚地看到,
+                  <em>Order</em> 并不是一个静态文档,
+                  而实际上是通过一系列不同的状态转换的:
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state.png"
+                  />
+                </p>
+                <p>
+                  我们应该如何为这些状态建模? 一个简单的方法是创建一个单一的 AND
+                  类型, 该类型使用标志捕获所有不同的状态, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> = {
     OrderId : OrderId
     <span style="color: #228B22">// ...</span>
     IsValidated : <span style="color: #00688B; font-weight: bold">bool</span> <span style="color: #228B22">// set when validated</span>
     IsPriced : <span style="color: #00688B; font-weight: bold">bool</span> <span style="color: #228B22">// set when priced</span>
     AmountToBill : <span style="color: #00688B; font-weight: bold">decimal</span> option <span style="color: #228B22">// also set when priced</span>
 }
-</pre></div>
-<p>但这有很多问题:</p>
-<ul>
-<li>状态是隐式的, 并且需要大量条件代码才能进行处理.</li>
-<li>有些状态拥有其它状态不需要的数据, 将它们全部记录在一条数据结构中会使设计复杂化. 例如, 仅在 <em>Priced</em> 状态下才需要 <em>AmountToBill</em>, 但由于在其它状态中不存在, 因此我们必须将该字段设为可选.</li>
-<li>目前尚不清楚哪些字段与哪些标志相关联. 例如设置 <em>IsPriced</em> 时需要设置 <em>AmountToBill</em>, 但是代码设计中并没有强制措施, 所以我们必须依靠注释提醒来保持数据一致性.</li>
-</ul>
-<p>一种更好的建模方式是为订单的每个状态创建一个独立的新类型, 这使我们可以消除隐式状态和条件字段.</p>
-<p>可以直接从我们之前创建的领域文档中定义类型. 例如, 下面是 <em>ValidatedOrder</em> 的领域文档:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>data ValidatedOrder =
+</pre>
+                </div>
+                <p>但这有很多问题:</p>
+                <ul>
+                  <li>状态是隐式的, 并且需要大量条件代码才能进行处理.</li>
+                  <li>
+                    有些状态拥有其它状态不需要的数据,
+                    将它们全部记录在一条数据结构中会使设计复杂化. 例如, 仅在
+                    <em>Priced</em> 状态下才需要 <em>AmountToBill</em>,
+                    但由于在其它状态中不存在, 因此我们必须将该字段设为可选.
+                  </li>
+                  <li>
+                    目前尚不清楚哪些字段与哪些标志相关联. 例如设置
+                    <em>IsPriced</em> 时需要设置 <em>AmountToBill</em>,
+                    但是代码设计中并没有强制措施,
+                    所以我们必须依靠注释提醒来保持数据一致性.
+                  </li>
+                </ul>
+                <p>
+                  一种更好的建模方式是为订单的每个状态创建一个独立的新类型,
+                  这使我们可以消除隐式状态和条件字段.
+                </p>
+                <p>
+                  可以直接从我们之前创建的领域文档中定义类型. 例如, 下面是
+                  <em>ValidatedOrder</em> 的领域文档:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>data ValidatedOrder =
     ValidatedCustomerInfo
     AND ValidatedShippingAddress
     AND ValidatedBillingAddress
     AND <span style="color: #00688B; font-weight: bold">list</span> <span style="color: #8B008B; font-weight: bold">of</span> ValidatedOrderLine
-</pre></div>
-<p>而下面这是 <em>ValidatedOrder</em> 的相应的类型定义, 这是一种直接的翻译(低表示化差异, 除了需要添加 <em>OrderId</em>, 因为必须在整个工作流中维护订单身份):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidatedOrder</span> = {
+</pre>
+                </div>
+                <p>
+                  而下面这是 <em>ValidatedOrder</em> 的相应的类型定义,
+                  这是一种直接的翻译(低表示化差异, 除了需要添加
+                  <em>OrderId</em>, 因为必须在整个工作流中维护订单身份):
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidatedOrder</span> = {
     OrderId : OrderId
     CustomerInfo : CustomerInfo
     ShippingAddress : Address
     BillingAddress : Address
     OrderLines : ValidatedOrderLine <span style="color: #00688B; font-weight: bold">list</span>
 }
-</pre></div>
-<p>我们可以用相同的方式为 <em>PricedOrder</em> 创建类型, 并为价格信息添加额外的字段:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PricedOrder</span> = {
+</pre>
+                </div>
+                <p>
+                  我们可以用相同的方式为 <em>PricedOrder</em> 创建类型,
+                  并为价格信息添加额外的字段:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PricedOrder</span> = {
     OrderId : <span style="color: #228B22">// ...</span>
     CustomerInfo : CustomerInfo
     ShippingAddress : Address
@@ -267,47 +573,136 @@
     OrderLines : PricedOrderLine <span style="color: #00688B; font-weight: bold">list</span>
     AmountToBill : BillingAmount
 }
-</pre></div>
-<p>最后, 我们可以创建一个顶级类型, 它是所有状态之间的选择:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> =
+</pre>
+                </div>
+                <p>最后, 我们可以创建一个顶级类型, 它是所有状态之间的选择:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Order</span> =
     | Unvalidated <span style="color: #8B008B; font-weight: bold">of</span> UnvalidatedOrder
     | Validated <span style="color: #8B008B; font-weight: bold">of</span> ValidatedOrder
     | Priced <span style="color: #8B008B; font-weight: bold">of</span> PricedOrder
     <span style="color: #228B22">// etc</span>
-</pre></div>
-<p>这是可以代表生命周期中任何阶段的订单对象, 并且是可以持久化或传达给其它上下文的类型.</p>
-<blockquote>
-<p>请注意, 我们不会在这组选择中包括 <em>Quote</em>, 因为这不是订单可以进入的状态, 而是一个完全不同的工作流.</p>
-</blockquote>
-<h2 id="adding-new-state-types-as-requirements-change">Adding New State Types as Requirements Change</h2>
-<p>关于为每个状态使用单独类型的一个好处是, 可以在不破坏现有代码的情况下添加新状态. 例如, 如果我们需要支持退款, 则可以添加一个新状态 <em>RefundedOrder</em> 以及该状态所需的任何信息. 因为其它状态是独立定义的, 所以正在使用它们的任何代码都不会受到更改的影响.</p>
-<h1 id="state-machines">State Machines</h1>
-<p>其实我们在<a href="http://www.smallcpp.cn/si-integrity-and-consistency-in-the-domain.html#capturing-business-rules-in-the-type-system">之前</a>也做过类似的设计了. 这些情况在业务建模场景中极为常见. 在典型模型中, 文档或记录可以处于一种或多种状态, 而一种状态到另一种状态的转换由某种类型的命令触发, 这被称为状态机.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state-machines.png"/></p>
-<p>我们将在这里讨论的状态机的类型要简单得多, 最多只有少数几种情况, 转换次数很少. 例如:</p>
-<p>例子一, 之前提到的, 电子邮件地址可能具有 “未验证” 和 “已验证” 状态, 可以在其中通过要求用户单击确认电子邮件中的链接来从 “未验证” 转换为 “已验证”.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state-machines1.png"/></p>
-<p>例子二, 购物车的状态可能为 “空”, “有效” 和 “已付款”, 可以通过向购物车中添加商品来从 “空” 转变为 “有效”, 并通过支付将其转换为 “已付款”.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state-machines2.png"/></p>
-<p>例子三, 包裹交付可能具有 “未交付”, “待交付” 和 “已交付” 三种状态, 您可以通过将包裹放在交付卡车上从 “未交付” 转换为 “已交付”, 依此类推.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state-machines3.png"/></p>
-<h2 id="why-use-state-machines">Why Use State Machines?</h2>
-<p>在这些情况下使用状态机有很多好处:</p>
-<p>— 每个状态可以具有不同的行为.</p>
-<p>例如, 在购物车示例中, 只能为有效的购物车付款. 在上一章中, 当我们讨论 “未验证/已验证” 的电子邮件设计时, 有一条业务规则说只能将密码重置发送到已验证的电子邮件地址. 通过为每个状态使用不同的类型, 我们可以利用编译器确保符合业务规则, 直接在函数签名中对该要求进行编码.</p>
-<p>— 所有状态均被明确记录.</p>
-<p>(没想好怎么翻译, 先放下原文) It is all too easy to have important states that are implicit but never documented. In the shopping cart example, the “empty cart” has different behavior from the “active cart” but it would be rare to see this documented explicitly in code.</p>
-<p>— 它是一种设计工具, 可迫使我们考虑可能发生的每种可能性.</p>
-<p>设计中常见的错误原因是某些边缘情况没有得到处理. 状态机强制考虑所有情况. 例如:</p>
-<ul>
-<li>如果我们尝试验证已验证的电子邮件, 会发生什么?</li>
-<li>如果我们尝试从空的购物车中删除商品, 会发生什么?</li>
-<li>如果我们尝试交付已处于 “已交付” 状态的包裹, 会发生什么</li>
-<li>等等. 从状态的角度考虑设计会迫使这些问题浮出水面, 并阐明领域逻辑.</li>
-</ul>
-<h2 id="how-to-implement-simple-state-machines-in-f">How to Implement Simple State Machines in F</h2>
-<p>这是对购物车使用状态机的示例:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Item</span> = <span style="color: #228B22">// ...</span>
+</pre>
+                </div>
+                <p>
+                  这是可以代表生命周期中任何阶段的订单对象,
+                  并且是可以持久化或传达给其它上下文的类型.
+                </p>
+                <blockquote>
+                  <p>
+                    请注意, 我们不会在这组选择中包括 <em>Quote</em>,
+                    因为这不是订单可以进入的状态, 而是一个完全不同的工作流.
+                  </p>
+                </blockquote>
+                <h2 id="adding-new-state-types-as-requirements-change">
+                  Adding New State Types as Requirements Change
+                </h2>
+                <p>
+                  关于为每个状态使用单独类型的一个好处是,
+                  可以在不破坏现有代码的情况下添加新状态. 例如,
+                  如果我们需要支持退款, 则可以添加一个新状态
+                  <em>RefundedOrder</em> 以及该状态所需的任何信息.
+                  因为其它状态是独立定义的,
+                  所以正在使用它们的任何代码都不会受到更改的影响.
+                </p>
+                <h1 id="state-machines">State Machines</h1>
+                <p>
+                  其实我们在<a
+                    href="http://www.smallcpp.com/si-integrity-and-consistency-in-the-domain.html#capturing-business-rules-in-the-type-system"
+                    >之前</a
+                  >也做过类似的设计了. 这些情况在业务建模场景中极为常见.
+                  在典型模型中, 文档或记录可以处于一种或多种状态,
+                  而一种状态到另一种状态的转换由某种类型的命令触发,
+                  这被称为状态机.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state-machines.png"
+                  />
+                </p>
+                <p>
+                  我们将在这里讨论的状态机的类型要简单得多,
+                  最多只有少数几种情况, 转换次数很少. 例如:
+                </p>
+                <p>
+                  例子一, 之前提到的, 电子邮件地址可能具有 “未验证” 和 “已验证”
+                  状态, 可以在其中通过要求用户单击确认电子邮件中的链接来从
+                  “未验证” 转换为 “已验证”.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state-machines1.png"
+                  />
+                </p>
+                <p>
+                  例子二, 购物车的状态可能为 “空”, “有效” 和 “已付款”,
+                  可以通过向购物车中添加商品来从 “空” 转变为 “有效”,
+                  并通过支付将其转换为 “已付款”.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state-machines2.png"
+                  />
+                </p>
+                <p>
+                  例子三, 包裹交付可能具有 “未交付”, “待交付” 和 “已交付”
+                  三种状态, 您可以通过将包裹放在交付卡车上从 “未交付” 转换为
+                  “已交付”, 依此类推.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state-machines3.png"
+                  />
+                </p>
+                <h2 id="why-use-state-machines">Why Use State Machines?</h2>
+                <p>在这些情况下使用状态机有很多好处:</p>
+                <p>— 每个状态可以具有不同的行为.</p>
+                <p>
+                  例如, 在购物车示例中, 只能为有效的购物车付款. 在上一章中,
+                  当我们讨论 “未验证/已验证” 的电子邮件设计时,
+                  有一条业务规则说只能将密码重置发送到已验证的电子邮件地址.
+                  通过为每个状态使用不同的类型,
+                  我们可以利用编译器确保符合业务规则,
+                  直接在函数签名中对该要求进行编码.
+                </p>
+                <p>— 所有状态均被明确记录.</p>
+                <p>
+                  (没想好怎么翻译, 先放下原文) It is all too easy to have
+                  important states that are implicit but never documented. In
+                  the shopping cart example, the “empty cart” has different
+                  behavior from the “active cart” but it would be rare to see
+                  this documented explicitly in code.
+                </p>
+                <p>— 它是一种设计工具, 可迫使我们考虑可能发生的每种可能性.</p>
+                <p>
+                  设计中常见的错误原因是某些边缘情况没有得到处理.
+                  状态机强制考虑所有情况. 例如:
+                </p>
+                <ul>
+                  <li>如果我们尝试验证已验证的电子邮件, 会发生什么?</li>
+                  <li>如果我们尝试从空的购物车中删除商品, 会发生什么?</li>
+                  <li>
+                    如果我们尝试交付已处于 “已交付” 状态的包裹, 会发生什么
+                  </li>
+                  <li>
+                    等等. 从状态的角度考虑设计会迫使这些问题浮出水面,
+                    并阐明领域逻辑.
+                  </li>
+                </ul>
+                <h2 id="how-to-implement-simple-state-machines-in-f">
+                  How to Implement Simple State Machines in F
+                </h2>
+                <p>这是对购物车使用状态机的示例:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">Item</span> = <span style="color: #228B22">// ...</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ActiveCartData</span> = { UnpaidItems: Item <span style="color: #00688B; font-weight: bold">list</span> }
 
@@ -317,11 +712,26 @@
     | EmptyCart <span style="color: #228B22">// no data</span>
     | ActiveCart <span style="color: #8B008B; font-weight: bold">of</span> ActiveCartData
     | PaidCart <span style="color: #8B008B; font-weight: bold">of</span> PaidCartData
-</pre></div>
-<p><em>ActiveCartData</em> 和 <em>PaidCartData</em> 状态各自具有自己的类型. <em>EmptyCart</em> 状态没有与之关联的数据, 因此不需要特殊类型.</p>
-<p>而命令的处理程序是一个接受整个状态机(OR 类型)并返回状态机新版本(更新后的 OR 类型)的函数.</p>
-<p>假设我们要向购物车中添加商品, 状态转换函数 <em>addItem</em> 带有 <em>ShoppingCart</em> 参数和要添加的项目, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">addItem</span> cart item =
+</pre>
+                </div>
+                <p>
+                  <em>ActiveCartData</em> 和
+                  <em>PaidCartData</em> 状态各自具有自己的类型.
+                  <em>EmptyCart</em> 状态没有与之关联的数据, 因此不需要特殊类型.
+                </p>
+                <p>
+                  而命令的处理程序是一个接受整个状态机(OR
+                  类型)并返回状态机新版本(更新后的 OR 类型)的函数.
+                </p>
+                <p>
+                  假设我们要向购物车中添加商品, 状态转换函数
+                  <em>addItem</em> 带有
+                  <em>ShoppingCart</em> 参数和要添加的项目, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">addItem</span> cart item =
     smatch cart <span style="color: #8B008B; font-weight: bold">with</span>
     | EmptyCart -&gt;
     <span style="color: #228B22">// create a new active cart with one item</span>
@@ -332,10 +742,22 @@
     | PaidCart _ -&gt;
     <span style="color: #228B22">// ignore</span>
     cart
-</pre></div>
-<p>结果是新的 <em>ShoppingCart</em> 可能处于或未处于新状态(如果处于 “已付费” 状态).</p>
-<p>或者说我们要为购物车付款. 状态转换函数 <em>makePayment</em> 带有 <em>ShoppingCart</em> 参数和付款信息, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">makePayment</span> cart payment =
+</pre>
+                </div>
+                <p>
+                  结果是新的
+                  <em>ShoppingCart</em> 可能处于或未处于新状态(如果处于 “已付费”
+                  状态).
+                </p>
+                <p>
+                  或者说我们要为购物车付款. 状态转换函数
+                  <em>makePayment</em> 带有
+                  <em>ShoppingCart</em> 参数和付款信息, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">let</span> <span style="color: #00688B">makePayment</span> cart payment =
     <span style="color: #8B008B; font-weight: bold">match</span> cart <span style="color: #8B008B; font-weight: bold">with</span>
     | EmptyCart -&gt;
     <span style="color: #228B22">// ignore</span>
@@ -346,204 +768,544 @@
     | PaidCart _ -&gt;
     <span style="color: #228B22">// ignore</span>
     cart
-</pre></div>
-<p>结果是新的 <em>ShoppingCart</em> 可能处于 “已付款” 状态, 也可能未处于 “已付款” 状态(如果已经处于 “空” 或 “已付款” 状态).</p>
-<p>可以看到, 从调用者的角度来看, 状态的集合对于一般操作(<em>ShoppingCart</em> 类型)被视为 “一件事”, 但是在内部处理时, 每个状态都被单独对待.</p>
-<h1 id="modeling-each-step-in-the-workflow-with-types">Modeling Each Step in the Workflow With Types</h1>
-<p>状态机方法非常适合建模订单处理工作流, 因此, 现在让我们为每个步骤的细节建模.</p>
-<h2 id="the-validation-step">The Validation Step</h2>
-<p>让我们从验证开始. 在之前的讨论中, 我们将 <em>ValidateOrder</em> 子步骤记录为:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>substep "ValidateOrder" =
+</pre>
+                </div>
+                <p>
+                  结果是新的 <em>ShoppingCart</em> 可能处于 “已付款” 状态,
+                  也可能未处于 “已付款” 状态(如果已经处于 “空” 或 “已付款”
+                  状态).
+                </p>
+                <p>
+                  可以看到, 从调用者的角度来看, 状态的集合对于一般操作(<em
+                    >ShoppingCart</em
+                  >
+                  类型)被视为 “一件事”, 但是在内部处理时, 每个状态都被单独对待.
+                </p>
+                <h1 id="modeling-each-step-in-the-workflow-with-types">
+                  Modeling Each Step in the Workflow With Types
+                </h1>
+                <p>
+                  状态机方法非常适合建模订单处理工作流, 因此,
+                  现在让我们为每个步骤的细节建模.
+                </p>
+                <h2 id="the-validation-step">The Validation Step</h2>
+                <p>
+                  让我们从验证开始. 在之前的讨论中, 我们将
+                  <em>ValidateOrder</em> 子步骤记录为:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>substep "ValidateOrder" =
     input: UnvalidatedOrder
     output: ValidatedOrder OR ValidationError
     dependencies: CheckProductCodeExists, CheckAddressExists
-</pre></div>
-<p>现在我们可以用刚才讨论的方式定义输入和输出(<em>UnvalidatedOrder</em> 和 <em>ValidatedOrder</em>). 但是除了它们, 我们还看到有两个依赖项, 一个依赖项检查产品代码是否存在, 另一个依赖项检查地址是否存在.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/validate-order.png"/></p>
-<p>我们如何使用类型对这些依赖项建模呢? 简单来说, 我们只把它们当作函数, 函数的类型签名将成为我们稍后需要实现的 “接口”.</p>
-<p>例如, 要检查产品代码是否存在, 我们需要一个函数, 该函数输入一个 <em>ProductCode</em>, 如果产品目录中存在该代码, 则返回 <em>true</em>, 否则返回 <em>false</em>. 我们可以定义一个 <em>CheckProductCodeExists</em> 类型代表函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
+</pre>
+                </div>
+                <p>
+                  现在我们可以用刚才讨论的方式定义输入和输出(<em
+                    >UnvalidatedOrder</em
+                  >
+                  和 <em>ValidatedOrder</em>). 但是除了它们,
+                  我们还看到有两个依赖项, 一个依赖项检查产品代码是否存在,
+                  另一个依赖项检查地址是否存在.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/validate-order.png"
+                  />
+                </p>
+                <p>
+                  我们如何使用类型对这些依赖项建模呢? 简单来说,
+                  我们只把它们当作函数, 函数的类型签名将成为我们稍后需要实现的
+                  “接口”.
+                </p>
+                <p>
+                  例如, 要检查产品代码是否存在, 我们需要一个函数, 该函数输入一个
+                  <em>ProductCode</em>, 如果产品目录中存在该代码, 则返回
+                  <em>true</em>, 否则返回 <em>false</em>. 我们可以定义一个
+                  <em>CheckProductCodeExists</em> 类型代表函数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
     ProductCode -&gt; <span style="color: #00688B; font-weight: bold">bool</span>
     <span style="color: #228B22">// ^input ^output</span>
-</pre></div>
-<p>再来看第二个依赖项, 我们需要一个函数, 该函数输入 <em>UnvalidatedAddress</em> 并在地址有效时下返回正确地址, 或者在地址无效时返回某种验证错误.</p>
-<p>我们也许还想区分 <em>CheckedAddress</em> (远程地址检查服务的输出)和 <em>Address</em> 领域对象, 并且有时需要在它们之间进行转换. 但现在, 我们可以暂时只说 <em>CheckedAddress</em> 只是 <em>UnvalidatedAddress</em> 的包装版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckedAddress</span> =
+</pre>
+                </div>
+                <p>
+                  再来看第二个依赖项, 我们需要一个函数, 该函数输入
+                  <em>UnvalidatedAddress</em> 并在地址有效时下返回正确地址,
+                  或者在地址无效时返回某种验证错误.
+                </p>
+                <p>
+                  我们也许还想区分
+                  <em>CheckedAddress</em> (远程地址检查服务的输出)和
+                  <em>Address</em> 领域对象, 并且有时需要在它们之间进行转换.
+                  但现在, 我们可以暂时只说 <em>CheckedAddress</em> 只是
+                  <em>UnvalidatedAddress</em> 的包装版本:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckedAddress</span> =
     CheckedAddress <span style="color: #8B008B; font-weight: bold">of</span> UnvalidatedAddress
-</pre></div>
-<p>然后, 该远程地址检查服务将 <em>UnvalidatedAddress</em> 作为输入, 并返回 <em>Result</em> 类型, 其中对于成功案例具有 <em>CheckedAddress</em> 值, 对于失败案例具有 <em>AddressValidationError</em> 值(副作用):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AddressValidationError</span> =
+</pre>
+                </div>
+                <p>
+                  然后, 该远程地址检查服务将
+                  <em>UnvalidatedAddress</em> 作为输入, 并返回
+                  <em>Result</em> 类型, 其中对于成功案例具有
+                  <em>CheckedAddress</em> 值, 对于失败案例具有
+                  <em>AddressValidationError</em> 值(副作用):
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AddressValidationError</span> =
     AddressValidationError <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckAddressExists</span> =
     UnvalidatedAddress -&gt; Result&lt;CheckedAddress,AddressValidationError&gt;
     <span style="color: #228B22">// ^input ^output</span>
-</pre></div>
-<p>定义了依赖项之后就可以定义出 <em>ValidateOrder</em> 函数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <p>定义了依赖项之后就可以定义出 <em>ValidateOrder</em> 函数:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     CheckProductCodeExists <span style="color: #228B22">// dependency</span>
     -&gt; CheckAddressExists <span style="color: #228B22">// dependency</span>
     -&gt; UnvalidatedOrder <span style="color: #228B22">// input</span>
     -&gt; Result&lt;ValidatedOrder,ValidationError&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<p>该函数的总返回值必须为 <em>Result</em>, 因为其中一个依赖项 (<em>CheckAddressExists</em>）返回 <em>Result</em>. 当在任何地方使用 <em>Result</em> 时, 它都会 “污染” 所接触的内容, 并且会传递 “结果”, 直到到达处理它的顶级函数为止.</p>
-<blockquote>
-<p>我们将依赖项放在函数首位, 将主要输入参数放在倒数第二位(输出类型之前). 这样做的原因是使部分应用更容易(在功能上等同于依赖注入).</p>
-</blockquote>
-<h2 id="the-pricing-step">The Pricing Step</h2>
-<p>让我们继续设计 <em>PriceOrder</em> 步骤, 这是原始的领域文档:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>substep "PriceOrder" =
+</pre>
+                </div>
+                <p>
+                  该函数的总返回值必须为 <em>Result</em>, 因为其中一个依赖项
+                  (<em>CheckAddressExists</em>）返回 <em>Result</em>.
+                  当在任何地方使用 <em>Result</em> 时, 它都会 “污染”
+                  所接触的内容, 并且会传递 “结果”, 直到到达处理它的顶级函数为止.
+                </p>
+                <blockquote>
+                  <p>
+                    我们将依赖项放在函数首位,
+                    将主要输入参数放在倒数第二位(输出类型之前).
+                    这样做的原因是使部分应用更容易(在功能上等同于依赖注入).
+                  </p>
+                </blockquote>
+                <h2 id="the-pricing-step">The Pricing Step</h2>
+                <p>
+                  让我们继续设计 <em>PriceOrder</em> 步骤, 这是原始的领域文档:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>substep "PriceOrder" =
     input: ValidatedOrder
     output: PricedOrder
     dependencies: GetProductPrice
-</pre></div>
-<p>它也有一个依赖项 – 一个返回给定产品价格的函数.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/price-order.png"/></p>
-<p>我们可以定义一个 <em>GetProductPrice</em> 类型来记录这个依赖项:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">GetProductPrice</span> =
+</pre>
+                </div>
+                <p>它也有一个依赖项 – 一个返回给定产品价格的函数.</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/price-order.png"
+                  />
+                </p>
+                <p>
+                  我们可以定义一个
+                  <em>GetProductPrice</em> 类型来记录这个依赖项:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">GetProductPrice</span> =
     ProductCode -&gt; Price
-</pre></div>
-<p>同样, 请注意我们在这里所做的事情. <em>PriceOrder</em> 函数需要产品目录中的信息, 但是我们没有传递某种重量级的 <em>IProductCatalog</em> 接口, 而是传递了一个函数 (<em>GetProductPrice</em>), 该函数恰好代表了我们现阶段对产品目录的需求. 也就是说, <em>GetProductPrice</em> 充当了一个抽象 – 它隐藏了产品目录的存在, 只向我们提供了所需的功能, 而没有更多(类似接口隔离).</p>
-<p><em>PriceOrder</em> 的签名将如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
+</pre>
+                </div>
+                <p>
+                  同样, 请注意我们在这里所做的事情.
+                  <em>PriceOrder</em> 函数需要产品目录中的信息,
+                  但是我们没有传递某种重量级的 <em>IProductCatalog</em> 接口,
+                  而是传递了一个函数 (<em>GetProductPrice</em>),
+                  该函数恰好代表了我们现阶段对产品目录的需求. 也就是说,
+                  <em>GetProductPrice</em> 充当了一个抽象 –
+                  它隐藏了产品目录的存在, 只向我们提供了所需的功能,
+                  而没有更多(类似接口隔离).
+                </p>
+                <p><em>PriceOrder</em> 的签名将如下所示:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     GetProductPrice <span style="color: #228B22">// dependency</span>
     -&gt; ValidatedOrder <span style="color: #228B22">// input</span>
     -&gt; PricedOrder <span style="color: #228B22">// output</span>
-</pre></div>
-<p>这个函数始终成功, 因此无需返回 <em>Result</em>.</p>
-<h2 id="the-acknowledge-order-step">The Acknowledge Order Step</h2>
-<p>下一步是 <em>Acknowledge</em> 步骤, 它将创建一封确认信, 并将其发送给客户.</p>
-<p>首先是为 “确认信” 建模. 现在假设它只包含一个 HTML 字符串即可. 我们将 HTML 字符串建模为简单类型, 并将 <em>OrderAcknowledgment</em> 建模为 AND 类型, 其中包含邮件地址和邮件内容(HTML 字符串):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">HtmlString</span> =
+</pre>
+                </div>
+                <p>这个函数始终成功, 因此无需返回 <em>Result</em>.</p>
+                <h2 id="the-acknowledge-order-step">
+                  The Acknowledge Order Step
+                </h2>
+                <p>
+                  下一步是 <em>Acknowledge</em> 步骤, 它将创建一封确认信,
+                  并将其发送给客户.
+                </p>
+                <p>
+                  首先是为 “确认信” 建模. 现在假设它只包含一个 HTML 字符串即可.
+                  我们将 HTML 字符串建模为简单类型, 并将
+                  <em>OrderAcknowledgment</em> 建模为 AND 类型,
+                  其中包含邮件地址和邮件内容(HTML 字符串):
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">HtmlString</span> =
     HtmlString <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderAcknowledgment</span> = {
     EmailAddress : EmailAddress
     Letter : HtmlString
 }
-</pre></div>
-<p>我们怎么知道这封信的内容是什么? 有可能是根据客户信息和订单详细信息, 然后从某种模板中创建内容.</p>
-<p>但与其将这种逻辑嵌入到工作流中, 不如让它成为其他人的问题! 也就是说, 我们假设某个服务函数将为我们生成内容, 而我们要做的就是将 <em>PricedOrder</em> 提供给这个服务函数.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateOrderAcknowledgmentLetter</span> =
+</pre>
+                </div>
+                <p>
+                  我们怎么知道这封信的内容是什么?
+                  有可能是根据客户信息和订单详细信息, 然后从某种模板中创建内容.
+                </p>
+                <p>
+                  但与其将这种逻辑嵌入到工作流中, 不如让它成为其他人的问题!
+                  也就是说, 我们假设某个服务函数将为我们生成内容,
+                  而我们要做的就是将 <em>PricedOrder</em> 提供给这个服务函数.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateOrderAcknowledgmentLetter</span> =
     PricedOrder -&gt; HtmlString
-</pre></div>
-<p>然后我们将这个函数作为 <em>Acknowledge</em> 步骤的依赖项.</p>
-<p>一旦有了信件后, 我们需要发送它. 我们应该怎么做? 我们应该直接调用某种 API, 还是将确认信息写入消息队列, 或者是其它的什么方式?</p>
-<p>幸运的是, 我们现在无需决定这些问题. 我们可以先不讨论确切的实现, 而只关注需要的接口. 和以前一样, 现在我们所需要做的设计就是定义一个函数, 该函数将 <em>OrderAcknowledgment</em> 作为输入并为我们发送出去 – 我们不在乎具体怎么发.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
+</pre>
+                </div>
+                <p>然后我们将这个函数作为 <em>Acknowledge</em> 步骤的依赖项.</p>
+                <p>
+                  一旦有了信件后, 我们需要发送它. 我们应该怎么做?
+                  我们应该直接调用某种 API, 还是将确认信息写入消息队列,
+                  或者是其它的什么方式?
+                </p>
+                <p>
+                  幸运的是, 我们现在无需决定这些问题.
+                  我们可以先不讨论确切的实现, 而只关注需要的接口. 和以前一样,
+                  现在我们所需要做的设计就是定义一个函数, 该函数将
+                  <em>OrderAcknowledgment</em> 作为输入并为我们发送出去 –
+                  我们不在乎具体怎么发.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
     OrderAcknowledgment -&gt; <span style="color: #00688B; font-weight: bold">unit</span>
-</pre></div>
-<p>在这里, 该函数未返回任何结果, 我们使用 <em>unit</em> 来表示存在一些我们不关心的副作用.</p>
-<p>如果我们想要从 <em>Place Order</em> 工作流中返回一个 <em>OrderAcknowledgmentSent</em> 事件, 但是上面这种设计, 我们无法确认是否成功发送. 因此, 我们需要进行更改, 一个明显的选择是返回一个布尔值, 然后我们可以根据它来决定是否创建事件:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
+</pre>
+                </div>
+                <p>
+                  在这里, 该函数未返回任何结果, 我们使用
+                  <em>unit</em> 来表示存在一些我们不关心的副作用.
+                </p>
+                <p>
+                  如果我们想要从 <em>Place Order</em> 工作流中返回一个
+                  <em>OrderAcknowledgmentSent</em> 事件, 但是上面这种设计,
+                  我们无法确认是否成功发送. 因此, 我们需要进行更改,
+                  一个明显的选择是返回一个布尔值,
+                  然后我们可以根据它来决定是否创建事件:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
     OrderAcknowledgment -&gt; <span style="color: #00688B; font-weight: bold">bool</span>
-</pre></div>
-<p>但是, 在设计中布尔值通常是一个错误的选择, 因为布尔值信息不多. 最好使用简单的 <em>Sent/NotSent</em> OR 类型而不是bool:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendResult</span> = Sent | NotSent
+</pre>
+                </div>
+                <p>
+                  但是, 在设计中布尔值通常是一个错误的选择, 因为布尔值信息不多.
+                  最好使用简单的 <em>Sent/NotSent</em> OR 类型而不是bool:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendResult</span> = Sent | NotSent
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
     OrderAcknowledgment -&gt; SendResult
-</pre></div>
-<p>或者, 我们应该让服务本身返回 <em>OrderAcnowledgmentSent</em> 事件?</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
+</pre>
+                </div>
+                <p>
+                  或者, 我们应该让服务本身返回
+                  <em>OrderAcnowledgmentSent</em> 事件?
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
     OrderAcknowledgment -&gt; OrderAcknowledgmentSent option
-</pre></div>
-<p>但如果这样做, 我们会因为事件类型在领域和服务之间创建了耦合. 因此, 我们现在将继续使用 <em>Sent/NotSent</em> 方案(以后需要的话可以再更改它).</p>
-<p>最后是定义 <em>Acknowledge Order</em> 的输出 – <em>OrderAcknowledgmentSent</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderAcknowledgmentSent</span> = {
+</pre>
+                </div>
+                <p>
+                  但如果这样做, 我们会因为事件类型在领域和服务之间创建了耦合.
+                  因此, 我们现在将继续使用
+                  <em>Sent/NotSent</em> 方案(以后需要的话可以再更改它).
+                </p>
+                <p>
+                  最后是定义 <em>Acknowledge Order</em> 的输出 –
+                  <em>OrderAcknowledgmentSent</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderAcknowledgmentSent</span> = {
     OrderId : OrderId
     EmailAddress : EmailAddress
 }
-</pre></div>
-<p>现在, 让我们将所有这些放在一起以定义此步骤的函数类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AcknowledgeOrder</span> =
+</pre>
+                </div>
+                <p>现在, 让我们将所有这些放在一起以定义此步骤的函数类型:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AcknowledgeOrder</span> =
     CreateOrderAcknowledgmentLetter <span style="color: #228B22">// dependency</span>
     -&gt; SendOrderAcknowledgment <span style="color: #228B22">// dependency</span>
     -&gt; PricedOrder <span style="color: #228B22">// input</span>
     -&gt; OrderAcknowledgmentSent option <span style="color: #228B22">// output</span>
-</pre></div>
-<p>该函数返回一个可选事件, 因为可能 <em>acknowledgement</em> 没有成功发送.</p>
-<h2 id="creating-the-events-to-return">Creating the Events To Return</h2>
-<p>上一步将为我们创建 <em>OrderAcknowledgmentSent</em> 事件, 但是我们仍然需要创建 <em>OrderPlaced</em> 事件(用于运输)和 <em>BillableOrderPlaced</em> 事件(用于计费).</p>
-<p>这些很容易定义: <em>OrderPlaced</em> 事件可以只是 <em>PricedOrder</em> 的别名, 而 <em>BillableOrderPlaced</em> 只是 <em>PricedOrder</em> 的一个子集:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderPlaced</span> = PricedOrder
+</pre>
+                </div>
+                <p>
+                  该函数返回一个可选事件, 因为可能
+                  <em>acknowledgement</em> 没有成功发送.
+                </p>
+                <h2 id="creating-the-events-to-return">
+                  Creating the Events To Return
+                </h2>
+                <p>
+                  上一步将为我们创建 <em>OrderAcknowledgmentSent</em> 事件,
+                  但是我们仍然需要创建 <em>OrderPlaced</em> 事件(用于运输)和
+                  <em>BillableOrderPlaced</em> 事件(用于计费).
+                </p>
+                <p>
+                  这些很容易定义: <em>OrderPlaced</em> 事件可以只是
+                  <em>PricedOrder</em> 的别名, 而
+                  <em>BillableOrderPlaced</em> 只是
+                  <em>PricedOrder</em> 的一个子集:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderPlaced</span> = PricedOrder
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillableOrderPlaced</span> = {
   OrderId : OrderId
   BillingAddress: Address
   AmountToBill : BillingAmount
   }
-</pre></div>
-<p>要实际返回事件, 我们可以创建一个特殊的类型来保存它们, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderResult</span> = {
+</pre>
+                </div>
+                <p>
+                  要实际返回事件, 我们可以创建一个特殊的类型来保存它们,
+                  如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderResult</span> = {
     OrderPlaced : OrderPlaced
     BillableOrderPlaced : BillableOrderPlaced
     OrderAcknowledgmentSent : OrderAcknowledgmentSent option
 }
-</pre></div>
-<p>但是在以后我们很可能会在此工作流中添加新的事件, 定义这样的特殊 AND 类型使更改变得更加困难.</p>
-<p>所以, 为什么我们不让工作流返回事件列表, 其中事件可以是 <em>OrderPlaced</em>, <em>BillableOrderPlaced</em>, <em>OrderAcknowledgmentSent</em> 中的一个.</p>
-<p>也就是说, 我们将定义一个 <em>OrderPlacedEvent</em>, 它是这样的 OR 类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderEvent</span> =
+</pre>
+                </div>
+                <p>
+                  但是在以后我们很可能会在此工作流中添加新的事件, 定义这样的特殊
+                  AND 类型使更改变得更加困难.
+                </p>
+                <p>
+                  所以, 为什么我们不让工作流返回事件列表, 其中事件可以是
+                  <em>OrderPlaced</em>, <em>BillableOrderPlaced</em>,
+                  <em>OrderAcknowledgmentSent</em> 中的一个.
+                </p>
+                <p>
+                  也就是说, 我们将定义一个 <em>OrderPlacedEvent</em>, 它是这样的
+                  OR 类型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderEvent</span> =
     | OrderPlaced <span style="color: #8B008B; font-weight: bold">of</span> OrderPlaced
     | BillableOrderPlaced <span style="color: #8B008B; font-weight: bold">of</span> BillableOrderPlaced
     | AcknowledgmentSent <span style="color: #8B008B; font-weight: bold">of</span> OrderAcknowledgmentSent
-</pre></div>
-<p>然后, 工作流的最后一步将发出这些事件的列表:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateEvents</span> =
+</pre>
+                </div>
+                <p>然后, 工作流的最后一步将发出这些事件的列表:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateEvents</span> =
     PricedOrder -&gt; PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span>
-</pre></div>
-<p>如果我们需要处理新事件, 可以将其添加到选项中, 而不会破坏整个工作流. 而且, 如果发现相同的事件出现在领域中的多个工作流中, 我们甚至可以升级并创建一个更通用的 <em>OrderTakingDomainEvent</em> 作为领域中所有事件的选择.</p>
-<h1 id="documenting-effects">Documenting Effects</h1>
-<p>在<a href="http://www.smallcpp.cn/san-domain-modeling-with-types.html#documenting-effects-in-the-function-signature">前面的讨论</a>中, 我们提到了在类型签名中记录副作用: 此函数可以产生什么效果? 会返回错误吗? 它有 I/O 吗?</p>
-<p>让我们快速回顾一下我们所有的依赖关系, 并仔细检查是否需要明确说明此类副作用.</p>
-<h2 id="effects-in-the-validation-step">Effects in the Validation Step</h2>
-<p>验证步骤具有两个依赖性: <em>CheckProductCodeExists</em> 和 <em>CheckAddressExists</em>.</p>
-<p>先来看一看 <em>CheckProductCodeExists</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
+</pre>
+                </div>
+                <p>
+                  如果我们需要处理新事件, 可以将其添加到选项中,
+                  而不会破坏整个工作流. 而且,
+                  如果发现相同的事件出现在领域中的多个工作流中,
+                  我们甚至可以升级并创建一个更通用的
+                  <em>OrderTakingDomainEvent</em> 作为领域中所有事件的选择.
+                </p>
+                <h1 id="documenting-effects">Documenting Effects</h1>
+                <p>
+                  在<a
+                    href="http://www.smallcpp.com/san-domain-modeling-with-types.html#documenting-effects-in-the-function-signature"
+                    >前面的讨论</a
+                  >中, 我们提到了在类型签名中记录副作用: 此函数可以产生什么效果?
+                  会返回错误吗? 它有 I/O 吗?
+                </p>
+                <p>
+                  让我们快速回顾一下我们所有的依赖关系,
+                  并仔细检查是否需要明确说明此类副作用.
+                </p>
+                <h2 id="effects-in-the-validation-step">
+                  Effects in the Validation Step
+                </h2>
+                <p>
+                  验证步骤具有两个依赖性: <em>CheckProductCodeExists</em> 和
+                  <em>CheckAddressExists</em>.
+                </p>
+                <p>先来看一看 <em>CheckProductCodeExists</em>:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckProductCodeExists</span> =
     ProductCode -&gt; <span style="color: #00688B; font-weight: bold">bool</span>
-</pre></div>
-<p>这个函数是远程调用吗? 或者可能会返回错误吗? 让我们假设这些都没有. 我们希望可以使用产品目录的本地缓存, 我们可以快速访问它.</p>
-<p>另外我们已经知道 <em>CheckAddressExists</em> 函数是远程调用, 而不是领域内的本地服务, 因此它具有 <em>Async</em> 和 <em>Result</em> 副作用. 实际上, <em>Async</em> 和 <em>Result</em> 经常一起出现, 因此我们通常使用 <em>AsyncResult</em> 别名将它们组合为一种类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AsyncResult</span>&lt;<span style="color: #8B008B; font-weight: bold">'</span>success,<span style="color: #8B008B; font-weight: bold">'</span>failure&gt; =
+</pre>
+                </div>
+                <p>
+                  这个函数是远程调用吗? 或者可能会返回错误吗?
+                  让我们假设这些都没有. 我们希望可以使用产品目录的本地缓存,
+                  我们可以快速访问它.
+                </p>
+                <p>
+                  另外我们已经知道 <em>CheckAddressExists</em> 函数是远程调用,
+                  而不是领域内的本地服务, 因此它具有 <em>Async</em> 和
+                  <em>Result</em> 副作用. 实际上, <em>Async</em> 和
+                  <em>Result</em> 经常一起出现, 因此我们通常使用
+                  <em>AsyncResult</em> 别名将它们组合为一种类型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AsyncResult</span>&lt;<span style="color: #8B008B; font-weight: bold">'</span>success,<span style="color: #8B008B; font-weight: bold">'</span>failure&gt; =
     Async&lt;Result&lt;<span style="color: #8B008B; font-weight: bold">'</span>success,<span style="color: #8B008B; font-weight: bold">'</span>failure&gt;&gt;
-</pre></div>
-<p>这样, 我们现在可以将 <em>CheckAddressExists</em> 的返回类型从 <em>Result</em> 更改为 <em>AsyncResult</em>, 以指示该函数具有异步和错误副作用:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckAddressExists</span> =
+</pre>
+                </div>
+                <p>
+                  这样, 我们现在可以将 <em>CheckAddressExists</em> 的返回类型从
+                  <em>Result</em> 更改为 <em>AsyncResult</em>,
+                  以指示该函数具有异步和错误副作用:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CheckAddressExists</span> =
     UnvalidatedAddress -&gt; AsyncResult&lt;CheckedAddress,AddressValidationError&gt;
-</pre></div>
-<p>现在从类型签名中可以明显看出 <em>CheckAddressExists</em> 函数正在执行 I/O, 并且可能会失败. 之前谈到界限上下文时, 我们说自治(<em>autonomy</em>)是一个关键因素, 那么是否意味着我们应该尝试创建地址验证服务的本地版本? 这取决于 <em>Ollie</em>(业务领域专家) 提起此服务时是否要求具有很高的可用性(此例中没有).</p>
-<blockquote>
-<p>请记住, 想要自治的主要原因不是性能, 而是致力于高可用的服务.</p>
-</blockquote>
-<p>就像 <em>Result</em> 一样, <em>Async</em> 对于包含它的任何代码都具有感染力. 因此必须更改整个 <em>ValidateOrder</em> 步骤以也返回 <em>AsyncResult</em>:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <p>
+                  现在从类型签名中可以明显看出
+                  <em>CheckAddressExists</em> 函数正在执行 I/O, 并且可能会失败.
+                  之前谈到界限上下文时,
+                  我们说自治(<em>autonomy</em>)是一个关键因素,
+                  那么是否意味着我们应该尝试创建地址验证服务的本地版本? 这取决于
+                  <em>Ollie</em>(业务领域专家)
+                  提起此服务时是否要求具有很高的可用性(此例中没有).
+                </p>
+                <blockquote>
+                  <p>
+                    请记住, 想要自治的主要原因不是性能, 而是致力于高可用的服务.
+                  </p>
+                </blockquote>
+                <p>
+                  就像 <em>Result</em> 一样,
+                  <em>Async</em> 对于包含它的任何代码都具有感染力.
+                  因此必须更改整个 <em>ValidateOrder</em> 步骤以也返回
+                  <em>AsyncResult</em>:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     CheckProductCodeExists <span style="color: #228B22">// dependency</span>
     -&gt; CheckAddressExists <span style="color: #228B22">// AsyncResult dependency</span>
     -&gt; UnvalidatedOrder <span style="color: #228B22">// input</span>
     -&gt; AsyncResult&lt;ValidatedOrder,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<h2 id="effects-in-the-pricing-step">Effects in the Pricing Step</h2>
-<p><em>PriceOrder</em> 步骤只有 <em>GetProductPrice</em> 一个依赖. 我们将再次假设产品目录是本地的(例如缓存在内存中), 因此这个依赖项不是异步的, 而且据我们所知也不会有错误. 因此 <em>GetProductPrice</em> 没有任何副作用.</p>
-<p>但是<em>PriceOrder</em> 步骤本身很可能会返回错误. 假设某商品定价错误, 因此整个 <em>AmountToBill</em> 很大(或负数). 这是我们应该捕获的东西. 所以现在我们还需要一个错误类型, 我们将其称为 <em>PricingError</em>.</p>
-<p><em>PriceOrder</em> 函数现在如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PricingError</span> =
+</pre>
+                </div>
+                <h2 id="effects-in-the-pricing-step">
+                  Effects in the Pricing Step
+                </h2>
+                <p>
+                  <em>PriceOrder</em> 步骤只有
+                  <em>GetProductPrice</em> 一个依赖.
+                  我们将再次假设产品目录是本地的(例如缓存在内存中),
+                  因此这个依赖项不是异步的, 而且据我们所知也不会有错误. 因此
+                  <em>GetProductPrice</em> 没有任何副作用.
+                </p>
+                <p>
+                  但是<em>PriceOrder</em> 步骤本身很可能会返回错误.
+                  假设某商品定价错误, 因此整个
+                  <em>AmountToBill</em> 很大(或负数). 这是我们应该捕获的东西.
+                  所以现在我们还需要一个错误类型, 我们将其称为
+                  <em>PricingError</em>.
+                </p>
+                <p><em>PriceOrder</em> 函数现在如下所示:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PricingError</span> =
     PricingError <span style="color: #8B008B; font-weight: bold">of</span> <span style="color: #00688B; font-weight: bold">string</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     GetProductPrice <span style="color: #228B22">// dependency</span>
     -&gt; ValidatedOrder <span style="color: #228B22">// input</span>
     -&gt; Result&lt;PricedOrder,PricingError&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<h2 id="effects-in-the-acknowledge-step">Effects in the Acknowledge Step</h2>
-<p><em>AcknowledgeOrder</em> 步骤具有两个依赖项:</p>
-<ul>
-<li><em>CreateOrderAcknowledgmentLetter</em></li>
-<li><em>SendOrderAcknowledgment</em></li>
-</ul>
-<p><em>CreateOrderAcknowledgmentLetter</em> 函数会返回错误吗? 也许不会, 我们将假定它是本地的, 并使用已缓存的模板. 因此, 总的来说, <em>CreateOrderAcknowledgmentLetter</em> 函数没有任何需要在类型签名中记录的副作用.</p>
-<p>另一方面, 我们知道 <em>SendOrderAcknowledgment</em> 将执行 I/O, 因此有异步副作用. 那是否有错误呢？此处我们不在乎错误的详细信息, 即使有错误, 我们也要忽略它并继续执行. 因此, 这意味着修订后的 <em>SendOrderAcknowledgment</em> 将具有 <em>Async</em> 类型, 而不是 <em>Result</em> 类型:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
+</pre>
+                </div>
+                <h2 id="effects-in-the-acknowledge-step">
+                  Effects in the Acknowledge Step
+                </h2>
+                <p><em>AcknowledgeOrder</em> 步骤具有两个依赖项:</p>
+                <ul>
+                  <li><em>CreateOrderAcknowledgmentLetter</em></li>
+                  <li><em>SendOrderAcknowledgment</em></li>
+                </ul>
+                <p>
+                  <em>CreateOrderAcknowledgmentLetter</em> 函数会返回错误吗?
+                  也许不会, 我们将假定它是本地的, 并使用已缓存的模板. 因此,
+                  总的来说,
+                  <em>CreateOrderAcknowledgmentLetter</em>
+                  函数没有任何需要在类型签名中记录的副作用.
+                </p>
+                <p>
+                  另一方面, 我们知道 <em>SendOrderAcknowledgment</em> 将执行
+                  I/O, 因此有异步副作用.
+                  那是否有错误呢？此处我们不在乎错误的详细信息, 即使有错误,
+                  我们也要忽略它并继续执行. 因此, 这意味着修订后的
+                  <em>SendOrderAcknowledgment</em> 将具有 <em>Async</em> 类型,
+                  而不是 <em>Result</em> 类型:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">SendOrderAcknowledgment</span> =
     OrderAcknowledgment -&gt; Async&lt;SendResult&gt;
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">AcknowledgeOrder</span> =
@@ -551,11 +1313,24 @@
     -&gt; SendOrderAcknowledgment <span style="color: #228B22">// Async dependency</span>
     -&gt; PricedOrder <span style="color: #228B22">// input</span>
     -&gt; Async&lt;OrderAcknowledgmentSent option&gt; <span style="color: #228B22">// Async output</span>
-</pre></div>
-<h1 id="composing-the-workflow-from-the-steps">Composing the Workflow From the Steps</h1>
-<p>现在我们定义了所有步骤, 当我们实现它们时, 应该能够将一个步骤的输出连接到下一个步骤的输入, 从而建立整个工作流.</p>
-<p>让我们把那些步骤的定义拿出来放在一起, 并删除依赖项, 以便观察仅列出输入和输出.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <h1 id="composing-the-workflow-from-the-steps">
+                  Composing the Workflow From the Steps
+                </h1>
+                <p>
+                  现在我们定义了所有步骤, 当我们实现它们时,
+                  应该能够将一个步骤的输出连接到下一个步骤的输入,
+                  从而建立整个工作流.
+                </p>
+                <p>
+                  让我们把那些步骤的定义拿出来放在一起, 并删除依赖项,
+                  以便观察仅列出输入和输出.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     UnvalidatedOrder <span style="color: #228B22">// input</span>
     -&gt; AsyncResult&lt;ValidatedOrder,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt; <span style="color: #228B22">// output</span>
 
@@ -570,12 +1345,33 @@
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">CreateEvents</span> =
     PricedOrder <span style="color: #228B22">// input</span>
     -&gt; PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span> <span style="color: #228B22">// output</span>
-</pre></div>
-<p><em>PriceOrder</em> 的输入需要一个 <em>ValidatedOrder</em>, 但是 <em>ValidateOrder</em> 的输出是 <em>AsyncResult</em>, 这似乎根本不匹配. 同样, <em>PriceOrder</em> 步骤的输出不能用作 <em>AcknowledgeOrder</em> 的输入, 依此类推.</p>
-<p>为了组合这些函数, 我们将不得不处理输入和输出类型, 以便它们兼容并可以装配在一起. 在进行类型驱动的设计时(type-driven design), 这是一个常见的挑战, 我们将在[实现章节]中了解如何做到这一点.</p>
-<h1 id="are-dependencies-part-of-the-design">Are Dependencies Part of the Design?</h1>
-<p>在上面的代码中, 我们将对其他上下文的调用(例如 <em>CheckProductCodeExists</em> 和 <em>ValidateAddress</em>)视为依赖项记录. 我们为工作流的每个子步骤的依赖都设计了明确的额外参数:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <p>
+                  <em>PriceOrder</em> 的输入需要一个 <em>ValidatedOrder</em>,
+                  但是 <em>ValidateOrder</em> 的输出是 <em>AsyncResult</em>,
+                  这似乎根本不匹配. 同样, <em>PriceOrder</em> 步骤的输出不能用作
+                  <em>AcknowledgeOrder</em> 的输入, 依此类推.
+                </p>
+                <p>
+                  为了组合这些函数, 我们将不得不处理输入和输出类型,
+                  以便它们兼容并可以装配在一起.
+                  在进行类型驱动的设计时(type-driven design),
+                  这是一个常见的挑战, 我们将在[实现章节]中了解如何做到这一点.
+                </p>
+                <h1 id="are-dependencies-part-of-the-design">
+                  Are Dependencies Part of the Design?
+                </h1>
+                <p>
+                  在上面的代码中, 我们将对其他上下文的调用(例如
+                  <em>CheckProductCodeExists</em> 和
+                  <em>ValidateAddress</em>)视为依赖项记录.
+                  我们为工作流的每个子步骤的依赖都设计了明确的额外参数:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     CheckProductCodeExists <span style="color: #228B22">// explicit dependency</span>
     -&gt; CheckAddressExists <span style="color: #228B22">// explicit dependency</span>
     -&gt; UnvalidatedOrder <span style="color: #228B22">// input</span>
@@ -584,31 +1380,69 @@
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     GetProductPrice <span style="color: #228B22">// explicit dependency</span>
     -&gt; ValidatedOrder <span style="color: #228B22">// input -&gt; Result&lt;PricedOrder,PricingError&gt; // output</span>
-</pre></div>
-<p>有人可能会争辩说, 任何流程如何执行其工作都应该对我们隐藏, 我们是否真的在乎它需要与哪些系统协作(指明确的额外参数)以实现其目标? 如果从这一角度出发, 流程定义将简化为仅输入和输出, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
+</pre>
+                </div>
+                <p>
+                  有人可能会争辩说, 任何流程如何执行其工作都应该对我们隐藏,
+                  我们是否真的在乎它需要与哪些系统协作(指明确的额外参数)以实现其目标?
+                  如果从这一角度出发, 流程定义将简化为仅输入和输出, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">ValidateOrder</span> =
     UnvalidatedOrder <span style="color: #228B22">// input</span>
     -&gt; AsyncResult&lt;ValidatedOrder,ValidationError <span style="color: #00688B; font-weight: bold">list</span>&gt; <span style="color: #228B22">// output</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PriceOrder</span> =
     ValidatedOrder <span style="color: #228B22">// input</span>
     -&gt; Result&lt;PricedOrder,PricingError&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<p>哪一种方式更好呢? 设计永远不会有正确的答案, 但总有些准则可以遵循:</p>
-<ul>
-<li>对于中公开出去的 API, 请对调用者隐藏依赖信息.</li>
-<li>对于内部使用的函数, 请明确说明其依赖关系.</li>
-</ul>
-<p>在这种情况下, 不应公开顶级 <em>PlaceOrder</em> 工作流函数的依赖项, 因为调用者不需要了解它们. 签名应仅显示输入和输出, 如下所示:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderWorkflow</span> =
+</pre>
+                </div>
+                <p>
+                  哪一种方式更好呢? 设计永远不会有正确的答案,
+                  但总有些准则可以遵循:
+                </p>
+                <ul>
+                  <li>对于中公开出去的 API, 请对调用者隐藏依赖信息.</li>
+                  <li>对于内部使用的函数, 请明确说明其依赖关系.</li>
+                </ul>
+                <p>
+                  在这种情况下, 不应公开顶级
+                  <em>PlaceOrder</em> 工作流函数的依赖项,
+                  因为调用者不需要了解它们. 签名应仅显示输入和输出, 如下所示:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderWorkflow</span> =
     PlaceOrder <span style="color: #228B22">// input</span>
     -&gt; AsyncResult&lt;PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span>,PlaceOrderError&gt; <span style="color: #228B22">// output</span>
-</pre></div>
-<p>但是, 对于工作流中的每个内部步骤, 都应该像在原始设计中那样明确显示依赖性. 这有助于记录每个步骤实际需要的内容. 如果某个步骤的依赖关系发生变化, 那么我们可以更改该步骤的功能定义, 这又将迫使我们更改实现.</p>
-<h1 id="the-complete-pipeline">The Complete Pipeline</h1>
-<p>我们已经完成了设计的第一步, 让我们再回顾一下. 首先, 我们将记录下公开 API 的类型. 通常, 我们会将它们全部放在一个文件中, 例如 <em>DomainApi.fs</em> 或其它语言中类似的文件.</p>
-<p>首先是输入的类型定义(也就是触发 <em>Place Order</em> 工作流的命令 – <em>PlaceOrderCommand</em>):</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// ----------------------</span>
+</pre>
+                </div>
+                <p>
+                  但是, 对于工作流中的每个内部步骤,
+                  都应该像在原始设计中那样明确显示依赖性.
+                  这有助于记录每个步骤实际需要的内容.
+                  如果某个步骤的依赖关系发生变化,
+                  那么我们可以更改该步骤的功能定义, 这又将迫使我们更改实现.
+                </p>
+                <h1 id="the-complete-pipeline">The Complete Pipeline</h1>
+                <p>
+                  我们已经完成了设计的第一步, 让我们再回顾一下. 首先,
+                  我们将记录下公开 API 的类型. 通常,
+                  我们会将它们全部放在一个文件中, 例如
+                  <em>DomainApi.fs</em> 或其它语言中类似的文件.
+                </p>
+                <p>
+                  首先是输入的类型定义(也就是触发
+                  <em>Place Order</em> 工作流的命令 –
+                  <em>PlaceOrderCommand</em>):
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// ----------------------</span>
 <span style="color: #228B22">// Input data</span>
 <span style="color: #228B22">// ----------------------</span>
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">UnvalidatedOrder</span> = {
@@ -631,9 +1465,13 @@
 }
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderCommand</span> = Command&lt;UnvalidatedOrder&gt;
-</pre></div>
-<p>接下来是输出和工作流本身的定义:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #CD5555">/// Success output of PlaceOrder workflow</span>
+</pre>
+                </div>
+                <p>接下来是输出和工作流本身的定义:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #CD5555">/// Success output of PlaceOrder workflow</span>
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">OrderPlaced</span> = <span style="color: #228B22">// ...</span>
 
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">BillableOrderPlaced</span> = <span style="color: #228B22">// ...</span>
@@ -655,11 +1493,19 @@
 <span style="color: #8B008B; font-weight: bold">type</span> <span style="color: #008b45; font-weight: bold">PlaceOrderWorkflow</span> =
     PlaceOrderCommand <span style="color: #228B22">// input command</span>
     -&gt; AsyncResult&lt;PlaceOrderEvent <span style="color: #00688B; font-weight: bold">list</span>,PlaceOrderError&gt; <span style="color: #228B22">// output events</span>
-</pre></div>
-<h2 id="the-internal-steps">The internal steps</h2>
-<p>在单独的实现文件(例如 <em>PlaceOrderWorkflow.fs</em>)中记录内部子步骤的类型定义, 在这些定义后面, 我们将添加实现.</p>
-<p>首先是代表订单生命周期的内部状态:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// bring in the types from the domain API module</span>
+</pre>
+                </div>
+                <h2 id="the-internal-steps">The internal steps</h2>
+                <p>
+                  在单独的实现文件(例如
+                  <em>PlaceOrderWorkflow.fs</em>)中记录内部子步骤的类型定义,
+                  在这些定义后面, 我们将添加实现.
+                </p>
+                <p>首先是代表订单生命周期的内部状态:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// bring in the types from the domain API module</span>
 <span style="color: #8B008B; font-weight: bold">open</span> <span style="color: #008b45; text-decoration: underline">DomainApi</span>
 
 <span style="color: #228B22">// ----------------------</span>
@@ -691,9 +1537,13 @@
     | Validated <span style="color: #8B008B; font-weight: bold">of</span> ValidatedOrder
     | Priced <span style="color: #8B008B; font-weight: bold">of</span> PricedOrder
     <span style="color: #228B22">// etc</span>
-</pre></div>
-<p>然后定义每个内部子步骤:：</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span><span style="color: #228B22">// ----------------------</span>
+</pre>
+                </div>
+                <p>然后定义每个内部子步骤:：</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span><span style="color: #228B22">// ----------------------</span>
 <span style="color: #228B22">// Definitions of Internal Steps</span>
 <span style="color: #228B22">// ----------------------</span>
 
@@ -730,81 +1580,169 @@
     -&gt; Result&lt;PricedOrder,PricingError&gt; <span style="color: #228B22">// output</span>
 
 <span style="color: #228B22">// etc</span>
-</pre></div>
-<p>现在我们已经所有类型集中在一起了, 并随时可以指导实现.</p>
-<h1 id="long-running-workflows">Long Running Workflows</h1>
-<p>对于管道(<em>pipeline</em>), 有一个重要的假设, 那就是, 即使有远程系统调用, 该管道也将在大约几秒钟的短时间内完成.</p>
-<p>但是, 如果这些外部服务需要更长的时间才能完成该怎么办? 例如, 如果验证是由人而不是机器来完成的, 那可能会花掉整整一整天的时间, 又或者, 如果定价是由其他某个部门完成的, 那也有可能要花很长时间. 如果这些事都是真的, 它们会影响到哪些设计?</p>
-<p>首先, 我们需要在调用远程服务之前将状态保存到存储中, 然后等待一条消息告诉我们该服务已完成, 然后我们必须从存储中重新加载状态并继续执行该工作流中的下一步. 这比使用普通的异步调用要 “重” 得多, 因为我们需要在每个步骤之间保持状态.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/storage.png"/></p>
-<p>通过这样做, 我们将原始工作流分解为较小的独立块, 每个块均由事件触发. 我们甚至可以将其视为一系列单独的迷你工作流, 而不是一个工作流.</p>
-<p>在这里, 状态机模式是帮助我们思考的宝贵工具. 在执行每个步骤之前, 从存储中加载订单的当前状态, 然后迷你工作流将订单从当前状态转换为新状态, 最后, 新状态再次保存回存储中.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/函数式领域建模/state-storage.png"/></p>
-<p>这类长期运行的工作流有时称为 <em><a href="http://vasters.com/archive/Sagas.html">Sagas</a></em>. 每当涉及 “慢人” 时，它们很常见. 另外, 在要将工作流分解成由事件(例如微服务)联系在一起的分离的独立组件时, 也可以使用它们.</p>
-<p>在我们的示例中, 工作流非常简单. 如果事件和状态的数量增加, 并且转换变得复杂, 则可能需要创建一个特殊的组件, 即流程管理器. 该组件负责处理传入的消息, 根据当前状态确定应采取的操作, 然后触发适当的工作流.</p>
-    </div>
+</pre>
+                </div>
+                <p>现在我们已经所有类型集中在一起了, 并随时可以指导实现.</p>
+                <h1 id="long-running-workflows">Long Running Workflows</h1>
+                <p>
+                  对于管道(<em>pipeline</em>), 有一个重要的假设, 那就是,
+                  即使有远程系统调用, 该管道也将在大约几秒钟的短时间内完成.
+                </p>
+                <p>
+                  但是, 如果这些外部服务需要更长的时间才能完成该怎么办? 例如,
+                  如果验证是由人而不是机器来完成的,
+                  那可能会花掉整整一整天的时间, 又或者,
+                  如果定价是由其他某个部门完成的, 那也有可能要花很长时间.
+                  如果这些事都是真的, 它们会影响到哪些设计?
+                </p>
+                <p>
+                  首先, 我们需要在调用远程服务之前将状态保存到存储中,
+                  然后等待一条消息告诉我们该服务已完成,
+                  然后我们必须从存储中重新加载状态并继续执行该工作流中的下一步.
+                  这比使用普通的异步调用要 “重” 得多,
+                  因为我们需要在每个步骤之间保持状态.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/storage.png"
+                  />
+                </p>
+                <p>
+                  通过这样做, 我们将原始工作流分解为较小的独立块,
+                  每个块均由事件触发.
+                  我们甚至可以将其视为一系列单独的迷你工作流, 而不是一个工作流.
+                </p>
+                <p>
+                  在这里, 状态机模式是帮助我们思考的宝贵工具.
+                  在执行每个步骤之前, 从存储中加载订单的当前状态,
+                  然后迷你工作流将订单从当前状态转换为新状态, 最后,
+                  新状态再次保存回存储中.
+                </p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/函数式领域建模/state-storage.png"
+                  />
+                </p>
+                <p>
+                  这类长期运行的工作流有时称为
+                  <em
+                    ><a href="http://vasters.com/archive/Sagas.html"
+                      >Sagas</a
+                    ></em
+                  >. 每当涉及 “慢人” 时，它们很常见. 另外,
+                  在要将工作流分解成由事件(例如微服务)联系在一起的分离的独立组件时,
+                  也可以使用它们.
+                </p>
+                <p>
+                  在我们的示例中, 工作流非常简单. 如果事件和状态的数量增加,
+                  并且转换变得复杂, 则可能需要创建一个特殊的组件, 即流程管理器.
+                  该组件负责处理传入的消息, 根据当前状态确定应采取的操作,
+                  然后触发适当的工作流.
+                </p>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u51fd\u6570\u5f0f",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2019-12-16T23:00:00+08:00",
+              "headline": "\u4e94. Modeling Workflows as Pipelines",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/wu-modeling-workflows-as-pipelines.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "\u73b0\u5728\u5f00\u59cb\u5bf9 Place Order \u5de5\u4f5c\u6d41\u5efa\u6a21, \u4e0b\u9762\u662f\u6211\u4eec\u9700\u8981\u5efa\u6a21\u7684\u6458\u8981: workflow \"Place Order\" = input: UnvalidatedOrder output (on success): OrderAcknowledgmentSent AND OrderPlaced (to send to shipping) AND BillableOrderPlaced (to send to billing) output (on error): ValidationError \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://www.smallcpp.com/images/\u51fd\u6570\u5f0f\u9886\u57df\u5efa\u6a21/pipeline.png"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2019-12-16T23:00:00+08:00", "headline": "\u4e94. Modeling Workflows as Pipelines", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/wu-modeling-workflows-as-pipelines.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u73b0\u5728\u5f00\u59cb\u5bf9 Place Order \u5de5\u4f5c\u6d41\u5efa\u6a21, \u4e0b\u9762\u662f\u6211\u4eec\u9700\u8981\u5efa\u6a21\u7684\u6458\u8981: workflow \"Place Order\" = input: UnvalidatedOrder output (on success): OrderAcknowledgmentSent AND OrderPlaced (to send to shipping) AND BillableOrderPlaced (to send to billing) output (on error): ValidationError \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/\u51fd\u6570\u5f0f\u9886\u57df\u5efa\u6a21/pipeline.png"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

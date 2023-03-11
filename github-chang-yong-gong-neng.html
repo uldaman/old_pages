@@ -1,235 +1,455 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Github 常用功能</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - Github 常用功能" />
+    <meta
+      property="og:description"
+      content="Watch、star、fork 如上图所示, 每个 github 项目的右上角, 都有三个按钮: Watch、star、fork. Watch 这个单词在调试程序时经常遇到, 意为监视, 当把某个变量添加到监视后, 就可以实时看到变量的值的变化. Github 中的 Watch 也是类似的功能, 当你监视某个项目后, 如果项目发生变动, 如有人提交了 pull request、发起了..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/github-chang-yong-gong-neng.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/github/watch.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2017-08-26T21:28:00+08:00"
+    />
+    <meta property="article:section" content="工具折腾" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>Github 常用功能</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - Github 常用功能">
-  <meta property="og:description" content="Watch、star、fork 如上图所示, 每个 github 项目的右上角, 都有三个按钮: Watch、star、fork. Watch 这个单词在调试程序时经常遇到, 意为监视, 当把某个变量添加到监视后, 就可以实时看到变量的值的变化. Github 中的 Watch 也是类似的功能, 当你监视某个项目后, 如果项目发生变动, 如有人提交了 pull request、发起了...">
-<meta property="og:url" content="http://www.smallcpp.cn/github-chang-yong-gong-neng.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/github/watch.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2017-08-26T21:28:00+08:00">
-  <meta property="article:section" content="工具折腾">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/github-chang-yong-gong-neng.html" rel="bookmark"
-        title="Permalink to Github 常用功能">Github 常用功能</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2017-08-26T21:28:00+08:00">
-    Published <span class="is-info">Sat 26 August 2017</span>
-    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#watchstarfork">Watch、star、fork</a><ul>
-<li><a href="#watch">Watch</a></li>
-<li><a href="#star">star</a></li>
-<li><a href="#fork">fork</a></li>
-</ul>
-</li>
-<li><a href="#issue">issue</a></li>
-<li><a href="#pull-request">Pull Request</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="watchstarfork">Watch、star、fork</h1>
-<p><img alt="" src="http://www.smallcpp.cn/images/github/watch.png"/></p>
-<p>如上图所示, 每个 github 项目的右上角, 都有三个按钮: <code>Watch</code>、<code>star</code>、<code>fork</code>.</p>
-<h2 id="watch">Watch</h2>
-<p>这个单词在调试程序时经常遇到, 意为监视, 当把某个变量添加到监视后, 就可以实时看到变量的值的变化.</p>
-<p>Github 中的 <code>Watch</code> 也是类似的功能, 当你监视某个项目后, 如果项目发生变动, 如有人提交了 pull request、发起了 issue 等等情况, 都会在自己的个人通知中心收到一条通知消息, 如果设置了个人邮箱, 那么还可能收到相应的邮件.</p>
-<p>点击 <code>Watch</code> 按钮后会出现三个选项:</p>
-<ul>
-<li>Not watching, 不监视, 将不会收到与我无关的通知, 只会关注与我有关的动态 (我发起的、主动参与的或被 @ 的)</li>
-<li>Watching, 监视, 关注这个项目的所有动态</li>
-<li>Ignoring, 彻底忽略这个项目的动态, 那意味着连与我有关的重要消息也收不到了</li>
-</ul>
-<p>通常只会在 <code>Not watching</code> 和 <code>Watching</code> 中选择.</p>
-<h2 id="star">star</h2>
-<p>集<code>点赞</code>与<code>收藏</code>功能于一体…</p>
-<p>点击 github 个人头像, 选择 <code>your stars</code> 可以查看 <code>star</code> 过的列表.</p>
-<p>然后就没啥好说的了…</p>
-<h2 id="fork">fork</h2>
-<p>当对别人的项目进行 <code>fork</code> 后, 就会在自己的仓库生成一份源项目的拷贝, 当然这个拷贝只是 <code>fork</code> 发生时的项目文件, 如果后续源项目文件发生改变, 必须通过 <a href="http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#pull-request">pull request</a> 去同步.</p>
-<p><code>fork</code> 应该只在需要对开源项目做贡献时才使用, 很多人会把 <code>fork</code> 当成收藏，这是不对的, 收藏应该使用 <a href="http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#star">star</a> 功能.</p>
-<p><code>fork</code> 别人的源项目后, 应该谨遵 <a href="http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#pull-request">pull request</a> 的建议去贡献自己的代码.</p>
-<h1 id="issue">issue</h1>
-<p><img alt="" src="http://www.smallcpp.cn/images/github/issues.png"/></p>
-<p>问题列表, 可当该项目的 <strong>todolist</strong> 使用, 可以选择 issue 的类型, 如 feature、bug 等.</p>
-<p>另外，在 commit 中可以通过 <code>#issue_id</code> 与某个 issue 关联, 比如 <code>commit message title, #1</code>, 还可以指定对 issue 的操作:</p>
-<ul>
-<li><code>commit message title, closed #1</code></li>
-<li><code>commit message title, fixed #1</code></li>
-<li><code>commit message title, resolved #1</code></li>
-</ul>
-<p>不过在此之前, 需要检查下你的 Github 的注册邮箱与 <code>git config --list</code> 中设置的 <code>user.email</code> 是否一致, <strong>只有一致了才能通过 commit 操作 issue</strong>, 如果不一致, 需要设置下:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>git config --global user.email "email@example.com"
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/github-chang-yong-gong-neng.html"
+                  rel="bookmark"
+                  title="Permalink to Github 常用功能"
+                  >Github 常用功能</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2017-08-26T21:28:00+08:00">
+                  Published <span class="is-info">Sat 26 August 2017</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    >工具折腾</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li>
+                      <a href="#watchstarfork">Watch、star、fork</a>
+                      <ul>
+                        <li><a href="#watch">Watch</a></li>
+                        <li><a href="#star">star</a></li>
+                        <li><a href="#fork">fork</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#issue">issue</a></li>
+                    <li><a href="#pull-request">Pull Request</a></li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="watchstarfork">Watch、star、fork</h1>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/github/watch.png"
+                  />
+                </p>
+                <p>
+                  如上图所示, 每个 github 项目的右上角, 都有三个按钮:
+                  <code>Watch</code>、<code>star</code>、<code>fork</code>.
+                </p>
+                <h2 id="watch">Watch</h2>
+                <p>
+                  这个单词在调试程序时经常遇到, 意为监视,
+                  当把某个变量添加到监视后, 就可以实时看到变量的值的变化.
+                </p>
+                <p>
+                  Github 中的 <code>Watch</code> 也是类似的功能,
+                  当你监视某个项目后, 如果项目发生变动, 如有人提交了 pull
+                  request、发起了 issue 等等情况,
+                  都会在自己的个人通知中心收到一条通知消息, 如果设置了个人邮箱,
+                  那么还可能收到相应的邮件.
+                </p>
+                <p>点击 <code>Watch</code> 按钮后会出现三个选项:</p>
+                <ul>
+                  <li>
+                    Not watching, 不监视, 将不会收到与我无关的通知,
+                    只会关注与我有关的动态 (我发起的、主动参与的或被 @ 的)
+                  </li>
+                  <li>Watching, 监视, 关注这个项目的所有动态</li>
+                  <li>
+                    Ignoring, 彻底忽略这个项目的动态,
+                    那意味着连与我有关的重要消息也收不到了
+                  </li>
+                </ul>
+                <p>
+                  通常只会在 <code>Not watching</code> 和
+                  <code>Watching</code> 中选择.
+                </p>
+                <h2 id="star">star</h2>
+                <p>集<code>点赞</code>与<code>收藏</code>功能于一体…</p>
+                <p>
+                  点击 github 个人头像, 选择 <code>your stars</code> 可以查看
+                  <code>star</code> 过的列表.
+                </p>
+                <p>然后就没啥好说的了…</p>
+                <h2 id="fork">fork</h2>
+                <p>
+                  当对别人的项目进行 <code>fork</code> 后,
+                  就会在自己的仓库生成一份源项目的拷贝, 当然这个拷贝只是
+                  <code>fork</code> 发生时的项目文件,
+                  如果后续源项目文件发生改变, 必须通过
+                  <a
+                    href="http://www.smallcpp.com/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#pull-request"
+                    >pull request</a
+                  >
+                  去同步.
+                </p>
+                <p>
+                  <code>fork</code> 应该只在需要对开源项目做贡献时才使用,
+                  很多人会把 <code>fork</code> 当成收藏，这是不对的,
+                  收藏应该使用
+                  <a
+                    href="http://www.smallcpp.com/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#star"
+                    >star</a
+                  >
+                  功能.
+                </p>
+                <p>
+                  <code>fork</code> 别人的源项目后, 应该谨遵
+                  <a
+                    href="http://www.smallcpp.com/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#pull-request"
+                    >pull request</a
+                  >
+                  的建议去贡献自己的代码.
+                </p>
+                <h1 id="issue">issue</h1>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/github/issues.png"
+                  />
+                </p>
+                <p>
+                  问题列表, 可当该项目的 <strong>todolist</strong> 使用,
+                  可以选择 issue 的类型, 如 feature、bug 等.
+                </p>
+                <p>
+                  另外，在 commit 中可以通过 <code>#issue_id</code> 与某个 issue
+                  关联, 比如 <code>commit message title, #1</code>, 还可以指定对
+                  issue 的操作:
+                </p>
+                <ul>
+                  <li><code>commit message title, closed #1</code></li>
+                  <li><code>commit message title, fixed #1</code></li>
+                  <li><code>commit message title, resolved #1</code></li>
+                </ul>
+                <p>
+                  不过在此之前, 需要检查下你的 Github 的注册邮箱与
+                  <code>git config --list</code> 中设置的
+                  <code>user.email</code> 是否一致,
+                  <strong>只有一致了才能通过 commit 操作 issue</strong>,
+                  如果不一致, 需要设置下:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>git config --global user.email "email@example.com"
 
 # 如果设置了 config --local, 则需要再检查下
 git config --local user.email "email@example.com"
-</pre></div>
-<p>issue 中还可以通过指定 <code>Assignee</code> 则可以将 issue 分配到某位项目成员身上, 为<strong>团队协作</strong>提供可能.</p>
-<p>最后, issue 是开放的, 作为一个路人, 你可以通过 issue 给别人的项目提 bug.</p>
-<h1 id="pull-request">Pull Request</h1>
-<blockquote>
-<p>首先, 要注意一点, 对于 fork 的项目, 最好永远不要直接在 master 分支上进行修改, 因为 fork 的源项目随时会发生更改, 当收到 fork 源更新的通知时, 需要在自己的仓库发起同步 Pull Request, 如果之前直接在 master 上修改了代码, 此时就会出现冲突问题. 所以在 master 分支上应该只用来发起同步 Pull Request.</p>
-</blockquote>
-<p>当 <a href="http://www.smallcpp.cn/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#fork">fork</a> 了一个开源项目后, 应该:</p>
-<ul>
-<li>clone 自己仓库的项目到本地</li>
-<li>在本地仓库中新建一个专门的开发分支进行修改</li>
-<li>push 开发分支的修改到自己的 github 仓库</li>
-<li>从开发分支向 fork 源的 master 分支发起推送 Pull Request</li>
-<li>fork 源项目的维护者合并功能到他的 master 分支</li>
-<li>从 fork 源的 master 分支发起同步 Pull Request 到自己仓库项目的 master 分支</li>
-<li>删除开发分支, Pull Request 工作流结束</li>
-</ul>
-<p><img alt="" src="http://www.smallcpp.cn/images/github/newrequest.png"/></p>
-<p>点击 <code>New pull request</code> 按钮创建一个新请求.</p>
-<p><img alt="" src="http://www.smallcpp.cn/images/github/comparing.png"/></p>
-<p>该请求是<strong>双向</strong>的:</p>
-<ul>
-<li>当如上图所示, <code>base fork</code> 选择 fork 的源项目而 <code>head fork</code> 选择自己的项目时, 创建的请求是把自己项目的更新推送到 -&gt; 源项目.</li>
-<li>反过来, 如果 <code>base fork</code> 选择自己的项目而 <code>head fork</code> 选择 fork 的源项目时, 创建的请求是从源项目更新到 -&gt; 自己的项目</li>
-<li>如果无法选择 <code>base fork</code> 和 <code>head fork</code>, 可以点击 <code>compare across forks</code> 试试.</li>
-</ul>
-    </div>
+</pre>
+                </div>
+                <p>
+                  issue 中还可以通过指定 <code>Assignee</code> 则可以将 issue
+                  分配到某位项目成员身上, 为<strong>团队协作</strong>提供可能.
+                </p>
+                <p>
+                  最后, issue 是开放的, 作为一个路人, 你可以通过 issue
+                  给别人的项目提 bug.
+                </p>
+                <h1 id="pull-request">Pull Request</h1>
+                <blockquote>
+                  <p>
+                    首先, 要注意一点, 对于 fork 的项目, 最好永远不要直接在
+                    master 分支上进行修改, 因为 fork 的源项目随时会发生更改,
+                    当收到 fork 源更新的通知时, 需要在自己的仓库发起同步 Pull
+                    Request, 如果之前直接在 master 上修改了代码,
+                    此时就会出现冲突问题. 所以在 master 分支上应该只用来发起同步
+                    Pull Request.
+                  </p>
+                </blockquote>
+                <p>
+                  当
+                  <a
+                    href="http://www.smallcpp.com/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Github%20%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html#fork"
+                    >fork</a
+                  >
+                  了一个开源项目后, 应该:
+                </p>
+                <ul>
+                  <li>clone 自己仓库的项目到本地</li>
+                  <li>在本地仓库中新建一个专门的开发分支进行修改</li>
+                  <li>push 开发分支的修改到自己的 github 仓库</li>
+                  <li>
+                    从开发分支向 fork 源的 master 分支发起推送 Pull Request
+                  </li>
+                  <li>fork 源项目的维护者合并功能到他的 master 分支</li>
+                  <li>
+                    从 fork 源的 master 分支发起同步 Pull Request
+                    到自己仓库项目的 master 分支
+                  </li>
+                  <li>删除开发分支, Pull Request 工作流结束</li>
+                </ul>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/github/newrequest.png"
+                  />
+                </p>
+                <p>点击 <code>New pull request</code> 按钮创建一个新请求.</p>
+                <p>
+                  <img
+                    alt=""
+                    src="http://www.smallcpp.com/images/github/comparing.png"
+                  />
+                </p>
+                <p>该请求是<strong>双向</strong>的:</p>
+                <ul>
+                  <li>
+                    当如上图所示, <code>base fork</code> 选择 fork 的源项目而
+                    <code>head fork</code> 选择自己的项目时,
+                    创建的请求是把自己项目的更新推送到 -&gt; 源项目.
+                  </li>
+                  <li>
+                    反过来, 如果 <code>base fork</code> 选择自己的项目而
+                    <code>head fork</code> 选择 fork 的源项目时,
+                    创建的请求是从源项目更新到 -&gt; 自己的项目
+                  </li>
+                  <li>
+                    如果无法选择 <code>base fork</code> 和
+                    <code>head fork</code>, 可以点击
+                    <code>compare across forks</code> 试试.
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u5de5\u5177\u6298\u817e",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2017-08-26T21:28:00+08:00",
+              "headline": "Github \u5e38\u7528\u529f\u80fd",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/github-chang-yong-gong-neng.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "Watch\u3001star\u3001fork \u5982\u4e0a\u56fe\u6240\u793a, \u6bcf\u4e2a github \u9879\u76ee\u7684\u53f3\u4e0a\u89d2, \u90fd\u6709\u4e09\u4e2a\u6309\u94ae: Watch\u3001star\u3001fork. Watch \u8fd9\u4e2a\u5355\u8bcd\u5728\u8c03\u8bd5\u7a0b\u5e8f\u65f6\u7ecf\u5e38\u9047\u5230, \u610f\u4e3a\u76d1\u89c6, \u5f53\u628a\u67d0\u4e2a\u53d8\u91cf\u6dfb\u52a0\u5230\u76d1\u89c6\u540e, \u5c31\u53ef\u4ee5\u5b9e\u65f6\u770b\u5230\u53d8\u91cf\u7684\u503c\u7684\u53d8\u5316. Github \u4e2d\u7684 Watch \u4e5f\u662f\u7c7b\u4f3c\u7684\u529f\u80fd, \u5f53\u4f60\u76d1\u89c6\u67d0\u4e2a\u9879\u76ee\u540e, \u5982\u679c\u9879\u76ee\u53d1\u751f\u53d8\u52a8, \u5982\u6709\u4eba\u63d0\u4ea4\u4e86 pull request\u3001\u53d1\u8d77\u4e86 issue \u7b49\u7b49\u60c5\u51b5, \u90fd\u4f1a\u5728\u81ea\u5df1\u7684\u4e2a\u4eba\u901a\u77e5\u4e2d\u5fc3\u6536\u5230\u4e00\u6761\u901a\u77e5\u6d88\u606f, \u5982\u679c\u8bbe\u7f6e\u4e86\u4e2a\u4eba\u90ae\u7bb1 \u2026",
+              "image": {
+                "@type": "ImageObject",
+                "url": "http://www.smallcpp.com/images/github/watch.png"
+              }
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-08-26T21:28:00+08:00", "headline": "Github \u5e38\u7528\u529f\u80fd", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/github-chang-yong-gong-neng.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "Watch\u3001star\u3001fork \u5982\u4e0a\u56fe\u6240\u793a, \u6bcf\u4e2a github \u9879\u76ee\u7684\u53f3\u4e0a\u89d2, \u90fd\u6709\u4e09\u4e2a\u6309\u94ae: Watch\u3001star\u3001fork. Watch \u8fd9\u4e2a\u5355\u8bcd\u5728\u8c03\u8bd5\u7a0b\u5e8f\u65f6\u7ecf\u5e38\u9047\u5230, \u610f\u4e3a\u76d1\u89c6, \u5f53\u628a\u67d0\u4e2a\u53d8\u91cf\u6dfb\u52a0\u5230\u76d1\u89c6\u540e, \u5c31\u53ef\u4ee5\u5b9e\u65f6\u770b\u5230\u53d8\u91cf\u7684\u503c\u7684\u53d8\u5316. Github \u4e2d\u7684 Watch \u4e5f\u662f\u7c7b\u4f3c\u7684\u529f\u80fd, \u5f53\u4f60\u76d1\u89c6\u67d0\u4e2a\u9879\u76ee\u540e, \u5982\u679c\u9879\u76ee\u53d1\u751f\u53d8\u52a8, \u5982\u6709\u4eba\u63d0\u4ea4\u4e86 pull request\u3001\u53d1\u8d77\u4e86 issue \u7b49\u7b49\u60c5\u51b5, \u90fd\u4f1a\u5728\u81ea\u5df1\u7684\u4e2a\u4eba\u901a\u77e5\u4e2d\u5fc3\u6536\u5230\u4e00\u6761\u901a\u77e5\u6d88\u606f, \u5982\u679c\u8bbe\u7f6e\u4e86\u4e2a\u4eba\u90ae\u7bb1 \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.cn/images/github/watch.png"}}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

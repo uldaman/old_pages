@@ -1,3 +1,3 @@
 sitemap:
-http://www.smallcpp.cn/sitemapxml/index.xml
-http://www.smallcpp.cn/sitemap/index.html
+http://www.smallcpp.com/sitemapxml/index.xml
+http://www.smallcpp.com/sitemap/index.html

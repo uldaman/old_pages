@@ -1,1036 +1,1125 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Ramda 算子一览表</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - Ramda 算子一览表" />
+    <meta
+      property="og:description"
+      content="list function object relation logic math string type adjust __ assoc clamp allPass add match is all addIndex assocPath countBy and dec replace isNil any always clone difference anyPass divide …"
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/ramda-suan-zi-yi-lan-biao.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/extra/avatar.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2018-12-16T19:00:00+08:00"
+    />
+    <meta property="article:section" content="函数式" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>Ramda 算子一览表</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - Ramda 算子一览表">
-  <meta property="og:description" content="list function object relation logic math string type adjust __ assoc clamp allPass add match is all addIndex assocPath countBy and dec replace isNil any always clone difference anyPass divide …">
-<meta property="og:url" content="http://www.smallcpp.cn/ramda-suan-zi-yi-lan-biao.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2018-12-16T19:00:00+08:00">
-  <meta property="article:section" content="函数式">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <nav class="navbar has-shadow is-hidden-print">
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/ramda-suan-zi-yi-lan-biao.html"
+                  rel="bookmark"
+                  title="Permalink to Ramda 算子一览表"
+                  >Ramda 算子一览表</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2018-12-16T19:00:00+08:00">
+                  Published <span class="is-info">Sun 16 December 2018</span> in
+                  <a href="http://www.smallcpp.com/category/han-shu-shi.html"
+                    >函数式</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>list</th>
+                      <th>function</th>
+                      <th>object</th>
+                      <th>relation</th>
+                      <th>logic</th>
+                      <th>math</th>
+                      <th>string</th>
+                      <th>type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>adjust</td>
+                      <td>__</td>
+                      <td>assoc</td>
+                      <td>clamp</td>
+                      <td>allPass</td>
+                      <td>add</td>
+                      <td>match</td>
+                      <td>is</td>
+                    </tr>
+                    <tr>
+                      <td>all</td>
+                      <td>addIndex</td>
+                      <td>assocPath</td>
+                      <td>countBy</td>
+                      <td>and</td>
+                      <td>dec</td>
+                      <td>replace</td>
+                      <td>isNil</td>
+                    </tr>
+                    <tr>
+                      <td>any</td>
+                      <td>always</td>
+                      <td>clone</td>
+                      <td>difference</td>
+                      <td>anyPass</td>
+                      <td>divide</td>
+                      <td>split</td>
+                      <td>propIs</td>
+                    </tr>
+                    <tr>
+                      <td>aperture</td>
+                      <td>ap</td>
+                      <td>dissoc</td>
+                      <td>differenceWith</td>
+                      <td>both</td>
+                      <td>inc</td>
+                      <td>test</td>
+                      <td>type</td>
+                    </tr>
+                    <tr>
+                      <td>append</td>
+                      <td>apply</td>
+                      <td>dissocPath</td>
+                      <td>eqBy</td>
+                      <td>complement</td>
+                      <td>mathMod</td>
+                      <td>toLower</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>chain</td>
+                      <td>applySpec</td>
+                      <td>eqProps</td>
+                      <td>equals</td>
+                      <td>cond</td>
+                      <td>mean</td>
+                      <td>toString</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>concat</td>
+                      <td>applyTo</td>
+                      <td>evolve</td>
+                      <td>gt</td>
+                      <td>defaultTo</td>
+                      <td>median</td>
+                      <td>toUpper</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>contains</td>
+                      <td>ascend</td>
+                      <td>forEachObjIndexed</td>
+                      <td>gte</td>
+                      <td>either</td>
+                      <td>modulo</td>
+                      <td>trim</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>drop</td>
+                      <td>binary</td>
+                      <td>has</td>
+                      <td>identical</td>
+                      <td>ifElse</td>
+                      <td>multiply</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>dropLast</td>
+                      <td>bind</td>
+                      <td>hasIn</td>
+                      <td>innerJoin</td>
+                      <td>isEmpty</td>
+                      <td>negate</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>dropLastWhile</td>
+                      <td>call</td>
+                      <td>hasPath</td>
+                      <td>intersection</td>
+                      <td>not</td>
+                      <td>product</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>dropRepeats</td>
+                      <td>comparator</td>
+                      <td>invert</td>
+                      <td>lt</td>
+                      <td>or</td>
+                      <td>subtract</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>dropRepeatsWith</td>
+                      <td>compose</td>
+                      <td>invertObj</td>
+                      <td>lte</td>
+                      <td>pathSatisfies</td>
+                      <td>sum</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>dropWhile</td>
+                      <td>composeK</td>
+                      <td>keys</td>
+                      <td>max</td>
+                      <td>propSatisfies</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>endsWith</td>
+                      <td>composeP</td>
+                      <td>keysIn</td>
+                      <td>maxBy</td>
+                      <td>unless</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>filter</td>
+                      <td>composeWith</td>
+                      <td>lens</td>
+                      <td>min</td>
+                      <td>until</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>find</td>
+                      <td>construct</td>
+                      <td>lensIndex</td>
+                      <td>minBy</td>
+                      <td>when</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>findIndex</td>
+                      <td>constructN</td>
+                      <td>lensPath</td>
+                      <td>pathEq</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>findLast</td>
+                      <td>converge</td>
+                      <td>lensProp</td>
+                      <td>propEq</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>findLastIndex</td>
+                      <td>curry</td>
+                      <td>mapObjIndexed</td>
+                      <td>sortBy</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>flatten</td>
+                      <td>curryN</td>
+                      <td>merge</td>
+                      <td>sortWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>forEach</td>
+                      <td>descend</td>
+                      <td>mergeDeepLeft</td>
+                      <td>symmetricDifference</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>fromPairs</td>
+                      <td>empty</td>
+                      <td>mergeDeepRight</td>
+                      <td>symmetricDifferenceWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>groupBy</td>
+                      <td>F</td>
+                      <td>mergeDeepWith</td>
+                      <td>union</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>groupWith</td>
+                      <td>flip</td>
+                      <td>mergeDeepWithKey</td>
+                      <td>unionWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>head</td>
+                      <td>identity</td>
+                      <td>mergeLeft</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>includes</td>
+                      <td>invoker</td>
+                      <td>mergeRight</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>indexBy</td>
+                      <td>juxt</td>
+                      <td>mergeWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>indexOf</td>
+                      <td>lift</td>
+                      <td>mergeWithKey</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>init</td>
+                      <td>liftN</td>
+                      <td>objOf</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>insert</td>
+                      <td>memoizeWith</td>
+                      <td>omit</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>insertAll</td>
+                      <td>nAry</td>
+                      <td>over</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>intersperse</td>
+                      <td>nthArg</td>
+                      <td>path</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>into</td>
+                      <td>o</td>
+                      <td>pathOr</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>join</td>
+                      <td>of</td>
+                      <td>pick</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>last</td>
+                      <td>once</td>
+                      <td>pickAll</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>lastIndexOf</td>
+                      <td>otherwise</td>
+                      <td>pickBy</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>length</td>
+                      <td>partial</td>
+                      <td>project</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>map</td>
+                      <td>partialRight</td>
+                      <td>prop</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>mapAccum</td>
+                      <td>pipe</td>
+                      <td>propOr</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>mapAccumRight</td>
+                      <td>pipeK</td>
+                      <td>props</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>mergeAll</td>
+                      <td>pipeP</td>
+                      <td>set</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>none</td>
+                      <td>pipeWith</td>
+                      <td>toPairs</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>nth</td>
+                      <td>T</td>
+                      <td>toPairsIn</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>pair</td>
+                      <td>tap</td>
+                      <td>values</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>partition</td>
+                      <td>then</td>
+                      <td>valuesIn</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>pluck</td>
+                      <td>thunkify</td>
+                      <td>view</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>prepend</td>
+                      <td>tryCatch</td>
+                      <td>where</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>range</td>
+                      <td>unapply</td>
+                      <td>whereEq</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reduce</td>
+                      <td>unary</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reduceBy</td>
+                      <td>uncurryN</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reduced</td>
+                      <td>useWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reduceRight</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reduceWhile</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reject</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>remove</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>repeat</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>reverse</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>scan</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>sequence</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>slice</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>sort</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>splitAt</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>splitEvery</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>splitWhen</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>startsWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>tail</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>take</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>takeLast</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>takeLastWhile</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>takeWhile</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>times</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>transduce</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>transpose</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>traverse</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>unfold</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>uniq</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>uniqBy</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>uniqWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>unnest</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>update</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>without</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>xprod</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>zip</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>zipObj</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>zipWith</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u51fd\u6570\u5f0f",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2018-12-16T19:00:00+08:00",
+              "headline": "Ramda \u7b97\u5b50\u4e00\u89c8\u8868",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/ramda-suan-zi-yi-lan-biao.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "list function object relation logic math string type adjust __ assoc clamp allPass add match is all addIndex assocPath countBy and dec replace isNil any always clone difference anyPass divide \u2026"
+            }
+          </script>
+        </div>
+
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
         </div>
       </div>
     </div>
-  </nav>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/ramda-suan-zi-yi-lan-biao.html" rel="bookmark"
-        title="Permalink to Ramda 算子一览表">Ramda 算子一览表</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2018-12-16T19:00:00+08:00">
-    Published <span class="is-info">Sun 16 December 2018</span>
-    in <a href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-  </abbr>
-
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <table>
-<thead>
-<tr>
-<th>list</th>
-<th>function</th>
-<th>object</th>
-<th>relation</th>
-<th>logic</th>
-<th>math</th>
-<th>string</th>
-<th>type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>adjust</td>
-<td>__</td>
-<td>assoc</td>
-<td>clamp</td>
-<td>allPass</td>
-<td>add</td>
-<td>match</td>
-<td>is</td>
-</tr>
-<tr>
-<td>all</td>
-<td>addIndex</td>
-<td>assocPath</td>
-<td>countBy</td>
-<td>and</td>
-<td>dec</td>
-<td>replace</td>
-<td>isNil</td>
-</tr>
-<tr>
-<td>any</td>
-<td>always</td>
-<td>clone</td>
-<td>difference</td>
-<td>anyPass</td>
-<td>divide</td>
-<td>split</td>
-<td>propIs</td>
-</tr>
-<tr>
-<td>aperture</td>
-<td>ap</td>
-<td>dissoc</td>
-<td>differenceWith</td>
-<td>both</td>
-<td>inc</td>
-<td>test</td>
-<td>type</td>
-</tr>
-<tr>
-<td>append</td>
-<td>apply</td>
-<td>dissocPath</td>
-<td>eqBy</td>
-<td>complement</td>
-<td>mathMod</td>
-<td>toLower</td>
-<td></td>
-</tr>
-<tr>
-<td>chain</td>
-<td>applySpec</td>
-<td>eqProps</td>
-<td>equals</td>
-<td>cond</td>
-<td>mean</td>
-<td>toString</td>
-<td></td>
-</tr>
-<tr>
-<td>concat</td>
-<td>applyTo</td>
-<td>evolve</td>
-<td>gt</td>
-<td>defaultTo</td>
-<td>median</td>
-<td>toUpper</td>
-<td></td>
-</tr>
-<tr>
-<td>contains</td>
-<td>ascend</td>
-<td>forEachObjIndexed</td>
-<td>gte</td>
-<td>either</td>
-<td>modulo</td>
-<td>trim</td>
-<td></td>
-</tr>
-<tr>
-<td>drop</td>
-<td>binary</td>
-<td>has</td>
-<td>identical</td>
-<td>ifElse</td>
-<td>multiply</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>dropLast</td>
-<td>bind</td>
-<td>hasIn</td>
-<td>innerJoin</td>
-<td>isEmpty</td>
-<td>negate</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>dropLastWhile</td>
-<td>call</td>
-<td>hasPath</td>
-<td>intersection</td>
-<td>not</td>
-<td>product</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>dropRepeats</td>
-<td>comparator</td>
-<td>invert</td>
-<td>lt</td>
-<td>or</td>
-<td>subtract</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>dropRepeatsWith</td>
-<td>compose</td>
-<td>invertObj</td>
-<td>lte</td>
-<td>pathSatisfies</td>
-<td>sum</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>dropWhile</td>
-<td>composeK</td>
-<td>keys</td>
-<td>max</td>
-<td>propSatisfies</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>endsWith</td>
-<td>composeP</td>
-<td>keysIn</td>
-<td>maxBy</td>
-<td>unless</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>filter</td>
-<td>composeWith</td>
-<td>lens</td>
-<td>min</td>
-<td>until</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>find</td>
-<td>construct</td>
-<td>lensIndex</td>
-<td>minBy</td>
-<td>when</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>findIndex</td>
-<td>constructN</td>
-<td>lensPath</td>
-<td>pathEq</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>findLast</td>
-<td>converge</td>
-<td>lensProp</td>
-<td>propEq</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>findLastIndex</td>
-<td>curry</td>
-<td>mapObjIndexed</td>
-<td>sortBy</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>flatten</td>
-<td>curryN</td>
-<td>merge</td>
-<td>sortWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>forEach</td>
-<td>descend</td>
-<td>mergeDeepLeft</td>
-<td>symmetricDifference</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>fromPairs</td>
-<td>empty</td>
-<td>mergeDeepRight</td>
-<td>symmetricDifferenceWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>groupBy</td>
-<td>F</td>
-<td>mergeDeepWith</td>
-<td>union</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>groupWith</td>
-<td>flip</td>
-<td>mergeDeepWithKey</td>
-<td>unionWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>head</td>
-<td>identity</td>
-<td>mergeLeft</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>includes</td>
-<td>invoker</td>
-<td>mergeRight</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>indexBy</td>
-<td>juxt</td>
-<td>mergeWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>indexOf</td>
-<td>lift</td>
-<td>mergeWithKey</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>init</td>
-<td>liftN</td>
-<td>objOf</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>insert</td>
-<td>memoizeWith</td>
-<td>omit</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>insertAll</td>
-<td>nAry</td>
-<td>over</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>intersperse</td>
-<td>nthArg</td>
-<td>path</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>into</td>
-<td>o</td>
-<td>pathOr</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>join</td>
-<td>of</td>
-<td>pick</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>last</td>
-<td>once</td>
-<td>pickAll</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>lastIndexOf</td>
-<td>otherwise</td>
-<td>pickBy</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>length</td>
-<td>partial</td>
-<td>project</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>map</td>
-<td>partialRight</td>
-<td>prop</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>mapAccum</td>
-<td>pipe</td>
-<td>propOr</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>mapAccumRight</td>
-<td>pipeK</td>
-<td>props</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>mergeAll</td>
-<td>pipeP</td>
-<td>set</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>none</td>
-<td>pipeWith</td>
-<td>toPairs</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>nth</td>
-<td>T</td>
-<td>toPairsIn</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>pair</td>
-<td>tap</td>
-<td>values</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>partition</td>
-<td>then</td>
-<td>valuesIn</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>pluck</td>
-<td>thunkify</td>
-<td>view</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>prepend</td>
-<td>tryCatch</td>
-<td>where</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>range</td>
-<td>unapply</td>
-<td>whereEq</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reduce</td>
-<td>unary</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reduceBy</td>
-<td>uncurryN</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reduced</td>
-<td>useWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reduceRight</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reduceWhile</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reject</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>remove</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>repeat</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>reverse</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>scan</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>sequence</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>slice</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>sort</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>splitAt</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>splitEvery</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>splitWhen</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>startsWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>tail</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>take</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>takeLast</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>takeLastWhile</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>takeWhile</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>times</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>transduce</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>transpose</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>traverse</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>unfold</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>uniq</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>uniqBy</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>uniqWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>unnest</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>update</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>without</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>xprod</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>zip</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>zipObj</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>zipWith</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-    </div>
-
-  </article>
-</section>
-
-<script type="application/ld+json">
-  {"articleSection": "\u51fd\u6570\u5f0f", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2018-12-16T19:00:00+08:00", "headline": "Ramda \u7b97\u5b50\u4e00\u89c8\u8868", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/ramda-suan-zi-yi-lan-biao.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "list function object relation logic math string type adjust __ assoc clamp allPass add match is all addIndex assocPath countBy and dec replace isNil any always clone difference anyPass divide \u2026"}
-</script>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  </div>
+    </footer>
 
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
-      </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
-
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>

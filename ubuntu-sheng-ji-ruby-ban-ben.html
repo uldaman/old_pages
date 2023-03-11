@@ -1,117 +1,190 @@
 <!DOCTYPE html>
 <html lang="zh">
+  <head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Ubuntu 升级 Ruby 版本</title>
+    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+    />
+    <style media="print">
+      .is-hidden-print {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <meta property="og:title" content="Small Cpp - Ubuntu 升级 Ruby 版本" />
+    <meta
+      property="og:description"
+      content="使用 rvm 管理 ruby 版本 这是推荐的方式, 但是由于 GFW 的原因, rvm 不一定安装成功, 如果不成功则参考下面的从源码安装. Reference: 在ubuntu中安装及使用rvm管理ruby版本 准备工作 后面需要使用 curl, 用 dpkg -s curl 命令检查一下系统中有没有安装 abbuggy@abbuggy-ubuntu:~$ dpkg -s curl..."
+    />
+    <meta
+      property="og:url"
+      content="http://www.smallcpp.com/ubuntu-sheng-ji-ruby-ban-ben.html"
+    />
+    <meta
+      property="og:image"
+      content="http://www.smallcpp.com/images/extra/avatar.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Small Cpp" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-05-28T21:47:00+08:00"
+    />
+    <meta property="article:section" content="工具折腾" />
+  </head>
 
-<head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width">
-  <title>Ubuntu 升级 Ruby 版本</title>
-  <link rel="icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.cn/extra/avatar.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.cn/theme/css/main.a3671138.css">
-  <style media="print">
-    .is-hidden-print {
-      display: none !important
-    }
-  </style>
-  <link rel="stylesheet" href="http://www.smallcpp.cn/custom.css">
-<meta property="og:title" content="Small Cpp - Ubuntu 升级 Ruby 版本">
-  <meta property="og:description" content="使用 rvm 管理 ruby 版本 这是推荐的方式, 但是由于 GFW 的原因, rvm 不一定安装成功, 如果不成功则参考下面的从源码安装. Reference: 在ubuntu中安装及使用rvm管理ruby版本 准备工作 后面需要使用 curl, 用 dpkg -s curl 命令检查一下系统中有没有安装 abbuggy@abbuggy-ubuntu:~$ dpkg -s curl...">
-<meta property="og:url" content="http://www.smallcpp.cn/ubuntu-sheng-ji-ruby-ban-ben.html">
-    <meta property="og:image" content="http://www.smallcpp.cn/images/extra/avatar.png">
-    <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
-<meta name="twitter:card" content="summary">
-<meta property="og:site_name" content="Small Cpp">
-<meta property="og:type" content="article">
-  <meta property="article:published_time" content="2016-05-28T21:47:00+08:00">
-  <meta property="article:section" content="工具折腾">
-</head>
-
-<body id="index" class="home">
-  <header class="hero is-primary">
-    <div class="hero-head">
-      <div class="container">
-        <nav class="navbar">
-          <div class="navbar-brand">
-            <a class="navbar-item title is-3"
-              href="http://www.smallcpp.cn/"><img src="http://www.smallcpp.cn/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navbar has-shadow is-hidden-print">
-    <div class="container">
-      <div class="navbar-center"></div>
-      <span id="navToggle" class="navbar-burger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-      <div id="navMenu" class="navbar-menu">
-        <div class="navbar-end">
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/za-xiang.html">杂项</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/shu-ju-ku.html">数据库</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/ruan-jian-gong-cheng.html">软件工程</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/han-shu-shi.html">函数式</a>
-          <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/golang.html">Golang</a>
-          <a class="navbar-item is-tab "
-            href="http://www.smallcpp.cn/category/da-shu-ju.html">大数据</a>
+  <body id="index" class="home">
+    <header class="hero is-primary">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+                ><img
+                  src="http://www.smallcpp.com/extra/avatar.png"
+                  class="avatar"
+                />&nbsp;Small Cpp</a
+              >
+            </div>
+          </nav>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
 
-  <div class="container">
-    <div class="section columns">
-      <div class="column is-three-quarters-desktop is-two-thirds-tablet">
-<section id="content" class="body">
-  <article>
-    <h1 class="title">
-      <a href="http://www.smallcpp.cn/ubuntu-sheng-ji-ruby-ban-ben.html" rel="bookmark"
-        title="Permalink to Ubuntu 升级 Ruby 版本">Ubuntu 升级 Ruby 版本</a></h1>
-<footer class="post-info">
-  <abbr class="published" title="2016-05-28T21:47:00+08:00">
-    Published <span class="is-info">Sat 28 May 2016</span>
-    in <a href="http://www.smallcpp.cn/category/gong-ju-zhe-teng.html">工具折腾</a>
-  </abbr>
+    <nav class="navbar has-shadow is-hidden-print">
+      <div class="container">
+        <div class="navbar-center"></div>
+        <span id="navToggle" class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div id="navMenu" class="navbar-menu">
+          <div class="navbar-end">
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/za-xiang.html"
+              >杂项</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              >数据库</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              >软件工程</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              >函数式</a
+            >
+            <a
+              class="navbar-item is-tab is-active"
+              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              >工具折腾</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/golang.html"
+              >Golang</a
+            >
+            <a
+              class="navbar-item is-tab"
+              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              >大数据</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
 
-  <p class="author">
-    <em>by       HanXiao
-    </em>
-    &nbsp;
-  </p>
-  
-</footer>    <div class="section">
-      <div class="toc">
-<ul>
-<li><a href="#rvm-ruby">使用 rvm 管理 ruby 版本</a><ul>
-<li><a href="#_1">准备工作</a></li>
-<li><a href="#rvm">安装 rvm</a></li>
-<li><a href="#rvm_1">使用 RVM</a></li>
-</ul>
-</li>
-<li><a href="#_2">从源码安装</a></li>
-<li><a href="#travis-client">使用 Travis Client 推荐的方法</a></li>
-</ul>
-</div>
-      <hr />
-      
-<h1 id="rvm-ruby">使用 rvm 管理 ruby 版本</h1>
-<p>这是推荐的方式, 但是由于 GFW 的原因, rvm 不一定安装成功, 如果不成功则参考下面的从源码安装.</p>
-<p>Reference: <a href="http://blog.csdn.net/abbuggy/article/details/8170899">在ubuntu中安装及使用rvm管理ruby版本</a></p>
-<h2 id="_1">准备工作</h2>
-<p>后面需要使用 <strong>curl</strong>, 用 <strong>dpkg -s curl</strong> 命令检查一下系统中有没有安装</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>abbuggy@abbuggy-ubuntu:~$ dpkg -s curl
+    <div class="container">
+      <div class="section columns">
+        <div class="column is-three-quarters-desktop is-two-thirds-tablet">
+          <section id="content" class="body">
+            <article>
+              <h1 class="title">
+                <a
+                  href="http://www.smallcpp.com/ubuntu-sheng-ji-ruby-ban-ben.html"
+                  rel="bookmark"
+                  title="Permalink to Ubuntu 升级 Ruby 版本"
+                  >Ubuntu 升级 Ruby 版本</a
+                >
+              </h1>
+              <footer class="post-info">
+                <abbr class="published" title="2016-05-28T21:47:00+08:00">
+                  Published <span class="is-info">Sat 28 May 2016</span> in
+                  <a
+                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    >工具折腾</a
+                  >
+                </abbr>
+
+                <p class="author">
+                  <em>by HanXiao </em>
+                  &nbsp;
+                </p>
+              </footer>
+              <div class="section">
+                <div class="toc">
+                  <ul>
+                    <li>
+                      <a href="#rvm-ruby">使用 rvm 管理 ruby 版本</a>
+                      <ul>
+                        <li><a href="#_1">准备工作</a></li>
+                        <li><a href="#rvm">安装 rvm</a></li>
+                        <li><a href="#rvm_1">使用 RVM</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#_2">从源码安装</a></li>
+                    <li>
+                      <a href="#travis-client">使用 Travis Client 推荐的方法</a>
+                    </li>
+                  </ul>
+                </div>
+                <hr />
+
+                <h1 id="rvm-ruby">使用 rvm 管理 ruby 版本</h1>
+                <p>
+                  这是推荐的方式, 但是由于 GFW 的原因, rvm 不一定安装成功,
+                  如果不成功则参考下面的从源码安装.
+                </p>
+                <p>
+                  Reference:
+                  <a href="http://blog.csdn.net/abbuggy/article/details/8170899"
+                    >在ubuntu中安装及使用rvm管理ruby版本</a
+                  >
+                </p>
+                <h2 id="_1">准备工作</h2>
+                <p>
+                  后面需要使用 <strong>curl</strong>, 用
+                  <strong>dpkg -s curl</strong> 命令检查一下系统中有没有安装
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>abbuggy@abbuggy-ubuntu:~$ dpkg -s curl
 Package: curl
 Status: install ok installed
 Priority: optional
@@ -132,18 +205,35 @@ Description: Get a file from an HTTP, HTTPS or FTP server
  authentication, FTP upload, HTTP post, file transfer resume and more.
 Homepage: http://curl.haxx.se
 Original-Maintainer: Ramakrishnan Muthukrishnan &lt;rkrishnan@debian.org&gt;
-</pre></div>
-<p>上面的说明我是已经安装过了的, 如果没有安装应该是类似如下的回显:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>abbuggy@abbuggy-ubuntu:~$ dpkg -s curl
+</pre>
+                </div>
+                <p>
+                  上面的说明我是已经安装过了的,
+                  如果没有安装应该是类似如下的回显:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>abbuggy@abbuggy-ubuntu:~$ dpkg -s curl
 系统没有安装软件包 curl, 因而没有相关的信息.
 使用 dpkg --info (= dpkg-deb --info) 来检测打包好的文件,
 还可以通过 dpkg --contents (= dpkg-deb --contents) 来列出它们的内容.
-</pre></div>
-<p>那么安装就行了 <code>sudo apt-get install curl</code></p>
-<h2 id="rvm">安装 rvm</h2>
-<p>用 rvm 官方推荐的方式安装 <code>curl -L get.rvm.io | bash -s stable</code></p>
-<p>回显提示我们, RVM 被安装在 <code>$HOME/.vrm</code> 中, 并且需要在终端中加载脚本 <code>$HOME/.rvm/scripts/rvm</code></p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>abbuggy@abbuggy-ubuntu:~$ curl -L get.rvm.io | bash -s stable
+</pre>
+                </div>
+                <p>那么安装就行了 <code>sudo apt-get install curl</code></p>
+                <h2 id="rvm">安装 rvm</h2>
+                <p>
+                  用 rvm 官方推荐的方式安装
+                  <code>curl -L get.rvm.io | bash -s stable</code>
+                </p>
+                <p>
+                  回显提示我们, RVM 被安装在 <code>$HOME/.vrm</code> 中,
+                  并且需要在终端中加载脚本 <code>$HOME/.rvm/scripts/rvm</code>
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>abbuggy@abbuggy-ubuntu:~$ curl -L get.rvm.io | bash -s stable
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   185  100   185    0     0    144      0  0:00:01  0:00:01 --:--:--   906
@@ -177,37 +267,86 @@ Installation of RVM in /home/abbuggy/.rvm/ is almost complete:
 #   I sincerely hope that RVM helps to make your life easier and more enjoyable!!!
 #
 # ~Wayne
-</pre></div>
-<p>应该请把这句话加在 <code>$HOME/.bash_profile</code> 文件中, 以便在开启一个终端会话时候加载 RVM:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
-</pre></div>
-<p>如果对 shell 不熟悉, 这里简单解释一下这是干什么用的:</p>
-<p><code>[[condition]]</code> 两层的方括号中间括着条件返回条件是不是真, -s 是判断给定的文件是否存在的命令.</p>
-<p>这样一来, 不就是在 <code>[[ -s "$HOME/.vrm/scripts/vrm"]]</code> 判断刚才安装的 RVM 是否存在吗?</p>
-<p>接下来的&amp;&amp;符号是<strong>“短路的与”</strong>, 当前面的条件是真的时候, 执行后面的语句, 返回这两个语句是不是全是真.</p>
-<p>在这里, 利用了”短路”特性, 也就是说当 RVM 已经安装的话, 执行后面的 <code>$HOME/.rvm/scripts/rvm</code> 命令.</p>
-<p>这条命令和 <code>source "$HOME/.rvm/scripts/rvm"</code> 是一个意思: 加载 rvm 的启动脚本.</p>
-<p>现在, 通过修改 <code>.bash_profile</code> 增加的内容需要重新打开终端窗口时加载, 或者另一个是在当前窗口执行一遍 <code>$HOME/.rvm/scripts/rvm</code>.</p>
-<h2 id="rvm_1">使用 RVM</h2>
-<p>察看 RVM 的版本</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm -v
+</pre>
+                </div>
+                <p>
+                  应该请把这句话加在 <code>$HOME/.bash_profile</code> 文件中,
+                  以便在开启一个终端会话时候加载 RVM:
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
+</pre>
+                </div>
+                <p>如果对 shell 不熟悉, 这里简单解释一下这是干什么用的:</p>
+                <p>
+                  <code>[[condition]]</code>
+                  两层的方括号中间括着条件返回条件是不是真, -s
+                  是判断给定的文件是否存在的命令.
+                </p>
+                <p>
+                  这样一来, 不就是在
+                  <code>[[ -s "$HOME/.vrm/scripts/vrm"]]</code> 判断刚才安装的
+                  RVM 是否存在吗?
+                </p>
+                <p>
+                  接下来的&amp;&amp;符号是<strong>“短路的与”</strong>,
+                  当前面的条件是真的时候, 执行后面的语句,
+                  返回这两个语句是不是全是真.
+                </p>
+                <p>
+                  在这里, 利用了”短路”特性, 也就是说当 RVM 已经安装的话,
+                  执行后面的 <code>$HOME/.rvm/scripts/rvm</code> 命令.
+                </p>
+                <p>
+                  这条命令和
+                  <code>source "$HOME/.rvm/scripts/rvm"</code> 是一个意思: 加载
+                  rvm 的启动脚本.
+                </p>
+                <p>
+                  现在, 通过修改
+                  <code>.bash_profile</code>
+                  增加的内容需要重新打开终端窗口时加载,
+                  或者另一个是在当前窗口执行一遍
+                  <code>$HOME/.rvm/scripts/rvm</code>.
+                </p>
+                <h2 id="rvm_1">使用 RVM</h2>
+                <p>察看 RVM 的版本</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>rvm -v
 
 rvm 1.16.20 (stable) by Wayne E. Seguin &lt;wayneeseguin@gmail.com&gt;, Michal Papis &lt;mpapis@gmail.com&gt; [https://rvm.io/]
-</pre></div>
-<p>然后通过 <code>rvm requirements</code> 命令, 可以察看安装各版本时候的前提条件, 其中现在这句是需要关注的, 这是安装依赖的第三方包, 没有这个安装不成功岂不是很悲剧?</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>Additional Dependencies:
+</pre>
+                </div>
+                <p>
+                  然后通过 <code>rvm requirements</code> 命令,
+                  可以察看安装各版本时候的前提条件, 其中现在这句是需要关注的,
+                  这是安装依赖的第三方包, 没有这个安装不成功岂不是很悲剧?
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>Additional Dependencies:
 # For Ruby / Ruby HEAD (MRI, Rubinius, &amp; REE), install the following:
   ruby: /usr/bin/apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion pkg-config
-</pre></div>
-<p>这样一来, 安装 ruby 的准备工作就完成了, 察看当前 RVM中 已经安装的 ruby 版本, 现在应该还没有.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm list
+</pre>
+                </div>
+                <p>
+                  这样一来, 安装 ruby 的准备工作就完成了, 察看当前 RVM中
+                  已经安装的 ruby 版本, 现在应该还没有.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>rvm list
 
 rvm rubies
 
 # No rvm rubies installed yet. Try 'rvm help install'.
-</pre></div>
-<p>察看 RVM 可供安装的 ruby 版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm list known
+</pre>
+                </div>
+                <p>察看 RVM 可供安装的 ruby 版本:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>rvm list known
 # MRI Rubies
 
 [ruby-]1.8.6[-p420]
@@ -228,12 +367,21 @@ rvm rubies
 [ruby-]1.9.3-[p327]
 [ruby-]1.9.3-head
 [ruby-]2.0.0-preview1
-</pre></div>
-<p>例如安装 ruby 1.9.3-head, 在不发生歧义的情况下方括号内的东西可以不必敲.</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm install 1.9.3-head
-</pre></div>
-<p>之后等呀等呀自动安装了 1.8.7 和 1.9.3</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm list
+</pre>
+                </div>
+                <p>
+                  例如安装 ruby 1.9.3-head,
+                  在不发生歧义的情况下方括号内的东西可以不必敲.
+                </p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>rvm install 1.9.3-head
+</pre>
+                </div>
+                <p>之后等呀等呀自动安装了 1.8.7 和 1.9.3</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>rvm list
 
 rvm rubies
 
@@ -241,29 +389,50 @@ rvm rubies
    ruby-1.9.3-head [ i686 ]
 
 # Default ruby not set. Try 'rvm alias create default &lt;ruby&gt;'.
-</pre></div>
-<p>选择 1.9.3 作为当前的使用版本, 并且设置为缺省</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>rvm use ruby-1.9.3-head --default
+</pre>
+                </div>
+                <p>选择 1.9.3 作为当前的使用版本, 并且设置为缺省</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>rvm use ruby-1.9.3-head --default
 Using /home/abbuggy/.rvm/gems/ruby-1.9.3-head
-</pre></div>
-<p>设置好之后察看ruby版本</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>ruby -v
+</pre>
+                </div>
+                <p>设置好之后察看ruby版本</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>ruby -v
 ruby 1.9.3p327 (2012-11-10) [i686-linux]
-</pre></div>
-<p>察看ruby的路径, 就是 RVM 帮我们安装的</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>which ruby
+</pre>
+                </div>
+                <p>察看ruby的路径, 就是 RVM 帮我们安装的</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre style="line-height: 125%"><span></span>which ruby
 /home/abbuggy/.rvm/rubies/ruby-1.9.3-head/bin/ruby
-</pre></div>
-<h1 id="_2">从源码安装</h1>
-<p>如果你不能安装 RVM, 那就尝试从源码安装吧.</p>
-<p>Reference: <a href="http://blog.csdn.net/abbuggy/article/details/8170899">Setup Ruby On Rails on Ubuntu 14.04 Trusty Tahr</a></p>
-<p>为避免和当前 Ruby 冲突, 先卸载当前版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sudo apt-get remove ruby1.8
+</pre>
+                </div>
+                <h1 id="_2">从源码安装</h1>
+                <p>如果你不能安装 RVM, 那就尝试从源码安装吧.</p>
+                <p>
+                  Reference:
+                  <a href="http://blog.csdn.net/abbuggy/article/details/8170899"
+                    >Setup Ruby On Rails on Ubuntu 14.04 Trusty Tahr</a
+                  >
+                </p>
+                <p>为避免和当前 Ruby 冲突, 先卸载当前版本:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sudo apt-get remove ruby1.8
 
 sudo apt-get autoremove
-</pre></div>
-<p>然后安装新版本的 Ruby:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>wget http://ftp.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
+</pre>
+                </div>
+                <p>然后安装新版本的 Ruby:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>wget http://ftp.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.gz
 
 tar -xzvf ruby-2.3.1.tar.gz
 
@@ -274,86 +443,139 @@ cd ruby-2.3.1/
 make
 
 sudo make install
-</pre></div>
-<p>安装完查看下版本: <code>ruby -v</code>.</p>
-<h1 id="travis-client">使用 Travis Client 推荐的方法</h1>
-<p>由于我使用第二种方法成功安装了, 因为这种方法我没测试过, 先记录下再说…</p>
-<p>Reference: <a href="https://github.com/travis-ci/travis.rb#other-unix-systems">Travis Client Github</a></p>
-<p>先卸载当前版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sudo apt-get remove ruby1.8
+</pre>
+                </div>
+                <p>安装完查看下版本: <code>ruby -v</code>.</p>
+                <h1 id="travis-client">使用 Travis Client 推荐的方法</h1>
+                <p>
+                  由于我使用第二种方法成功安装了, 因为这种方法我没测试过,
+                  先记录下再说…
+                </p>
+                <p>
+                  Reference:
+                  <a
+                    href="https://github.com/travis-ci/travis.rb#other-unix-systems"
+                    >Travis Client Github</a
+                  >
+                </p>
+                <p>先卸载当前版本:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sudo apt-get remove ruby1.8
 
 sudo apt-get autoremove
-</pre></div>
-<p>然后安装新版本:</p>
-<div class="codehilite" style="background: #eeeedd"><pre style="line-height: 125%;"><span></span>sudo apt-get install python-software-properties
+</pre>
+                </div>
+                <p>然后安装新版本:</p>
+                <div class="codehilite" style="background: #eeeedd">
+                  <pre
+                    style="line-height: 125%"
+                  ><span></span>sudo apt-get install python-software-properties
 sudo apt-add-repository ppa:brightbox/ruby-ng
 sudo apt-get update
 sudo apt-get install ruby2.1 ruby-switch ruby2.1-dev
 sudo ruby-switch --set ruby2.1
-</pre></div>
-    </div>
+</pre>
+                </div>
+              </div>
+            </article>
+          </section>
 
-  </article>
-</section>
+          <script type="application/ld+json">
+            {
+              "articleSection": "\u5de5\u5177\u6298\u817e",
+              "author": { "@type": "Person", "name": "HanXiao" },
+              "datePublished": "2016-05-28T21:47:00+08:00",
+              "headline": "Ubuntu \u5347\u7ea7 Ruby \u7248\u672c",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://www.smallcpp.com/ubuntu-sheng-ji-ruby-ban-ben.html"
+              },
+              "@context": "http://schema.org",
+              "@type": "BlogPosting",
+              "description": "\u4f7f\u7528 rvm \u7ba1\u7406 ruby \u7248\u672c \u8fd9\u662f\u63a8\u8350\u7684\u65b9\u5f0f, \u4f46\u662f\u7531\u4e8e GFW \u7684\u539f\u56e0, rvm \u4e0d\u4e00\u5b9a\u5b89\u88c5\u6210\u529f, \u5982\u679c\u4e0d\u6210\u529f\u5219\u53c2\u8003\u4e0b\u9762\u7684\u4ece\u6e90\u7801\u5b89\u88c5. Reference: \u5728ubuntu\u4e2d\u5b89\u88c5\u53ca\u4f7f\u7528rvm\u7ba1\u7406ruby\u7248\u672c \u51c6\u5907\u5de5\u4f5c \u540e\u9762\u9700\u8981\u4f7f\u7528 curl, \u7528 dpkg -s curl \u547d\u4ee4\u68c0\u67e5\u4e00\u4e0b\u7cfb\u7edf\u4e2d\u6709\u6ca1\u6709\u5b89\u88c5 abbuggy@abbuggy-ubuntu:~$ dpkg -s curl Package: curl Status \u2026"
+            }
+          </script>
+        </div>
 
-<script type="application/ld+json">
-  {"articleSection": "\u5de5\u5177\u6298\u817e", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2016-05-28T21:47:00+08:00", "headline": "Ubuntu \u5347\u7ea7 Ruby \u7248\u672c", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.cn/ubuntu-sheng-ji-ruby-ban-ben.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u4f7f\u7528 rvm \u7ba1\u7406 ruby \u7248\u672c \u8fd9\u662f\u63a8\u8350\u7684\u65b9\u5f0f, \u4f46\u662f\u7531\u4e8e GFW \u7684\u539f\u56e0, rvm \u4e0d\u4e00\u5b9a\u5b89\u88c5\u6210\u529f, \u5982\u679c\u4e0d\u6210\u529f\u5219\u53c2\u8003\u4e0b\u9762\u7684\u4ece\u6e90\u7801\u5b89\u88c5. Reference: \u5728ubuntu\u4e2d\u5b89\u88c5\u53ca\u4f7f\u7528rvm\u7ba1\u7406ruby\u7248\u672c \u51c6\u5907\u5de5\u4f5c \u540e\u9762\u9700\u8981\u4f7f\u7528 curl, \u7528 dpkg -s curl \u547d\u4ee4\u68c0\u67e5\u4e00\u4e0b\u7cfb\u7edf\u4e2d\u6709\u6ca1\u6709\u5b89\u88c5 abbuggy@abbuggy-ubuntu:~$ dpkg -s curl Package: curl Status \u2026"}
-</script>
+        <div
+          class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print"
+        >
+          <aside class="menu">
+            <p class="menu-label">Links</p>
+            <ul class="menu-list">
+              <li>
+                <a href="https://zhuec.gitbook.io/learning-notes/">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">Learning Notes</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/vechain/thor">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">VeChain Thor</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://blog.csdn.net/u010850265">
+                  <span class="icon is-small"
+                    ><i class="fa fa-globe fa-fw"></i
+                  ></span>
+                  <span class="link-text">CSDN</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
+    </div>
 
-      <div class="column is-one-quarter-desktop is-one-third-tablet is-hidden-print">
-        <aside class="menu">
-          <p class="menu-label">Links</p>
-          <ul class="menu-list">
-            <li><a href="https://zhuec.gitbook.io/learning-notes/">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">Learning Notes</span>
-              </a></li>
-            <li><a href="https://github.com/vechain/thor">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">VeChain Thor</span>
-              </a></li>
-            <li><a href="http://blog.csdn.net/u010850265">
-                <span class="icon is-small"><i class="fa fa-globe fa-fw"></i></span>
-                <span class="link-text">CSDN</span>
-              </a></li>
-          </ul>
-        </aside>
+    <footer class="footer">
+      <div class="container has-text-centered">
+        <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>
+        <div class="credits">
+          <span
+            ><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
+            <a href="https://blog.getpelican.com/">Pelican</a></span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML
+            5</span
+          >
+          <span
+            ><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS
+            3</span
+          >
+          <span>Made with <a href="https://bulma.io">Bulma</a></span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container has-text-centered">
- <p class="subtitle">勿在浮沙筑高台, 练从难处练, 用从易处用.</p>      <div class="credits">
-        <span><a href="https://github.com/textbook/bulrush">Bulrush</a> theme for
-          <a href="https://blog.getpelican.com/">Pelican</a></span>
-        <span><span class="icon is-small"><i class="fa fa-html5"></i></span> HTML 5</span>
-        <span><span class="icon is-small"><i class="fa fa-css3"></i></span> CSS 3</span>
-        <span>Made with <a href="https://bulma.io">Bulma</a></span>
+      <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
+        <div class="github-fork-ribbon">
+          <a href="https://github.com/uldaman">
+            <i class="fa fa-github fa-fw"></i>
+            Fork me on GitHub
+          </a>
+        </div>
       </div>
-    </div>
-  <div class="github-fork-ribbon-wrapper is-hidden-mobile is-hidden-print">
-    <div class="github-fork-ribbon">
-      <a href="https://github.com/uldaman">
-        <i class="fa fa-github fa-fw"></i>
-        Fork me on GitHub
-      </a>
-    </div>
-  </div>
-  </footer>
+    </footer>
 
-  <script type="text/javascript">
-    document.getElementById('navToggle').addEventListener('click', function () {
-      var nav = document.getElementById('navMenu');
-      var className = nav.getAttribute('class');
-      if (className == 'navbar-menu') {
-        nav.className = 'navbar-menu is-active';
-      } else {
-        nav.className = 'navbar-menu';
-      }
-    });
-  </script>
-</body>
-
+    <script type="text/javascript">
+      document
+        .getElementById("navToggle")
+        .addEventListener("click", function () {
+          var nav = document.getElementById("navMenu");
+          var className = nav.getAttribute("class");
+          if (className == "navbar-menu") {
+            nav.className = "navbar-menu is-active";
+          } else {
+            nav.className = "navbar-menu";
+          }
+        });
+    </script>
+  </body>
 </html>
