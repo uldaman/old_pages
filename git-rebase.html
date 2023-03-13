@@ -4,8 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Git Rebase</title>
-    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
-    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="icon"
+      href="http://uldaman.github.io/old_pages/extra/avatar.png"
+    />
+    <link
+      rel="shortcut icon"
+      href="http://uldaman.github.io/old_pages/extra/avatar.png"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -16,23 +22,29 @@
     />
     <link
       rel="stylesheet"
-      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+      href="http://uldaman.github.io/old_pages/theme/css/main.a3671138.css"
     />
     <style media="print">
       .is-hidden-print {
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <link
+      rel="stylesheet"
+      href="http://uldaman.github.io/old_pages/custom.css"
+    />
     <meta property="og:title" content="Small Cpp - Git Rebase" />
     <meta
       property="og:description"
       content="rebase 比较复杂, 应该是 git 中的高级应用了, 所以单独拿出来做篇 wiki, 转自: ihower blog. 使用 git rebase 避免無謂的 merge git pull 預設的行為是將遠端的 repo. 與本地的 repo. 合併, 這也是 DVCS 的初衷, 將兩個 branch 合併. 但是, 很多時候會發生以下這種情形 …"
     />
-    <meta property="og:url" content="http://www.smallcpp.com/git-rebase.html" />
+    <meta
+      property="og:url"
+      content="http://uldaman.github.io/old_pages/git-rebase.html"
+    />
     <meta
       property="og:image"
-      content="http://www.smallcpp.com/images/gitRebase/git-merge.jpg"
+      content="http://uldaman.github.io/old_pages/images/gitRebase/git-merge.jpg"
     />
     <meta
       name="twitter:image:alt"
@@ -54,9 +66,11 @@
         <div class="container">
           <nav class="navbar">
             <div class="navbar-brand">
-              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+              <a
+                class="navbar-item title is-3"
+                href="http://uldaman.github.io/old_pages/"
                 ><img
-                  src="http://www.smallcpp.com/extra/avatar.png"
+                  src="http://uldaman.github.io/old_pages/extra/avatar.png"
                   class="avatar"
                 />&nbsp;Small Cpp</a
               >
@@ -78,37 +92,37 @@
           <div class="navbar-end">
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/za-xiang.html"
+              href="http://uldaman.github.io/old_pages/category/za-xiang.html"
               >杂项</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              href="http://uldaman.github.io/old_pages/category/shu-ju-ku.html"
               >数据库</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              href="http://uldaman.github.io/old_pages/category/ruan-jian-gong-cheng.html"
               >软件工程</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              href="http://uldaman.github.io/old_pages/category/han-shu-shi.html"
               >函数式</a
             >
             <a
               class="navbar-item is-tab is-active"
-              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              href="http://uldaman.github.io/old_pages/category/gong-ju-zhe-teng.html"
               >工具折腾</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/golang.html"
+              href="http://uldaman.github.io/old_pages/category/golang.html"
               >Golang</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              href="http://uldaman.github.io/old_pages/category/da-shu-ju.html"
               >大数据</a
             >
           </div>
@@ -123,7 +137,7 @@
             <article>
               <h1 class="title">
                 <a
-                  href="http://www.smallcpp.com/git-rebase.html"
+                  href="http://uldaman.github.io/old_pages/git-rebase.html"
                   rel="bookmark"
                   title="Permalink to Git Rebase"
                   >Git Rebase</a
@@ -133,7 +147,7 @@
                 <abbr class="published" title="2017-08-07T13:00:00+08:00">
                   Published <span class="is-info">Mon 07 August 2017</span> in
                   <a
-                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    href="http://uldaman.github.io/old_pages/category/gong-ju-zhe-teng.html"
                     >工具折腾</a
                   >
                 </abbr>
@@ -169,7 +183,7 @@
                 <p>
                   <img
                     alt=""
-                    src="http://www.smallcpp.com/images/gitRebase/git-merge.jpg"
+                    src="http://uldaman.github.io/old_pages/images/gitRebase/git-merge.jpg"
                   />
                 </p>
                 <p>
@@ -343,14 +357,14 @@ git config --global/local branch.autosetuprebase always
               "headline": "Git Rebase",
               "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "http://www.smallcpp.com/git-rebase.html"
+                "@id": "http://uldaman.github.io/old_pages/git-rebase.html"
               },
               "@context": "http://schema.org",
               "@type": "BlogPosting",
               "description": "rebase \u6bd4\u8f83\u590d\u6742, \u5e94\u8be5\u662f git \u4e2d\u7684\u9ad8\u7ea7\u5e94\u7528\u4e86, \u6240\u4ee5\u5355\u72ec\u62ff\u51fa\u6765\u505a\u7bc7 wiki, \u8f6c\u81ea: ihower blog. \u4f7f\u7528 git rebase \u907f\u514d\u7121\u8b02\u7684 merge git pull \u9810\u8a2d\u7684\u884c\u70ba\u662f\u5c07\u9060\u7aef\u7684 repo. \u8207\u672c\u5730\u7684 repo. \u5408\u4f75, \u9019\u4e5f\u662f DVCS \u7684\u521d\u8877, \u5c07\u5169\u500b branch \u5408\u4f75. \u4f46\u662f, \u5f88\u591a\u6642\u5019\u6703\u767c\u751f\u4ee5\u4e0b\u9019\u7a2e\u60c5\u5f62 \u2026",
               "image": {
                 "@type": "ImageObject",
-                "url": "http://www.smallcpp.com/images/gitRebase/git-merge.jpg"
+                "url": "http://uldaman.github.io/old_pages/images/gitRebase/git-merge.jpg"
               }
             }
           </script>

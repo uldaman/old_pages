@@ -5,21 +5,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width">
   <title>DDD 领域驱动设计与六边形架构</title>
-  <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png">
-  <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png">
+  <link rel="icon" href="http://uldaman.github.io/old_pages/extra/avatar.png">
+  <link rel="shortcut icon" href="http://uldaman.github.io/old_pages/extra/avatar.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <link rel="stylesheet" href="http://www.smallcpp.com/theme/css/main.a3671138.css">
+  <link rel="stylesheet" href="http://uldaman.github.io/old_pages/theme/css/main.a3671138.css">
   <style media="print">
     .is-hidden-print {
       display: none !important
     }
   </style>
-  <link rel="stylesheet" href="http://www.smallcpp.com/custom.css">
+  <link rel="stylesheet" href="http://uldaman.github.io/old_pages/custom.css">
 <meta property="og:title" content="Small Cpp - DDD 领域驱动设计与六边形架构">
   <meta property="og:description" content="软件世界是对现实世界的抽象, 而传统的三层架构或 MVC 架构 (参考: 三层架构与 MVC), 却是结构化的生搬硬套, 在这些架构中的设计出来的对象是贫血的, 是“业务逻辑”类, 跟现实世界甚至毫无关系, 那么根据根据现实世界的真实领域, 映射到软件世界的领域驱动设计和六边形架构, 才是更好的架构方式, 应用场景更广, 扩展更简单. PS, 领域驱动设计继承了职责驱动设计,...">
-<meta property="og:url" content="http://www.smallcpp.com/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html">
-    <meta property="og:image" content="http://www.smallcpp.com/images/软件工程/六边形.png">
+<meta property="og:url" content="http://uldaman.github.io/old_pages/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html">
+    <meta property="og:image" content="http://uldaman.github.io/old_pages/images/软件工程/六边形.png">
     <meta name="twitter:image:alt" content="Small Cpp | 勿在浮沙筑高台, 练从难处练, 用从易处用.">
 <meta name="twitter:card" content="summary">
 <meta property="og:site_name" content="Small Cpp">
@@ -35,7 +35,7 @@
         <nav class="navbar">
           <div class="navbar-brand">
             <a class="navbar-item title is-3"
-              href="http://www.smallcpp.com/"><img src="http://www.smallcpp.com/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
+              href="http://uldaman.github.io/old_pages/"><img src="http://uldaman.github.io/old_pages/extra/avatar.png" class="avatar">&nbsp;Small Cpp</a>
           </div>
         </nav>
       </div>
@@ -53,19 +53,19 @@
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/za-xiang.html">杂项</a>
+            href="http://uldaman.github.io/old_pages/category/za-xiang.html">杂项</a>
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/shu-ju-ku.html">数据库</a>
+            href="http://uldaman.github.io/old_pages/category/shu-ju-ku.html">数据库</a>
           <a class="navbar-item is-tab is-active"
-            href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html">软件工程</a>
+            href="http://uldaman.github.io/old_pages/category/ruan-jian-gong-cheng.html">软件工程</a>
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/han-shu-shi.html">函数式</a>
+            href="http://uldaman.github.io/old_pages/category/han-shu-shi.html">函数式</a>
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html">工具折腾</a>
+            href="http://uldaman.github.io/old_pages/category/gong-ju-zhe-teng.html">工具折腾</a>
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/golang.html">Golang</a>
+            href="http://uldaman.github.io/old_pages/category/golang.html">Golang</a>
           <a class="navbar-item is-tab "
-            href="http://www.smallcpp.com/category/da-shu-ju.html">大数据</a>
+            href="http://uldaman.github.io/old_pages/category/da-shu-ju.html">大数据</a>
         </div>
       </div>
     </div>
@@ -77,12 +77,12 @@
 <section id="content" class="body">
   <article>
     <h1 class="title">
-      <a href="http://www.smallcpp.com/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html" rel="bookmark"
+      <a href="http://uldaman.github.io/old_pages/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html" rel="bookmark"
         title="Permalink to DDD 领域驱动设计与六边形架构">DDD 领域驱动设计与六边形架构</a></h1>
 <footer class="post-info">
   <abbr class="published" title="2017-08-04T11:24:00+08:00">
     Published <span class="is-info">Fri 04 August 2017</span>
-    in <a href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html">软件工程</a>
+    in <a href="http://uldaman.github.io/old_pages/category/ruan-jian-gong-cheng.html">软件工程</a>
   </abbr>
 
   <p class="author">
@@ -92,10 +92,10 @@
   </p>
   
 </footer>    <div class="section">
-      <p>软件世界是对现实世界的抽象, 而传统的三层架构或 MVC 架构 (参考: <a href="http://www.smallcpp.com/san-ceng-jia-gou-yu-mvc.html">三层架构与 MVC</a>), 却是结构化的生搬硬套, 在这些架构中的设计出来的对象是贫血的, 是“业务逻辑”类, 跟现实世界甚至毫无关系, 那么根据根据现实世界的真实领域, 映射到软件世界的<code>领域驱动设计</code>和<code>六边形架构</code>, 才是更好的架构方式, 应用场景更广, 扩展更简单.</p>
+      <p>软件世界是对现实世界的抽象, 而传统的三层架构或 MVC 架构 (参考: <a href="http://uldaman.github.io/old_pages/san-ceng-jia-gou-yu-mvc.html">三层架构与 MVC</a>), 却是结构化的生搬硬套, 在这些架构中的设计出来的对象是贫血的, 是“业务逻辑”类, 跟现实世界甚至毫无关系, 那么根据根据现实世界的真实领域, 映射到软件世界的<code>领域驱动设计</code>和<code>六边形架构</code>, 才是更好的架构方式, 应用场景更广, 扩展更简单.</p>
 <p>PS, 领域驱动设计继承了职责驱动设计, 或者可以说是职责驱动设计的进化.</p>
 <p>领域驱动设计不是一种设计风格, 也不是一种架构模型, 而是一种思考方式, 指导如何进行职责的划分, 而六边开架构就是一种架构了, &ldquo;六&rdquo;只是一个量词, 表明这种架构可以支持多个客户端, 它也被称之为端口与适配器架构, 很适合和领域驱动结合 (在<a href="http://pan.baidu.com/s/1gfIMKqJ">《实现领域驱动设计》</a>一书中作者将六边形架构应用于 DDD).</p>
-<p><img alt="" src="http://www.smallcpp.com/images/软件工程/六边形.png"></p>
+<p><img alt="" src="http://uldaman.github.io/old_pages/images/软件工程/六边形.png"></p>
 <p>在六边形架构中, 提出了一种具有对称性特征的架构风格. 在这种架构中, 不同的客户通过&rdquo;平等&rdquo;的方式与系统交互. 包括输入系统 (web，gui) 和输出系统 (database、log、message queue).
 需要新的客户吗? 不是问题. 只需要添加一个新的适配器将客户输入转化成能被系统 API 所理解的参数就行了.</p>
 <blockquote>
@@ -113,14 +113,14 @@
 <p>用例控制器维护与同一个用例相关的工作流, 如对数据流进行封装、转换, 还可以维护关于用例状态的信息 (例如 Session), 如果你的系统有完善的异常处理机制, 通常异常也应从底层向上抛出到控制器中处理;</p>
 <p>注意要避免控制器的<strong>职责过多</strong>, 把本应是领域层对象的职责也给分配给控制器是不对的, 这会形成臃肿控制器 (这种现象在 MVC 及其它三层模型变体中很常见, 因为它们是贫血模型, 那么必然会造成 Controller 层的臃肿 ).</p>
 <p>在设计控制器时, 通常会采用 GOF 中的<strong>外观模式</strong>, 例如下图中的 DB.java, 该类为 java.sql 包中复杂且全面的逻辑提供了一个非常简单的、特定于处理 Product 用例的外观.</p>
-<p><img alt="" src="http://www.smallcpp.com/images/软件工程/外观.png"></p>
+<p><img alt="" src="http://uldaman.github.io/old_pages/images/软件工程/外观.png"></p>
     </div>
 
   </article>
 </section>
 
 <script type="application/ld+json">
-  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-08-04T11:24:00+08:00", "headline": "DDD \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u4e0e\u516d\u8fb9\u5f62\u67b6\u6784", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://www.smallcpp.com/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u8f6f\u4ef6\u4e16\u754c\u662f\u5bf9\u73b0\u5b9e\u4e16\u754c\u7684\u62bd\u8c61, \u800c\u4f20\u7edf\u7684\u4e09\u5c42\u67b6\u6784\u6216 MVC \u67b6\u6784 (\u53c2\u8003: \u4e09\u5c42\u67b6\u6784\u4e0e MVC), \u5374\u662f\u7ed3\u6784\u5316\u7684\u751f\u642c\u786c\u5957, \u5728\u8fd9\u4e9b\u67b6\u6784\u4e2d\u7684\u8bbe\u8ba1\u51fa\u6765\u7684\u5bf9\u8c61\u662f\u8d2b\u8840\u7684, \u662f\u201c\u4e1a\u52a1\u903b\u8f91\u201d\u7c7b, \u8ddf\u73b0\u5b9e\u4e16\u754c\u751a\u81f3\u6beb\u65e0\u5173\u7cfb, \u90a3\u4e48\u6839\u636e\u6839\u636e\u73b0\u5b9e\u4e16\u754c\u7684\u771f\u5b9e\u9886\u57df, \u6620\u5c04\u5230\u8f6f\u4ef6\u4e16\u754c\u7684\u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u548c\u516d\u8fb9\u5f62\u67b6\u6784, \u624d\u662f\u66f4\u597d\u7684\u67b6\u6784\u65b9\u5f0f, \u5e94\u7528\u573a\u666f\u66f4\u5e7f, \u6269\u5c55\u66f4\u7b80\u5355. PS, \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u7ee7\u627f\u4e86\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1, \u6216\u8005\u53ef\u4ee5\u8bf4\u662f\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1\u7684\u8fdb\u5316. \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u4e0d\u662f\u4e00\u79cd\u8bbe\u8ba1\u98ce\u683c, \u4e5f\u4e0d\u662f\u4e00\u79cd\u67b6\u6784\u6a21\u578b, \u800c\u662f\u4e00\u79cd\u601d\u8003\u65b9\u5f0f, \u6307\u5bfc\u5982\u4f55\u8fdb\u884c\u804c\u8d23\u7684\u5212\u5206, \u800c\u516d\u8fb9\u5f00\u67b6\u6784\u5c31\u662f\u4e00\u79cd\u67b6\u6784\u4e86, \u201c\u516d \u2026", "image": {"@type": "ImageObject", "url": "http://www.smallcpp.com/images/\u8f6f\u4ef6\u5de5\u7a0b/\u516d\u8fb9\u5f62.png"}}
+  {"articleSection": "\u8f6f\u4ef6\u5de5\u7a0b", "author": {"@type": "Person", "name": "HanXiao"}, "datePublished": "2017-08-04T11:24:00+08:00", "headline": "DDD \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u4e0e\u516d\u8fb9\u5f62\u67b6\u6784", "mainEntityOfPage": {"@type": "WebPage", "@id": "http://uldaman.github.io/old_pages/ddd-ling-yu-qu-dong-she-ji-yu-liu-bian-xing-jia-gou.html"}, "@context": "http://schema.org", "@type": "BlogPosting", "description": "\u8f6f\u4ef6\u4e16\u754c\u662f\u5bf9\u73b0\u5b9e\u4e16\u754c\u7684\u62bd\u8c61, \u800c\u4f20\u7edf\u7684\u4e09\u5c42\u67b6\u6784\u6216 MVC \u67b6\u6784 (\u53c2\u8003: \u4e09\u5c42\u67b6\u6784\u4e0e MVC), \u5374\u662f\u7ed3\u6784\u5316\u7684\u751f\u642c\u786c\u5957, \u5728\u8fd9\u4e9b\u67b6\u6784\u4e2d\u7684\u8bbe\u8ba1\u51fa\u6765\u7684\u5bf9\u8c61\u662f\u8d2b\u8840\u7684, \u662f\u201c\u4e1a\u52a1\u903b\u8f91\u201d\u7c7b, \u8ddf\u73b0\u5b9e\u4e16\u754c\u751a\u81f3\u6beb\u65e0\u5173\u7cfb, \u90a3\u4e48\u6839\u636e\u6839\u636e\u73b0\u5b9e\u4e16\u754c\u7684\u771f\u5b9e\u9886\u57df, \u6620\u5c04\u5230\u8f6f\u4ef6\u4e16\u754c\u7684\u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u548c\u516d\u8fb9\u5f62\u67b6\u6784, \u624d\u662f\u66f4\u597d\u7684\u67b6\u6784\u65b9\u5f0f, \u5e94\u7528\u573a\u666f\u66f4\u5e7f, \u6269\u5c55\u66f4\u7b80\u5355. PS, \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u7ee7\u627f\u4e86\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1, \u6216\u8005\u53ef\u4ee5\u8bf4\u662f\u804c\u8d23\u9a71\u52a8\u8bbe\u8ba1\u7684\u8fdb\u5316. \u9886\u57df\u9a71\u52a8\u8bbe\u8ba1\u4e0d\u662f\u4e00\u79cd\u8bbe\u8ba1\u98ce\u683c, \u4e5f\u4e0d\u662f\u4e00\u79cd\u67b6\u6784\u6a21\u578b, \u800c\u662f\u4e00\u79cd\u601d\u8003\u65b9\u5f0f, \u6307\u5bfc\u5982\u4f55\u8fdb\u884c\u804c\u8d23\u7684\u5212\u5206, \u800c\u516d\u8fb9\u5f00\u67b6\u6784\u5c31\u662f\u4e00\u79cd\u67b6\u6784\u4e86, \u201c\u516d \u2026", "image": {"@type": "ImageObject", "url": "http://uldaman.github.io/old_pages/images/\u8f6f\u4ef6\u5de5\u7a0b/\u516d\u8fb9\u5f62.png"}}
 </script>
       </div>
 

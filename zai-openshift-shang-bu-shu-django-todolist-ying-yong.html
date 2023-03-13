@@ -4,8 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>在 OpenShift 上部署 Django Todolist 应用</title>
-    <link rel="icon" href="http://www.smallcpp.com/extra/avatar.png" />
-    <link rel="shortcut icon" href="http://www.smallcpp.com/extra/avatar.png" />
+    <link
+      rel="icon"
+      href="http://uldaman.github.io/old_pages/extra/avatar.png"
+    />
+    <link
+      rel="shortcut icon"
+      href="http://uldaman.github.io/old_pages/extra/avatar.png"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -16,14 +22,17 @@
     />
     <link
       rel="stylesheet"
-      href="http://www.smallcpp.com/theme/css/main.a3671138.css"
+      href="http://uldaman.github.io/old_pages/theme/css/main.a3671138.css"
     />
     <style media="print">
       .is-hidden-print {
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="http://www.smallcpp.com/custom.css" />
+    <link
+      rel="stylesheet"
+      href="http://uldaman.github.io/old_pages/custom.css"
+    />
     <meta
       property="og:title"
       content="Small Cpp - 在 OpenShift 上部署 Django Todolist 应用"
@@ -34,7 +43,7 @@
     />
     <meta
       property="og:url"
-      content="http://www.smallcpp.com/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
+      content="http://uldaman.github.io/old_pages/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
     />
     <meta property="og:image" content="http://i66.tinypic.com/zvu6o3.jpg" />
     <meta
@@ -57,9 +66,11 @@
         <div class="container">
           <nav class="navbar">
             <div class="navbar-brand">
-              <a class="navbar-item title is-3" href="http://www.smallcpp.com/"
+              <a
+                class="navbar-item title is-3"
+                href="http://uldaman.github.io/old_pages/"
                 ><img
-                  src="http://www.smallcpp.com/extra/avatar.png"
+                  src="http://uldaman.github.io/old_pages/extra/avatar.png"
                   class="avatar"
                 />&nbsp;Small Cpp</a
               >
@@ -81,37 +92,37 @@
           <div class="navbar-end">
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/za-xiang.html"
+              href="http://uldaman.github.io/old_pages/category/za-xiang.html"
               >杂项</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/shu-ju-ku.html"
+              href="http://uldaman.github.io/old_pages/category/shu-ju-ku.html"
               >数据库</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/ruan-jian-gong-cheng.html"
+              href="http://uldaman.github.io/old_pages/category/ruan-jian-gong-cheng.html"
               >软件工程</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/han-shu-shi.html"
+              href="http://uldaman.github.io/old_pages/category/han-shu-shi.html"
               >函数式</a
             >
             <a
               class="navbar-item is-tab is-active"
-              href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+              href="http://uldaman.github.io/old_pages/category/gong-ju-zhe-teng.html"
               >工具折腾</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/golang.html"
+              href="http://uldaman.github.io/old_pages/category/golang.html"
               >Golang</a
             >
             <a
               class="navbar-item is-tab"
-              href="http://www.smallcpp.com/category/da-shu-ju.html"
+              href="http://uldaman.github.io/old_pages/category/da-shu-ju.html"
               >大数据</a
             >
           </div>
@@ -126,7 +137,7 @@
             <article>
               <h1 class="title">
                 <a
-                  href="http://www.smallcpp.com/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
+                  href="http://uldaman.github.io/old_pages/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
                   rel="bookmark"
                   title="Permalink to 在 OpenShift 上部署 Django Todolist 应用"
                   >在 OpenShift 上部署 Django Todolist 应用</a
@@ -136,7 +147,7 @@
                 <abbr class="published" title="2016-05-11T10:23:00+08:00">
                   Published <span class="is-info">Wed 11 May 2016</span> in
                   <a
-                    href="http://www.smallcpp.com/category/gong-ju-zhe-teng.html"
+                    href="http://uldaman.github.io/old_pages/category/gong-ju-zhe-teng.html"
                     >工具折腾</a
                   >
                 </abbr>
@@ -166,25 +177,25 @@
                 <p>
                   首先去 Openshift 上创建一个 Django 应用, 关于怎么创建
                   Openshift 应用参考我<a
-                    href="http://www.smallcpp.com/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
+                    href="http://uldaman.github.io/old_pages/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
                     >另一篇笔记</a
                   >
                 </p>
                 <p>
                   我这里创建了一个 <code>todolist-smallcpp.rhcloud.com</code>,
                   然后, 利用<a
-                    href="http://www.smallcpp.com/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
+                    href="http://uldaman.github.io/old_pages/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
                     >另一篇笔记</a
                   >的知识用 SecureCRT 连上我们的服务器.
                 </p>
                 <p><strong>补充一下用 putty.exe 连接的方法.</strong></p>
                 <p>
                   首先, 和<a
-                    href="http://www.smallcpp.com/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
+                    href="http://uldaman.github.io/old_pages/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/%E5%8D%90%20%E8%A7%A3%E5%90%A7!%20%E5%8F%B9%E6%81%AF%E5%A2%99!%20%E2%80%94%20%E4%BC%98%E9%9B%85%E7%9A%84%E7%BF%BB%E5%A2%99.html"
                     >另一篇笔记</a
                   >中一样, 通过
                   <a
-                    href="http://www.smallcpp.com/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Git%20%E7%AE%80%E6%98%8E%E6%89%8B%E5%86%8C.html#101-ssh-key"
+                    href="http://uldaman.github.io/old_pages/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/Git%20%E7%AE%80%E6%98%8E%E6%89%8B%E5%86%8C.html#101-ssh-key"
                     >Git 简明手册</a
                   >
                   拿到了两个密钥文件: id_rsa(私钥) 和 id_rsa.pub(公钥), 将
@@ -551,7 +562,7 @@ STATIC_ROOT = os.path.join(WSGI_DIR, <span style="color: #CD5555">'static'</span
               "headline": "\u5728 OpenShift \u4e0a\u90e8\u7f72 Django Todolist \u5e94\u7528",
               "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "http://www.smallcpp.com/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
+                "@id": "http://uldaman.github.io/old_pages/zai-openshift-shang-bu-shu-django-todolist-ying-yong.html"
               },
               "@context": "http://schema.org",
               "@type": "BlogPosting",
