@@ -1,3 +1,3 @@
 sitemap:
-http://uldaman.github.io/old_pages/sitemapxml/index.xml
-http://uldaman.github.io/old_pages/sitemap/index.html
+https://uldaman.github.io/old_pages/sitemapxml/index.xml
+https://uldaman.github.io/old_pages/sitemap/index.html
